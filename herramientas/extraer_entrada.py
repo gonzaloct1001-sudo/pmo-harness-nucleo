@@ -36,9 +36,16 @@ from datetime import datetime
 from email import policy
 from pathlib import Path
 
+# Se reconocen solo por el nombre del archivo (su vocabulario aparece en cualquier documento) y antes que la carpeta de
+# bases: la normativa general y las charlas no son requisitos de la convocatoria; el formulario es la estructura a llenar.
+POR_NOMBRE = [
+    ("normativa", r"(?<![a-záéíóúñ])(ley\s*(n[°º.]?\s*)?\d|decreto|d\.?f\.?l\.?\s*\d|reglamento)"),
+    ("charla", r"charla|capacitaci[oó]n|webinar|taller|transcripci[oó]n|grabaci[oó]n"),
+    ("formulario", r"formulario(?!\s*22)|(?<![a-z])form\s?\d|formato vac[ií]o|ficha de postulaci"),
+]
 CATEGORIAS = [
     ("bases", r"\bbases\b|convocatoria|llamado a (concurso|licitaci)|t[eé]rminos de referencia|\brfp\b|aclaraci[oó]n|"
-              r"foro de (preguntas|consultas)|preguntas y respuestas|formulario de postulaci|pauta de evaluaci"),
+              r"foro de (preguntas|consultas)|preguntas y respuestas|pauta de evaluaci"),
     ("contrato", r"contrato|convenio|anexo|enmienda|adenda|addendum|orden de compra|\boc\b|bases de licitaci|t[eé]rminos de referencia"),
     ("propuesta", r"propuesta|cotizaci|oferta t[eé]cnica|oferta econ[oó]mica|reevaluaci"),
     ("lineamientos", r"lineamiento|directrices|acuerdos? (de|del) directorio|sesi[oó]n (de|del) directorio|instrucci[oó]n del directorio|"
@@ -59,7 +66,15 @@ CATEGORIAS = [
     ("organigrama", r"organigrama|contactos|stakeholder|directorio"),
 ]
 SENSIBLES = ("cv", "financiero")  # datos personales o reservados: por defecto nunca se replican
-REPLICAS_POR_DEFECTO = {"completas": ["bases", "contrato", "lineamientos", "minuta", "reporte"],
+# «CV» también es la sigla de instrumentos (CORFO Crea y Valida): sola, indica un currículum solo si hay datos personales
+CV_FUERTE = r"curr[ií]cul|hoja de vida"
+DATOS_PERSONALES = (r"fecha de nacimiento", r"estado civil", r"nacionalidad", r"experiencia (laboral|profesional)",
+                    r"formaci[oó]n acad[eé]mica", r"antecedentes acad[eé]micos", r"t[ií]tulo profesional", r"\bedad\b")
+
+
+def parece_cv(contenido):
+    return sum(bool(re.search(p, contenido)) for p in DATOS_PERSONALES) >= 2
+REPLICAS_POR_DEFECTO = {"completas": ["bases", "formulario", "normativa", "charla", "contrato", "lineamientos", "minuta", "reporte"],
                         "solo_ficha": ["cv", "financiero", "certificado", "correo", "chat-ia"]}
 EXT_TEXTO = {".txt", ".md", ".csv", ".tsv", ".log"}
 EXT_IMAGEN = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".svg"}
@@ -78,22 +93,33 @@ def categorizar(rel, texto):
     partes = Path(rel).parts
     nombre = partes[-1].lower().replace("_", " ")
     carpeta = " ".join(partes[:-1]).lower().replace("-", " ")
-    if re.search(r"\bbases\b", carpeta):  # la carpeta de bases (postulaciones) es una indicación explícita del usuario
-        return "bases"
-    for cat, patron in CATEGORIAS:
+    for cat, patron in POR_NOMBRE:
         if re.search(patron, nombre):
             return cat
+    if Path(rel).suffix.lower() in EXT_IMAGEN and re.search(dict(POR_NOMBRE)["charla"] + r"|video", carpeta):
+        return "charla"  # capturas de una charla o de su video
+    if re.search(r"\bbases\b", carpeta):  # la carpeta de bases (postulaciones) es una indicación explícita del usuario
+        return "bases"
     contenido = (texto or "")[:5000].lower()
     inicio = contenido[:400]
+    cv_dudoso = bool(texto) and not parece_cv(contenido)  # sin texto que leer, un nombre con «CV» se trata como currículum
+    for cat, patron in CATEGORIAS:
+        if cat == "cv" and cv_dudoso:
+            patron = CV_FUERTE
+        if re.search(patron, nombre):
+            return cat
     for cat in SENSIBLES:  # un CV o un estado financiero se reconoce por su encabezado aunque el resto parezca un informe
-        if re.search(dict(CATEGORIAS)[cat], inicio):
+        patron = CV_FUERTE if cat == "cv" and cv_dudoso else dict(CATEGORIAS)[cat]
+        if re.search(patron, inicio):
             return cat
     puntajes = {}
     es_planilla = Path(rel).suffix.lower() in (".xlsx", ".xlsm", ".xls", ".csv", ".tsv")
-    no_planilla = {"contrato", "correo", "chat-ia", "minuta", "marca"}
+    no_planilla = {"bases", "contrato", "correo", "chat-ia", "minuta", "marca"}  # una planilla propia no son bases
     for cat, patron in CATEGORIAS:
         if es_planilla and cat in no_planilla:
             continue
+        if cat == "cv" and cv_dudoso:
+            patron = CV_FUERTE
         pts = len(re.findall(patron, contenido)) + 2 * len(re.findall(patron, inicio))
         if pts:
             puntajes[cat] = pts
@@ -331,13 +357,52 @@ def escribir_replica(proyecto: Path, fila, texto, origen):
         f"fecha_extraccion: {datetime.now():%Y-%m-%d}\n"
         f"paginas: {paginas.group(1) if paginas else ''}\n"
         f"calidad: {calidad}              # completa | parcial (posible escaneo) | sin_texto\n"
-        "confidencialidad: interna\n"
+        + ("ocr: pendiente               # es un escaneo: pásalo por OCR y deja el resultado en _entrada/ (ver inventario)\n"
+           if "ESCANEO" in fila["detalle"] else "")
+        + "confidencialidad: interna\n"
         "original: \"\"                  # enlace a la carpeta oficial del documento (Drive, OneDrive, SharePoint), si existe\n"
         "---\n"
         "<!-- Réplica fiel del texto del documento original, para trabajar en cualquier computador sin él. Ante dudas de\n"
         "     interpretación, firmas, formularios oficiales o elementos gráficos, prevalece el original. -->\n"
         f"# {Path(fila['archivo']).name}\n\n{texto}\n", encoding="utf-8")
     return ruta.relative_to(proyecto).as_posix()
+
+
+OCR_INSTRUCCION = ("pásalo por OCR: ábrelo en Word (Archivo → Abrir: lo convierte en texto editable) y guárdalo como .docx, "
+                   "o en Google Drive (clic derecho → Abrir con → Documentos de Google); deja el resultado con el mismo nombre en "
+                   "la misma carpeta o en una subcarpeta ocr/ y vuelve a procesar la entrada")
+
+
+def emparejar_ocr(proyecto: Path, entrada: Path, filas, politica):
+    """Un mismo documento en dos versiones (un escaneo y su OCR, o el original y una copia «ocr/»): queda una sola
+    réplica, la de la versión con más texto. Se reconocen por el nombre, en la misma carpeta o en una subcarpeta ocr/."""
+    def clave(f):
+        partes = [p for p in Path(f["archivo"]).parts[:-1] if p.lower() != "ocr"]
+        nombre = re.sub(r"(^|[-_ .])ocr($|[-_ .])", " ", Path(f["archivo"]).stem.lower())
+        return "/".join(partes).lower(), re.sub(r"[^a-z0-9]", "", nombre)
+
+    grupos = {}
+    for f in filas:
+        if f["estado"] == "extraido" and f.get("texto"):
+            grupos.setdefault(clave(f), []).append(f)
+    for grupo in grupos.values():
+        if len(grupo) < 2 or not any("ocr" in f["archivo"].lower() or "ESCANEO" in f["detalle"] for f in grupo):
+            continue
+        principal = max(grupo, key=lambda f: int(f["palabras"] or 0))
+        otros = [f for f in grupo if f is not principal]
+        replicar = any((f.get("replica") or "").startswith("fuentes/") for f in grupo)
+        for f in otros:
+            if (f.get("replica") or "").startswith("fuentes/"):
+                (proyecto / f["replica"]).unlink(missing_ok=True)
+            f["replica"] = f"version de {principal['id']}"
+            if "otra versión de" not in f["detalle"]:
+                f["detalle"] += f" · otra versión de {principal['id']} (se usa la de más texto)"
+        if replicar and not (principal.get("replica") or "").startswith("fuentes/") \
+                and destino_replica(politica, principal["categoria_sugerida"]) != "solo_ficha":
+            cuerpo = (entrada / principal["texto"]).read_text(encoding="utf-8").split("\n\n", 1)[-1]
+            principal["replica"] = escribir_replica(proyecto, principal, cuerpo, entrada.name)
+        if "versión preferida" not in principal["detalle"]:
+            principal["detalle"] += f" · versión preferida (también: {', '.join(f['id'] for f in otros)})"
 
 
 def archivar(entrada: Path, fecha: str) -> int:
@@ -472,6 +537,7 @@ def main():
         por_hash[h] = fila
         nuevos += 1
 
+    emparejar_ocr(proyecto, entrada, filas, politica)
     with open(inv_csv, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=campos)
         w.writeheader()
@@ -489,9 +555,11 @@ def main():
     md += ["", "## Detalle", "", "| Id | Archivo | Categoría | Detalle | Palabras | Estado |", "|---|---|---|---|---|---|"]
     md += [f"| {f['id']} | {f['archivo']} | {f['categoria_sugerida']} | {f['detalle']} | {f['palabras']} | "
            f"{f['estado']}{' de ' + f['duplicado_de'] if f['duplicado_de'] else ''} |" for f in filas]
-    alertas = [f for f in filas if f["estado"] in ("error", "no_soportado") or "ESCANEO" in f["detalle"]]
+    sin_ocr = lambda f: "ESCANEO" in f["detalle"] and "otra versión de" not in f["detalle"]  # noqa: E731
+    alertas = [f for f in filas if f["estado"] in ("error", "no_soportado") or sin_ocr(f)]
     if alertas:
-        md += ["", "## Requieren atención", ""] + [f"- {f['id']} {f['archivo']}: {f['detalle']}" for f in alertas]
+        md += ["", "## Requieren atención", ""] + [f"- {f['id']} {f['archivo']}: {f['detalle']}"
+                                                   + (f". Sin texto suficiente: {OCR_INSTRUCCION}" if sin_ocr(f) else "") for f in alertas]
     unicos = [f for f in filas if f["estado"] != "duplicado"]
     replicados = [f for f in unicos if (f.get("replica") or "").startswith("fuentes/")]
     solo_ficha = [f for f in unicos if f.get("replica") == "solo_ficha"]
@@ -509,6 +577,10 @@ def main():
     (proc / "inventario.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print("\n".join(md[:8 + len(resumen)]))
     print(f"\nRéplicas en fuentes/: {len(replicados)} · solo ficha: {len(solo_ficha)} · por decidir en el alta: {len(por_decidir)}")
+    escaneos = [f for f in unicos if sin_ocr(f)]
+    if escaneos:
+        print(f"Escaneos sin texto suficiente: {len(escaneos)} ({', '.join(f['id'] for f in escaneos)}): hay que pasarlos por OCR "
+              "(instrucciones en «Requieren atención» del inventario). Mientras tanto, su contenido no entra a la revisión de requisitos.")
     print(f"Inventario completo: {entrada_visible / '_procesado' / 'inventario.md'}")
 
 

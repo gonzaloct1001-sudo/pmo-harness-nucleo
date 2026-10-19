@@ -190,7 +190,9 @@ def main():
             print(f"- GitHub: repositorio privado {url} (tema pmo-harness-empresa).")
         else:
             print(f"- GitHub: no se pudo crear el repositorio: {(r.stderr or r.stdout).strip()[:300]}")
-    print(f"\nSiguiente paso: abre {destino} en VS Code y escribe «hola».")
+    print(f"\nSiguiente paso: abre {destino} en tu editor con tu asistente de IA y escribe «hola».")
+    print("Si llevas varias empresas y quieres ver su status en una sola vista: pide «quiero un tablero único» "
+          "(se crea en una carpeta y un repositorio privado aparte, solo para ti).")
 
 
 if __name__ == "__main__":

@@ -42,3 +42,6 @@ empresa/contenidos/archivos/*
 
 # --- Respaldos locales que deja actualizar_nucleo.py ---
 .harness/respaldo-nucleo/
+
+# --- Lanzador del status semanal (rutas propias de cada computador) ---
+status/abrir-status.cmd

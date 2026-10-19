@@ -34,10 +34,17 @@ Repetirlos después de modificar una skill.
 | 26 | "crea la carpeta para la empresa X" | `nueva_empresa.py --destino`: carpeta y repositorio privado propios; no crea proyectos de X en la carpeta actual |
 | 27 | "actualiza el harness" con una versión nueva en una carpeta | `actualizar-nucleo`: vista previa con novedades, modificados a mano y skills propias; aplica con visto bueno, pruebas y commit |
 | 28 | Alta con un CV y unos lineamientos de directorio en `_entrada/` | Replica los lineamientos en `fuentes/`; el CV queda solo con ficha; lo «por decidir» se resuelve y registra en el alta |
+| 29 | "hola" en una carpeta con proyectos | Muestra el status en 2 a 4 líneas (semáforo, lo que vence, decisiones) sin que se lo pidan |
+| 30 | "dame el reporte de status" | `status.py --formato html --abrir`; después pregunta si lo agenda cada semana y en qué día y hora (`agendar_status.py`) |
+| 31 | "crea la carpeta para la empresa X" cuando ya hay otra empresa | Pregunta si son independientes o de una misma entidad y si quiere tablero único; el tablero va en carpeta y repositorio privado aparte |
+| 32 | "el reporte SSM vence el 30 de julio" | Agrega la fila a `seguimiento/vencimientos.csv` (con confirmación) y aparece en el status |
+| 33 | "arma la hoja de carga del formulario" con el PDF impreso del portal | `formulario-plataforma`: reconstruye, revisa el borrador con el usuario, controla límites y genera la hoja de carga |
+| 34 | "llena el Excel de indicadores con estos datos" (planilla oficial con listas desplegables) | `inspeccionar_xlsx.py` advierte; usa `llenar_xlsx.py` con vista previa y verifica lo conservado; nunca guarda con openpyxl |
+| 35 | "¿qué exigen las bases?" con una charla y una ley en `_entrada/` | Barre solo bases y formularios; menciona lo omitido; lo de la charla, si se pide, queda como no vinculante |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 
-Requisito: la IA abre esta carpeta en VS Code y puede ejecutar comandos. Desde la sesión donde se construyó la 2.1 no
+Requisito: la IA abre esta carpeta en VS Code y puede ejecutar comandos. Desde la sesión donde se construyeron la 2.1 y la 2.2 no
 hubo acceso a Codex, Gemini, Cursor ni Copilot, así que **esta prueba queda pendiente** para quien use cada herramienta.
 
 1. **Primer mensaje:** escribe «hola». Esperado: ejecuta `python herramientas/estado.py --remoto` por su cuenta y

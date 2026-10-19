@@ -47,8 +47,11 @@ por los de mayor peso), competidores probables, equipo, socios y documentos nece
 Revisión azul: pide al subagente `revisor-independiente` que critique la estrategia contra la pauta inversa.
 
 ## 5. Redacción por secciones (revisión rosa)
-- Una sección por capítulo del formulario en `propuesta/` (plantilla `_plantilla-seccion.md`), con `responde_a`
-  (requisitos y criterios) y `limite`. Usa `contexto/estilo.md` y reutiliza el banco de antecedentes adaptándolo:
+- **Si la postulación se llena en una plataforma y no hay un documento que llenar** (CORFO, fondos.gob.cl), sigue
+  `formulario-plataforma`: reconstruye los campos con sus límites, redacta campo por campo y controla los caracteres; al
+  final genera el Word de trabajo y la hoja de carga.
+- Si hay un formulario o índice en documento: una sección por capítulo en `propuesta/` (plantilla
+  `_plantilla-seccion.md`), con `responde_a` (requisitos y criterios) y `limite`. Usa `contexto/estilo.md` y reutiliza el banco de antecedentes adaptándolo:
   primero `empresa/contenidos/` (común a todas las postulaciones de la empresa) y luego `contenidos/` de la postulación.
 - Escribe para el evaluador: los términos de la pauta, evidencia concreta, cifras con fuente, nada que no se pueda
   cumplir y rendir. Respeta los límites (cuenta caracteres o páginas).
@@ -58,6 +61,10 @@ Revisión azul: pide al subagente `revisor-independiente` que critique la estrat
 `evaluacion-economica` en modo postulación: `economico/presupuesto.yaml` con los parámetros de las bases (con
 fuente) → `python herramientas/presupuesto_postulacion.py proyectos/<slug>/economico/presupuesto.yaml`. Los
 controles NO CUMPLE deben quedar en cero. Si las bases piden VAN/TIR o flujo de caja, `modelo_economico.py`.
+**Anexos oficiales en Excel o Word** (planilla de presupuesto, carta Gantt, cartas, declaraciones): se entregan en el
+formato de la entidad. Los Excel se llenan con `llenar_xlsx.py` (conserva listas desplegables, formas y fórmulas); los
+Word, con el método de marcadores o secciones de `generar-reporte` sobre una copia. Las firmas y declaraciones juradas
+las completa y firma quien corresponde.
 
 ## 7. Riesgos, impacto e indicadores
 `levantar-riesgos` con el checklist de postulación (inadmisibilidad, plazos, plataforma, documentos vencidos,

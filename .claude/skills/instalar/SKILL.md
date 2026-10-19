@@ -108,7 +108,7 @@ Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créa
 ```yaml
 instalado: true
 fecha_instalacion: AAAA-MM-DD
-version_harness: "2.1"
+version_harness: "2.2"
 empresa: <nombre>                      # dueña de esta carpeta (detalle en empresa/empresa.yaml)
 nucleo:
   origen: <url del núcleo>   # por defecto, la de NUCLEO.txt (repositorio público); de ahí actualizar_nucleo.py trae las mejoras
@@ -149,6 +149,14 @@ Si el usuario dice que ya dejó los documentos antes de instalar, verifica `_ent
    - que puede volver a ver todo diciendo «¿qué puedo hacer?» (skill `ayuda`) y que la guía completa está en `GUIA.md`.
 
 ## Otra empresa, u otro computador
+- **Antes de crear la segunda empresa, pregunta cómo quiere gestionarlas** (y respeta lo que decida):
+  1. ¿Son empresas independientes o parte de una misma entidad?
+  2. ¿Las lleva **separadas** (una carpeta y un repositorio privado por empresa: lo recomendado si son personas
+     jurídicas distintas o si alguien más verá una de ellas) o **juntas** en una sola carpeta (misma marca, mismo banco
+     de antecedentes y mismo repositorio, con un proyecto por cada una)?
+  3. Si las lleva separadas: ¿quiere además un **tablero único** de status con todas? Ese tablero va en una carpeta y
+     un repositorio privado propios, solo para él (skill `status`, sección 3).
+  Registra su decisión en `seguimiento/decisiones.csv` de la empresa principal, si existe.
 - **Otra empresa** («crea la carpeta para la empresa X»): pregunta dónde dejarla (por defecto, junto a esta carpeta, en
   la carpeta padre) y ejecuta `python herramientas/nueva_empresa.py "<Nombre>" --destino <carpeta padre>` (sin
   `--sin-github` si `gh` tiene sesión: crea el repositorio privado con el tema `pmo-harness-empresa`). Luego indica que

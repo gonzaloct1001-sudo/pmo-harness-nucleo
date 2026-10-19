@@ -7,10 +7,35 @@ Uso:
 Muestra por hoja: rango usado, celdas combinadas, protección, cantidad de fórmulas,
 ejemplos de fórmulas y las celdas con valores fijos (candidatas a celdas de entrada),
 destacando las que tienen fuente azul o relleno amarillo (convención habitual de inputs).
-También lista los nombres definidos y los vínculos a otros archivos.
+También lista los nombres definidos y los vínculos a otros archivos, y advierte si la planilla tiene elementos que se
+pierden al guardarla con openpyxl (listas desplegables modernas, formas, macros): en ese caso se llena con
+`llenar_xlsx.py`, que escribe solo los valores y deja todo lo demás intacto.
 """
 import argparse
 import sys
+import warnings
+import zipfile
+
+
+def riesgos_al_guardar(ruta):
+    """Elementos de la planilla que openpyxl no conserva al guardar (y que una entidad podría exigir)."""
+    riesgos = []
+    try:
+        with zipfile.ZipFile(ruta) as z:
+            nombres = z.namelist()
+            hojas = "".join(z.read(n).decode("utf-8", "ignore") for n in nombres if n.startswith("xl/worksheets/sheet"))
+            dibujos = "".join(z.read(n).decode("utf-8", "ignore") for n in nombres if n.startswith("xl/drawings/drawing"))
+    except (zipfile.BadZipFile, OSError):
+        return riesgos
+    if "x14:dataValidation" in hojas:
+        riesgos.append(f"{hojas.count('x14:dataValidation ')} lista(s) desplegable(s) modernas")
+    if "<xdr:sp" in dibujos:
+        riesgos.append(f"{dibujos.count('<xdr:sp')} forma(s) o cuadro(s) de texto")
+    if "x14:conditionalFormatting" in hojas:
+        riesgos.append("formatos condicionales modernos")
+    if any("vbaProject" in n for n in nombres):
+        riesgos.append("macros")
+    return riesgos
 
 try:
     from openpyxl import load_workbook
@@ -33,8 +58,14 @@ def main():
     args = p.parse_args()
 
     keep_vba = args.archivo.lower().endswith(".xlsm")
-    wb = load_workbook(args.archivo, keep_vba=keep_vba)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")  # los avisos de openpyxl se traducen abajo, en lenguaje simple
+        wb = load_workbook(args.archivo, keep_vba=keep_vba)
     print(f"# Estructura de {args.archivo}\n")
+    riesgos = riesgos_al_guardar(args.archivo)
+    if riesgos:
+        print(f"**Atención — no guardar con openpyxl:** tiene {', '.join(riesgos)}, que se borrarían. Para llenarla usa "
+              "`python herramientas/llenar_xlsx.py` (escribe solo los valores y deja todo lo demás intacto).\n")
     if getattr(wb, "_external_links", None):
         print(f"**Atención:** tiene {len(wb._external_links)} vínculo(s) a otros archivos. "
               "No guardar con openpyxl sin respaldar esos valores.\n")

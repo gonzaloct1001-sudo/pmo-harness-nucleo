@@ -34,6 +34,8 @@ autoria:                       # los entregables salen a nombre de esta persona 
   terminos_permitidos: []
 
 replicas:                      # qué documentos de _entrada/ se replican completos en fuentes/ (texto fiel, en el repositorio privado)
-  completas: [bases, contrato, lineamientos, minuta, reporte]   # bases, anexos, aclaraciones, lineamientos, contratos, actas, informes
+  completas: [bases, formulario, normativa, charla, contrato, lineamientos, minuta, reporte]
+  # bases, anexos y aclaraciones; formularios de la plataforma; leyes y decretos; charlas y capacitaciones (transcripción);
+  # contratos y convenios; lineamientos del directorio; actas; informes
   solo_ficha: [cv, financiero, certificado, correo, chat-ia]     # quedan locales; en Git solo su ficha resumen
   # Lo que no calce con ninguna lista no se replica y se decide en el alta. Un proyecto puede redefinir este bloque.

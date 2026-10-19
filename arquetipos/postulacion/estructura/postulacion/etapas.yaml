@@ -98,6 +98,8 @@ etapas:
       - {tipo: metrica, metrica: contenidos_vencidos, operador: "==", valor: 0}
       - {tipo: metrica, metrica: entrega_archivos, operador: ">", valor: 0}
       - {tipo: metrica, metrica: entrega_autoria_errores, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: formulario_campos_excedidos, operador: "==", valor: 0}     # si hay postulacion/formulario.yaml
+      - {tipo: metrica, metrica: formulario_obligatorios_vacios, operador: "==", valor: 0}
       - {tipo: sin_pendientes, ruta: entrega/checklist.md}
 
   - id: post_entrega

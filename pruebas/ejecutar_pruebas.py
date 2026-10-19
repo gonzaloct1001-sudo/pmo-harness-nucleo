@@ -20,6 +20,11 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 PY = sys.executable
+for _flujo in (sys.stdout, sys.stderr):  # la consola de Windows (cp1252) no debe caerse al mostrar el detalle de una falla
+    try:
+        _flujo.reconfigure(errors="replace")
+    except (AttributeError, ValueError):
+        pass
 resultados = []
 DETALLE = "--detalle" in sys.argv
 
@@ -267,8 +272,8 @@ def main():
         paquete = repo / "ejemplos" / "paquete-postulacion-demo"
         for sub in ("00-bases-y-aclaraciones", "06-correos"):
             shutil.copytree(paquete / sub, pp / "_entrada" / sub, dirs_exist_ok=True)
-        prueba("extraer_entrada: reconoce bases de concurso", [H + "extraer_entrada.py", "proyectos/prueba-postulacion"], repo,
-               ["| bases | 3 |", "| correo | 1 |"])
+        prueba("extraer_entrada: reconoce bases de concurso y el formulario", [H + "extraer_entrada.py", "proyectos/prueba-postulacion"], repo,
+               ["| bases | 2 |", "| formulario | 1 |", "| correo | 1 |"])
         prueba("extraer_requisitos: barrido detecta excluyente escondido en anexo y mención de IA",
                [H + "extraer_requisitos.py", "proyectos/prueba-postulacion"], repo,
                ["carta de compromiso", "causal de inadmisibilidad", "ATENCIÓN: 1 candidato(s) mencionan inteligencia artificial",
@@ -792,15 +797,19 @@ def main():
             "reporte mensual del proyecto; informe técnico.\n", encoding="utf-8")
         (pr / "_entrada" / "09-otros" / "EEFF_2025.md").write_text(
             "# Estados financieros 2025\n\nBalance general y estado de resultados de la sociedad.\n", encoding="utf-8")
+        (pr / "_entrada" / "09-otros" / "1.2026+Plan+de+Trabajo+y+presupuesto+CV.md").write_text(  # CV = Crea y Valida (CORFO)
+            "# Plan de trabajo y presupuesto CV\n\nActividades por mes, montos por ítem y aportes del proyecto Crea y Valida.\n", encoding="utf-8")
         (pr / "_entrada" / "09-otros" / "Notas_varias.md").write_text(
             "# Notas varias\n\nIdeas sueltas sobre el proyecto, sin clasificar todavía, para conversar con el equipo.\n", encoding="utf-8")
         prueba("extraer_entrada: réplicas según la política (lineamientos sí; CV y estados financieros no)",
-               [H + "extraer_entrada.py", "proyectos/prueba-replicas"], repo, ["Réplicas en fuentes/: 1 · solo ficha: 2 · por decidir en el alta: 1"])
+               [H + "extraer_entrada.py", "proyectos/prueba-replicas"], repo, ["Réplicas en fuentes/: 1 · solo ficha: 2 · por decidir en el alta: 2"])
         _rep_r = sorted(x.name for x in (pr / "fuentes").glob("F*.md"))
         resultados.append(("extraer_entrada: un CV que parece informe no se replica", _rep_r == [n for n in _rep_r if "Lineamientos" in n]
                            and len(_rep_r) == 1, [str(_rep_r)]))
         _inv_r = list(csv.DictReader(open(pr / "_entrada" / "_procesado" / "inventario.csv", encoding="utf-8")))
         _id_notas = next(r["id"] for r in _inv_r if r["archivo"].endswith("Notas_varias.md"))
+        _cat_cv = next(r["categoria_sugerida"] for r in _inv_r if "Plan+de+Trabajo" in r["archivo"])
+        resultados.append(("extraer_entrada: «CV» como sigla (Crea y Valida) sin datos personales no es un currículum", _cat_cv != "cv", [_cat_cv]))
         prueba("extraer_entrada --replicar: replica lo que el alta decide", [H + "extraer_entrada.py", "proyectos/prueba-replicas",
                "--replicar", _id_notas], repo, [f"{_id_notas} → fuentes/{_id_notas}-Notas_varias.md"])
         shutil.rmtree(pr)
@@ -831,6 +840,247 @@ def main():
             _r = subprocess.run([_ps, "-NoProfile", "-Command", _cmd], cwd=repo, capture_output=True, text=True)
             resultados.append(("instalador de Windows: sintaxis de PowerShell", _r.returncode == 0, [_r.stdout, _r.stderr]))
 
+
+        # --- v2.2 · Barrido selectivo, OCR, planillas oficiales, formulario de plataforma y status ---
+        correr([H + "crear_proyecto.py", "prueba-cat", "--arquetipos", "postulacion"], repo)
+        pc = repo / "proyectos" / "prueba-cat"
+        eb, ei, ea = pc / "_entrada" / "00-bases-y-aclaraciones", pc / "_entrada" / "04-reportes-y-plantillas", pc / "_entrada" / "05-actas-y-minutas"
+        for d_ in (eb, ei, ea):
+            d_.mkdir(parents=True, exist_ok=True)
+        (eb / "Bases_concurso_2026.md").write_text("# Bases\n\nLos postulantes deberán presentar la carta de compromiso firmada.\n", encoding="utf-8")
+        (eb / "10ley_21591_royalty.md").write_text("# Ley 21.591\n\nLos gobiernos regionales deberán destinar los recursos según esta ley.\n", encoding="utf-8")
+        (ea / "Transcripcion charla explicativa.md").write_text("# Charla\n\nLos postulantes deberán adjuntar una carta del municipio, dijo el expositor.\n", encoding="utf-8")
+        (ei / "Formato vacio FORM1.md").write_text(
+            "Resumen de la Iniciativa\nNOMBRE OFICIAL DE LA INICIATIVA (*)\n80\n Indique el título oficial del proyecto.\n"
+            "27/4/26, 19:32 Portal de postulación\nhttps://portal.ejemplo.cl/postulacion 1/4\n--- Página 2 ---\n"
+            "RESUMEN EJECUTIVO (*)\n Describir el objeto principal; deberá incluir la duración.\n1,500\n"
+            "¿BENEFICIARIOS CONSIDERAN PERSONAS ADULTOS MAYORES DE 60\nAÑOS?\n", encoding="utf-8")
+        from pypdf import PdfWriter
+        _pw = PdfWriter()
+        for _ in range(3):
+            _pw.add_blank_page(width=595, height=842)
+        with open(eb / "Bases_tecnicas_escaneadas.pdf", "wb") as f:
+            _pw.write(f)
+        prueba("extraer_entrada: categorías por nombre (normativa, charla, formulario) y escaneo sin texto", [H + "extraer_entrada.py", "proyectos/prueba-cat"],
+               repo, ["| normativa | 1 |", "| charla | 1 |", "| formulario | 1 |", "| bases | 2 |", "Escaneos sin texto suficiente: 1"])
+        _inv_c = (pc / "_entrada" / "_procesado" / "inventario.md").read_text(encoding="utf-8")
+        _rep_scan = list((pc / "fuentes").glob("*Bases_tecnicas_escaneadas*.md"))
+        resultados.append(("extraer_entrada: el escaneo queda con instrucción de OCR y réplica marcada «ocr: pendiente»",
+                           "pásalo por OCR" in _inv_c and bool(_rep_scan) and "ocr: pendiente" in _rep_scan[0].read_text(encoding="utf-8"),
+                           [_inv_c[-900:]]))
+        prueba("extraer_requisitos: por defecto solo bases y formularios; avisa lo no barrido", [H + "extraer_requisitos.py", "proyectos/prueba-cat"],
+               repo, ["No barridos (otras categorías del inventario): charla 1, normativa 1"], ausentes=["vienen de charlas"])
+        _barr = (pc / "postulacion" / "barrido-requisitos.csv").read_text(encoding="utf-8")
+        resultados.append(("extraer_requisitos: candidatos de bases y formulario, sin ley ni charla",
+                           "carta de compromiso" in _barr and "deberá incluir la duración" in _barr and "gobiernos regionales" not in _barr
+                           and "municipio" not in _barr, [_barr[:600]]))
+        prueba("extraer_requisitos: lo que viene de una charla no es vinculante", [H + "extraer_requisitos.py", "proyectos/prueba-cat",
+               "--categorias", "bases,formulario,charla"], repo, ["1 candidato(s) vienen de charlas", "NO son vinculantes"])
+        resultados.append(("extraer_requisitos: columna vinculante = no para la charla",
+                           "no: confirmar por consulta" in (pc / "postulacion" / "barrido-requisitos.csv").read_text(encoding="utf-8"), ["sin marca"]))
+        from docx import Document as _Doc5
+        _d5 = _Doc5()
+        _d5.add_paragraph("Bases técnicas del concurso. Los postulantes deberán acreditar experiencia regional de al menos dos años.")
+        (eb / "ocr").mkdir()
+        _d5.save(str(eb / "ocr" / "Bases_tecnicas_escaneadas.docx"))
+        prueba("extraer_entrada: la versión OCR reemplaza al escaneo", [H + "extraer_entrada.py", "proyectos/prueba-cat"], repo,
+               ["Réplicas en fuentes/"], ausentes=["Escaneos sin texto suficiente"])
+        _reps = sorted(x.name for x in (pc / "fuentes").glob("*Bases_tecnicas_escaneadas*.md"))
+        resultados.append(("extraer_entrada: una sola réplica, la de la versión con texto",
+                           len(_reps) == 1 and "experiencia regional" in (pc / "fuentes" / _reps[0]).read_text(encoding="utf-8"), [str(_reps)]))
+
+        # Planilla oficial con listas desplegables modernas y una forma: openpyxl las borra, llenar_xlsx.py no
+        import zipfile as _zf
+        from openpyxl import Workbook as _WB, load_workbook as _lw3
+        fx = tmp / "planilla-oficial.xlsx"
+        _wb = _WB()
+        _ws = _wb.active
+        _ws.title = "Datos"
+        _ws["A1"], _ws["B1"], _ws["C1"] = "Concepto", "Monto", "Total"
+        _ws["A2"], _ws["C2"] = "Honorarios", "=B2*2"
+        _ws["D2"].number_format = "dd-mm-yyyy"
+        _ws.merge_cells("E1:F1")
+        _ws["E1"] = "Combinada"
+        _ws2 = _wb.create_sheet("Resumen")
+        _ws2["A1"] = "=Datos!C2"
+        _ws2.protection.sheet = True
+        _wb.create_sheet("Listas")["A1"] = "Sí"
+        _wb.save(fx)
+        _partes = {}
+        with _zf.ZipFile(fx) as z:
+            _infos = z.infolist()
+            _partes = {i.filename: z.read(i.filename) for i in _infos}
+        _sx = _partes["xl/worksheets/sheet1.xml"].decode("utf-8")
+        if "xmlns:r=" not in _sx:
+            _sx = _sx.replace("<worksheet ", '<worksheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ', 1)
+        _sx = _sx.replace("</worksheet>", '<drawing r:id="rIdDr1"/><extLst><ext uri="{CCE6A557-97BC-4b89-ADB6-D9C93CAAB3DF}" '
+                          'xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"><x14:dataValidations count="1" '
+                          'xmlns:xm="http://schemas.microsoft.com/office/excel/2006/main"><x14:dataValidation type="list" allowBlank="1">'
+                          "<x14:formula1><xm:f>Listas!$A$1:$A$2</xm:f></x14:formula1><xm:sqref>B2:B5</xm:sqref></x14:dataValidation>"
+                          "</x14:dataValidations></ext></extLst></worksheet>")
+        _partes["xl/worksheets/sheet1.xml"] = _sx.encode("utf-8")
+        _partes["xl/worksheets/_rels/sheet1.xml.rels"] = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+            '<Relationship Id="rIdDr1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" '
+            'Target="../drawings/drawing1.xml"/></Relationships>').encode("utf-8")
+        _partes["xl/drawings/drawing1.xml"] = (
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" '
+            'xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><xdr:twoCellAnchor><xdr:from><xdr:col>4</xdr:col><xdr:colOff>0</xdr:colOff>'
+            "<xdr:row>3</xdr:row><xdr:rowOff>0</xdr:rowOff></xdr:from><xdr:to><xdr:col>7</xdr:col><xdr:colOff>0</xdr:colOff><xdr:row>8</xdr:row>"
+            '<xdr:rowOff>0</xdr:rowOff></xdr:to><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="2" name="Instrucciones"/>'
+            '<xdr:cNvSpPr txBox="1"/></xdr:nvSpPr><xdr:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="100" cy="100"/></a:xfrm><a:prstGeom prst="rect">'
+            "<a:avLst/></a:prstGeom></xdr:spPr><xdr:txBody><a:bodyPr/><a:p><a:r><a:t>Instrucciones</a:t></a:r></a:p></xdr:txBody></xdr:sp>"
+            "<xdr:clientData/></xdr:twoCellAnchor></xdr:wsDr>").encode("utf-8")
+        _partes["[Content_Types].xml"] = _partes["[Content_Types].xml"].decode("utf-8").replace(
+            "</Types>", '<Override PartName="/xl/drawings/drawing1.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/></Types>').encode("utf-8")
+        with _zf.ZipFile(fx, "w", _zf.ZIP_DEFLATED) as z:
+            for nombre_p, contenido in _partes.items():
+                z.writestr(nombre_p, contenido)
+        import warnings as _w
+        with _w.catch_warnings():
+            _w.simplefilter("ignore")
+            _rt = _lw3(fx)
+            _rt.save(tmp / "openpyxl-guardado.xlsx")
+        with _zf.ZipFile(tmp / "openpyxl-guardado.xlsx") as z:
+            _pierde = "x14:dataValidation" not in z.read("xl/worksheets/sheet1.xml").decode("utf-8")
+        resultados.append(("llenar_xlsx: (motivo) guardar con openpyxl borra las listas desplegables modernas", _pierde, ["openpyxl las conservó"]))
+        prueba("inspeccionar_xlsx: advierte que no se guarde con openpyxl", [H + "inspeccionar_xlsx.py", str(fx)], repo,
+               ["no guardar con openpyxl", "lista(s) desplegable(s)", "forma(s)", "llenar_xlsx.py"])
+        valores = tmp / "valores.yaml"
+        valores.write_text("celdas:\n  - {hoja: Datos, celda: B2, valor: 1500000}\n  - {hoja: Datos, celda: A3, valor: \"Pasajes & viáticos\"}\n"
+                           "  - {hoja: Datos, celda: D2, valor: 2026-01-15}\n  - {hoja: Datos, celda: B3, valor: \"55%\"}\n"
+                           "  - {hoja: Datos, celda: C2, valor: 7}\n  - {hoja: Resumen, celda: B1, valor: 1}\n  - {hoja: Datos, celda: F1, valor: x}\n"
+                           "  - {hoja: \"Datos \", celda: A9, valor: fila nueva}\n", encoding="utf-8")
+        prueba("llenar_xlsx: escribe valores y rechaza fórmulas, hojas protegidas y celdas combinadas ocultas",
+               [H + "llenar_xlsx.py", str(fx), "--valores", str(valores), "--salida", str(tmp / "planilla-llena.xlsx")], repo,
+               ["Celdas a escribir: 5 · rechazadas: 3", "tiene una fórmula", "la hoja está protegida", "escribe en E1", "Verificación: OK",
+                "x14:dataValidation 1", "xdr:sp 1"], codigo=1)
+        with _w.catch_warnings():
+            _w.simplefilter("ignore")
+            _ll = _lw3(tmp / "planilla-llena.xlsx", read_only=True)
+            _vals = (_ll["Datos"]["B2"].value, _ll["Datos"]["A3"].value, str(_ll["Datos"]["D2"].value)[:10], _ll["Datos"]["B3"].value,
+                     _ll["Datos"]["A9"].value, _ll["Datos"]["C2"].value)
+        with _zf.ZipFile(fx) as z1, _zf.ZipFile(tmp / "planilla-llena.xlsx") as z2:
+            _iguales = all(z1.read(n) == z2.read(n) for n in z1.namelist() if n not in ("xl/worksheets/sheet1.xml", "xl/workbook.xml"))
+        resultados.append(("llenar_xlsx: valores correctos y todo lo demás idéntico byte a byte",
+                           _vals == (1500000, "Pasajes & viáticos", "2026-01-15", 0.55, "fila nueva", "=B2*2") and _iguales, [str(_vals), f"iguales={_iguales}"]))
+
+        # Formulario de plataforma: reconstrucción (texto del portal y Word con instrucciones en azul), control y salidas
+        prueba("formulario: reconstruye el formulario impreso del portal", [H + "formulario.py", "proyectos/prueba-cat", "--reconstruir",
+               str(ei / "Formato vacio FORM1.md")], repo, ["campos: 3", "con límite de caracteres: 2", "obligatorios: 2"])
+        import yaml as _yaml2
+        _bor = _yaml2.safe_load((pc / "postulacion" / "formulario.borrador.yaml").read_text(encoding="utf-8"))
+        _c = _bor["campos"]
+        resultados.append(("formulario: preguntas, límites (también tras la ayuda), obligatorios y títulos en dos líneas",
+                           [x["pregunta"] for x in _c] == ["NOMBRE OFICIAL DE LA INICIATIVA", "RESUMEN EJECUTIVO",
+                                                            "¿BENEFICIARIOS CONSIDERAN PERSONAS ADULTOS MAYORES DE 60 AÑOS?"]
+                           and [x["limite"] for x in _c] == [80, 1500, ""] and "Portal" not in str(_c), [str(_c)[:600]]))
+        from docx.shared import RGBColor as _RGB
+        _dw = _Doc5()
+        _dw.add_heading("Proyecto", level=1)
+
+        def _azul(t):
+            _dw.add_paragraph().add_run(t).font.color.rgb = _RGB(0, 0, 0xFF)
+        _azul("1. Título del Proyecto *\nNombre de identificación del proyecto.")
+        _azul("0 / 250")
+        _dw.add_paragraph("Mi proyecto de prueba")
+        _azul("2. ¿Cuál es la tendencia tecnológica? *\nElija una.")
+        _dw.add_paragraph("Inteligencia Artificial (IA)")
+        _dw.add_paragraph("Robótica")
+        _dw.add_paragraph("3. Región de impacto del proyecto *")
+        _dw.add_paragraph("Antofagasta")
+        _dw.save(str(tmp / "formulario-corfo.docx"))
+        prueba("formulario: reconstruye un Word con las instrucciones en azul", [H + "formulario.py", "proyectos/prueba-cat", "--reconstruir",
+               str(tmp / "formulario-corfo.docx")], repo, ["campos: 3", "con límite de caracteres: 1", "con respuesta previa: 1"])
+        _c2 = _yaml2.safe_load((pc / "postulacion" / "formulario.borrador.yaml").read_text(encoding="utf-8"))["campos"]
+        resultados.append(("formulario: pregunta, límite, respuesta previa, selección con opciones y pregunta sin color",
+                           _c2[0]["limite"] == 250 and _c2[0]["respuesta"] == "Mi proyecto de prueba" and _c2[1]["tipo"] == "seleccion"
+                           and _c2[1]["opciones"] == ["Inteligencia Artificial (IA)", "Robótica"] and _c2[2]["pregunta"].startswith("3. Región"),
+                           [str(_c2)[:600]]))
+        _bor["plataforma"] = "Portal de prueba"
+        _bor["campos"][0]["respuesta"] = "Transferencia tecnológica para la agricultura del desierto en la región, con apoyo del Miniзterio regional"
+        _bor["campos"][1]["archivo"] = "propuesta/campos/C02.md"
+        (pc / "propuesta" / "campos").mkdir(parents=True, exist_ok=True)
+        (pc / "propuesta" / "campos" / "C02.md").write_text("---\ncampo: C02\n---\n**Resumen** del proyecto.​ Dura 18 meses.\n", encoding="utf-8")
+        (pc / "postulacion" / "formulario.yaml").write_text(_yaml2.safe_dump(_bor, allow_unicode=True, sort_keys=False), encoding="utf-8")
+        prueba("formulario: control de límites, obligatorios y caracteres raros", [H + "formulario.py", "proyectos/prueba-cat"], repo,
+               ["exceden su límite: 1", "Cyrillic Small Letter Ze", "Zero Width Space", "| C02 | RESUMEN EJECUTIVO * | 1500 | 37 | ok |"])
+        prueba("formulario: --limpiar quita invisibles y deja los dudosos para revisar", [H + "formulario.py", "proyectos/prueba-cat", "--limpiar"],
+               repo, ["Campos corregidos: 1", "caracteres raros: 1"])
+        prueba("formulario: Word de trabajo y hoja de carga", [H + "formulario.py", "proyectos/prueba-cat", "--word", "--hoja-carga"], repo,
+               ["Word de trabajo:", "Hoja de carga:"])
+        _hc = list((pc / "propuesta" / "salida").glob("hoja-de-carga_*.html"))
+        _ww = list((pc / "propuesta" / "salida").glob("formulario-trabajo_*.docx"))
+        resultados.append(("formulario: la hoja de carga trae cada campo con su botón Copiar y el Word la instrucción en azul",
+                           bool(_hc) and _hc[0].read_text(encoding="utf-8").count("Copiar</button>") == 3 and bool(_ww)
+                           and any(r.font.color.rgb == _RGB(0, 0, 0xFF) for p in _Doc5(str(_ww[0])).paragraphs for r in p.runs if r.font.color.type),
+                           [str(_hc), str(_ww)]))
+        prueba("verificar_autoria: el Word de trabajo sale limpio", [H + "verificar_autoria.py", str(_ww[0]) if _ww else "x", "--proyecto",
+               "proyectos/prueba-cat"], repo, ["Resultado: OK"])
+        prueba("postulacion: muestra el formulario y lo exige en la compuerta de entrega", [H + "postulacion.py", "proyectos/prueba-cat"], repo,
+               ["Formulario de la plataforma: listos / exceden el límite / obligatorios vacíos | 1 de 3 / 1 / 0", "formulario_campos_excedidos == 0"])
+
+        # Salidas JSON para el status
+        _js = subprocess.run([PY, H + "postulacion.py", "ejemplos/postulacion-demo", "--hoy", "2026-11-03", "--json"], cwd=repo, capture_output=True,
+                             text=True, encoding="utf-8")
+        _jv = subprocess.run([PY, H + "validar_proyecto.py", "ejemplos/demo-andes", "--hoy", "2026-09-25", "--json"], cwd=repo, capture_output=True,
+                             text=True, encoding="utf-8")
+        _je = subprocess.run([PY, H + "evaluar_metricas.py", "ejemplos/portafolio-acciones", "--hoy", "2026-08-31", "--json"], cwd=repo,
+                             capture_output=True, text=True, encoding="utf-8")
+        try:
+            _pj, _vj, _ej = json.loads(_js.stdout), json.loads(_jv.stdout), json.loads(_je.stdout)
+            _ok_json = (_pj["etapa"] == "red_team" and _pj["metricas"]["excluyentes_pendientes"] == 7 and _vj["conteos"]["riesgos_altos_sin_plan"] == 1
+                        and _vj["conteos"]["acuerdos_vencidos"] == 1 and round(_vj["avance_total"]["real"]) == 27 and _ej["reglas_criticas"] >= 1)
+        except (json.JSONDecodeError, KeyError, TypeError) as ex:
+            _ok_json = False
+            _pj = str(ex)
+        resultados.append(("postulacion, validar_proyecto y evaluar_metricas: salida --json con los mismos cálculos", _ok_json, [str(_pj)[:300]]))
+
+        # Status de la empresa: semáforos, vencimientos propios, reporte web y Excel, historial, inicio de sesión
+        _vc = pc / "seguimiento" / "vencimientos.csv"
+        _vc.write_text("id,fecha,compromiso,tipo,responsable,estado,comentario\nV-01,2026-10-24,Reporte SSM 1S26,informe,Responsable,pendiente,\n",
+                       encoding="utf-8")
+        prueba("status: semáforos, alerta de vencimiento propio y decisiones", [H + "status.py", "--hoy", "2026-10-20"], repo,
+               ["# Status", "🟡", "Reporte SSM 1S26 (24-10, en 4 días)","## Lo que viene (14 días)", "Decidir si se postula (Go/No-Go)",
+                "## Postulaciones"])
+        prueba("status: el vencimiento pasado pone el proyecto en rojo", [H + "status.py", "--hoy", "2026-10-25", "--breve"], repo,
+               ["🔴", "venció «Reporte SSM 1S26»"])
+        prueba("status: reporte web, Markdown y Excel con historial", [H + "status.py", "--hoy", "2026-10-20", "--formato", "html,md,xlsx"], repo,
+               ["Reporte:", "status-2026-10-20.html"])
+        _st = repo / "status"
+        resultados.append(("status: archivos del reporte e historial en status/",
+                           all((_st / f"status-2026-10-20.{e}").exists() for e in ("html", "md", "xlsx")) and (_st / "historial" / "2026-10-20.json").exists()
+                           and "Requiere tu decisión" in (_st / "status-2026-10-20.html").read_text(encoding="utf-8"), [str(list(_st.rglob("*")))]))
+        prueba("verificar_autoria: el Excel del status sale limpio", [H + "verificar_autoria.py", str(_st / "status-2026-10-20.xlsx")], repo, ["Resultado: OK"])
+        prueba("status: compara con el status anterior", [H + "status.py", "--hoy", "2026-10-25"], repo,
+               ["## Cambios desde el 20-10-2026", "empeoró"])
+        (repo / ".harness").mkdir(exist_ok=True)
+        (repo / ".harness" / "estado.yaml").write_text('instalado: true\nversion_harness: "2.2"\n', encoding="utf-8")
+        prueba("estado: al iniciar muestra el status breve", [H + "estado.py"], repo, ["Status de los proyectos", "Prueba"])
+        shutil.rmtree(repo / ".harness")
+        shutil.rmtree(_st)
+
+        # Tablero único de varias empresas (carpeta y repositorio aparte) y agenda semanal (simulada)
+        correr([H + "nueva_empresa.py", "Empresa Tres", "--destino", str(tmp / "empresas"), "--sin-github"], repo, env=env_git)
+        panel = tmp / "empresas" / "Panel-General"
+        prueba("status: crear el panel de varias empresas", [H + "status.py", "--crear-panel", str(panel), "--empresas", str(e2),
+               str(tmp / "empresas" / "empresa-tres"), "--nombre", "Panel de prueba"], repo, ["Panel creado", "--private"])
+        _py_panel = (panel / "panel.yaml").read_text(encoding="utf-8") if (panel / "panel.yaml").exists() else ""
+        resultados.append(("status: el panel guarda rutas relativas y tiene su propio repositorio",
+                           "../empresa-dos" in _py_panel and "../empresa-tres" in _py_panel and (panel / ".git").exists()
+                           and (panel / "AGENTS.md").exists(), [_py_panel]))
+        prueba("status: tablero único de varias empresas", [H + "status.py", "--panel", str(panel), "--formato", "html"], repo,
+               ["# Tablero general", "| Empresa |", "Empresa Dos"])
+        resultados.append(("status: el reporte del panel queda en la carpeta del panel, no en las empresas",
+                           any(panel.glob("status-*.html")) and not (e2 / "status").exists(), [str(list(panel.iterdir()))]))
+        prueba("status: un panel requiere al menos dos empresas", [H + "status.py", "--crear-panel", str(tmp / "p2"), "--empresas", str(e2)], repo,
+               ["al menos dos carpetas"], codigo=1)
+        _ag = prueba("agendar_status: simula la programación semanal", [H + "agendar_status.py", "--dia", "lunes", "--hora", "9:00", "--simular"],
+                     repo, [], codigo=None)
+        resultados.append(("agendar_status: comando del sistema correcto para este computador",
+                           ("/SC WEEKLY /D MON /ST 09:00" in _ag) if os.name == "nt" else ("StartCalendarInterval" in _ag or "cron" in _ag), [_ag[:400]]))
+        prueba("agendar_status: valida la hora", [H + "agendar_status.py", "--dia", "lunes", "--hora", "25:00", "--simular"], repo,
+               ["--hora HH:MM"], codigo=1)
 
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)

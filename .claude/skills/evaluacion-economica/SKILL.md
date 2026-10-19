@@ -22,6 +22,10 @@ Cuando el trabajo es el presupuesto de una postulación a un fondo o licitación
    reclasificar partidas) y muestra el efecto; la decisión de montos y aportes es del postulante.
 5. Si las bases piden evaluación económica del proyecto (VAN, TIR, flujo de caja), agrégala con `modelo_economico.py`
    y verifica que el presupuesto del proyecto y el flujo usen las mismas cifras.
+5b. **Planilla oficial de la entidad** (Anexo de presupuesto, plan de trabajo, carta Gantt): el Excel con controles es
+   la herramienta de trabajo; lo que se entrega es **la planilla oficial llenada**. Vuelca las cifras con
+   `llenar_xlsx.py` (ver `generar-reporte/references/modos-salida.md`), nunca reconstruyendo la planilla. Después, si
+   hay LibreOffice, recalcula y compara los totales de la planilla oficial con los del presupuesto: deben coincidir.
 6. Ambos Excel salen con autoría limpia (autor del proyecto); confírmalo con `verificar_autoria.py`.
 
 ## 1. Definir el marco (preguntas mínimas, con propuesta)

@@ -180,14 +180,23 @@ def resumen(remoto=False):
         if alta_en_curso(entrada / "_procesado" / "avance-alta.md"):
             lineas.append(f"- {p.name}: hay un alta en curso (ver _entrada/_procesado/avance-alta.md); ofrece continuarla.")
         if entrada.exists():
-            n = sum(1 for x in entrada.rglob("*") if x.is_file() and x.name not in (".gitkeep", "LEEME.md") and not x.name.startswith("_LEEME")
-                    and "_procesado" not in x.parts and "_archivo" not in x.parts)
+            n = sum(1 for x in _nucleo.ruta_larga(entrada).rglob("*") if x.is_file() and x.name not in (".gitkeep", "LEEME.md")
+                    and not x.name.startswith("_LEEME") and "_procesado" not in x.parts and "_archivo" not in x.parts)
             if n:
                 lineas.append(f"- {p.name}: {n} archivo(s) en _entrada/ (pueden estar sin procesar).")
         n_cambios = (cambios or {}).get(f"proyectos/{p.name}", 0)
         if n_cambios:
             lineas.append(f"- {p.name}: {n_cambios} archivo(s) modificados sin guardar en Git; si el traspaso no los explica, "
                           "revisa `git status` y `git diff` antes de seguir, y ofrece `guardar-cambios`.")
+    if instalado and proyectos and not mantenedor:
+        try:  # status breve: dónde estamos (semáforo, lo que vence, decisiones); requiere las librerías instaladas
+            import status as _status
+            breve = _status.resumen_breve(RAIZ)
+            if breve:
+                lineas.append("- Status de los proyectos (muéstraselo al usuario en 2 a 4 líneas al empezar; el detalle, con la skill `status`):")
+                lineas += [f"  {x}" for x in breve]
+        except Exception:
+            pass
     return "\n".join(lineas)
 
 

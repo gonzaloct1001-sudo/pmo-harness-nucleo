@@ -1,4 +1,4 @@
-# PMO Harness 2.1: manual de usuario
+# PMO Harness 2.2: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa.
 
@@ -63,11 +63,19 @@ aclaraciones, lineamientos, contratos, actas e informes queda una **copia fiel**
 privado, para trabajar desde otro computador sin los originales. De CVs, estados financieros y datos personales solo
 queda una ficha.
 
+- **Documentos escaneados** (un PDF que es solo imagen): el asistente te avisa cuáles son. Pásalos por OCR (por
+  ejemplo, abrirlos con Word o Google Drive y guardarlos como Word) y deja esa versión en una subcarpeta `ocr/` junto al
+  original: se usa la que tenga texto.
+- **Charlas, leyes y reglamentos** también se guardan, pero no se mezclan con los requisitos: lo que se dijo en una charla
+  no obliga hasta que una aclaración oficial lo confirme, y te lo marca así.
+
 Si después llegan más documentos, déjalos en `_entrada/`: en la siguiente sesión te ofrece procesarlos.
 
 ## 6. Uso diario: pídelo con tus palabras
 | Quieres… | Dile, por ejemplo |
 |---|---|
+| Saber cómo van tus proyectos | «¿cómo vamos?», «¿qué vence esta semana?» (también te lo muestra al abrir cada día) |
+| El reporte de status | «dame el reporte de status» (página web; si quieres, te la deja lista cada semana el día y la hora que elijas) |
 | Preparar una reunión de avance | «tengo reunión de avance el jueves, ¿qué llevo?» |
 | Una minuta | pega tus notas: «estas son las notas de la reunión de hoy» |
 | El informe de avance | «genera el informe de avance de octubre» |
@@ -77,6 +85,8 @@ Si después llegan más documentos, déjalos en `_entrada/`: en la siguiente ses
 | Actualizar el avance | «la configuración va en 70%», «terminamos el levantamiento el lunes» |
 | Registrar un riesgo o problema | «el proveedor se va a atrasar dos semanas» |
 | Revisar todo | «¿cuadra todo?», «¿qué está atrasado o vencido?» |
+| Recordar un compromiso | «el reporte semestral SSM vence el 30 de julio» (aparece en el status hasta que lo cierres) |
+| Llenar una planilla oficial | «llena el Excel de indicadores con estos datos» (no rompe listas desplegables, fórmulas ni formas) |
 | Un contrato o enmienda | «llegó la enmienda 2» |
 | Ver qué puedes hacer | «¿qué puedo hacer?» |
 | Guardar | «guarda» (sube los cambios a GitHub de forma segura) |
@@ -87,7 +97,11 @@ Deja las bases, anexos y aclaraciones en `_entrada/00-bases-y-aclaraciones/` y d
 2. te ayuda a decidir si conviene postular;
 3. reconstruye cómo evaluará el comité y arma la propuesta por secciones;
 4. hace el presupuesto con controles contra las bases (topes, cofinanciamiento, aportes);
-5. somete la propuesta a un **red team** (revisores con miradas distintas) y revisa todo antes de entregar.
+5. somete la propuesta a un **red team** (revisores con miradas distintas) y revisa todo antes de entregar;
+6. si se postula en una plataforma web (por ejemplo, Fondos.gob.cl o la de CORFO), reconstruye el **formulario** desde
+   su versión impresa o el Word de preguntas, controla el **límite de caracteres** de cada campo y los caracteres que la
+   plataforma podría rechazar, y te entrega una **hoja de carga**: una página con cada respuesta y un botón «Copiar»
+   para pegarla en la plataforma, campo por campo.
 
 Los CVs, certificados y la descripción de la empresa se guardan una vez en el **banco de antecedentes** de la empresa
 y sirven para todas sus postulaciones; te avisa si un certificado estará vencido al cierre.
@@ -109,6 +123,10 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - **Otra IA, o cambiar a mitad de camino:** abre la carpeta con la otra IA y escribe «hola» o «¿en qué íbamos?». La
   primera vez se configura sola. Cada proyecto guarda un **traspaso** (qué se hizo, en qué quedó, el próximo paso), así
   que la nueva IA retoma sin que repitas nada. Antes de cambiar, di «guarda».
+- **Ver todas tus empresas juntas (tablero único):** cada empresa tiene su propio status en su carpeta. Si además quieres
+  una sola vista de todas, pide «quiero un tablero único». Antes te pregunta si son empresas independientes o de una misma
+  entidad, y si prefieres un tablero por empresa o uno general. El tablero general queda en **una carpeta y un
+  repositorio privado aparte, solo tuyo**: lee el status de cada empresa sin copiar sus datos ni mezclarlos.
 
 ## 10. Privacidad: tu repositorio y el del harness
 - El **harness** se publica en un repositorio público de **solo lectura**: cualquiera lo descarga, pero nadie puede
@@ -119,6 +137,8 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
   muestra qué cambia; respalda, prueba y, si algo falla, deja todo como estaba. Tus proyectos, documentos e informes no
   se tocan.
 - **No uses «Fork»** para obtener el harness: crearía una copia pública.
+- **Tablero único:** si llevas varias empresas y quieres verlas juntas, el tablero va en su propio repositorio
+  privado, independiente de los de cada empresa. Así nadie con acceso a una empresa ve las demás.
 - La IA que usas procesa el contenido de tus documentos según las condiciones de su proveedor. Confirma que tus
   clientes lo permiten (la ficha de inicio lo pregunta).
 
@@ -126,7 +146,10 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - **No sube a GitHub** documentos confidenciales: la carpeta `_entrada`, originales de contratos, CVs, paquetes firmados.
   El control está en Git y funciona con cualquier IA.
 - **Revisa cada planilla** antes de guardarla (columnas y fechas).
-- **Al abrir** te dice qué hay pendiente: traspasos, documentos nuevos, altas a medio camino, cambios sin guardar.
+- **Al abrir** te dice qué hay pendiente: el status de tus proyectos (semáforo, lo que vence pronto, decisiones que
+  esperan), traspasos, documentos nuevos, altas a medio camino y cambios sin guardar.
+- **Planillas oficiales** (por ejemplo, el Excel de indicadores de CORFO): se llenan sin tocar sus listas desplegables,
+  fórmulas, formas ni hojas protegidas, y se verifica que todo lo demás quede idéntico.
 - **Antes de entregar un documento** revisa que salga a tu nombre y sin rastros del proceso.
 
 Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
@@ -139,7 +162,11 @@ Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
 - **¿Puedo usar MS Project?** Sí: guarda el cronograma como XML y di «importa el cronograma de MS Project». Primero ves
   una vista previa; nada se reemplaza sin tu confirmación.
 - **¿Qué pasa si no sé un dato?** Queda como pendiente y aparece en el informe; no se inventa.
-- **¿Dónde quedan mis informes?** En `reportes/emitidos/` de cada proyecto.
+- **¿Dónde quedan mis informes?** En `reportes/emitidos/` de cada proyecto. El reporte de status, en `status/` de la
+  carpeta de la empresa (o en la carpeta del tablero único).
+- **¿El reporte semanal se envía solo?** Se prepara solo, en tu computador, el día y la hora que elijas, y se abre en tu
+  navegador. No se envía a nadie. Para cambiarlo o quitarlo: «cambia el día del reporte semanal», «quita el reporte semanal».
+- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 9).
 - **¿Necesito los documentos originales en otro computador?** Casi nunca: las bases y los documentos de definición
   están replicados en `fuentes/`. Los originales hacen falta para firmar o presentar, o ante una duda legal.
 - **¿Cómo pruebo sin datos reales?** Pídele «prueba con el paquete de postulación de ejemplo».

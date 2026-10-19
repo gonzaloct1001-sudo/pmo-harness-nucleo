@@ -1,1 +1,1 @@
-id,documento,ubicacion,texto,tipo_sugerido,excluyente_sugerido,datos_detectados,huella,estado_revision,requisito_id,motivo_descarte
+id,documento,ubicacion,texto,tipo_sugerido,excluyente_sugerido,datos_detectados,huella,estado_revision,requisito_id,motivo_descarte,vinculante

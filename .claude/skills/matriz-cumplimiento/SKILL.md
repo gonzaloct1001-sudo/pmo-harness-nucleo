@@ -14,6 +14,14 @@ verificado_por, comentario.
 ## 1. Barrido (red de seguridad)
 `python herramientas/extraer_requisitos.py proyectos/<slug>` sobre el texto de todas las bases (incluidas
 aclaraciones y foro). Es incremental: al llegar una aclaración, solo agrega lo nuevo.
+- Por defecto barre las categorías `bases` y `formulario` del inventario. Si el inventario clasificó mal unas bases
+  (por ejemplo, como `otro`), corrige su categoría en `_entrada/_procesado/inventario.csv` y vuelve a barrer.
+- La **normativa** general (leyes, decretos) y las **charlas** se barren solo si hace falta:
+  `--categorias bases,formulario,normativa,charla`. Lo que venga de una charla queda con `vinculante = no: confirmar
+  por consulta`: si agrega o contradice algo de las bases, redacta la consulta formal en `postulacion/consultas.csv`
+  y no lo incorpores como requisito hasta tener respuesta.
+- Si el inventario avisa **escaneos sin texto** entre las bases, pide pasarlos por OCR antes de dar el barrido por
+  completo: lo que exigen esos documentos todavía no está en la matriz.
 
 ## 2. Lectura completa y consolidación
 1. Lee las bases completas en este orden: bases administrativas → técnicas → económicas → anexos y formularios →

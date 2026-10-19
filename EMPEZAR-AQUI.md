@@ -90,7 +90,11 @@ El asistente elige el tipo de proyecto, lo configura y te muestra la **guía de 
 
 ## Listo. Así se usa todos los días
 
+Cada vez que abras la carpeta y escribas «hola», el asistente te muestra en pocas líneas **cómo van tus proyectos**:
+semáforo, lo que vence pronto y las decisiones que te esperan.
+
 Pídele las cosas con tus palabras, por ejemplo:
+- «¿Cómo vamos?» · «dame el reporte de status» (página web; te ofrece dejarlo listo cada semana)
 - «Prepara la postulación» · «¿qué exigen las bases?» · «¿qué falta para entregar?»
 - «Tengo reunión de avance el jueves, ¿qué llevo?» · «estas son mis notas de la reunión»
 - «Genera el informe de avance» · «arma el flujo de caja con estos supuestos»
@@ -98,7 +102,9 @@ Pídele las cosas con tus palabras, por ejemplo:
 - «¿Qué puedo hacer?» (muestra todo lo disponible) · «guarda» (respalda en GitHub)
 
 **Más adelante:**
-- **Otra empresa:** «crea la carpeta para la empresa X».
+- **Otra empresa:** «crea la carpeta para la empresa X». Te preguntará si son empresas independientes o de una misma
+  entidad, y si quieres ver todas juntas en un **tablero único** (va en una carpeta y un repositorio privado aparte, solo
+  tuyo) o el status de cada una por separado.
 - **Otro computador:** instala tu herramienta de IA, abre cualquier carpeta y pide «descarga mis empresas».
 - **Otra IA:** abre la carpeta con la nueva y escribe «hola». Retoma donde quedaste.
 - **Versión nueva del harness:** «actualiza el harness». Tus proyectos y datos no se tocan.

@@ -114,6 +114,7 @@ def main():
                    help="calcular el avance planificado a la fecha de la última actualización del cronograma")
     p.add_argument("--cronograma", help="archivo de cronograma alternativo (por defecto cronograma/cronograma.csv)")
     p.add_argument("--salida", help="guardar el informe en este archivo .md")
+    p.add_argument("--json", action="store_true", help="entregar hallazgos, avance y conteos en JSON (lo usa status.py)")
     args = p.parse_args()
 
     raiz = Path(args.proyecto)
@@ -272,6 +273,27 @@ def main():
         decl = numero(r.get("avance_declarado_pct"), None) if (r.get("avance_declarado_pct") or "").strip() else None
         if decl is not None and avance_total is not None and est not in ("pagado",) and abs(decl - avance_total) > 5:
             inf.a(f"Estado de pago {r.get('id')} declara {decl:.0f}% de avance y el cronograma indica {avance_total:.0f}%.")
+
+    if args.json:
+        import json
+        cuenta = lambda lista, cond: sum(1 for x in lista if cond(x))  # noqa: E731
+        conteos = {
+            "hitos_vencidos": cuenta(inf.criticos, lambda x: x.startswith("Hito vencido")),
+            "tareas_atrasadas": cuenta(inf.advertencias, lambda x: x.startswith("Tarea atrasada")),
+            "acuerdos_vencidos": cuenta(inf.advertencias, lambda x: x.startswith("Acuerdo ") and "vencido" in x),
+            "issues_vencidos": cuenta(inf.advertencias, lambda x: x.startswith("Issue ") and "vencido" in x),
+            "riesgos_altos_sin_plan": cuenta(inf.criticos, lambda x: "no tiene plan de acción" in x),
+            "fuera_de_plazo_contractual": cuenta(inf.criticos, lambda x: "después del término contractual" in x),
+            "cambios_sin_resolver": cuenta(inf.advertencias, lambda x: x.startswith("Cambio ") and "sin resolverse" in x),
+        }
+        peso = sum(x["peso"] for x in subproyectos.values())
+        total = ({"plan": sum(x["plan"] for x in subproyectos.values()) / peso, "real": sum(x["real"] for x in subproyectos.values()) / peso}
+                 if peso else None)
+        print(json.dumps({"criticos": inf.criticos, "advertencias": inf.advertencias, "info": inf.info, "conteos": conteos,
+                          "avance_total": total, "termino_contractual": termino if isinstance(termino, date) else None,
+                          "avance": [{"subproyecto": sp, "plan": pl, "real": re_, "desviacion": dv, "estado": es}
+                                     for sp, pl, re_, dv, es in tabla_avance]}, ensure_ascii=False, default=str))
+        return
 
     # --- Informe ---
     nombre = (cfg.get("proyecto") or {}).get("nombre", raiz.name)

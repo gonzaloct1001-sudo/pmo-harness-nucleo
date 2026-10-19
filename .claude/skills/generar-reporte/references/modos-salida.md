@@ -40,8 +40,27 @@ Para secciones de largo variable (listas de riesgos, tablas), ubica el párrafo 
 filas o párrafos después de él copiando su estilo. Si la plantilla no tiene marcadores, identifica las
 secciones por sus títulos y avísale al usuario que conviene agregarle marcadores.
 
-## Excel en modo actualizar (planillas de control acumulativas)
-1. Ejecuta `python herramientas/inspeccionar_xlsx.py <archivo>` si no conoces el archivo o cambió.
+## Excel oficial o de terceros (planillas de CORFO, del GORE, de un cliente): `llenar_xlsx.py`
+Abrir y guardar con openpyxl **borra** las listas desplegables modernas, las formas y cuadros de texto y otras
+extensiones que estas planillas suelen tener; una planilla dañada puede ser rechazada. Para cualquier planilla que no
+creó el harness (o si `inspeccionar_xlsx.py` muestra «no guardar con openpyxl»):
+1. `python herramientas/inspeccionar_xlsx.py <archivo>` → hojas, celdas de entrada, fórmulas, hojas protegidas.
+2. Escribe el mapeo en un YAML (hoja, celda y valor), con los datos del proyecto:
+   ```yaml
+   celdas:
+     - {hoja: "1. Información General", celda: C3, valor: "Programa X"}
+     - {hoja: "3. Matriz de Resultados", celda: M4, valor: 0.55}      # porcentajes como fracción (o "55%")
+     - {hoja: "1. Información General", celda: F3, valor: 2026-01-15}  # fechas AAAA-MM-DD
+   ```
+3. `python herramientas/llenar_xlsx.py <planilla> --valores valores.yaml --vista-previa` → muestra qué cambiaría.
+4. `python herramientas/llenar_xlsx.py <planilla> --valores valores.yaml --salida emitidos/<periodo>/<nombre>.xlsx`.
+   Nunca escribe sobre fórmulas, hojas protegidas ni celdas ocultas de un rango combinado; verifica que todo lo demás
+   quedó idéntico. El original no se toca. Guarda el YAML junto al emitido: es el registro de qué se escribió.
+5. Informa al usuario las celdas escritas y las rechazadas (con el motivo).
+
+## Excel creado por el harness en modo actualizar (planillas de control propias, acumulativas)
+1. Ejecuta `python herramientas/inspeccionar_xlsx.py <archivo>` si no conoces el archivo o cambió. Si advierte
+   elementos que se perderían, usa `llenar_xlsx.py` (sección anterior).
 2. Si el archivo tiene vínculos a otros libros, **detente** y avisa: guardarlo con openpyxl rompe esos vínculos.
 3. Edita solo las celdas del mapeo de la definición:
 ```python

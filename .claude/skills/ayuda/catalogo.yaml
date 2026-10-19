@@ -66,6 +66,8 @@ skills:
      ejemplos: ["listo, ya dejé los documentos", "procesa lo nuevo de la entrada", "retomemos el alta"]}
   - {id: ayuda, para: "Ver qué puedo hacer en este proyecto y cómo pedirlo", arquetipos: [todos],
      ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
+  - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
+     ejemplos: ["¿cómo vamos?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
   - {id: generar-reporte, para: "Generar cualquier reporte del catálogo del proyecto", arquetipos: [todos],
      ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité"]}
   - {id: nuevo-tipo-reporte, para: "Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
@@ -116,6 +118,8 @@ skills:
      ejemplos: ["revisa la prefactibilidad del consultor"]}
   - {id: preparar-postulacion, para: "Llevar la postulación de las bases a la entrega, con compuertas", arquetipos: [postulacion],
      ejemplos: ["prepara la postulación", "¿cómo vamos con la postulación?", "¿qué falta para entregar?"]}
+  - {id: formulario-plataforma, para: "Formulario de la plataforma: reconstruirlo, controlar límites de caracteres, Word de trabajo y hoja para copiar y pegar", arquetipos: [postulacion],
+     ejemplos: ["la postulación se llena en línea, no hay formulario", "¿cuántos caracteres llevo en el resumen?", "prepárame la hoja para cargar en el portal"]}
   - {id: matriz-cumplimiento, para: "Todos los requisitos de las bases con dueño, evidencia y checklist de entrega", arquetipos: [postulacion],
      ejemplos: ["¿qué exigen las bases?", "llegó una aclaración", "¿cumplimos todo?"]}
 

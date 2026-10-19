@@ -22,6 +22,9 @@ ficha del proyecto J».
 - Razón social y RUT:
 - Representante legal (quien firma postulaciones y declaraciones):
 - ¿Tienes logo, colores o una plantilla de informe de la empresa? (déjalos en `_entrada/08-marca/` y `04-reportes-y-plantillas/`):
+- ¿Llevas proyectos de otras empresas? ¿Cuáles? ¿Son independientes o parte de una misma entidad?:
+- ¿Quieres ver todas en un tablero único (carpeta y repositorio privado aparte) o el status de cada una por separado?:
+- ¿Quieres un reporte de status semanal? (día y hora):
 
 ## 2. El proyecto
 - ¿De qué se trata? (en tus palabras, 2 o 3 líneas):

@@ -1,4 +1,4 @@
-# PMO Harness v2.1
+# PMO Harness v2.2
 
 Marco de trabajo para diseñar y gestionar proyectos **de cualquier tipo** con un asistente de IA —Claude Code,
 OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u otro que trabaje sobre carpetas— para un programa
@@ -165,6 +165,20 @@ Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadore
   «Actualiza el harness» (`actualizar_nucleo.py`) trae la versión nueva desde el repositorio del núcleo o un zip, sin
   tocar proyectos ni datos, con respaldo, pruebas y reversión si algo falla.
 
+## Status de todos los proyectos
+- **Cada día:** al abrir la sesión, el asistente muestra en pocas líneas el status de los proyectos de la empresa
+  (semáforo, lo que vence pronto, decisiones que esperan). En cualquier momento: «¿cómo vamos?».
+- **Reporte web:** «dame el reporte de status» genera una página (también Markdown, Excel o JSON) en `status/`, con
+  historial y comparación con el anterior. Después pregunta si se deja listo **cada semana**, en qué día y a qué hora
+  (`herramientas/agendar_status.py`: Tareas programadas en Windows, launchd en Mac).
+- **Reglas fijas del semáforo:** salen de los mismos cálculos de `postulacion.py`, `validar_proyecto.py` y
+  `evaluar_metricas.py`, más el calendario, los hitos, los acuerdos y los compromisos propios
+  (`seguimiento/vencimientos.csv`, por ejemplo un reporte semestral).
+- **Varias empresas:** cada una tiene su status en su carpeta. Si se quieren ver juntas, un **tablero único**
+  (`status.py --crear-panel`) va en una carpeta y un repositorio privado aparte, solo del usuario: lee el status de cada
+  empresa sin copiar sus datos. Al sumar otra empresa, el asistente pregunta si son independientes o de una misma
+  entidad, y si se prefiere un tablero por empresa o uno general.
+
 ---
 
 ## Probar antes con datos ficticios
@@ -269,7 +283,7 @@ justo después de editarlo (también si se modificó por consola), y al abrir un
 (instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
 aunque en Windows solo responda `py` o en Mac esté en `.venv`.
 
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 155 pruebas sobre copias de los
+**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 194 pruebas sobre copias de los
 ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
 cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
 guion para probar el harness con cada IA.
@@ -306,6 +320,10 @@ guion para probar el harness con cada IA.
 | Evaluación económica | "Arma el flujo de caja con estos supuestos", "¿qué pasa si la demanda cae 20%?" |
 | Chequear que todo cuadre | "Revisa la consistencia antes del comité" |
 | Dar de alta otro proyecto | "Da de alta un proyecto nuevo" |
+| Status | "¿Cómo vamos?", "dame el reporte de status", "agenda el reporte semanal los lunes a las 9" |
+| Compromiso con fecha | "El reporte semestral SSM vence el 30 de julio" (queda en el status hasta cerrarlo) |
+| Formulario de la plataforma | "Arma la hoja de carga del formulario" (límites de caracteres y botón Copiar por campo) |
+| Llenar una planilla oficial | "Llena el Excel de indicadores con estos datos" (sin romper listas desplegables ni formas) |
 | Guardar | "Guarda los cambios" |
 | Cambiar de IA | Abre la carpeta con la otra IA y di "hola" o "¿en qué íbamos?" (retoma desde el traspaso) |
 | Otra empresa | "Crea la carpeta para la empresa X" (repositorio propio, sin mezclar datos) |
@@ -362,6 +380,8 @@ en cualquier momento, pregunta «¿qué puedo hacer?» (skill `ayuda`). No hace 
   informes. De CVs, estados financieros y datos personales nunca se sube el texto: solo su ficha.
 - El control de Git (y, en Claude Code, también un hook) bloquea cualquier intento de agregar lo confidencial, aunque
   se pida por error.
+- **Status:** el reporte de cada empresa queda en su carpeta (`status/`). El tablero único de varias empresas va en un
+  repositorio privado aparte, para que quien tenga acceso a una empresa no vea las demás.
 - El repositorio debe ser **privado**. Aun así, confirma que la política de la empresa y de sus clientes permite usar
   herramientas de IA y GitHub con su información. La IA que uses procesa el contenido de los documentos.
 - `guardar-cambios` revisa que no se suban archivos sensibles antes de cada envío.
@@ -373,6 +393,10 @@ permisos se configuran en la propia herramienta: conviene un modo que pida confi
 la carpeta o borren archivos.
 
 ## Historial de versiones
+- **2.2** — Status diario en el chat y al iniciar, reporte web con historial y agenda semanal, tablero único de varias
+  empresas en su propio repositorio privado; formulario de la plataforma (límites, caracteres raros, hoja de carga);
+  llenado de planillas oficiales sin pérdidas; barrido de requisitos selectivo (charlas y normativa aparte) y manejo de
+  escaneos (ver CHANGELOG.md).
 - **2.1** — Funciona con cualquier asistente de IA (`AGENTS.md` como fuente única, `configurar-asistente`, traspaso entre
   sesiones e IA, controles en Git); instalación automática con permiso en Windows y Mac; una empresa por carpeta y
   repositorio, con herencia de marca y banco común, y actualización del núcleo sin tocar los datos; réplicas fieles en

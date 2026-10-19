@@ -105,6 +105,7 @@ def main():
     ap.add_argument("--hoy", help="fecha de corte AAAA-MM-DD (por defecto, hoy)")
     ap.add_argument("--registrar", action="store_true", help="guardar las métricas en metricas/mediciones.csv")
     ap.add_argument("--salida")
+    ap.add_argument("--json", action="store_true", help="entregar métricas y hallazgos en JSON (lo usa status.py)")
     a = ap.parse_args()
     raiz = Path(a.proyecto)
     hoy = fecha(a.hoy) if a.hoy else date.today()
@@ -315,6 +316,14 @@ def main():
                 adv.append(f"Autoría: {f.name} tiene {len(e)} error(es): ejecuta verificar_autoria.py --corregir y revisa el texto.")
     m["entrega_autoria_errores"] = errores_aut
 
+    # --- Formulario de la plataforma (postulacion/formulario.yaml, si existe) ---
+    import formulario as _formulario
+    mf, _, _, adv_f, _ = _formulario.controlar(raiz)
+    m.update(mf)
+    if mf["formulario_campos"]:
+        cerca = cierre is not None and m["dias_al_cierre"] is not None and m["dias_al_cierre"] <= 3
+        (crit if cerca else adv).extend(adv_f[:12])
+
     # --- Alertas de cierre ---
     if cierre is not None:
         d = m["dias_al_cierre"]
@@ -360,6 +369,18 @@ def main():
         cumple = all(ok for ok, _ in resultados)
         tabla_etapas.append((e, cumple, resultados))
 
+    if a.json:
+        import json
+        actual_nombre = next((e.get("nombre") for e, _, _ in tabla_etapas if e.get("id") == actual), actual)
+        compuerta_ok = next((c for e, c, _ in tabla_etapas if e.get("id") == actual), False)
+        print(json.dumps({"metricas": m, "criticos": list(dict.fromkeys(crit)), "advertencias": list(dict.fromkeys(adv)),
+                          "info": list(dict.fromkeys(info)), "etapa": actual, "etapa_nombre": actual_nombre,
+                          "compuerta_cumplida": compuerta_ok, "cierre": cierre, "hora_cierre": pos.get("hora_cierre"),
+                          "decision_go": pos.get("decision_go"), "resultado": pos.get("resultado"),
+                          "monto_solicitado": pos.get("monto_solicitado"), "moneda": pos.get("moneda", "CLP"),
+                          "entidad": pos.get("entidad"), "instrumento": pos.get("instrumento")}, ensure_ascii=False, default=str))
+        return
+
     # --- Informe ---
     fmt = lambda v: "—" if v is None else f"{v:.2f}"  # noqa: E731
     nombre = (cfg.get("proyecto") or {}).get("nombre", raiz.name)
@@ -379,7 +400,11 @@ def main():
             f" ({pmin:g} / {objetivo:g}) |",
             f"| Fallas fatales abiertas | {m['fallas_fatales_abiertas']} |",
             f"| Documentos vencidos al cierre | {m['contenidos_vencidos']} |",
-            f"| Errores de autoría en entrega/final | {m['entrega_autoria_errores']} |", ""]
+            f"| Errores de autoría en entrega/final | {m['entrega_autoria_errores']} |"]
+    if m["formulario_campos"]:
+        out += [f"| Formulario de la plataforma: listos / exceden el límite / obligatorios vacíos | {m['formulario_campos_listos']} de "
+                f"{m['formulario_campos']} / {m['formulario_campos_excedidos']} / {m['formulario_obligatorios_vacios']} |"]
+    out += [""]
     out += ["## Etapas y compuertas", "", "| # | Etapa | Compuerta | Pendiente para cumplirla |", "|---|---|---|---|"]
     for i, (e, cumple, res) in enumerate(tabla_etapas, 1):
         marca = " ← actual" if e.get("id") == actual else ""

@@ -55,9 +55,15 @@ reportes y plantillas; y las enmiendas con sus afectaciones por subproyecto (`ge
 4. Muestra al usuario un resumen breve: cantidad de archivos por categoría, rango de fechas, cuántos quedaron
    replicados y problemas (escaneos sin texto, formatos no soportados, duplicados). No esperes respuesta si no hay
    bloqueos: sigue.
-5. Si hay escaneos sin texto importantes (por ejemplo, el contrato o las bases), léelos como imagen si puedes y
-   transcribe su texto en la réplica (marca `calidad: parcial` y anota «transcripción desde imagen»); si no puedes,
-   pídelos en otro formato y continúa con el resto.
+5. **Escaneos sin texto** (el inventario los lista en «Requieren atención» con instrucciones): pide al usuario pasarlos
+   por OCR (Word o Google Drive lo hacen, en dos clics) y dejar el resultado en la misma carpeta o en `ocr/`; al
+   volver a procesar, el harness une ambas versiones y se queda con la de más texto. Si el documento es corto y puedes
+   leer imágenes, puedes transcribirlo tú en la réplica (marca `calidad: parcial` y «transcripción desde imagen»).
+   Si un PDF trae texto pero con errores evidentes (palabras cambiadas de forma sistemática), avísalo: también conviene
+   pasarlo por OCR de nuevo.
+6. Categorías que importan para la postulación: `bases` y `formulario` entran al barrido de requisitos; `normativa`
+   (leyes, decretos) y `charla` (capacitaciones, transcripciones) se replican pero no se barren por defecto, y lo dicho
+   en una charla no es vinculante. Corrige en `inventario.csv` las categorías evidentes antes de barrer.
 
 ## Fase C — Lectura y extracción
 Lee los textos de `_procesado/texto/` en este orden, aplicando `lectura-por-tipo.md`:

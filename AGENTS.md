@@ -19,7 +19,10 @@ Responde siempre en español (Chile), con tono profesional, directo y sin tecnic
    `.claude/skills/configurar-asistente/SKILL.md` antes de la primera tarea (toma un par de minutos y no pregunta
    casi nada). Si eres un asistente distinto del último que trabajó (campo `asistente` de los traspasos), aplica
    su sección «Cambio de asistente a mitad de camino».
-3. Según el estado:
+3. **Dónde estamos.** Si el estado trae «Status de los proyectos», muéstraselo al usuario en 2 a 4 líneas junto al
+   saludo: rojos y amarillos con su motivo, lo que vence pronto y las decisiones pendientes. El detalle y el reporte
+   web, con la skill `status`.
+4. Según el estado:
    - **No instalado** (no existe `.harness/estado.yaml`): sea cual sea el primer mensaje del usuario (incluso un
      saludo), respóndelo brevemente y ofrece comenzar con la skill `instalar`. Menciona que puede completar antes
      `FICHA-DE-INICIO.md` (o que la usarás si ya la completó) y que el manual está en `MANUAL-DE-USUARIO.md`.
@@ -31,7 +34,7 @@ Responde siempre en español (Chile), con tono profesional, directo y sin tecnic
      preguntando si parte de cero, está en marcha con documentos o está en marcha sin documentos.
    - **Controles de Git inactivos:** ofrece activarlos (`git config core.hooksPath .githooks`).
    - **Commits en GitHub que no están en este computador:** ofrece `git pull` antes de trabajar.
-4. Si nada de lo anterior aplica, atiende directamente lo que pida el usuario.
+5. Si nada de lo anterior aplica, atiende directamente lo que pida el usuario.
 
 ## Organización
 
@@ -42,7 +45,11 @@ empresa con **su** repositorio privado: `instalar` desconecta la copia clonada d
 La carpeta donde el dueño mantiene el núcleo está marcada (`git config pmo.mantenedor true`) y no lleva empresas ni proyectos.
 
 Una carpeta del harness es un repositorio privado y pertenece a **una empresa** (o a una persona). Para otra
-empresa se crea otra carpeta con `herramientas/nueva_empresa.py`. **Nunca mezcles datos de dos empresas.**
+empresa se crea otra carpeta con `herramientas/nueva_empresa.py`. **Nunca mezcles datos de dos empresas.** Si el
+usuario lleva varias empresas, **pregúntale** si son independientes o parte de una misma entidad, y si quiere llevarlas
+separadas o juntas y un **tablero único** de status o uno por empresa: la estructura sigue su forma de gestionar. Cada
+empresa tiene su status en su carpeta; un tablero único va en una **carpeta de panel con su propio repositorio
+privado**, independiente de los de las empresas (skill `status`).
 
 1. **Núcleo genérico** — sirve para cualquier proyecto. No se escribe nada específico de un proyecto aquí.
    `.claude/skills/` procedimientos (skills) · `.claude/agents/` roles (subagentes) · `herramientas/` scripts ·
@@ -190,6 +197,8 @@ reemplaza al actualizarlo; las skills propias no.
 | `matriz-cumplimiento` | Todos los requisitos de las bases (barrido exhaustivo), dueños, evidencia y checklist de entrega | `.claude/skills/matriz-cumplimiento/SKILL.md` |
 | `red-team` | Panel de revisores con perspectivas distintas: puntaje estimado, fallas fatales y plan de respuesta | `.claude/skills/red-team/SKILL.md` |
 | `gestionar-programa` | Programa con subproyectos: personas, presupuesto y contingencia, enmiendas, estado consolidado | `.claude/skills/gestionar-programa/SKILL.md` |
+| `status` | Status de todos los proyectos (semáforos, lo que vence, decisiones), reporte web semanal y tablero de varias empresas («¿cómo vamos?») | `.claude/skills/status/SKILL.md` |
+| `formulario-plataforma` | Formulario de una plataforma sin documento descargable: reconstruirlo, controlar límites, Word de trabajo y hoja para copiar y pegar | `.claude/skills/formulario-plataforma/SKILL.md` |
 | `ayuda` | Qué puede hacer el harness en el proyecto activo, con frases de ejemplo («¿qué puedo hacer?») | `.claude/skills/ayuda/SKILL.md` |
 | `guardar-cambios` | Guardar y subir el trabajo a GitHub («guarda», «terminé por hoy») | `.claude/skills/guardar-cambios/SKILL.md` |
 
@@ -210,7 +219,11 @@ perspectiva del red team por vez).
 - Detalle por herramienta (qué archivo lee, qué soporta): `.claude/skills/configurar-asistente/references/asistentes.md`.
 
 ## Herramientas (`python`, o `py` en Windows; `.venv/bin/python` en Mac)
-- `estado.py [--remoto]` → estado al iniciar: instalación, empresa, asistentes, controles, proyectos, traspasos, material pendiente.
+- `estado.py [--remoto]` → estado al iniciar: instalación, empresa, asistentes, controles, proyectos, traspasos, material pendiente y status breve.
+- `status.py [--breve] [--formato html,md,xlsx,json] [--abrir] [--panel carpeta] [--crear-panel carpeta --empresas ...]` → status de gestión.
+- `agendar_status.py --dia lunes --hora 09:00 [--panel carpeta] | --ver | --quitar` → reporte web semanal agendado en este computador.
+- `formulario.py <proyecto> [--reconstruir archivos] [--limpiar] [--word] [--hoja-carga]` → formulario de una plataforma de postulación.
+- `llenar_xlsx.py <planilla> --valores valores.yaml [--vista-previa]` → llena planillas oficiales sin borrar listas, formas ni fórmulas.
 - `crear_proyecto.py <slug> --arquetipos a,b [--nombre N] [--perfil ruta]` → crea o amplía un proyecto (hereda de `empresa/`).
 - `crear_proyecto.py <id> --programa <programa>` → crea un subproyecto dentro de un programa.
 - `nueva_empresa.py "<Nombre>" --destino <carpeta> [--sin-github]` → carpeta y repositorio privado nuevos para otra empresa.
@@ -225,7 +238,7 @@ perspectiva del red team por vez).
 - `importar_backlog.py <ruta-proyecto> --desde github|csv` → trae el backlog desde GitHub o Jira.
 - `importar_msproject.py <archivo.xml> <ruta-proyecto> [--mapa "Rama=sp1"] [--reemplazar] [--linea-base]` → cronograma desde MS Project (XML).
 - `puntaje_pauta.py <ruta-proyecto>` → admisibilidad, puntajes ponderados, umbrales, ranking y presupuesto.
-- `extraer_requisitos.py <ruta-proyecto>` → barrido de las bases: candidatos a requisito con fuente (incremental).
+- `extraer_requisitos.py <ruta-proyecto> [--categorias ...|--todo]` → barrido de bases y formularios: candidatos a requisito con fuente (incremental).
 - `postulacion.py <ruta-proyecto> [--registrar]` → etapa y compuerta, cumplimiento, vencimientos, red team, controles y autoría.
 - `presupuesto_postulacion.py <presupuesto.yaml>` → Excel del presupuesto con fórmulas, fuentes y controles contra las bases.
 - `guia_proyecto.py <ruta-proyecto> | --general` → guía del usuario (`GUIA.md`).
@@ -235,7 +248,7 @@ perspectiva del red team por vez).
 - `extraer_entrada.py <ruta-proyecto> [--origen carpeta]` → inventario, texto y réplicas en `fuentes/` (incremental).
 - `md_a_docx.py <entrada.md> <salida.docx> --proyecto <ruta> [--borrador]` → Word con la marca y autoría del proyecto.
 - `verificar_autoria.py <archivo|carpeta> --proyecto <ruta> [--corregir]` → revisa que un entregable no tenga rastros del proceso.
-- `inspeccionar_xlsx.py <archivo.xlsx>` → estructura de un Excel (hojas, fórmulas, celdas de entrada).
+- `inspeccionar_xlsx.py <archivo.xlsx>` → estructura de un Excel (hojas, fórmulas, celdas de entrada) y si se puede guardar con openpyxl.
 - `gantt_mermaid.py <ruta-proyecto>` → `cronograma/gantt.md` para visualizar la carta Gantt.
 - `pruebas/ejecutar_pruebas.py` → batería de pruebas del harness (ver también `pruebas/escenarios-skills.md`).
 

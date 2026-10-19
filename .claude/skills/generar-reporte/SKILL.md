@@ -50,7 +50,7 @@ Lee `references/modos-salida.md` para el detalle técnico de cada caso.
 |---|---|---|
 | docx | generar, sin plantilla | Escribe el contenido en `emitidos/<periodo>/<tipo>.md` siguiendo las secciones de la definición y conviértelo con `herramientas/md_a_docx.py` |
 | docx | generar, con plantilla | Copia la plantilla a `emitidos/<periodo>/` y reemplaza sus marcadores o secciones |
-| xlsx | actualizar | Copia el último emitido (o la plantilla si es el primero) a `emitidos/<periodo>/` y actualiza **solo** las celdas del mapeo (típico de planillas de control acumulativas) |
+| xlsx | actualizar | Copia el último emitido (o la plantilla si es el primero) a `emitidos/<periodo>/` y actualiza **solo** las celdas del mapeo (típico de planillas de control acumulativas). **Planilla oficial o de terceros** (por ejemplo, el SSM de CORFO): siempre con `llenar_xlsx.py`, nunca con openpyxl |
 | xlsx | generar | Crea la planilla desde la plantilla con openpyxl, usando fórmulas en vez de valores calculados |
 | pptx | generar | Usa la plantilla y sus layouts con python-pptx; una idea por diapositiva |
 | md | generar | Deja el `.md` en `emitidos/<periodo>/` |

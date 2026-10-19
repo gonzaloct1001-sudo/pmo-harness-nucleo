@@ -1,5 +1,50 @@
 # Cambios
 
+## 2.2 — 2026-10-19
+
+### Nuevo: status diario y reporte web
+- `herramientas/status.py` (skill `status`): semáforo por proyecto con reglas fijas, a partir de los cálculos que ya hacen
+  `postulacion.py`, `validar_proyecto.py` y `evaluar_metricas.py` (ahora con `--json`), el calendario de la postulación,
+  los hitos, acuerdos, issues, el traspaso y los compromisos propios de `seguimiento/vencimientos.csv` (nuevo en la
+  plantilla). Muestra lo que viene en 14 días, las decisiones que esperan al usuario y el pipeline de postulaciones.
+- En el chat («¿cómo vamos?») y **al iniciar cada sesión** (`estado.py` agrega un resumen breve).
+- Reporte en página web autocontenida (claro y oscuro), Markdown, Excel o JSON en `status/`; guarda un historial y
+  compara con el status anterior (qué mejoró o empeoró).
+- `herramientas/agendar_status.py`: deja el reporte listo cada semana, el día y la hora que elija el usuario (Tareas
+  programadas en Windows, launchd en Mac); `--ver`, `--quitar` y `--simular`.
+- **Tablero único** de varias empresas (`status.py --crear-panel` / `--panel`): en una carpeta y un repositorio privado
+  aparte, solo del usuario; lee el status de cada empresa sin copiar sus datos. `instalar` pregunta, al sumar otra
+  empresa, si son independientes o de una misma entidad y si prefiere un tablero por empresa o uno general.
+
+### Nuevo: formulario de la plataforma de postulación
+- `herramientas/formulario.py` (skill `formulario-plataforma`): reconstruye el formulario desde su versión impresa (PDF
+  de Fondos.gob.cl u otro portal) o el Word de preguntas (instrucciones en color, contador «0 / 250»); controla límites
+  de caracteres, campos obligatorios vacíos y caracteres que la plataforma podría rechazar (`--limpiar` quita los
+  invisibles); genera el Word de trabajo y una **hoja de carga** HTML con un botón «Copiar» por campo.
+- `postulacion.py` muestra el estado del formulario; la compuerta de entrega exige que ningún campo exceda su límite
+  ni quede un obligatorio vacío.
+
+### Nuevo: planillas oficiales sin pérdidas
+- `herramientas/llenar_xlsx.py`: escribe valores directamente en el XML de la hoja y deja todo lo demás idéntico byte a
+  byte (listas desplegables modernas, formas, tablas, formato condicional). Rechaza celdas con fórmula, hojas protegidas
+  y celdas combinadas ocultas; verifica lo conservado al terminar. Guardar con openpyxl borra esos elementos.
+- `inspeccionar_xlsx.py` advierte cuando una planilla no debe guardarse con openpyxl.
+
+### Mejoras del barrido de requisitos
+- Categorías por nombre: `normativa` (leyes, decretos, reglamentos), `charla` (charlas, capacitaciones,
+  transcripciones) y `formulario` (formatos vacíos, fichas de postulación). Se replican, pero no se barren por defecto.
+- `extraer_requisitos.py` barre por defecto solo bases y formularios (`--categorias`, `--todo`), informa lo omitido y
+  marca como no vinculante lo que viene de una charla (columna nueva `vinculante`).
+- Escaneos: `extraer_entrada.py` marca las réplicas sin texto (`ocr: pendiente`), indica cómo pasarlas por OCR y, si
+  aparece la versión con texto (por ejemplo, en una subcarpeta `ocr/`), usa esa y descarta la otra.
+
+### Correcciones
+- «CV» en el nombre de un archivo ya no basta para tratarlo como currículum (es también la sigla de Crea y Valida de
+  CORFO): sin datos personales en el contenido, se clasifica por lo que es. Un archivo sin texto con «CV» en el nombre
+  sigue tratándose como currículum, por precaución.
+- Las capturas de pantalla dentro de una carpeta de charla o video se clasifican como charla.
+- Compatibilidad con Python 3.9 en los textos HTML de `formulario.py` y `status.py`.
+
 ## 2.1 — 2026-10-19
 
 ### Nuevo: funciona con cualquier asistente de IA

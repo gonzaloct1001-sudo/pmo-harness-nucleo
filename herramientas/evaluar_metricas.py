@@ -97,6 +97,7 @@ def main():
     ap.add_argument("proyecto")
     ap.add_argument("--hoy")
     ap.add_argument("--salida")
+    ap.add_argument("--json", action="store_true", help="entregar hallazgos y métricas en JSON (lo usa status.py)")
     a = ap.parse_args()
     raiz = Path(a.proyecto)
     hoy = fecha(a.hoy) if a.hoy else date.today()
@@ -233,6 +234,20 @@ def main():
                     advert.append(f"Ficha {iid}: revisión vencida desde {fr}.")
                 elif (fr - hoy).days <= 30:
                     info.append(f"Ficha {iid}: revisión vence el {fr}.")
+
+    if a.json:
+        import json
+        m_json = []
+        for m in metricas.values():
+            if m.get("nivel") == "proyecto":
+                u = ultimo.get(("PROYECTO", m["id"]))
+                m_json.append({"id": m["id"], "nombre": m.get("nombre", m["id"]), "valor": u[1] if u else None,
+                               "fecha": u[0] if u else None, "unidad": m.get("unidad", ""), "semaforo": semaforo(m, u[1] if u else None)})
+        print(json.dumps({"criticos": criticos, "advertencias": advert, "info": info, "candidatos": candidatos,
+                          "reglas_criticas": sum(1 for x in criticos if x.startswith("Regla")),
+                          "reglas_advertencia": sum(1 for x in advert if x.startswith("Regla") and "incumplida" in x),
+                          "metricas_proyecto": m_json}, ensure_ascii=False, default=str))
+        return
 
     # --- Informe ---
     nombre = (cfg.get("proyecto") or {}).get("nombre", raiz.name)

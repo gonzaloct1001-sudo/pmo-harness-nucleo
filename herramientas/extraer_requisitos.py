@@ -2,10 +2,14 @@
 """Barrido exhaustivo de las bases de una convocatoria: candidatos a requisito para la matriz de cumplimiento.
 
 Uso:
-    python herramientas/extraer_requisitos.py proyectos/<slug> [--origen carpeta ...] [--salida archivo.csv]
+    python herramientas/extraer_requisitos.py proyectos/<slug> [--categorias bases,formulario,...] [--todo]
+                                              [--origen carpeta ...] [--salida archivo.csv]
 
 Lee los textos de las bases (por defecto las réplicas de `fuentes/*.md`, que sirven en cualquier computador; los textos
-de `_entrada/_procesado/texto/*.md` que no tengan réplica, generados por extraer_entrada.py; y `postulacion/bases/*.md`) y marca cada frase o fila de tabla con lenguaje obligatorio o de plazo ("deberá",
+de `_entrada/_procesado/texto/*.md` que no tengan réplica, generados por extraer_entrada.py; y `postulacion/bases/*.md`).
+Por defecto barre solo las categorías `bases` y `formulario` del inventario: la normativa general (leyes, decretos), las
+charlas y los archivos de trabajo propios generan ruido; se agregan con --categorias o --todo. Lo que venga de una charla
+queda con `vinculante = no: confirmar por consulta`. Marca cada frase o fila de tabla con lenguaje obligatorio o de plazo ("deberá",
 "obligatorio", "excluyente", "adjuntar", "a más tardar", "no se aceptarán", topes, garantías, formatos...).
 Para cada candidato sugiere tipo (admisibilidad, tecnico, economico, formal, declaracion), si parece excluyente,
 y extrae fechas, horas, montos y porcentajes.
@@ -58,7 +62,7 @@ DATOS = [
     ("porcentaje", re.compile(r"\b\d{1,3}([.,]\d+)?\s?%")),
 ]
 CAMPOS = ["id", "documento", "ubicacion", "texto", "tipo_sugerido", "excluyente_sugerido", "datos_detectados", "huella",
-          "estado_revision", "requisito_id", "motivo_descarte"]
+          "estado_revision", "requisito_id", "motivo_descarte", "vinculante"]
 IA = re.compile(r"inteligencia artificial|\bIA\b|\bI\.A\.|chat\s?gpt|generativ|modelos? de lenguaje|\bLLM\b", re.I)
 ITEM = re.compile(r"^([-*•]|\d+(\.\d+)*[.)]|[a-zA-Z][.)])\s+")
 ABREV = re.compile(r"\b(arts?|inc|n[úu]m|p[áa]gs?|pp|lit|n[°º]|sra?|dra?|ej|etc)\.\s", re.I)
@@ -148,15 +152,40 @@ def datos(texto):
     return " · ".join(encontrados)
 
 
-def fuentes_por_defecto(raiz):
-    """Réplicas de fuentes/ (sirven en cualquier computador), textos de _entrada/_procesado/ que no tengan réplica
-    (mismo id del inventario) y fichas de postulacion/bases/."""
+CATEGORIAS_POR_DEFECTO = ("bases", "formulario")  # la normativa general y las charlas se barren solo si se piden
+NO_VINCULANTES = ("charla",)  # lo dicho en una charla o capacitación no es vinculante: se confirma por consulta formal
+
+
+def categoria_replica(ruta):
+    m = re.search(r"^categoria:\s*(\S+)", ruta.read_text(encoding="utf-8", errors="replace")[:1500], re.M)
+    return m.group(1) if m else ""
+
+
+def categorias_inventario(raiz):
+    inv = raiz / "_entrada" / "_procesado" / "inventario.csv"
+    if not inv.exists():
+        return {}
+    with open(inv, encoding="utf-8", newline="") as f:
+        return {r["id"]: r.get("categoria_sugerida", "") for r in csv.DictReader(f)}
+
+
+def fuentes_por_defecto(raiz, categorias=CATEGORIAS_POR_DEFECTO):
+    """Réplicas de fuentes/ (sirven en cualquier computador) y textos de _entrada/_procesado/ sin réplica (mismo id del
+    inventario), de las categorías pedidas; más las fichas de postulacion/bases/. Devuelve ([(ruta, categoría)], omitidos)."""
     replicas = sorted(p for p in (raiz / "fuentes").glob("*.md") if p.name.upper() != "LEEME.MD")
     con_replica = {p.name.split("-", 1)[0] for p in replicas}
-    rutas = replicas + sorted(p for p in (raiz / "_entrada" / "_procesado" / "texto").glob("*.md")
-                              if p.name.split("__", 1)[0] not in con_replica)
-    rutas += sorted(p for p in (raiz / "postulacion" / "bases").glob("*.md") if p.name.upper() != "LEEME.MD")
-    return rutas
+    inv = categorias_inventario(raiz)
+    elegidas, omitidas = [], {}
+    candidatas = [(p, categoria_replica(p) or "bases") for p in replicas]
+    candidatas += [(p, inv.get(p.name.split("__", 1)[0], "bases"))
+                   for p in sorted((raiz / "_entrada" / "_procesado" / "texto").glob("*.md")) if p.name.split("__", 1)[0] not in con_replica]
+    for p, cat in candidatas:
+        if categorias is None or cat in categorias:
+            elegidas.append((p, cat))
+        else:
+            omitidas[cat] = omitidas.get(cat, 0) + 1
+    elegidas += [(p, "bases") for p in sorted((raiz / "postulacion" / "bases").glob("*.md")) if p.name.upper() != "LEEME.MD"]
+    return elegidas, omitidas
 
 
 def main():
@@ -164,16 +193,21 @@ def main():
     ap.add_argument("proyecto")
     ap.add_argument("--origen", nargs="*", help="carpetas o archivos con el texto de las bases (por defecto, ver arriba)")
     ap.add_argument("--salida", help="por defecto postulacion/barrido-requisitos.csv")
+    ap.add_argument("--categorias", help=f"categorías del inventario a barrer, separadas por coma (por defecto: {','.join(CATEGORIAS_POR_DEFECTO)}; "
+                                         "agrega normativa o charla si hace falta)")
+    ap.add_argument("--todo", action="store_true", help="barrer todos los documentos, de cualquier categoría")
     a = ap.parse_args()
 
     raiz = Path(a.proyecto)
+    omitidas = {}
     if a.origen:
         rutas = []
         for o in a.origen:
             p = Path(o)
-            rutas += sorted(p.rglob("*.md")) + sorted(p.rglob("*.txt")) if p.is_dir() else [p]
+            rutas += [(x, "bases") for x in (sorted(p.rglob("*.md")) + sorted(p.rglob("*.txt")) if p.is_dir() else [p])]
     else:
-        rutas = fuentes_por_defecto(raiz)
+        categorias = None if a.todo else tuple(c.strip() for c in (a.categorias or ",".join(CATEGORIAS_POR_DEFECTO)).split(",") if c.strip())
+        rutas, omitidas = fuentes_por_defecto(raiz, categorias)
     if not rutas:
         sys.exit("No hay textos de bases: ejecuta primero extraer_entrada.py o indica --origen.")
     salida = Path(a.salida) if a.salida else raiz / "postulacion" / "barrido-requisitos.csv"
@@ -186,7 +220,7 @@ def main():
     vistos = {p["huella"] for p in previos}
     filas = list(previos)
     nuevos = 0
-    for ruta in rutas:
+    for ruta, categoria in rutas:
         texto = ruta.read_text(encoding="utf-8", errors="replace")
         texto = re.sub(r"\A---\n.*?\n---\n", "", texto, count=1, flags=re.S)  # encabezado de una réplica de fuentes/
         for frase, titulo, pagina, linea in unidades(texto):
@@ -201,7 +235,8 @@ def main():
             filas.append({"id": f"B-{siguiente:03d}", "documento": ruta.stem, "ubicacion": ubic, "texto": frase[:600],
                           "tipo_sugerido": clasificar(frase), "excluyente_sugerido": "si" if EXCLUYENTE.search(frase) else "revisar",
                           "datos_detectados": datos(frase), "huella": h, "estado_revision": "pendiente",
-                          "requisito_id": "", "motivo_descarte": ""})
+                          "requisito_id": "", "motivo_descarte": "",
+                          "vinculante": "no: confirmar por consulta" if categoria in NO_VINCULANTES else "si"})
             nuevos += 1
 
     with open(salida, "w", encoding="utf-8", newline="") as f:
@@ -215,6 +250,13 @@ def main():
         por_tipo[r["tipo_sugerido"]] = por_tipo.get(r["tipo_sugerido"], 0) + 1
     print(f"# Barrido de requisitos — {raiz.as_posix()}\n")
     print(f"- Documentos leídos: {len(rutas)} · candidatos: {len(filas)} (nuevos en esta pasada: {nuevos}) · pendientes de revisar: {len(pend)}")
+    if omitidas:
+        print("- No barridos (otras categorías del inventario): " + ", ".join(f"{k} {v}" for k, v in sorted(omitidas.items()))
+              + ". Para incluirlos: --categorias bases,formulario,<categoría> (o --todo).")
+    no_vinc = [r for r in filas if r.get("vinculante", "si").startswith("no")]
+    if no_vinc:
+        print(f"- ATENCIÓN: {len(no_vinc)} candidato(s) vienen de charlas o capacitaciones: NO son vinculantes. Si agregan o "
+              "contradicen algo de las bases, confírmalos con una consulta formal (postulacion/consultas.csv).")
     print("- Por tipo sugerido: " + ", ".join(f"{k} {v}" for k, v in sorted(por_tipo.items(), key=lambda x: -x[1])))
     exc = [r for r in filas if r["excluyente_sugerido"] == "si"]
     print(f"- Con lenguaje de exclusión (revisar como excluyentes): {len(exc)}")
