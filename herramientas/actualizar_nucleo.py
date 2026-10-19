@@ -45,7 +45,8 @@ def obtener_fuente(origen, tmp):
     if p.is_dir():
         return p.resolve()
     destino = Path(tmp) / "nucleo"
-    r = subprocess.run(["git", "clone", "-q", "--depth", "1", origen, str(destino)], capture_output=True, text=True)
+    r = subprocess.run(["git", "-c", "core.autocrlf=false", "-c", "core.longpaths=true", "clone", "-q", "--depth", "1", origen,
+                        str(destino)], capture_output=True, text=True)
     if r.returncode != 0:
         sys.exit(f"No se pudo descargar el núcleo desde {origen}:\n{(r.stderr or r.stdout).strip()[:500]}")
     return destino

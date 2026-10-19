@@ -641,6 +641,13 @@ def main():
                            and _nuc.misma_url(_oficial + ".git", _oficial.upper() + "/")
                            and _nuc.misma_url("git@github.com:" + _oficial.split("github.com/")[1] + ".git", _oficial)
                            and not _nuc.misma_url(_oficial + "-otro", _oficial), [_oficial]))
+        (tmp / "lf.md").write_bytes(b"linea uno\nlinea dos\n")
+        (tmp / "crlf.md").write_bytes(b"linea uno\r\nlinea dos\r\n")
+        (tmp / "bin.dat").write_bytes(b"\0\r\n")
+        (tmp / "bin2.dat").write_bytes(b"\0\n")
+        resultados.append(("_nucleo: la huella ignora CRLF/LF en texto, no en binarios (zip de GitHub vs copia en Windows)",
+                           _nuc.huella(tmp / "lf.md") == _nuc.huella(tmp / "crlf.md") and _nuc.huella(tmp / "bin.dat") != _nuc.huella(tmp / "bin2.dat"),
+                           ["huellas distintas por saltos de línea, o binario alterado"]))
         subprocess.run(["git", "remote", "add", "origin", _oficial + ".git"], cwd=repo)
         prueba("estado: reconoce una copia clonada del núcleo público", [H + "estado.py"], repo, ["Copia clonada del núcleo público", "PRIVADO propio"])
         prueba("nueva_empresa --aqui: configura la empresa de esta carpeta y la desconecta del núcleo",

@@ -26,11 +26,12 @@ def ruta_larga(ruta):
 
 
 def huella(ruta):
-    h = hashlib.sha256()
-    with open(ruta, "rb") as f:
-        for bloque in iter(lambda: f.read(1 << 20), b""):
-            h.update(bloque)
-    return h.hexdigest()[:20]
+    """Huella del contenido. En archivos de texto ignora la diferencia CRLF/LF (Windows/Mac): el zip de GitHub y una
+    copia clonada en Windows tienen el mismo contenido aunque sus saltos de línea difieran."""
+    datos = Path(ruta).read_bytes()
+    if b"\0" not in datos[:8192]:
+        datos = datos.replace(b"\r\n", b"\n")
+    return hashlib.sha256(datos).hexdigest()[:20]
 
 
 def rutas(raiz):

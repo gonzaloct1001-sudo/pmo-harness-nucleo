@@ -269,7 +269,7 @@ justo después de editarlo (también si se modificó por consola), y al abrir un
 (instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
 aunque en Windows solo responda `py` o en Mac esté en `.venv`.
 
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 154 pruebas sobre copias de los
+**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 155 pruebas sobre copias de los
 ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
 cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
 guion para probar el harness con cada IA.
