@@ -1,0 +1,4 @@
+id,nombre,carpeta,responsable,estado,peso,comentario
+sp1,ERP,subproyectos/sp1,Pedro Soto,activo,,
+sp2,App de despacho,subproyectos/sp2,Carla Vidal,activo,,
+sp3,Portal de clientes,subproyectos/sp3,Diego Paz,activo,,Incorporado por la Enmienda N°1

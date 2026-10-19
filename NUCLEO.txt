@@ -1,0 +1,38 @@
+# origen: https://github.com/gonzaloct1001-sudo/pmo-harness-nucleo
+# (repositorio público del núcleo: de ahí actualizar_nucleo.py trae las versiones nuevas; nadie más puede modificarlo)
+#
+# Rutas del núcleo del PMO Harness (una por línea; las que terminan en / son carpetas completas).
+# herramientas/actualizar_nucleo.py reemplaza estas rutas con la versión nueva del núcleo.
+# Todo lo que no está aquí es de la empresa y nunca se toca al actualizar: proyectos/, empresa/, .harness/,
+# FICHA-DE-INICIO.md, los perfiles propios de biblioteca/perfiles/ y las skills propias de .claude/skills/.
+.claude/agents/
+.claude/skills/
+.claude/settings.json
+.githooks/
+herramientas/
+arquetipos/
+plantilla-proyecto/
+plantilla-subproyecto/
+plantilla-empresa/
+pruebas/
+ejemplos/
+biblioteca/LEEME.md
+biblioteca/perfiles/fondo-anid/
+biblioteca/perfiles/fondo-corfo/
+biblioteca/perfiles/fondo-regional-o-sectorial/
+biblioteca/perfiles/licitacion-mercado-publico/
+biblioteca/perfiles/licitacion-privada-rfp/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+README.md
+MANUAL-DE-USUARIO.md
+EMPEZAR-AQUI.md
+CHANGELOG.md
+LICENSE
+NUCLEO.txt
+requirements.txt
+.gitignore
+.gitattributes
+INSTALAR-WINDOWS.bat
+INSTALAR-MAC.command

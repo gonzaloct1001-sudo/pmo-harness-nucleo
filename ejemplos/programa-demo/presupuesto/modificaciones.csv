@@ -1,0 +1,7 @@
+id,fecha,tipo,documento,subproyecto,cuenta,monto,motivo,aprobado_por
+M-01,2026-08-20,enmienda,E01,sp3,RRHH,180000000,Incorpora el Portal de clientes,Partes (E01)
+M-02,2026-08-20,enmienda,E01,sp3,CONTINGENCIA,20000000,Contingencia del Portal,Partes (E01)
+M-03,2026-09-10,contingencia,ACTA-05,sp1,CONTINGENCIA,-25000000,Migración de datos más compleja,Comité
+M-03,2026-09-10,contingencia,ACTA-05,sp1,RRHH,25000000,Migración de datos más compleja,Comité
+M-04,2026-09-15,contingencia,ACTA-06,PROGRAMA,CONTINGENCIA,-40000000,Refuerzo del equipo de la app,Comité
+M-04,2026-09-15,contingencia,ACTA-06,sp2,RRHH,40000000,Refuerzo del equipo de la app,Comité

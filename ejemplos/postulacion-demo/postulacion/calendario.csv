@@ -1,0 +1,6 @@
+id,hito,fecha,hora,tipo,fuente,alerta_dias,estado,comentario
+CAL-01,Plazo de consultas,2026-10-20,,consultas,B01 num. 4,3,cumplido,Se envió Q-01
+CAL-02,Publicación de respuestas y aclaraciones,2026-10-27,,respuestas,B01 num. 4,2,cumplido,Aclaración N°1
+CAL-03,Renovar certificado de vigencia,2026-11-05,,otro,Anexo 2,3,pendiente,Debe tener menos de 60 días
+CAL-04,Carga anticipada en la plataforma,2026-11-09,,otro,Buena práctica,3,pendiente,
+CAL-05,Cierre de postulaciones,2026-11-10,15:00,cierre,B01 num. 4,7,pendiente,

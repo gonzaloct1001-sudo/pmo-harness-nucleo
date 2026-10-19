@@ -1,0 +1,8 @@
+fecha,subproyecto,cuenta,tipo,monto,documento,proveedor,descripcion
+2026-06-30,PROGRAMA,GESTION,real,15000000,F-100,Consultora,Oficina del programa jun-sep
+2026-09-30,sp1,RRHH,real,240000000,F-201,Consultora,Consultores ERP jun-sep
+2026-07-15,sp1,LICENCIAS,real,150000000,F-202,Proveedor ERP,Licencias
+2026-10-01,sp1,RRHH,comprometido,70000000,OC-310,Consultora,Consultores ERP oct-ene
+2026-09-30,sp2,RRHH,real,200000000,F-301,Consultora,Desarrollo app jun-sep
+2026-10-05,sp2,RRHH,comprometido,60000000,OC-320,Consultora,Desarrollo app oct-nov
+2026-09-30,sp3,RRHH,real,20000000,F-401,Consultora,Diseño del portal

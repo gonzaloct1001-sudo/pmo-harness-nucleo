@@ -1,0 +1,13 @@
+id,nombre,etapa,fecha_etapa,responsable,categoria,etiquetas,comentario
+ANDE,Andina Energía,en_cartera,2025-08-31,Titular,Energía,dividendos,
+CDSUR,Cobre del Sur,en_cartera,2025-08-31,Titular,Minería,cíclica,
+BPAC,Banco Pacífico,en_cartera,2025-08-31,Titular,Financiero,dividendos,
+TCOR,Tecnología Cordillera,en_cartera,2025-08-31,Titular,Tecnología,crecimiento,
+AGUA,Agua Clara,en_cartera,2025-08-31,Titular,Servicios básicos,defensiva;dividendos,
+PNOR,Puertos del Norte,en_cartera,2025-11-30,Titular,Infraestructura,,
+VVAL,Viñas del Valle,retirado,2026-03-31,Titular,Consumo,,Vendida: tesis de exportaciones no se cumplió
+RAUS,Retail Austral,analisis,2026-08-15,Titular,Consumo,recuperación,Falta escribir la tesis
+SALI,Salud Integral,preseleccion,2026-07-10,Titular,Salud,defensiva,
+TAND,Telecom Andes,preseleccion,2026-07-10,Titular,Telecomunicaciones,dividendos,
+FARA,Forestal Araucanía,universo,2026-06-01,Titular,Forestal,cíclica,
+ICOS,Inmobiliaria Costa,universo,2026-06-01,Titular,Inmobiliario,,

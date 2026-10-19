@@ -1,0 +1,19 @@
+# Métricas del arquetipo ejecución. Las calcula: python herramientas/evm_cpm.py <proyecto>
+# (valor ganado requiere las columnas costo_plan y costo_real en cronograma/cronograma.csv)
+metricas:
+  - {id: spi, nombre: Índice de desempeño del plazo (SPI), nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: semanal,
+     fuente: herramientas/evm_cpm.py, definicion: Valor ganado / valor planificado, umbral_amarillo: 0.95, umbral_rojo: 0.9}
+  - {id: cpi, nombre: Índice de desempeño del costo (CPI), nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/evm_cpm.py, definicion: Valor ganado / costo real, umbral_amarillo: 0.95, umbral_rojo: 0.9}
+  - {id: pv, nombre: Valor planificado (PV), nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: semanal, fuente: herramientas/evm_cpm.py, definicion: Presupuesto del trabajo planificado a la fecha}
+  - {id: ev, nombre: Valor ganado (EV), nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: semanal, fuente: herramientas/evm_cpm.py, definicion: Presupuesto del trabajo realizado}
+  - {id: ac, nombre: Costo real (AC), nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: mensual, fuente: herramientas/evm_cpm.py, definicion: Costo incurrido a la fecha}
+  - {id: eac, nombre: Costo estimado al término (EAC), nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: mensual, fuente: herramientas/evm_cpm.py, definicion: BAC / CPI}
+  - {id: vac, nombre: Desviación de costo al término (VAC), nivel: proyecto, unidad: CLP, direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/evm_cpm.py, definicion: BAC − EAC (negativo = sobrecosto), umbral_amarillo: 0, umbral_rojo: -1}
+  - {id: desvio_termino_dias, nombre: Desviación del término pronosticado, nivel: proyecto, unidad: días, direccion: menor_mejor, frecuencia: semanal,
+     fuente: herramientas/evm_cpm.py, definicion: Término pronosticado − término contractual vigente, umbral_amarillo: 0, umbral_rojo: 15}
+  - {id: holgura_minima_dias, nombre: Holgura mínima, nivel: proyecto, unidad: días, direccion: informativa, frecuencia: semanal, fuente: herramientas/evm_cpm.py, definicion: Menor holgura total del plan}
+  - {id: tareas_criticas, nombre: Tareas en ruta crítica, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: semanal, fuente: herramientas/evm_cpm.py, definicion: Tareas con holgura cero}
+reglas:
+  - {id: EJE-01, descripcion: El término pronosticado no debe superar el contractual, aplica_a: {nivel: proyecto}, metrica: desvio_termino_dias, operador: "<=", valor: 0, severidad: critico}

@@ -1,0 +1,4 @@
+id,nombre,etapa,fecha_etapa,responsable,categoria,etiquetas,comentario,postulante,monto_solicitado
+P-001,Sensores IoT para riego de precisión en viñas,recibida,2026-09-15,Evaluador (demo),Agroindustria,,,AgroSensores SpA (ficticia),48000000
+P-002,Plataforma de reservas para turismo rural,recibida,2026-09-15,Evaluador (demo),Turismo,,,Rutas del Valle Ltda. (ficticia),35000000
+P-003,Reciclaje de plásticos agrícolas en pellets,recibida,2026-09-15,Evaluador (demo),Economía circular,,,EcoPellet SpA (ficticia),50000000

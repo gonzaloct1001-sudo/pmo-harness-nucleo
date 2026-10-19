@@ -1,0 +1,3 @@
+id,fecha_solicitud,solicitante,titulo,tipo,impacto_plazo_dias,impacto_costo,impacto_alcance,estado,fecha_resolucion,aprobado_por,documento_formal
+CC-001,2026-07-08,Carolina Pérez,Incorporar portal de clientes,alcance,30,45000000,Nuevo SP4,formalizada,2026-08-12,Comité de dirección,E01
+CC-002,2026-09-04,Marcela Rojas,Modo sin conexión para la app de despacho,alcance,,,Funcionalidad nueva en SP2,en_analisis,,,

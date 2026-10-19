@@ -1,0 +1,4 @@
+# Parámetros de cálculo de la cartera (usados por scripts/calcular_cartera.py)
+benchmark: IDX                 # ticker del índice de referencia en datos/precios.csv
+tasa_libre_riesgo_anual: 0.05  # ficticia; usar la tasa de referencia que corresponda
+ventana_meses: 12              # ventana para retornos, volatilidad, drawdown y Sharpe

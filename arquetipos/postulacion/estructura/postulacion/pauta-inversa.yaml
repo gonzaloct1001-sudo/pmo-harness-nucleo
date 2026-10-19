@@ -1,0 +1,42 @@
+# ============================================================
+# Pauta inversa: cómo evaluará la entidad, reconstruida desde las bases (skill definir-pauta, modo oferente).
+# Mismo formato que la pauta del arquetipo evaluacion. Cada dato cita su fuente en las bases.
+# La usan el red team (para puntuar) y postulacion.py (puntaje estimado frente a umbral y objetivo).
+# ============================================================
+convocatoria:
+  nombre: PENDIENTE
+  bases: ""                   # documento y versión de las bases usadas
+  fecha_cierre: ""
+  monto_maximo_por_postulacion: 0
+  moneda: CLP
+
+escala:
+  minimo: 1
+  maximo: 5
+  descripcion_general:
+    1: Deficiente / sin evidencia
+    2: Insuficiente
+    3: Aceptable
+    4: Bueno
+    5: Excelente
+
+admisibilidad: []
+#  - {id: ADM-01, requisito: "Postulante con inicio de actividades en primera categoría", excluyente: true, fuente: "Bases, art. 5"}
+
+criterios: []
+#  - id: C1
+#    nombre: Calidad técnica de la propuesta
+#    ponderacion: 0.30
+#    fuente: "Bases técnicas, art. 12"
+#    descripcion: Qué evalúa el comité en este criterio, según las bases.
+#    niveles:            # descriptores; si las bases no los traen, redactarlos como conductas observables y marcarlos (propuesto)
+#      1: "..."
+#      3: "..."
+#      5: "..."
+#    temas_ganadores: [] # qué mostrar en la propuesta para llegar al nivel máximo (lo completa la estrategia)
+
+umbrales:
+  puntaje_minimo: 0           # puntaje ponderado mínimo que exigen las bases para ser elegible
+  minimo_por_criterio: {}     # ej.: {C1: 3}
+  puntaje_objetivo: 0         # puntaje que el equipo se fija para tener opción real de adjudicar (≥ mínimo)
+desempate: []

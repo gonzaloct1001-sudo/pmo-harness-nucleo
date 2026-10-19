@@ -1,0 +1,130 @@
+# Catálogo para la guía del usuario (lo lee herramientas/guia_proyecto.py).
+# arquetipos: [todos] = útil en cualquier proyecto; [] = sin proyecto (instalación o creación).
+# Los ejemplos son frases naturales: no hace falta nombrar la skill.
+
+arquetipos:
+  ejecucion:
+    nombre: Ejecución por plan
+    que_es: Proyecto con alcance, plan de tareas, hitos y a menudo contrato. Se controla avance, plazo y costo.
+    carpetas: ["cronograma/ (plan, línea base, carta Gantt)", "contractual/ (contrato, enmiendas, cambios, línea base vigente)"]
+    rutina: ["Cada semana: contar el avance y generar el reporte semanal.", "Ante un cambio de alcance, plazo o costo: registrarlo como solicitud de cambio.",
+             "Antes de cada comité: preparar la reunión y revisar la consistencia."]
+  obra:
+    nombre: Obra (complemento de ejecución)
+    que_es: Trabajo en terreno con consultas técnicas, no conformidades, inspecciones y estados de pago.
+    carpetas: ["obra/ (RFI, no conformidades, inspecciones, estados de pago, libro de obra)"]
+    rutina: ["Registrar RFI, observaciones e inspecciones el mismo día.", "Cada estado de pago: revisar coherencia con el avance físico."]
+  agil:
+    nombre: Ágil
+    que_es: Equipo que entrega en iteraciones (sprints) con backlog, métricas de flujo y registros de ingeniería.
+    carpetas: ["agil/ (backlog, sprints, despliegues, ADR, deuda técnica, trazabilidad)"]
+    rutina: ["Inicio de sprint: planificar con capacidad y velocidad.", "Diario: seguimiento breve.", "Cierre: revisión, retrospectiva y métricas."]
+  cartera:
+    nombre: Cartera de ítems
+    que_es: Muchos ítems similares (bots, acciones, proveedores, iniciativas) que avanzan por etapas con métricas y reglas.
+    carpetas: ["items/ (ítems, etapas, fichas)", "datos/ y scripts/ (cálculos propios)"]
+    rutina: ["Cargar datos o mediciones con la frecuencia definida.", "Revisar semáforos y reglas; mover ítems de etapa cuando cumplan requisitos."]
+  evaluacion:
+    nombre: Evaluación de propuestas
+    que_es: Evaluar propuestas o postulaciones de terceros con una pauta (admisibilidad, puntajes, ranking).
+    carpetas: ["evaluacion/ (pauta, admisibilidad, puntajes, evaluaciones)", "postulaciones/ (documentos, no se suben a Git)"]
+    rutina: ["Definir la pauta desde las bases.", "Revisar admisibilidad y evaluar cada propuesta por separado.", "Consolidar ranking y acta."]
+  estudio:
+    nombre: Estudio o análisis
+    que_es: El producto es una respuesta o recomendación (perfil, prefactibilidad, evaluación económica).
+    carpetas: ["estudio/ (preguntas, supuestos, modelo, hallazgos, conclusiones)"]
+    rutina: ["Registrar supuestos con fuente.", "Actualizar el modelo y la sensibilidad.", "Revisar la calidad del estudio antes de entregarlo."]
+  postulacion:
+    nombre: Postulación (oferente)
+    que_es: Preparar y presentar una propuesta para ganar un fondo, licitación, RFP o concurso, cumpliendo el 100% de las bases.
+    carpetas: ["postulacion/ (etapas, matriz de requisitos, barrido de bases, calendario, consultas, pauta inversa, Go/No-Go, estrategia)",
+               "propuesta/ (una sección por capítulo)", "economico/ (presupuesto con controles)", "redteam/ (revisiones)",
+               "entrega/ (checklist y paquete final, que no se sube a Git)", "contenidos/ (banco reutilizable del postulante)"]
+    rutina: ["Cada vez que llega material de las bases (aclaraciones, foro): barrer requisitos y actualizar la matriz.",
+             "Cada semana, y a diario en la última semana: revisar el estado (etapa, compuerta, vencimientos).",
+             "Antes de entregar: red team, revisión oro y guante blanco, verificación de autoría."]
+  programa:
+    nombre: Programa con subproyectos
+    que_es: Un contrato general ejecutado en varios subproyectos, cada uno con su Gantt, presupuesto, equipo, riesgos, minutas y reportes; visión consolidada del programa.
+    carpetas: ["programa/ (subproyectos, personas y asignaciones)", "presupuesto/ (macro y por subproyecto, contingencia, gastos, pronóstico)",
+               "contractual/afectaciones.csv (qué cambia cada enmienda en cada subproyecto)", "subproyectos/<id>/ (todo lo propio de cada subproyecto)",
+               "cronograma/gantt-programa.md (macro) y gantt-detalle.md"]
+    rutina: ["Cada semana: actualizar el avance de cada subproyecto y revisar el estado consolidado.",
+             "Cada mes: registrar gastos y compromisos, actualizar el pronóstico y generar el control presupuestario.",
+             "Al llegar una enmienda: registrar sus efectos por subproyecto y aplicarlos."]
+
+skills:
+  - {id: instalar, para: "Preparar la carpeta, el computador y GitHub; encaminar el primer proyecto", arquetipos: [],
+     ejemplos: ["instala el harness", "empecemos", "estoy en un computador nuevo"]}
+  - {id: configurar-asistente, para: "Dejar lista otra IA (Codex, Gemini, Cursor, Copilot u otra) o retomar el trabajo tras cambiar de IA", arquetipos: [],
+     ejemplos: ["voy a usar Gemini en esta carpeta", "cambié de IA, ¿en qué íbamos?", "¿puedo usar esto con Codex?"]}
+  - {id: actualizar-nucleo, para: "Traer la versión nueva del harness sin tocar los proyectos ni los datos de la empresa", arquetipos: [],
+     ejemplos: ["actualiza el harness", "llegó una versión nueva del núcleo, instálala"]}
+  - {id: nuevo-proyecto, para: "Diseñar y crear un proyecto desde una descripción", arquetipos: [],
+     ejemplos: ["quiero llevar la construcción de una casa", "quiero postular a un fondo CORFO", "armemos un proyecto para mi equipo de software"]}
+  - {id: alta-proyecto, para: "Cargar documentos existentes y configurar todo el proyecto", arquetipos: [todos],
+     ejemplos: ["listo, ya dejé los documentos", "procesa lo nuevo de la entrada", "retomemos el alta"]}
+  - {id: ayuda, para: "Ver qué puedo hacer en este proyecto y cómo pedirlo", arquetipos: [todos],
+     ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
+  - {id: generar-reporte, para: "Generar cualquier reporte del catálogo del proyecto", arquetipos: [todos],
+     ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité"]}
+  - {id: nuevo-tipo-reporte, para: "Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
+     ejemplos: ["quiero un informe mensual para el directorio en Excel", "este Word es la plantilla del reporte quincenal"]}
+  - {id: minuta, para: "Convertir notas de reunión en minuta con acuerdos y decisiones", arquetipos: [todos],
+     ejemplos: ["estas son mis notas de la reunión de hoy", "haz el acta del comité"]}
+  - {id: preparar-reunion, para: "Agenda, estado, decisiones a pedir y preguntas difíciles", arquetipos: [todos],
+     ejemplos: ["tengo comité el jueves", "¿qué llevo a la reunión con el cliente?"]}
+  - {id: riesgos-issues, para: "Registrar y actualizar riesgos y problemas", arquetipos: [todos],
+     ejemplos: ["el proveedor se va a atrasar", "registra este problema", "revisemos la matriz de riesgos"]}
+  - {id: levantar-riesgos, para: "Identificar riesgos nuevos de forma sistemática", arquetipos: [todos],
+     ejemplos: ["hagamos un premortem", "levanta los riesgos de la postulación"]}
+  - {id: consistencia, para: "Detectar contradicciones, atrasos e incumplimientos", arquetipos: [todos],
+     ejemplos: ["¿cuadra todo?", "¿qué está pendiente o vencido?", "revisa el proyecto antes del comité"]}
+  - {id: revisar-documento, para: "Analizar correos, informes o documentos recibidos", arquetipos: [todos],
+     ejemplos: ["mira este correo del cliente", "¿qué implica este informe?", "¿qué respondo?"]}
+  - {id: versiones-documentos, para: "Comparar versiones y llevar la bitácora", arquetipos: [todos],
+     ejemplos: ["¿qué cambió en la nueva versión de las bases?", "compara estos dos documentos"]}
+  - {id: metricas, para: "Agregar métricas y reglas, cargar datos y ver semáforos", arquetipos: [todos],
+     ejemplos: ["quiero medir también la rotación", "carga estos datos", "¿cómo va el indicador?"]}
+  - {id: red-team, para: "Someter una propuesta o informe a revisores con perspectivas distintas", arquetipos: [todos],
+     ejemplos: ["revísalo como el comité", "hazle un red team a la propuesta", "¿qué le falta para ganar?"]}
+  - {id: gestionar-programa, para: "Programa con subproyectos: personas, presupuesto, contingencia, enmiendas por subproyecto y estado consolidado", arquetipos: [programa],
+     ejemplos: ["¿cómo va el programa completo?", "agrega un subproyecto de integración", "Luis pasa al 50% en el portal", "usa 10 millones de contingencia en el ERP"]}
+  - {id: guardar-cambios, para: "Guardar y subir el trabajo a GitHub de forma segura", arquetipos: [todos],
+     ejemplos: ["guarda", "respalda el trabajo del día", "sube los cambios"]}
+  - {id: actualizar-gantt, para: "Actualizar avance y fechas del cronograma", arquetipos: [ejecucion, obra],
+     ejemplos: ["la configuración va en 70%", "importa el cronograma de MS Project", "muéstrame la carta Gantt"]}
+  - {id: registrar-documento, para: "Incorporar contratos, anexos, enmiendas y propuestas", arquetipos: [ejecucion, obra],
+     ejemplos: ["llegó la enmienda 2", "¿qué dice el contrato sobre multas?"]}
+  - {id: control-cambios, para: "Gestionar solicitudes de cambio y su impacto", arquetipos: [ejecucion, obra, agil],
+     ejemplos: ["el cliente pidió un módulo nuevo", "necesitamos más plazo"]}
+  - {id: registros-obra, para: "RFI, no conformidades, inspecciones, estados de pago, valor ganado", arquetipos: [obra],
+     ejemplos: ["la ITO observó las fundaciones", "prepara el estado de pago 3"]}
+  - {id: gestionar-sprint, para: "Planificación, seguimiento y cierre de sprints; backlog", arquetipos: [agil],
+     ejemplos: ["planifiquemos el sprint 7", "importa el backlog de Jira"]}
+  - {id: registro-ingenieria, para: "ADR, deuda técnica, trazabilidad, despliegues y postmortems", arquetipos: [agil],
+     ejemplos: ["decidimos usar PostgreSQL", "hubo una caída en producción"]}
+  - {id: gestionar-items, para: "Agregar, mover de etapa, fichas y retiro de ítems", arquetipos: [cartera, evaluacion],
+     ejemplos: ["agrega la acción X a análisis", "¿qué ítems pueden pasar de etapa?"]}
+  - {id: definir-pauta, para: "Pauta de evaluación desde las bases (también la pauta inversa del oferente)", arquetipos: [evaluacion, postulacion],
+     ejemplos: ["arma la pauta con estas bases", "¿cómo nos va a evaluar el comité?"]}
+  - {id: evaluar-propuestas, para: "Admisibilidad, evaluación con evidencia y ranking", arquetipos: [evaluacion],
+     ejemplos: ["llegaron 12 postulaciones", "prepara el acta de evaluación"]}
+  - {id: evaluacion-economica, para: "Flujo de caja, VAN, TIR y sensibilidad; presupuesto de postulaciones con controles", arquetipos: [estudio, postulacion],
+     ejemplos: ["¿es rentable el proyecto?", "arma el presupuesto de la postulación con los controles de las bases"]}
+  - {id: revisar-estudio, para: "Revisar calidad y completitud de un estudio", arquetipos: [estudio],
+     ejemplos: ["revisa la prefactibilidad del consultor"]}
+  - {id: preparar-postulacion, para: "Llevar la postulación de las bases a la entrega, con compuertas", arquetipos: [postulacion],
+     ejemplos: ["prepara la postulación", "¿cómo vamos con la postulación?", "¿qué falta para entregar?"]}
+  - {id: matriz-cumplimiento, para: "Todos los requisitos de las bases con dueño, evidencia y checklist de entrega", arquetipos: [postulacion],
+     ejemplos: ["¿qué exigen las bases?", "llegó una aclaración", "¿cumplimos todo?"]}
+
+hooks:
+  - {nombre: Estado al iniciar la sesión, que_hace: "Resume proyectos, traspasos pendientes, material nuevo en _entrada, altas en curso y cambios sin guardar (en Claude Code llega solo; otras IA lo ejecutan al empezar).",
+     si_bloquea: "No bloquea: solo informa."}
+  - {nombre: Control de Git antes de cada commit, que_hace: "Con cualquier IA, o sin IA: impide guardar en Git material confidencial y planillas mal formadas.",
+     si_bloquea: "Corrige o quita del commit el archivo que indica. Nunca se salta el control."}
+  - {nombre: Protección de confidenciales, que_hace: "Antes de cada comando de Git (en Bash o PowerShell) impide subir material de _entrada, originales contractuales, CVs, paquetes firmados y credenciales.",
+     si_bloquea: "Quita el archivo del staging; si de verdad debe versionarse, confírmalo explícitamente sabiendo el riesgo."}
+  - {nombre: Validación de CSV y YAML, que_hace: "Después de cada edición revisa columnas, fechas AAAA-MM-DD y definiciones de métricas.",
+     si_bloquea: "Corrige el archivo que indica antes de seguir."}

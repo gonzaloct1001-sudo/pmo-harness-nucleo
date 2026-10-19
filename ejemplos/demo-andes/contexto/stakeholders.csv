@@ -1,0 +1,7 @@
+id,nombre,cargo,organizacion,rol_proyecto,poder,interes,estrategia,frecuencia_comunicacion,canal,recibe_reportes
+S01,Carolina Pérez,Gerente General,Distribuidora Andes,Sponsor,alto,alto,Gestionar de cerca,Semanal,Reporte semanal + comité mensual,si
+S02,Rodrigo Soto,Gerente de Finanzas,Distribuidora Andes,Aprueba presupuesto,alto,medio,Mantener satisfecho,Mensual,PEP + comité,si
+S03,Marcela Rojas,Gerente de Operaciones,Distribuidora Andes,Usuaria clave,medio,alto,Mantener informada,Quincenal,Reunión de seguimiento,no
+S04,Andrés Muñoz,Jefe de TI,Distribuidora Andes,Líder técnico cliente,medio,alto,Gestionar de cerca,Semanal,Reporte semanal + reunión técnica,si
+S05,Tomás Fuentes,Líder técnico,Proveedor App (ficticio),Proveedor SP2 y SP4,medio,alto,Mantener informado,Semanal,Reunión técnica,no
+S06,Jefa de Programa (demo),Jefa de programa,Consultora (ficticio),Responsable del programa,alto,alto,—,—,—,no

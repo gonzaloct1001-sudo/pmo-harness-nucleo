@@ -1,0 +1,5 @@
+id,subproyecto,tarea,responsable,inicio_plan,fin_plan,inicio_real,fin_real,avance_pct,predecesoras,es_hito,estado,comentario,costo_plan,costo_real
+T01,sp2,Diseño UX de la app,Carla Vidal,2026-06-15,2026-07-31,2026-06-15,2026-07-31,100,,no,terminada,,,
+T02,sp2,Desarrollo de la app y modo sin conexión,Carla Vidal,2026-08-01,2027-01-31,2026-08-01,,45,T01,no,en curso,,,
+T03,sp2,Piloto con choferes,Carla Vidal,2027-02-01,2027-03-15,,,0,T02;sp1:T04,no,no iniciada,,,
+T04,sp2,App en producción,Carla Vidal,2027-03-20,2027-03-20,,,0,T03,si,no iniciada,,,

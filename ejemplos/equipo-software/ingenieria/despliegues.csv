@@ -1,0 +1,12 @@
+id,fecha,version,entorno,resultado,causo_incidente,incidente,minutos_recuperacion,lead_time_horas,comentario
+DP-01,2026-08-07,0.1.0,produccion,exito,no,,,30,
+DP-02,2026-08-13,0.2.0,produccion,exito,no,,,26,
+DP-03,2026-08-21,0.3.0,produccion,exito,no,,,40,
+DP-04,2026-08-27,0.3.1,produccion,exito,no,,,8,Corrige B-01
+DP-05,2026-09-04,0.4.0,produccion,rollback,si,INC-01,95,52,Error de mapeo en envío al ERP
+DP-06,2026-09-05,0.4.1,produccion,exito,no,,,20,
+DP-07,2026-09-10,0.5.0,produccion,exito,no,,,36,
+DP-08,2026-09-17,0.6.0,produccion,exito,no,,,44,
+DP-09,2026-09-24,0.7.0,produccion,falla,si,INC-02,240,60,Duplicación de entregas (ver B-02)
+DP-10,2026-09-25,0.7.1,produccion,exito,no,,,10,Desactiva sincronización automática temporalmente
+DP-11,2026-09-22,0.7.0-rc,pruebas,exito,no,,,,

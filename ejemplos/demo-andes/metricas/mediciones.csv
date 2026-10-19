@@ -1,0 +1,11 @@
+fecha,entidad,metrica,valor,fuente,comentario
+2026-09-25,PROYECTO,ac,314000000,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,cpi,0.8662420382,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,desvio_termino_dias,29,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,eac,1033198529,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,ev,272000000,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,holgura_minima_dias,0,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,pv,345439560.4,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,spi,0.7874025767,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,tareas_criticas,2,herramientas/evm_cpm.py,
+2026-09-25,PROYECTO,vac,-138198529.4,herramientas/evm_cpm.py,

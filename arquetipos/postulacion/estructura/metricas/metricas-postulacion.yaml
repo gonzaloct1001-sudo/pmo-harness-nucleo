@@ -1,0 +1,66 @@
+# Métricas del arquetipo postulación. Las calcula: python herramientas/postulacion.py <proyecto> [--registrar]
+metricas:
+  - {id: dias_al_cierre, nombre: Días al cierre, nivel: proyecto, unidad: días, direccion: informativa, frecuencia: diaria,
+     fuente: herramientas/postulacion.py, definicion: Días corridos entre hoy y postulacion.fecha_cierre}
+  - {id: cumplimiento_pct, nombre: Cumplimiento de la matriz, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: diaria,
+     fuente: herramientas/postulacion.py, definicion: Requisitos cumplidos o no aplicables / requisitos totales, umbral_amarillo: 0.9, umbral_rojo: 0.7}
+  - {id: excluyentes_pendientes, nombre: Requisitos excluyentes pendientes, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: diaria,
+     fuente: herramientas/postulacion.py, definicion: Requisitos excluyentes que no están cumplidos ni son no aplicables, umbral_amarillo: 1, umbral_rojo: 3}
+  - {id: requisitos_total, nombre: Requisitos en la matriz, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Filas de postulacion/requisitos.csv}
+  - {id: requisitos_sin_responsable, nombre: Requisitos sin responsable, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Requisitos abiertos sin responsable asignado}
+  - {id: requisitos_sin_evidencia, nombre: Cumplidos sin evidencia, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Requisitos marcados cumplidos sin evidencia registrada}
+  - {id: barrido_total, nombre: Candidatos del barrido de bases, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Filas de postulacion/barrido-requisitos.csv}
+  - {id: barrido_sin_revisar, nombre: Candidatos del barrido sin revisar, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Candidatos que no se incorporaron a la matriz ni se descartaron con motivo}
+  - {id: calendario_con_cierre, nombre: Calendario con cierre, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: 1 si el calendario tiene un hito de tipo cierre con fecha}
+  - {id: consultas_por_enviar, nombre: Consultas por enviar, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: diaria,
+     fuente: herramientas/postulacion.py, definicion: Consultas en estado borrador}
+  - {id: consultas_sin_respuesta, nombre: Consultas sin respuesta, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: diaria,
+     fuente: herramientas/postulacion.py, definicion: Consultas enviadas que aún no tienen respuesta}
+  - {id: pauta_criterios, nombre: Criterios en la pauta inversa, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Criterios definidos en postulacion/pauta-inversa.yaml}
+  - {id: secciones_total, nombre: Secciones de la propuesta, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Archivos .md de propuesta/ (sin plantillas)}
+  - {id: secciones_sin_trazabilidad, nombre: Secciones sin trazabilidad, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Secciones que no declaran requisitos o criterios en responde_a}
+  - {id: criterios_sin_seccion, nombre: Criterios sin sección, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Criterios de la pauta inversa que ninguna sección declara responder}
+  - {id: controles_economicos_incumplidos, nombre: Controles del presupuesto incumplidos, nivel: proyecto, unidad: "", direccion: menor_mejor,
+     frecuencia: a_pedido, fuente: herramientas/postulacion.py, definicion: Controles NO CUMPLE en economico/controles.csv}
+  - {id: riesgos_registrados, nombre: Riesgos registrados, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Riesgos abiertos en riesgos/riesgos.csv}
+  - {id: rondas_redteam, nombre: Rondas del red team, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Rondas distintas con puntajes u observaciones}
+  - {id: puntaje_redteam, nombre: Puntaje estimado (red team), nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Promedio del puntaje ponderado de las perspectivas que puntúan en la última ronda}
+  - {id: puntaje_redteam_min, nombre: Puntaje estimado mínimo (red team), nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Menor puntaje ponderado entre perspectivas en la última ronda}
+  - {id: dispersion_redteam, nombre: Dispersión del red team, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Diferencia entre el mayor y el menor puntaje ponderado de la última ronda}
+  - {id: redteam_sobre_objetivo, nombre: Red team sobre el objetivo, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: 1 si el puntaje estimado iguala o supera el puntaje objetivo (o el mínimo si no hay objetivo) y los mínimos por criterio}
+  - {id: fallas_fatales_abiertas, nombre: Fallas fatales abiertas, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Observaciones tipo falla_fatal sin cerrar}
+  - {id: observaciones_abiertas, nombre: Observaciones abiertas del red team, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Observaciones sin respuesta o sin cerrar}
+  - {id: contenidos_vencidos, nombre: Documentos vencidos al cierre, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Documentos del banco con vigencia anterior a la fecha de cierre}
+  - {id: presupuesto_con_datos, nombre: Presupuesto con datos, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: 1 si el presupuesto tiene costo total mayor que cero (control CTL-00)}
+  - {id: entrega_archivos, nombre: Archivos en el paquete final, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Archivos en entrega/final}
+  - {id: entrega_autoria_errores, nombre: Errores de autoría en la entrega, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/postulacion.py, definicion: Errores de verificar_autoria en entrega/final}
+
+reglas:
+  - {id: POS-01, descripcion: No se entrega con requisitos excluyentes pendientes, aplica_a: {nivel: proyecto}, metrica: excluyentes_pendientes, operador: "<=", valor: 0, severidad: critico}
+  - {id: POS-02, descripcion: No se entrega con fallas fatales abiertas del red team, aplica_a: {nivel: proyecto}, metrica: fallas_fatales_abiertas, operador: "<=", valor: 0, severidad: critico}
+  - {id: POS-03, descripcion: El presupuesto cumple los controles de las bases, aplica_a: {nivel: proyecto}, metrica: controles_economicos_incumplidos, operador: "<=", valor: 0, severidad: critico}
+  - {id: POS-04, descripcion: Ningún documento del banco vence antes del cierre, aplica_a: {nivel: proyecto}, metrica: contenidos_vencidos, operador: "<=", valor: 0, severidad: critico}
+  - {id: POS-05, descripcion: Todos los candidatos del barrido de bases están revisados, aplica_a: {nivel: proyecto}, metrica: barrido_sin_revisar, operador: "<=", valor: 0, severidad: advertencia}
+  - {id: POS-06, descripcion: No quedan consultas por enviar, aplica_a: {nivel: proyecto}, metrica: consultas_por_enviar, operador: "<=", valor: 0, severidad: advertencia}

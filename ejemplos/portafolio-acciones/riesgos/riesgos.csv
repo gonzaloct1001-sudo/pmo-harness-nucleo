@@ -1,0 +1,4 @@
+id,fecha_registro,titulo,descripcion,categoria,probabilidad,impacto,severidad,responsable,estrategia,plan_accion,fecha_revision,estado
+R-001,2026-06-30,Concentración en una acción,"Si TCOR sigue subiendo sin rebalanceo, entonces la cartera queda expuesta a una sola empresa de valorización exigente",Concentración,4,4,16,Titular,Mitigar,Evaluar rebalanceo en la revisión mensual,2026-09-30,abierto
+R-002,2026-06-30,Rezago frente al índice,"Si la cartera sigue rindiendo bajo el índice, entonces conviene cuestionar la estrategia de selección",Desempeño,3,3,9,Titular,Aceptar,Revisar tesis de posiciones con peor desempeño,2026-09-30,abierto
+R-003,2026-06-30,Sensibilidad a tasas,"Si suben las tasas de interés, entonces AGUA y ANDE pueden caer por su perfil de bono",Mercado,3,2,6,Titular,Aceptar,,2026-12-31,abierto

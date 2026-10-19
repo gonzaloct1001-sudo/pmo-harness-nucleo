@@ -1,0 +1,44 @@
+# --- Material sin procesar (nunca se sube) ---
+proyectos/*/_entrada/*
+!proyectos/*/_entrada/LEEME.md
+
+# --- Originales contractuales: viven en el repositorio documental oficial ---
+proyectos/*/contractual/**/*.pdf
+proyectos/*/contractual/**/original.*
+
+# --- Archivos temporales de Office y del sistema ---
+~$*
+*.tmp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- Configuración local de Claude Code (personal de cada equipo) ---
+.claude/settings.local.json
+
+# --- Versiones originales de documentos (la bitácora y las comparaciones sí se suben) ---
+proyectos/*/documentos/**/v*.pdf
+proyectos/*/documentos/**/v*.doc*
+proyectos/*/documentos/**/v*.xls*
+proyectos/*/documentos/**/v*.ppt*
+
+# --- Documentos de postulaciones o propuestas evaluadas (confidenciales) ---
+proyectos/*/postulaciones/**
+!proyectos/*/postulaciones/LEEME.md
+
+# --- Postulaciones (oferente): antecedentes personales y paquete firmado ---
+proyectos/*/contenidos/archivos/**
+proyectos/*/entrega/final/**
+
+# --- Empresa: archivos del banco de antecedentes (CVs, certificados, estados financieros) ---
+empresa/contenidos/archivos/*
+!empresa/contenidos/archivos/.gitkeep
+
+# --- Respaldos locales que deja actualizar_nucleo.py ---
+.harness/respaldo-nucleo/

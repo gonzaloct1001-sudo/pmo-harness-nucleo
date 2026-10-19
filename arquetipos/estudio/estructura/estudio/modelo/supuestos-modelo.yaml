@@ -1,0 +1,21 @@
+# Supuestos del modelo económico — lo usa: python herramientas/modelo_economico.py <este archivo>
+# Reemplazar los valores de ejemplo. Montos en la moneda indicada; tasas como fracción (0.10 = 10%).
+nombre: PENDIENTE
+moneda: CLP
+tipo_evaluacion: privada       # privada | social (social: tasa social y precios sociales de la metodología oficial; impuesto 0)
+tasa_descuento: 0.10
+horizonte_anios: 10
+tasa_impuesto: 0.27
+inversiones:
+  - {concepto: Inversión inicial, anio: 0, monto: 0}
+ingresos:
+  - {concepto: Ingreso principal, anio_inicio: 1, monto_anual: 0, crecimiento_anual: 0.0}
+costos:
+  - {concepto: Costo de operación, anio_inicio: 1, monto_anual: 0, crecimiento_anual: 0.0}
+depreciacion:
+  - {activo: Inversión inicial, monto: 0, vida_util: 10}
+capital_trabajo: {porcentaje_ingresos: 0.0}
+valor_residual: {metodo: valor_libro}   # valor_libro | monto | ninguno  (si es monto, agregar: monto: X)
+sensibilidad:
+  variaciones: [-0.2, -0.1, 0.1, 0.2]
+  variables: [ingresos, costos, inversion]

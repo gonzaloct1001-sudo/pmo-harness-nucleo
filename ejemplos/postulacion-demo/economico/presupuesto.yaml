@@ -1,0 +1,27 @@
+# Presupuesto propuesto por el cliente (correo del 05-10-2026). NO cumple las bases: ver hoja Controles.
+nombre: Riego inteligente AgroSur
+moneda: CLP
+
+parametros:
+  financiamiento_entidad_max_pct: 0.70
+  financiamiento_entidad_max_monto: 40000000
+  aporte_propio_min_pct: 0.30
+  aporte_pecuniario_min_pct_del_propio: 0.50
+  fuente: "Bases B01, numeral 3"
+
+items:
+  - {id: RRHH, nombre: Recursos humanos, tope_pct: null}
+  - {id: OPE, nombre: Gastos de operación, tope_pct: null}
+  - {id: INV, nombre: Inversión, tope_pct: null}
+  - {id: ADM, nombre: Gastos de administración, tope_pct: 0.10}
+
+meses: 12
+
+partidas:
+  - {item: RRHH, descripcion: "Directora del proyecto (horas del equipo AgroSur)", unidad: mes, cantidad: 12, costo_unitario: 1000000, entidad: 0, pecuniario: 0, no_pecuniario: 1, terceros: 0}
+  - {item: RRHH, descripcion: "Ingeniero IoT", unidad: mes, cantidad: 12, costo_unitario: 1500000, entidad: 1, pecuniario: 0, no_pecuniario: 0, terceros: 0}
+  - {item: INV, descripcion: "Sensores y gateways", unidad: unidad, cantidad: 60, costo_unitario: 150000, entidad: 1, pecuniario: 0, no_pecuniario: 0, terceros: 0}
+  - {item: OPE, descripcion: "Validación en 6 predios", unidad: predio, cantidad: 6, costo_unitario: 1000000, entidad: 1, pecuniario: 0, no_pecuniario: 0, terceros: 0}
+  - {item: OPE, descripcion: "Uso de oficina y bodega (valorizado)", unidad: global, cantidad: 1, costo_unitario: 1000000, entidad: 0, pecuniario: 0, no_pecuniario: 1, terceros: 0}
+  - {item: OPE, descripcion: "Difusión y capacitación a productores", unidad: global, cantidad: 1, costo_unitario: 4000000, entidad: 1, pecuniario: 0, no_pecuniario: 0, terceros: 0}
+  - {item: ADM, descripcion: "Administración del proyecto", unidad: global, cantidad: 1, costo_unitario: 5000000, entidad: 0.6, pecuniario: 0.4, no_pecuniario: 0, terceros: 0}

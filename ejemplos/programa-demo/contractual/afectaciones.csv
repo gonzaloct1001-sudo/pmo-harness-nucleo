@@ -1,0 +1,6 @@
+documento,fecha_vigencia,subproyecto,tipo,antes,despues,descripcion,aplicado
+E01,2026-08-20,PROGRAMA,plazo,2027-03-31,2027-04-30,Término del programa,si
+E01,2026-08-20,sp3,alcance,,Portal de clientes,Nuevo subproyecto,si
+E01,2026-08-20,sp3,monto,0,200000000,Presupuesto del Portal,si
+E01,2026-08-20,sp3,plazo,,2027-04-30,Término del Portal,si
+E02,2026-09-25,sp2,plazo,2027-02-28,2027-03-31,Se extiende la app por el modo sin conexión,no

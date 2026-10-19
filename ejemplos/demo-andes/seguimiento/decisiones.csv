@@ -1,0 +1,4 @@
+id,fecha,origen,decision,tomada_por,impacto,comentario
+D-001,2026-07-10,Comité de dirección,Priorizar SP1 sobre SP3 en asignación de horas del equipo TI del cliente,Carolina Pérez,SP3 inicia diseño en septiembre,
+D-002,2026-08-20,Enmienda E01,Incorporar portal de clientes al alcance (SP4),Comité de dirección,+30 días de plazo y +45 MM CLP,Formalizado en E01
+D-003,2026-09-04,Comité de dirección,Evaluar modo sin conexión para la app antes de fin de septiembre,Comité de dirección,Posible cambio de alcance en SP2,Ver A-002

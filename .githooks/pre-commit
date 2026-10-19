@@ -1,0 +1,5 @@
+#!/bin/sh
+# Control del PMO Harness antes de cada commit. Funciona con cualquier asistente de IA, o sin asistente.
+# Se activa una vez por computador con: git config core.hooksPath .githooks
+raiz="$(git rev-parse --show-toplevel)" || exit 1
+exec sh "$raiz/herramientas/py.sh" "$raiz/herramientas/hooks/precommit.py"

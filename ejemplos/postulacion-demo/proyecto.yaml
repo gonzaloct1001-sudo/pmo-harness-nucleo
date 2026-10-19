@@ -1,0 +1,77 @@
+# ============================================================
+# PROYECTO FICTICIO DE PRUEBA (arquetipo postulacion) — todos los datos son inventados.
+# Estado: etapa red team, a una semana del cierre. Tiene problemas sembrados a propósito:
+# presupuesto que no cumple las bases, carta de compromiso faltante (excluyente), certificado que vence
+# antes del cierre y un criterio bajo el mínimo según el red team.
+# ============================================================
+
+proyecto:
+  nombre: Riego inteligente AgroSur - Fondo Impulsa 2026
+  slug: postulacion-demo
+  codigo: IMP-2026
+  cliente: AgroSur Tecnología SpA (ficticio)
+  descripcion: Postulación al Fondo Impulsa Innovación Regional 2026 para validar un sistema de riego con sensores de humedad para pequeños productores.
+  fecha_inicio: 2026-10-05
+  confidencialidad: alta
+
+arquetipos: [postulacion]
+perfil: ""
+
+responsable:
+  nombre: Consultor (demo)
+  cargo: Consultor de proyectos
+  correo: consultor@asesorias-demo.cl
+
+gobierno:
+  sponsor: Paula Soto (Gerente General, AgroSur)
+  aprueba_decisiones: Paula Soto
+  comite:
+    nombre: ""
+    frecuencia: ""
+
+reportes:
+  semana_inicia: lunes
+  catalogo: reportes/catalogo/
+
+formato:
+  idioma: es-CL
+  formato_fecha: DD-MM-AAAA
+  tamano_pagina: carta
+  logo: marca/logo.png
+  color_primario: "2E7D32"
+  color_secundario: "1B5E20"
+  fuente: Arial
+  pie_de_pagina: "AgroSur Tecnología SpA"
+
+autoria:
+  nombre: Paula Soto
+  organizacion: AgroSur Tecnología SpA
+  patron_nombre_archivo: "{tipo}_{periodo}"
+  terminos_prohibidos: []
+  terminos_permitidos: []
+
+umbrales:
+  desvio_amarillo_pct: 5
+  desvio_rojo_pct: 10
+  dias_revision_riesgos: 30
+
+induccion:
+  estado: completa
+  bloques_completos: [1, 2, 3, 5, 6, 7]
+  pendientes: []
+  ultima_actualizacion: 2026-10-06
+
+postulacion:
+  tipo: fondo
+  entidad: Agencia Regional de Fomento (ficticia)
+  instrumento: Fondo Impulsa Innovación Regional 2026
+  postulante: AgroSur Tecnología SpA (ficticio)
+  plataforma: Plataforma de postulación en línea de la Agencia
+  fecha_cierre: 2026-11-10
+  hora_cierre: "15:00"
+  monto_solicitado: 40000000
+  moneda: CLP
+  etapa: red_team
+  decision_go: go
+  resultado: pendiente
+  declaracion_ia_exigida: si

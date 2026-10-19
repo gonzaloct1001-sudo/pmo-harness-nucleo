@@ -1,0 +1,63 @@
+# Métricas y reglas del portafolio (FICTICIO). Porcentajes como fracción: 0,20 = 20%.
+# Para agregar una métrica: nuevo bloque aquí + que algún script o carga manual la registre en mediciones.csv.
+
+metricas:
+  # ---------------- Por acción ----------------
+  - {id: peso, nombre: Peso, nivel: item, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Valor de mercado de la posición / valor total de la cartera,
+     umbral_amarillo: 0.18, umbral_rojo: 0.20}
+  - {id: rentabilidad, nombre: Rentabilidad, nivel: item, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Valor de mercado / costo promedio − 1,
+     umbral_amarillo: -0.05, umbral_rojo: -0.15}
+  - {id: volatilidad_12m, nombre: Volatilidad 12m, nivel: item, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Desviación estándar de retornos mensuales × √12,
+     umbral_amarillo: 0.30, umbral_rojo: 0.40}
+  - {id: drawdown_max_12m, nombre: Caída máx. 12m, nivel: item, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Mayor caída desde un máximo en 12 meses,
+     umbral_amarillo: 0.20, umbral_rojo: 0.30}
+  - {id: roe, nombre: ROE, nivel: item, unidad: "%", direccion: mayor_mejor, frecuencia: trimestral,
+     fuente: datos/fundamentos.csv, definicion: Utilidad / patrimonio (últimos 12 meses), umbral_amarillo: 0.12, umbral_rojo: 0.08}
+  - {id: deuda_ebitda, nombre: Deuda/EBITDA, nivel: item, unidad: x, direccion: menor_mejor, frecuencia: trimestral,
+     fuente: datos/fundamentos.csv, definicion: Deuda financiera neta / EBITDA, umbral_amarillo: 3.0, umbral_rojo: 3.5}
+  - {id: pu, nombre: P/U, nivel: item, unidad: x, direccion: informativa, frecuencia: trimestral,
+     fuente: datos/fundamentos.csv, definicion: Precio / utilidad por acción}
+  - {id: valor_mercado, nombre: Valor de mercado, nivel: item, unidad: CLP, direccion: informativa, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Cantidad × precio de cierre, clave: false}
+  - {id: retorno_12m, nombre: Retorno precio 12m, nivel: item, unidad: "%", direccion: informativa, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Variación del precio en la ventana, clave: false}
+  - {id: dividend_yield, nombre: Dividendo/precio, nivel: item, unidad: "%", direccion: informativa, frecuencia: trimestral,
+     fuente: datos/fundamentos.csv, definicion: Dividendos 12m / precio, clave: false}
+
+  # ---------------- Cartera ----------------
+  - {id: valor_cartera, nombre: Valor de la cartera, nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Suma de valores de mercado}
+  - {id: n_posiciones, nombre: N° de posiciones, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Acciones con posición abierta, umbral_amarillo: 7, umbral_rojo: 6}
+  - {id: retorno_cartera_12m, nombre: Retorno cartera 12m, nivel: proyecto, unidad: "%", direccion: informativa, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Retorno ponderado por tiempo, mensual}
+  - {id: retorno_benchmark_12m, nombre: Retorno índice IDX 12m, nivel: proyecto, unidad: "%", direccion: informativa, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Variación del índice de referencia}
+  - {id: exceso_retorno_12m, nombre: Exceso sobre índice 12m, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Retorno cartera − retorno índice, umbral_amarillo: 0.0, umbral_rojo: -0.05}
+  - {id: volatilidad_cartera_12m, nombre: Volatilidad cartera 12m, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Desv. est. retornos mensuales × √12, umbral_amarillo: 0.20, umbral_rojo: 0.25}
+  - {id: drawdown_cartera_12m, nombre: Caída máx. cartera 12m, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Mayor caída desde un máximo, umbral_amarillo: 0.10, umbral_rojo: 0.15}
+  - {id: sharpe_12m, nombre: Sharpe 12m, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: (Retorno − tasa libre de riesgo) / volatilidad, umbral_amarillo: 0.5, umbral_rojo: 0.0}
+  - {id: peso_max_accion, nombre: Peso máx. por acción, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Mayor peso individual, umbral_amarillo: 0.18, umbral_rojo: 0.20}
+  - {id: peso_max_sector, nombre: Peso máx. por sector, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: scripts/calcular_cartera.py, definicion: Mayor suma de pesos de un sector, umbral_amarillo: 0.30, umbral_rojo: 0.35}
+
+# ---------------- Política de inversión ----------------
+reglas:
+  - {id: POL-01, descripcion: Máximo 20% de la cartera en una acción, aplica_a: {etapa: [en_cartera, en_revision]},
+     metrica: peso, operador: "<=", valor: 0.20, severidad: critico}
+  - {id: POL-02, descripcion: Máximo 35% de la cartera en un sector, aplica_a: {nivel: proyecto},
+     metrica: peso_max_sector, operador: "<=", valor: 0.35, severidad: critico}
+  - {id: POL-03, descripcion: Mínimo 6 posiciones, aplica_a: {nivel: proyecto},
+     metrica: n_posiciones, operador: ">=", valor: 6, severidad: critico}
+  - {id: POL-04, descripcion: Deuda/EBITDA de acciones en cartera bajo 3.5x,
+     aplica_a: {etapa: [en_cartera, en_revision], excluir: [BPAC]},   # bancos no se miden por deuda/EBITDA
+     metrica: deuda_ebitda, operador: "<=", valor: 3.5, severidad: advertencia}

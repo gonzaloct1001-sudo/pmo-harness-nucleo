@@ -1,0 +1,20 @@
+# Métricas del arquetipo evaluación. Las métricas por criterio (crit_<id>) las agrega definir-pauta.
+metricas:
+  - {id: admisible, nombre: Admisible, nivel: item, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: 1 si cumple todos los requisitos excluyentes, umbral_rojo: 1}
+  - {id: puntaje_ponderado, nombre: Puntaje ponderado, nivel: item, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: Suma de puntaje por criterio × ponderación}
+  - {id: cumple_umbrales, nombre: Cumple umbrales, nivel: item, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: 1 si es admisible y supera el puntaje mínimo y los mínimos por criterio, clave: false}
+  - {id: ranking, nombre: Ranking, nivel: item, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: Posición entre las admisibles evaluadas}
+  - {id: n_postulaciones, nombre: Postulaciones, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: Total registradas}
+  - {id: n_admisibles, nombre: Admisibles, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: Postulaciones admisibles}
+  - {id: n_evaluadas, nombre: Evaluadas, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: a_pedido,
+     fuente: herramientas/puntaje_pauta.py, definicion: Con todos los criterios puntuados}
+  - {id: monto_seleccionable, nombre: Monto de las seleccionables dentro de presupuesto, nivel: proyecto, unidad: CLP,
+     direccion: informativa, frecuencia: a_pedido, fuente: herramientas/puntaje_pauta.py,
+     definicion: Suma de montos solicitados de las que cumplen umbrales en orden de ranking hasta agotar presupuesto}
+reglas: []

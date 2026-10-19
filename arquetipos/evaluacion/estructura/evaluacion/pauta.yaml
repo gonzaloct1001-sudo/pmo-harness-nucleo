@@ -1,0 +1,41 @@
+# ============================================================
+# Pauta de evaluación — la construye la skill definir-pauta a partir de las bases.
+# Puntajes por criterio en la escala definida; ponderaciones como fracción (deben sumar 1).
+# ============================================================
+convocatoria:
+  nombre: PENDIENTE
+  bases: ""                   # archivo o enlace de las bases
+  fecha_cierre: ""
+  presupuesto_total: 0        # monto disponible para adjudicar (0 si no aplica)
+  monto_maximo_por_postulacion: 0
+  moneda: CLP
+
+escala:
+  minimo: 1
+  maximo: 5
+  descripcion_general:
+    1: Deficiente / sin evidencia
+    2: Insuficiente
+    3: Aceptable
+    4: Bueno
+    5: Excelente
+
+admisibilidad: []
+#  - {id: ADM-01, requisito: "Formulario completo y firmado", excluyente: true}
+#  - {id: ADM-02, requisito: "Carta de compromiso de cofinanciamiento", excluyente: false}  # subsanable
+
+criterios: []
+#  - id: C1
+#    nombre: Calidad técnica de la propuesta
+#    ponderacion: 0.30
+#    descripcion: Qué se evalúa en este criterio, según las bases.
+#    niveles:
+#      1: "..."
+#      3: "..."
+#      5: "..."
+
+umbrales:
+  puntaje_minimo: 0           # puntaje ponderado mínimo para ser seleccionable
+  minimo_por_criterio: {}     # ej.: {C1: 3}
+desempate: []                 # criterios en orden, ej.: [C1, C2]
+discrepancia_maxima: 2        # diferencia entre evaluadores que obliga a revisar un criterio

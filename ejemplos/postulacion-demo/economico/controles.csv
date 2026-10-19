@@ -1,0 +1,11 @@
+id,control,valor,limite,estado,fuente
+CTL-00,Costo total del presupuesto mayor que cero,55000000,0,CUMPLE,coherencia interna
+CTL-01,Aporte de la entidad / costo total ≤ máximo,0.7272727273,0.7,NO CUMPLE,"Bases B01, numeral 3"
+CTL-02,Aporte de la entidad ≤ monto máximo,40000000,40000000,CUMPLE,"Bases B01, numeral 3"
+CTL-03,Aporte propio / costo total ≥ mínimo,0.2727272727,0.3,NO CUMPLE,"Bases B01, numeral 3"
+CTL-04,Aporte pecuniario / aporte propio ≥ mínimo,0.1333333333,0.5,NO CUMPLE,"Bases B01, numeral 3"
+CTL-05,Partidas cuyas fuentes no suman 100%,0,0,CUMPLE,coherencia interna
+CTL-06,Ítem RRHH (Recursos humanos) / costo total ≤ tope,0.5454545455,,SIN REGLA,"Bases B01, numeral 3"
+CTL-07,Ítem OPE (Gastos de operación) / costo total ≤ tope,0.2,,SIN REGLA,"Bases B01, numeral 3"
+CTL-08,Ítem INV (Inversión) / costo total ≤ tope,0.1636363636,,SIN REGLA,"Bases B01, numeral 3"
+CTL-09,Ítem ADM (Gastos de administración) / costo total ≤ tope,0.09090909091,0.1,CUMPLE,"Bases B01, numeral 3"

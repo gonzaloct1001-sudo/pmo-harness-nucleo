@@ -1,0 +1,28 @@
+# ============================================================
+# Presupuesto de la postulación. Genera el Excel con fórmulas y controles:
+#   python herramientas/presupuesto_postulacion.py proyectos/<slug>/economico/presupuesto.yaml
+# Los parámetros SIEMPRE salen de las bases vigentes (y sus aclaraciones): cita la fuente de cada uno.
+# Porcentajes como fracción (0,6 = 60%). Déjalos en blanco (null) si las bases no fijan esa regla.
+# ============================================================
+nombre: PENDIENTE
+moneda: CLP
+
+parametros:
+  financiamiento_entidad_max_pct: null        # tope del aporte de la entidad sobre el costo total
+  financiamiento_entidad_max_monto: null      # tope en monto del aporte de la entidad
+  aporte_propio_min_pct: null                 # aporte mínimo del postulante sobre el costo total
+  aporte_pecuniario_min_pct_del_propio: null  # parte del aporte propio que debe ser en dinero (pecuniario)
+  fuente: PENDIENTE                           # ej.: "Bases técnicas, art. 8 y aclaración AC01"
+
+items:                                        # categorías de gasto que definen las bases, con tope opcional sobre el total
+  - {id: RRHH, nombre: Recursos humanos, tope_pct: null}
+  - {id: OPE, nombre: Gastos de operación, tope_pct: null}
+  - {id: INV, nombre: Inversión, tope_pct: null}
+  - {id: ADM, nombre: Gastos de administración, tope_pct: null}
+
+meses: 0                                      # > 0 agrega una hoja de cronograma financiero mensual
+
+partidas: []
+# Cada partida reparte su costo entre fuentes (fracciones que suman 1):
+#  - {item: RRHH, descripcion: "Jefe de proyecto (media jornada)", unidad: mes, cantidad: 12, costo_unitario: 1500000,
+#     entidad: 0.6, pecuniario: 0.4, no_pecuniario: 0, terceros: 0}

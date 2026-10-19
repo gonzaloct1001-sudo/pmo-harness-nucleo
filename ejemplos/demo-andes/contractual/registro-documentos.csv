@@ -1,0 +1,4 @@
+id,tipo,nombre,fecha,vigente,carpeta,modifica_a,comentario
+P01,propuesta,Propuesta técnico-económica,2026-04-15,no,contractual/comercial/propuestas/P01-propuesta-inicial,,Reemplazada por C00
+C00,contrato,Contrato de servicios de implementación,2026-05-20,si,contractual/contrato/C00-contrato-base,,
+E01,enmienda,Enmienda N°1 portal de clientes y plazo,2026-08-20,si,contractual/contrato/enmiendas/E01-2026-08-plazo-y-portal,C00,Origen CC-001

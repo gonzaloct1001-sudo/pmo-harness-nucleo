@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- ARCHIVO FICTICIO DE PRUEBA: exportación XML de MS Project ("Guardar como > XML") de un programa con tres ramas. -->
+<Project xmlns="http://schemas.microsoft.com/project">
+  <Name>Programa Logística Integrada.xml</Name>
+  <Title>Programa Logística Integrada</Title>
+  <StartDate>2026-06-01T08:00:00</StartDate>
+  <Tasks>
+    <Task><UID>0</UID><ID>0</ID><Name>Programa Logística Integrada</Name><OutlineLevel>0</OutlineLevel><Summary>1</Summary></Task>
+    <Task><UID>1</UID><ID>1</ID><Name>Kickoff del programa</Name><OutlineNumber>1</OutlineNumber><OutlineLevel>1</OutlineLevel><Summary>0</Summary>
+      <Start>2026-06-01T08:00:00</Start><Finish>2026-06-01T08:00:00</Finish><PercentComplete>100</PercentComplete><Milestone>1</Milestone>
+      <ActualStart>2026-06-01T08:00:00</ActualStart><ActualFinish>2026-06-01T08:00:00</ActualFinish></Task>
+    <Task><UID>2</UID><ID>2</ID><Name>ERP</Name><OutlineNumber>2</OutlineNumber><OutlineLevel>1</OutlineLevel><Summary>1</Summary>
+      <Start>2026-06-02T08:00:00</Start><Finish>2027-01-15T17:00:00</Finish><Cost>48000000000</Cost></Task>
+    <Task><UID>3</UID><ID>3</ID><Name>Levantamiento de procesos</Name><OutlineNumber>2.1</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-06-02T08:00:00</Start><Finish>2026-07-15T17:00:00</Finish><PercentComplete>100</PercentComplete><Milestone>0</Milestone>
+      <ActualStart>2026-06-02T08:00:00</ActualStart><ActualFinish>2026-07-15T17:00:00</ActualFinish>
+      <Cost>6000000000</Cost><ActualCost>6500000000</ActualCost>
+      <PredecessorLink><PredecessorUID>1</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink>
+      <Baseline><Number>0</Number><Start>2026-06-02T08:00:00</Start><Finish>2026-07-10T17:00:00</Finish></Baseline></Task>
+    <Task><UID>4</UID><ID>4</ID><Name>Configuración del ERP</Name><OutlineNumber>2.2</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-07-16T08:00:00</Start><Finish>2026-10-31T17:00:00</Finish><PercentComplete>80</PercentComplete><Milestone>0</Milestone>
+      <ActualStart>2026-07-16T08:00:00</ActualStart><Cost>18000000000</Cost><ActualCost>12000000000</ActualCost>
+      <PredecessorLink><PredecessorUID>3</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink>
+      <Baseline><Number>0</Number><Start>2026-07-13T08:00:00</Start><Finish>2026-10-15T17:00:00</Finish></Baseline></Task>
+    <Task><UID>5</UID><ID>5</ID><Name>Migración de datos</Name><OutlineNumber>2.3</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-11-01T08:00:00</Start><Finish>2026-12-31T17:00:00</Finish><PercentComplete>0</PercentComplete><Milestone>0</Milestone>
+      <Cost>12000000000</Cost>
+      <PredecessorLink><PredecessorUID>4</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>6</UID><ID>6</ID><Name>ERP en producción</Name><OutlineNumber>2.4</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2027-01-15T17:00:00</Start><Finish>2027-01-15T17:00:00</Finish><PercentComplete>0</PercentComplete><Milestone>1</Milestone>
+      <PredecessorLink><PredecessorUID>5</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>7</UID><ID>7</ID><Name>App de despacho</Name><OutlineNumber>3</OutlineNumber><OutlineLevel>1</OutlineLevel><Summary>1</Summary>
+      <Start>2026-06-15T08:00:00</Start><Finish>2027-03-20T17:00:00</Finish></Task>
+    <Task><UID>8</UID><ID>8</ID><Name>Diseño UX de la app</Name><OutlineNumber>3.1</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-06-15T08:00:00</Start><Finish>2026-07-31T17:00:00</Finish><PercentComplete>100</PercentComplete><Milestone>0</Milestone>
+      <Cost>4500000000</Cost><ActualCost>4400000000</ActualCost>
+      <PredecessorLink><PredecessorUID>1</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>9</UID><ID>9</ID><Name>Desarrollo de la app</Name><OutlineNumber>3.2</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-08-01T08:00:00</Start><Finish>2027-01-31T17:00:00</Finish><PercentComplete>45</PercentComplete><Milestone>0</Milestone>
+      <Cost>16000000000</Cost><ActualCost>9000000000</ActualCost>
+      <PredecessorLink><PredecessorUID>8</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>10</UID><ID>10</ID><Name>Pruebas de la app</Name><OutlineNumber>3.3</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-08-08T08:00:00</Start><Finish>2027-01-31T17:00:00</Finish><PercentComplete>30</PercentComplete><Milestone>0</Milestone>
+      <PredecessorLink><PredecessorUID>9</PredecessorUID><Type>3</Type><LinkLag>24000</LinkLag><LagFormat>7</LagFormat></PredecessorLink>
+      <PredecessorLink><PredecessorUID>9</PredecessorUID><Type>0</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>11</UID><ID>11</ID><Name>Piloto con choferes</Name><OutlineNumber>3.4</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2027-02-01T08:00:00</Start><Finish>2027-03-15T17:00:00</Finish><PercentComplete>0</PercentComplete><Milestone>0</Milestone>
+      <PredecessorLink><PredecessorUID>10</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink>
+      <PredecessorLink><PredecessorUID>6</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>12</UID><ID>12</ID><Name>Portal de clientes</Name><OutlineNumber>4</OutlineNumber><OutlineLevel>1</OutlineLevel><Summary>1</Summary>
+      <Start>2026-09-01T08:00:00</Start><Finish>2027-04-30T17:00:00</Finish></Task>
+    <Task><UID>13</UID><ID>13</ID><Name>Diseño del portal</Name><OutlineNumber>4.1</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2026-09-01T08:00:00</Start><Finish>2026-10-31T17:00:00</Finish><PercentComplete>60</PercentComplete><Milestone>0</Milestone>
+      <PredecessorLink><PredecessorUID>3</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+    <Task><UID>14</UID><ID>14</ID><Name>Portal en producción</Name><OutlineNumber>4.2</OutlineNumber><OutlineLevel>2</OutlineLevel><Summary>0</Summary>
+      <Start>2027-04-30T17:00:00</Start><Finish>2027-04-30T17:00:00</Finish><PercentComplete>0</PercentComplete><Milestone>1</Milestone>
+      <PredecessorLink><PredecessorUID>13</PredecessorUID><Type>1</Type><LinkLag>0</LinkLag><LagFormat>7</LagFormat></PredecessorLink></Task>
+  </Tasks>
+  <Resources>
+    <Resource><UID>0</UID><ID>0</ID><IsNull>0</IsNull></Resource>
+    <Resource><UID>1</UID><ID>1</ID><Name>Pedro Soto</Name></Resource>
+    <Resource><UID>2</UID><ID>2</ID><Name>Carla Vidal</Name></Resource>
+    <Resource><UID>3</UID><ID>3</ID><Name>Luis Mora</Name></Resource>
+    <Resource><UID>4</UID><ID>4</ID><Name>Diego Paz</Name></Resource>
+  </Resources>
+  <Assignments>
+    <Assignment><UID>1</UID><TaskUID>3</TaskUID><ResourceUID>1</ResourceUID><Units>1</Units></Assignment>
+    <Assignment><UID>2</UID><TaskUID>4</TaskUID><ResourceUID>1</ResourceUID><Units>1</Units></Assignment>
+    <Assignment><UID>3</UID><TaskUID>4</TaskUID><ResourceUID>3</ResourceUID><Units>0.6</Units></Assignment>
+    <Assignment><UID>4</UID><TaskUID>9</TaskUID><ResourceUID>2</ResourceUID><Units>1</Units></Assignment>
+    <Assignment><UID>5</UID><TaskUID>9</TaskUID><ResourceUID>3</ResourceUID><Units>0.4</Units></Assignment>
+    <Assignment><UID>6</UID><TaskUID>13</TaskUID><ResourceUID>4</ResourceUID><Units>1</Units></Assignment>
+  </Assignments>
+</Project>

@@ -1,0 +1,38 @@
+# ============================================================
+# Subproyecto de un programa. Lo que no se defina aquí (cliente, formato, marca, logo, autoría, umbrales, reportes)
+# se hereda del proyecto.yaml del programa. Lo que se define aquí prevalece.
+# ============================================================
+
+programa: "../.."              # carpeta del programa (no cambiar)
+
+proyecto:
+  nombre: ERP
+  slug: sp1              # id del subproyecto (carpeta)
+  codigo: ""
+  descripcion: Subproyecto sp1 del Programa Logística Integrada.
+  fecha_inicio: 2026-06-02
+
+objetivos: []                  # objetivos propios del subproyecto (medibles)
+
+arquetipos: [ejecucion]        # el subproyecto puede usar además agil, obra u otro
+
+responsable:
+  nombre: Pedro Soto
+  cargo: Líder del subproyecto
+  correo: ""
+
+linea_base:                    # línea base del SUBPROYECTO según el contrato padre y sus enmiendas
+  fecha_termino_vigente: 2027-01-15   # AAAA-MM-DD (puede cambiar por una enmienda: ver contractual/afectaciones.csv del programa)
+  monto_vigente: 480000000           # presupuesto asignado al subproyecto (debe cuadrar con presupuesto/ del programa)
+  documento_vigente: C00              # C00, E01, ... que fijó estos valores
+  ultima_actualizacion: ""
+
+cronograma_actualizado: 2026-10-15     # AAAA-MM-DD de la última actualización del avance real
+
+formato: {}                    # vacío = usa el formato y la marca del programa; define solo lo que cambie
+
+induccion:
+  estado: pendiente
+  bloques_completos: []
+  pendientes: []
+  ultima_actualizacion: ""

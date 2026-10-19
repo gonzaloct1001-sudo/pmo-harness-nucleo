@@ -1,0 +1,27 @@
+# ============================================================
+# Métricas y reglas del proyecto (contrato común para todos los arquetipos).
+# Agregar una métrica = agregar un bloque aquí. Los valores se registran en mediciones.csv.
+# Lo evalúa: python herramientas/evaluar_metricas.py proyectos/<slug>
+# ============================================================
+#
+# Campos de cada métrica:
+#   id            identificador corto, sin espacios (se usa en mediciones.csv)
+#   nombre        nombre visible
+#   nivel         item (una por ítem/entidad) | proyecto (una para todo el proyecto)
+#   unidad        "%" (se guarda como fracción: 0.15 = 15%), "CLP", "días", "x", "" ...
+#   direccion     mayor_mejor | menor_mejor | informativa
+#   frecuencia    diaria | semanal | mensual | trimestral | a_pedido
+#   fuente        de dónde sale el valor (script, archivo, manual)
+#   definicion    cómo se calcula, en palabras
+#   umbral_amarillo, umbral_rojo   opcionales; según la dirección
+#   clave         true/false: si aparece como columna en la tabla de ítems (por defecto true)
+#
+# Reglas: condiciones que deben cumplirse (políticas, límites, requisitos).
+#   aplica_a: {etapa: <id o lista>} ítems en esa(s) etapa(s) · {categoria: <x>} · {nivel: proyecto}
+#             opcional: excluir: [ids]  (ítems a los que la regla no aplica, explicando por qué)
+#   operador: <= | < | >= | > | == | !=
+#   severidad: critico | advertencia
+
+metricas: []
+
+reglas: []

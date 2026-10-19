@@ -1,0 +1,33 @@
+# Ciclo de vida de una acción en este portafolio (en orden).
+etapas:
+  - id: universo
+    nombre: Universo
+    descripcion: Acción identificada como posible candidata.
+    requisitos: []
+  - id: preseleccion
+    nombre: Preselección
+    descripcion: Pasa los filtros cuantitativos básicos.
+    requisitos:
+      - {tipo: metrica, metrica: roe, operador: ">=", valor: 0.12}
+      - {tipo: metrica, metrica: deuda_ebitda, operador: "<=", valor: 3.5}
+  - id: analisis
+    nombre: En análisis
+    descripcion: Se escribe la tesis y se evalúa en detalle.
+    requisitos:
+      - {tipo: metrica, metrica: roe, operador: ">=", valor: 0.12}
+      - {tipo: archivo, ruta: "items/fichas/{id}.md"}
+  - id: en_cartera
+    nombre: En cartera
+    descripcion: Posición abierta.
+    requisitos:
+      - {tipo: archivo, ruta: "items/fichas/{id}.md"}
+  - id: en_revision
+    nombre: En revisión
+    descripcion: Posición abierta cuya tesis está en duda; decidir mantener, reducir o vender.
+    sugerir_avance: false        # se entra por decisión, no por cumplir requisitos
+    requisitos:
+      - {tipo: archivo, ruta: "items/fichas/{id}.md"}
+  - id: retirado
+    nombre: Retirada
+    descripcion: Vendida o descartada.
+    requisitos: []

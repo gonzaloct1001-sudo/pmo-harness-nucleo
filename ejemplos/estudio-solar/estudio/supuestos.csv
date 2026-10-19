@@ -1,0 +1,6 @@
+id,supuesto,valor,unidad,fuente,confianza,sensibilidad,comentario
+S1,Ahorro anual en energía año 1,42000000,CLP,Simulación del proveedor con consumo 2025 (ficticia),media,alta,Validar con boletas de 12 meses
+S2,Crecimiento del precio de la energía,0.03,fracción anual,Supuesto del equipo,baja,alta,
+S3,Inversión en paneles e inversores,180000000,CLP,Cotización proveedor A (ficticia),alta,media,
+S4,Recambio de inversores año 6,15000000,CLP,Vida útil típica informada por el proveedor,media,baja,
+S5,Tasa de descuento,0.10,fracción,Política financiera de la empresa (ficticia),alta,media,

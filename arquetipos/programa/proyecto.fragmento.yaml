@@ -1,0 +1,4 @@
+programa_info:                 # [programa] reglas del programa (los subproyectos están en programa/subproyectos.csv)
+  ponderacion_avance: presupuesto   # presupuesto | peso | duracion  (cómo pondera el avance de cada subproyecto)
+  contingencia_alerta_pct: 0.25     # alerta cuando queda menos de esta fracción de la contingencia inicial
+  moneda: CLP

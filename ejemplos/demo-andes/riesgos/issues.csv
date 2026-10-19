@@ -1,0 +1,3 @@
+id,fecha_registro,titulo,descripcion,impacto,responsable,accion,fecha_compromiso,estado,riesgo_origen
+I-001,2026-09-02,Plan de cuentas no definido,Finanzas no ha validado el plan de cuentas para configurar el ERP,Atraso de configuración SP1,Rodrigo Soto,Sesión de validación con contabilidad externa,2026-10-02,abierto,
+I-002,2026-08-20,Licencias de prueba vencidas,Las licencias del ambiente de pruebas vencieron,Bloqueo de pruebas 3 días,Andrés Muñoz,Renovación de licencias,2026-08-25,cerrado,

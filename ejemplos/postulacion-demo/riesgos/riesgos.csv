@@ -1,0 +1,6 @@
+id,fecha_registro,titulo,descripcion,categoria,probabilidad,impacto,severidad,responsable,estrategia,plan_accion,fecha_revision,estado
+R-01,2026-10-28,Inadmisibilidad por carta de la Universidad,"Si la Universidad no firma la carta de compromiso a tiempo, la postulación es inadmisible (Anexo 2)",Admisibilidad,4,5,20,Paula Soto,Mitigar,Pedir firma antes del 30-10; alternativa: postular sin asociado y ajustar C3,2026-10-30,abierto
+R-02,2026-10-28,Presupuesto fuera de las reglas de cofinanciamiento,El aporte de la Agencia supera el 70% y el aporte pecuniario es bajo el 50% del aporte propio,Económico,5,5,25,Consultor (demo),Mitigar,Bajar la solicitud y aumentar el aporte pecuniario de AgroSur,2026-11-04,abierto
+R-03,2026-10-28,Certificado de vigencia vencido,El certificado del banco de contenidos vence antes del cierre,Formal,4,4,16,Consultor (demo),Mitigar,Solicitar certificado nuevo el 05-11,2026-11-05,abierto
+R-04,2026-10-28,Caída de la plataforma el día del cierre,"Si la plataforma falla cerca del cierre, no se alcanza a postular",Formal,2,5,10,Consultor (demo),Evitar,Carga completa el 09-11,2026-11-09,abierto
+R-05,2026-10-28,Validación técnica insuficiente,El comité puede considerar insuficiente la validación del sensor en suelos arcillosos,Técnico,3,3,9,Paula Soto,Mitigar,Agregar datos de calibración de la Universidad,2026-11-04,abierto

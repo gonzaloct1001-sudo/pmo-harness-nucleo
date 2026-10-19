@@ -1,0 +1,36 @@
+# Flujo del tablero (en orden) y reglas de trabajo del equipo.
+estados:
+  - {id: por_hacer, nombre: Por hacer, categoria: pendiente}
+  - {id: en_progreso, nombre: En progreso, categoria: en_curso}
+  - {id: en_revision, nombre: En revisión, categoria: en_curso}
+  - {id: hecho, nombre: Hecho, categoria: terminado}
+  - {id: descartado, nombre: Descartado, categoria: terminado_sin_valor}
+
+# Equivalencias al importar desde GitHub, Jira u otras herramientas (nombre externo → estado)
+equivalencias:
+  "To Do": por_hacer
+  "Backlog": por_hacer
+  "Open": por_hacer
+  "In Progress": en_progreso
+  "In Review": en_revision
+  "Code Review": en_revision
+  "QA": en_revision
+  "Done": hecho
+  "Closed": hecho
+  "Resolved": hecho
+  "Won't Do": descartado
+
+tipos: [historia, bug, tarea, deuda, epica, spike]
+duracion_sprint_dias: 14
+limite_trabajo_en_curso: 6
+
+definicion_de_listo:
+  - Historia con criterio de aceptación verificable
+  - Estimada por el equipo
+  - Dependencias identificadas
+
+definicion_de_hecho:
+  - Código revisado por otra persona
+  - Pruebas automatizadas pasando
+  - Documentación actualizada si cambia el comportamiento
+  - Desplegado en ambiente de pruebas y aceptado por el dueño de producto

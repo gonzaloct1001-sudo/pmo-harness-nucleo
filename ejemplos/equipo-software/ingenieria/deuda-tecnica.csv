@@ -1,0 +1,5 @@
+id,titulo,descripcion,componente,impacto,esfuerzo,costo_de_no_pagarla,prioridad,estado,fecha_registro,item_backlog
+DT-01,Cliente HTTP obsoleto,Librería sin soporte de seguridad,Integración,4,2,Riesgo de vulnerabilidad y bloqueo al actualizar Android,alta,abierta,2026-09-05,D-01
+DT-02,Sin pruebas de integración con ERP,Solo pruebas unitarias en el módulo de envío,Integración,5,3,Errores como INC-01 llegan a producción,alta,abierta,2026-09-06,
+DT-03,Lógica de sincronización duplicada,Dos rutas de código para sincronizar,Offline,4,3,Bugs como B-02,alta,abierta,2026-09-25,
+DT-04,Estilos duplicados en pantallas,CSS repetido,UI,1,1,Cambios de diseño más lentos,baja,abierta,2026-08-20,

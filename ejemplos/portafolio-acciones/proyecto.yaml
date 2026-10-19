@@ -1,0 +1,53 @@
+# ============================================================
+# PROYECTO FICTICIO DE PRUEBA — empresas, precios y datos inventados.
+# Incluye incumplimientos sembrados a propósito para probar evaluar_metricas.py.
+# ============================================================
+
+proyecto:
+  nombre: Portafolio de acciones (ficticio)
+  slug: portafolio-acciones
+  codigo: ""
+  cliente: Uso personal
+  descripcion: Construcción y seguimiento de un portafolio de acciones del mercado local, con política de inversión explícita, tesis por acción y revisión mensual contra un índice de referencia.
+  fecha_inicio: 2025-08-31
+  confidencialidad: alta
+
+arquetipos: [cartera]
+perfil: ""
+
+responsable:
+  nombre: Titular del portafolio (demo)
+  cargo: Inversionista
+  correo: ""
+
+gobierno:
+  sponsor: Titular del portafolio (demo)
+  aprueba_decisiones: Titular del portafolio (demo)
+  comite:
+    nombre: Revisión mensual de cartera
+    frecuencia: mensual
+
+reportes:
+  semana_inicia: lunes
+  catalogo: reportes/catalogo/
+
+formato:
+  idioma: es-CL
+  formato_fecha: DD-MM-AAAA
+  tamano_pagina: carta
+  logo: marca/logo.png
+  color_primario: "1B4332"
+  color_secundario: "40916C"
+  fuente: Arial
+  pie_de_pagina: "Uso personal — herramienta de seguimiento, no constituye recomendación de inversión"
+
+umbrales:
+  desvio_amarillo_pct: 5
+  desvio_rojo_pct: 10
+  dias_revision_riesgos: 30
+
+induccion:
+  estado: completa
+  bloques_completos: [1, 2, 3, 5, 6, 7]
+  pendientes: []
+  ultima_actualizacion: 2026-09-01

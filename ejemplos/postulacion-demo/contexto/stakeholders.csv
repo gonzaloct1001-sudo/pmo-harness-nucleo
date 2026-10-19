@@ -1,0 +1,4 @@
+id,nombre,cargo,organizacion,rol_proyecto,poder,interes,estrategia,frecuencia_comunicacion,canal,recibe_reportes
+S01,Paula Soto,Gerente General,AgroSur Tecnología SpA,Postulante y representante legal,alto,alto,Gestionar de cerca,Semanal,Reunión y correo,si
+S02,Jorge Vidal,Investigador,Universidad Regional (ficticia),Entidad asociada,medio,medio,Mantener informado,Quincenal,Correo,no
+S03,Consultor (demo),Consultor de proyectos,Asesorías Demo,Formula y coordina la postulación,medio,alto,-,-,-,no

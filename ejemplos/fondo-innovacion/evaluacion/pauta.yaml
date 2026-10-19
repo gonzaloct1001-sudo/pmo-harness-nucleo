@@ -1,0 +1,68 @@
+# Pauta construida con definir-pauta desde documentos/bases/v01_bases-fondo.md (FICTICIO)
+convocatoria:
+  nombre: Fondo Regional de Innovación 2026 (ficticio)
+  bases: documentos/bases/v01_bases-fondo.md
+  fecha_cierre: 2026-09-15
+  presupuesto_total: 120000000
+  monto_maximo_por_postulacion: 50000000
+  moneda: CLP
+
+escala:
+  minimo: 1
+  maximo: 5
+  descripcion_general: {1: Deficiente / sin evidencia, 2: Insuficiente, 3: Aceptable, 4: Bueno, 5: Excelente}
+
+admisibilidad:
+  - {id: ADM-01, requisito: "Formulario de postulación completo (Art. 6a)", excluyente: true}
+  - {id: ADM-02, requisito: "Inicio de actividades de al menos 2 años (Art. 6b)", excluyente: true}
+  - {id: ADM-03, requisito: "Carta de compromiso de cofinanciamiento firmada (Art. 6c)", excluyente: true}
+  - {id: ADM-04, requisito: "Presupuesto detallado por partida (Art. 6d)", excluyente: true}
+  - {id: ADM-05, requisito: "Cartas de apoyo de terceros (subsanable, Art. 6)", excluyente: false}
+
+criterios:
+  - id: C1
+    nombre: Grado de innovación
+    ponderacion: 0.30
+    descripcion: Novedad de la solución respecto de lo existente en la empresa y en el mercado regional.
+    niveles:
+      1: "No describe qué es nuevo, o es una compra de equipamiento estándar sin cambio de proceso o producto."
+      3: "Adapta una solución conocida a la empresa, con mejora clara de su proceso o producto."
+      5: "Solución nueva para el mercado regional, con evidencia de que no existe una alternativa equivalente."
+  - id: C2
+    nombre: Impacto económico esperado
+    ponderacion: 0.25
+    descripcion: Efecto cuantificado en ventas, costos o productividad, con supuestos explícitos.
+    niveles:
+      1: "No cuantifica el impacto."
+      3: "Cuantifica el impacto con supuestos poco fundamentados."
+      5: "Cuantifica con línea base, supuestos fundamentados e indicadores verificables."
+  - id: C3
+    nombre: Capacidad del equipo
+    ponderacion: 0.20
+    descripcion: Experiencia y dedicación del equipo para ejecutar el proyecto.
+    niveles:
+      1: "No identifica equipo o no tiene experiencia relacionada."
+      3: "Equipo identificado con experiencia parcial; dedicación no especificada."
+      5: "Equipo con experiencia demostrada en proyectos similares y dedicación comprometida."
+  - id: C4
+    nombre: Coherencia del plan de trabajo y presupuesto
+    ponderacion: 0.15
+    descripcion: Actividades, plazos y presupuesto consistentes entre sí y con los objetivos.
+    niveles:
+      1: "Plan o presupuesto ausentes o inconsistentes."
+      3: "Plan y presupuesto razonables con algunas inconsistencias menores."
+      5: "Plan con hitos verificables y presupuesto por partida plenamente coherente."
+  - id: C5
+    nombre: Sostenibilidad después del financiamiento
+    ponderacion: 0.10
+    descripcion: Cómo se mantiene la solución cuando termina el cofinanciamiento.
+    niveles:
+      1: "No aborda la continuidad."
+      3: "Menciona continuidad sin detalle de costos o responsables."
+      5: "Plan de continuidad con costos, responsables y fuente de financiamiento."
+
+umbrales:
+  puntaje_minimo: 3.5
+  minimo_por_criterio: {C1: 3}
+desempate: [C1, C2]
+discrepancia_maxima: 2

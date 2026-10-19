@@ -1,0 +1,14 @@
+id,subproyecto,tarea,responsable,inicio_plan,fin_plan,inicio_real,fin_real,avance_pct,predecesoras,es_hito,estado,comentario,costo_plan,costo_real
+T01,SP0 Gestión,Kickoff del programa,Jefa de Programa (demo),2026-06-01,2026-06-01,2026-06-01,2026-06-01,100,,si,terminada,,0,
+T02,SP1 ERP,Levantamiento de procesos,Andrés Muñoz,2026-06-02,2026-07-15,2026-06-02,2026-07-18,100,T01,no,terminada,Terminó 3 días tarde,60000000,65000000
+T03,SP1 ERP,Configuración del ERP,Andrés Muñoz,2026-07-16,2026-10-15,2026-07-20,,55,T02,no,en curso,Atraso por definición de plan de cuentas,180000000,120000000
+T04,SP1 ERP,Migración de datos,Andrés Muñoz,2026-10-16,2026-12-15,,,0,T03,no,no iniciada,,120000000,
+T05,SP1 ERP,ERP en producción,Andrés Muñoz,2027-01-15,2027-01-15,,,0,T04,si,no iniciada,,0,
+T06,SP2 App de despacho,Diseño UX de la app,Tomás Fuentes,2026-06-15,2026-07-31,2026-06-15,2026-07-31,100,T01,no,terminada,,45000000,44000000
+T07,SP2 App de despacho,Desarrollo app móvil,Tomás Fuentes,2026-08-01,2026-11-30,2026-08-03,,30,T06,no,en curso,,160000000,60000000
+T08,SP2 App de despacho,Piloto en terreno (20 choferes),Marcela Rojas,2026-12-01,2027-01-15,,,0,T07,no,no iniciada,,40000000,
+T09,SP3 Integración y BI,Diseño de integración,Andrés Muñoz,2026-09-01,2026-10-15,2026-09-01,,40,T02,no,en curso,,50000000,25000000
+T10,SP3 Integración y BI,Desarrollo de integraciones,Andrés Muñoz,2027-01-16,2027-03-15,,,0,"T05,T08",no,no iniciada,,90000000,
+T11,SP3 Integración y BI,Tableros BI,Andrés Muñoz,2027-02-01,2027-04-15,,,0,T09,no,no iniciada,,55000000,
+T12,SP4 Portal de clientes,Portal de clientes (E01),Tomás Fuentes,2027-01-04,2027-04-30,,,0,T09,no,no iniciada,Incorporado por enmienda E01,90000000,
+T13,SP0 Gestión,Cierre y transición a operación,Jefa de Programa (demo),2027-04-16,2027-05-15,,,0,"T10,T11,T12",no,no iniciada,,5000000,

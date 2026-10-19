@@ -1,0 +1,8 @@
+id,ronda,perspectiva,tipo,seccion,observacion,respuesta,accion,responsable,estado
+RT-01,roja,admisibilidad,falla_fatal,04-equipo,"Falta la carta de compromiso firmada de la Universidad (excluyente, Anexo 2)",aceptar,Conseguir la firma o retirar al asociado,Paula Soto,abierta
+RT-02,roja,financiero,falla_fatal,05-presupuesto,"La Agencia financia 72,7% (máximo 70%) y el aporte pecuniario es 13% del aporte propio (mínimo 50%)",aceptar,"Reestructurar: solicitar $38,5 millones y aportar $6 millones en efectivo",Consultor (demo),abierta
+RT-03,roja,admisibilidad,falla_fatal,anexos,El certificado de vigencia del banco vence antes del cierre,aceptar,Solicitar certificado nuevo el 05-11,Consultor (demo),en_curso
+RT-04,roja,experto_esceptico,debilidad,03-solucion,No se muestra la calibración del sensor en suelos arcillosos,aceptar,Incluir datos de la Universidad,Paula Soto,abierta
+RT-05,roja,competidor,debilidad,02-problema,No se compara con el riego tecnificado disponible en la zona,aceptar,Agregar tabla comparativa de costo por hectárea,Consultor (demo),abierta
+RT-06,roja,financiero,debilidad,05-presupuesto,La sostenibilidad posterior no tiene proyección de ingresos (C4 bajo el mínimo),aceptar,Agregar proyección de suscripciones a 3 años,Consultor (demo),abierta
+RT-07,roja,abogado_diablo,pregunta,05-presupuesto,¿Qué pasa con el servicio si al año 2 no se alcanzan las suscripciones esperadas?,investigar,Preparar escenario conservador,Paula Soto,abierta

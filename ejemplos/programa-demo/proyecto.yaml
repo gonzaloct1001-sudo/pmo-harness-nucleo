@@ -1,0 +1,74 @@
+# ============================================================
+# Configuración del proyecto — la leen todas las skills.
+# Valores "PENDIENTE" se completan en nuevo-proyecto o alta-proyecto.
+# Mientras estén pendientes, las skills usan los valores por defecto.
+# Los arquetipos pueden agregar bloques propios (ej.: ejecucion agrega linea_base).
+# ============================================================
+
+proyecto:
+  nombre: Programa Logística Integrada
+  slug: programa-demo              # nombre de la carpeta, sin espacios ni tildes
+  codigo: PLI-2026
+  cliente: Distribuidora Austral S.A. (ficticio)
+  descripcion: Programa con contrato único para implementar ERP, app de despacho y portal de clientes en tres subproyectos.
+  fecha_inicio: 2026-06-01
+  confidencialidad: alta       # alta | media | baja
+
+arquetipos: [programa, ejecucion]                 # ejecucion | cartera | estudio (uno o más). Ver arquetipos/
+perfil: ""                     # perfil de biblioteca usado como base, si aplica
+
+responsable:
+  nombre: Ana Rivas
+  cargo: Directora del programa
+  correo: ""
+
+gobierno:
+  sponsor: ""                  # quién patrocina o responde (puede ser el mismo responsable)
+  aprueba_decisiones: ""       # quién aprueba decisiones relevantes
+  comite:
+    nombre: ""
+    frecuencia: ""
+
+reportes:
+  semana_inicia: lunes
+  catalogo: reportes/catalogo/
+
+formato:
+  idioma: es-CL
+  formato_fecha: DD-MM-AAAA
+  tamano_pagina: carta         # carta | a4
+  logo: marca/logo.png         # si no existe, los documentos salen sin logo
+  color_primario: "0B5563"     # hexadecimal sin #
+  color_secundario: "2E75B6"
+  fuente: Arial
+  pie_de_pagina: "Documento confidencial"
+
+autoria:                       # los documentos entregables salen a nombre del usuario, sin rastros del proceso
+  nombre: ""                   # autor en las propiedades de Word/Excel/PowerPoint (vacío = responsable.nombre)
+  organizacion: ""             # empresa en las propiedades (opcional)
+  patron_nombre_archivo: "{tipo}_{periodo}"   # nombre de los emitidos; {tipo} {periodo} {slug} {codigo}
+  terminos_prohibidos: []      # términos adicionales que nunca deben aparecer en un entregable
+  terminos_permitidos: []      # términos que en este proyecto son legítimos (ej.: "inteligencia artificial", "gemini")
+  excluir: []                  # archivos que no se verifican ni modifican: de terceros o declaraciones exigidas (ej.: "carta-*.pdf", "declaracion-uso-ia.docx")
+
+umbrales:
+  desvio_amarillo_pct: 5
+  desvio_rojo_pct: 10
+  dias_revision_riesgos: 30
+
+induccion:
+  estado: pendiente            # pendiente | parcial | completa
+  bloques_completos: []
+  pendientes: []
+  ultima_actualizacion: ""
+programa_info:                 # [programa] reglas del programa (los subproyectos están en programa/subproyectos.csv)
+  ponderacion_avance: presupuesto   # presupuesto | peso | duracion  (cómo pondera el avance de cada subproyecto)
+  contingencia_alerta_pct: 0.25     # alerta cuando queda menos de esta fracción de la contingencia inicial
+  moneda: CLP
+
+linea_base:                    # [ejecucion] resumen numérico; detalle en contractual/linea-base-vigente.md
+  fecha_termino_vigente: 2027-04-30
+  monto_vigente: 1090000000
+  moneda: CLP                        # CLP | UF | USD
+  ultima_actualizacion: ""
+cronograma_actualizado: ""           # [ejecucion] AAAA-MM-DD de la última actualización del avance real (la mantiene actualizar-gantt)

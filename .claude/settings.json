@@ -1,0 +1,163 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python herramientas/validar_proyecto.py:*)",
+      "Bash(python herramientas/md_a_docx.py:*)",
+      "Bash(python herramientas/inspeccionar_xlsx.py:*)",
+      "Bash(python herramientas/gantt_mermaid.py:*)",
+      "Bash(python herramientas/extraer_entrada.py:*)",
+      "Bash(python herramientas/verificar_entorno.py:*)",
+      "Bash(python herramientas/crear_proyecto.py:*)",
+      "Bash(python herramientas/evaluar_metricas.py:*)",
+      "Bash(python herramientas/comparar_documentos.py:*)",
+      "Bash(python herramientas/puntaje_pauta.py:*)",
+      "Bash(python herramientas/modelo_economico.py:*)",
+      "Bash(python herramientas/metricas_agil.py:*)",
+      "Bash(python herramientas/importar_backlog.py:*)",
+      "Bash(python herramientas/evm_cpm.py:*)",
+      "Bash(python -m pip install -r requirements.txt)",
+      "Bash(python pruebas/ejecutar_pruebas.py:*)",
+      "Bash(python3 herramientas/validar_proyecto.py:*)",
+      "Bash(python3 herramientas/md_a_docx.py:*)",
+      "Bash(python3 herramientas/inspeccionar_xlsx.py:*)",
+      "Bash(python3 herramientas/gantt_mermaid.py:*)",
+      "Bash(python3 herramientas/extraer_entrada.py:*)",
+      "Bash(python3 herramientas/verificar_entorno.py:*)",
+      "Bash(python3 herramientas/crear_proyecto.py:*)",
+      "Bash(python3 herramientas/evaluar_metricas.py:*)",
+      "Bash(python3 herramientas/comparar_documentos.py:*)",
+      "Bash(python3 herramientas/puntaje_pauta.py:*)",
+      "Bash(python3 herramientas/modelo_economico.py:*)",
+      "Bash(python3 herramientas/metricas_agil.py:*)",
+      "Bash(python3 herramientas/importar_backlog.py:*)",
+      "Bash(python3 herramientas/evm_cpm.py:*)",
+      "Bash(python3 -m pip install -r requirements.txt)",
+      "Bash(python3 pruebas/ejecutar_pruebas.py:*)",
+      "Bash(py herramientas/validar_proyecto.py:*)",
+      "Bash(py herramientas/md_a_docx.py:*)",
+      "Bash(py herramientas/inspeccionar_xlsx.py:*)",
+      "Bash(py herramientas/gantt_mermaid.py:*)",
+      "Bash(py herramientas/extraer_entrada.py:*)",
+      "Bash(py herramientas/verificar_entorno.py:*)",
+      "Bash(py herramientas/crear_proyecto.py:*)",
+      "Bash(py herramientas/evaluar_metricas.py:*)",
+      "Bash(py herramientas/comparar_documentos.py:*)",
+      "Bash(py herramientas/puntaje_pauta.py:*)",
+      "Bash(py herramientas/modelo_economico.py:*)",
+      "Bash(py herramientas/metricas_agil.py:*)",
+      "Bash(py herramientas/importar_backlog.py:*)",
+      "Bash(py herramientas/evm_cpm.py:*)",
+      "Bash(py -m pip install -r requirements.txt)",
+      "Bash(py pruebas/ejecutar_pruebas.py:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote -v:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(python herramientas/verificar_autoria.py:*)",
+      "Bash(python herramientas/extraer_requisitos.py:*)",
+      "Bash(python herramientas/postulacion.py:*)",
+      "Bash(python herramientas/presupuesto_postulacion.py:*)",
+      "Bash(python3 herramientas/verificar_autoria.py:*)",
+      "Bash(python3 herramientas/extraer_requisitos.py:*)",
+      "Bash(python3 herramientas/postulacion.py:*)",
+      "Bash(python3 herramientas/presupuesto_postulacion.py:*)",
+      "Bash(py herramientas/verificar_autoria.py:*)",
+      "Bash(py herramientas/extraer_requisitos.py:*)",
+      "Bash(py herramientas/postulacion.py:*)",
+      "Bash(py herramientas/presupuesto_postulacion.py:*)",
+      "Bash(python herramientas/guia_proyecto.py:*)",
+      "Bash(python3 herramientas/guia_proyecto.py:*)",
+      "Bash(py herramientas/guia_proyecto.py:*)",
+      "Bash(python herramientas/programa.py:*)",
+      "Bash(python3 herramientas/programa.py:*)",
+      "Bash(py herramientas/programa.py:*)",
+      "Bash(python herramientas/importar_msproject.py:*)",
+      "Bash(python3 herramientas/importar_msproject.py:*)",
+      "Bash(py herramientas/importar_msproject.py:*)",
+      "Bash(python herramientas/estado.py:*)",
+      "Bash(python herramientas/hooks/precommit.py:*)",
+      "Bash(python herramientas/nueva_empresa.py:*)",
+      "Bash(python herramientas/actualizar_nucleo.py:*)",
+      "Bash(python3 herramientas/estado.py:*)",
+      "Bash(python3 herramientas/hooks/precommit.py:*)",
+      "Bash(python3 herramientas/nueva_empresa.py:*)",
+      "Bash(python3 herramientas/actualizar_nucleo.py:*)",
+      "Bash(py herramientas/estado.py:*)",
+      "Bash(py herramientas/hooks/precommit.py:*)",
+      "Bash(py herramientas/nueva_empresa.py:*)",
+      "Bash(py herramientas/actualizar_nucleo.py:*)",
+      "Bash(.venv/bin/python herramientas/actualizar_nucleo.py:*)",
+      "Bash(.venv/bin/python herramientas/comparar_documentos.py:*)",
+      "Bash(.venv/bin/python herramientas/crear_proyecto.py:*)",
+      "Bash(.venv/bin/python herramientas/estado.py:*)",
+      "Bash(.venv/bin/python herramientas/evaluar_metricas.py:*)",
+      "Bash(.venv/bin/python herramientas/evm_cpm.py:*)",
+      "Bash(.venv/bin/python herramientas/extraer_entrada.py:*)",
+      "Bash(.venv/bin/python herramientas/extraer_requisitos.py:*)",
+      "Bash(.venv/bin/python herramientas/gantt_mermaid.py:*)",
+      "Bash(.venv/bin/python herramientas/guia_proyecto.py:*)",
+      "Bash(.venv/bin/python herramientas/hooks/precommit.py:*)",
+      "Bash(.venv/bin/python herramientas/importar_backlog.py:*)",
+      "Bash(.venv/bin/python herramientas/importar_msproject.py:*)",
+      "Bash(.venv/bin/python herramientas/inspeccionar_xlsx.py:*)",
+      "Bash(.venv/bin/python herramientas/md_a_docx.py:*)",
+      "Bash(.venv/bin/python herramientas/metricas_agil.py:*)",
+      "Bash(.venv/bin/python herramientas/modelo_economico.py:*)",
+      "Bash(.venv/bin/python herramientas/nueva_empresa.py:*)",
+      "Bash(.venv/bin/python herramientas/postulacion.py:*)",
+      "Bash(.venv/bin/python herramientas/presupuesto_postulacion.py:*)",
+      "Bash(.venv/bin/python herramientas/programa.py:*)",
+      "Bash(.venv/bin/python herramientas/puntaje_pauta.py:*)",
+      "Bash(.venv/bin/python herramientas/validar_proyecto.py:*)",
+      "Bash(.venv/bin/python herramientas/verificar_autoria.py:*)",
+      "Bash(.venv/bin/python herramientas/verificar_entorno.py:*)",
+      "Bash(.venv/bin/python pruebas/ejecutar_pruebas.py:*)",
+      "Bash(.venv/bin/python -m pip install -r requirements.txt)",
+      "Bash(sh herramientas/py.sh:*)",
+      "Bash(git config core.hooksPath .githooks)",
+      "Bash(git config --get core.hooksPath)",
+      "Bash(git fetch:*)",
+      "Bash(git rev-list:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/inicio_sesion.py\""
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/proteger_confidenciales.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/validar_edicion.py\""
+          }
+        ]
+      }
+    ]
+  }
+}

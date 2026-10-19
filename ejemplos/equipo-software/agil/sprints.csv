@@ -1,0 +1,6 @@
+sprint,inicio,fin,objetivo,comprometido_pts,completado_pts,estado,comentario
+S1,2026-08-03,2026-08-14,Login y rutas básicas,21,21,cerrado,
+S2,2026-08-17,2026-08-28,Registro de entregas (POD),24,19,cerrado,
+S3,2026-08-31,2026-09-11,Sincronización con ERP,23,17,cerrado,
+S4,2026-09-14,2026-09-25,Modo sin conexión (fase 1),22,20,cerrado,
+S5,2026-09-28,2026-10-09,Modo sin conexión (fase 2) y estabilización,21,,activo,

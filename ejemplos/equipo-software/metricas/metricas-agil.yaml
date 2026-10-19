@@ -1,0 +1,32 @@
+# Métricas del arquetipo ágil. Las calcula: python herramientas/metricas_agil.py <proyecto>
+# Umbrales iniciales sugeridos; ajustarlos a la realidad del equipo tras 3 sprints.
+metricas:
+  - {id: velocidad_promedio, nombre: Velocidad (prom. 3 sprints), nivel: proyecto, unidad: pts, direccion: informativa, frecuencia: quincenal,
+     fuente: herramientas/metricas_agil.py, definicion: Puntos completados por sprint cerrado (promedio de los últimos 3)}
+  - {id: cumplimiento_compromiso, nombre: Cumplimiento del compromiso, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: quincenal,
+     fuente: herramientas/metricas_agil.py, definicion: Completado / comprometido (prom. últimos 3 sprints), umbral_amarillo: 0.8, umbral_rojo: 0.6}
+  - {id: avance_sprint_actual, nombre: Avance sprint actual, nivel: proyecto, unidad: "%", direccion: informativa, frecuencia: semanal,
+     fuente: herramientas/metricas_agil.py, definicion: Puntos terminados / comprometidos del sprint en curso}
+  - {id: trabajo_en_curso, nombre: Trabajo en curso, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: semanal,
+     fuente: herramientas/metricas_agil.py, definicion: Ítems en progreso o en revisión, umbral_amarillo: 6, umbral_rojo: 9}
+  - {id: bugs_abiertos, nombre: Bugs abiertos, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: semanal,
+     fuente: herramientas/metricas_agil.py, definicion: Ítems tipo bug no terminados, umbral_amarillo: 5, umbral_rojo: 10}
+  - {id: tiempo_ciclo_mediana_dias, nombre: Tiempo de ciclo (mediana), nivel: proyecto, unidad: días, direccion: menor_mejor, frecuencia: quincenal,
+     fuente: herramientas/metricas_agil.py, definicion: Días entre inicio y cierre de ítems terminados en la ventana, umbral_amarillo: 7, umbral_rojo: 12}
+  - {id: frecuencia_despliegue_semana, nombre: Despliegues a producción por semana, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: DORA — despliegues a producción / semanas de la ventana, umbral_amarillo: 1, umbral_rojo: 0.25}
+  - {id: lead_time_cambios_horas, nombre: Tiempo de entrega de cambios (mediana), nivel: proyecto, unidad: h, direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: DORA — horas desde el commit hasta producción, umbral_amarillo: 168, umbral_rojo: 720}
+  - {id: tasa_falla_cambios, nombre: Tasa de falla de cambios, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: DORA — despliegues con falla, reversa o incidente / total, umbral_amarillo: 0.15, umbral_rojo: 0.30}
+  - {id: tiempo_recuperacion_min, nombre: Tiempo de recuperación (mediana), nivel: proyecto, unidad: min, direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: DORA — minutos para recuperar el servicio tras un despliegue fallido, umbral_amarillo: 60, umbral_rojo: 1440}
+  - {id: deuda_tecnica_abierta, nombre: Deuda técnica abierta, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: Ítems de deuda técnica no resueltos}
+  - {id: deuda_tecnica_alta, nombre: Deuda técnica de prioridad alta, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: Deuda abierta con prioridad alta, umbral_amarillo: 2, umbral_rojo: 4}
+  - {id: requisitos_sin_prueba, nombre: Requisitos sin prueba asociada, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/metricas_agil.py, definicion: Requisitos vigentes sin prueba en la matriz de trazabilidad, umbral_amarillo: 1, umbral_rojo: 3}
+reglas:
+  - {id: AGI-01, descripcion: Respetar el límite de trabajo en curso, aplica_a: {nivel: proyecto}, metrica: trabajo_en_curso, operador: "<=", valor: 6, severidad: advertencia}
+  - {id: AGI-02, descripcion: Todo requisito vigente debe tener al menos una prueba, aplica_a: {nivel: proyecto}, metrica: requisitos_sin_prueba, operador: "==", valor: 0, severidad: advertencia}

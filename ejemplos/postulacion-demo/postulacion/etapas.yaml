@@ -1,0 +1,117 @@
+# ============================================================
+# Flujo de la postulación: etapas y compuertas. Lo evalúa: python herramientas/postulacion.py <proyecto>
+# La etapa actual está en proyecto.yaml → postulacion.etapa.
+# Una etapa se da por cumplida cuando se satisfacen TODAS las condiciones de su compuerta; recién entonces
+# se avanza a la siguiente. El flujo es modificable: agrega, quita o renombra etapas según las bases
+# (p. ej. pertinencia, pitch, entrevista) y registra el cambio en seguimiento/decisiones.csv.
+#
+# Tipos de condición:
+#   {tipo: metrica, metrica: <id>, operador: <=|<|>=|>|==|!=, valor: <n>}   métricas que calcula postulacion.py
+#   {tipo: campo, campo: postulacion.<clave>, valor: <texto>}               valor en proyecto.yaml
+#   {tipo: archivo, ruta: <ruta relativa al proyecto>}                      el archivo existe
+#   {tipo: sin_pendientes, ruta: <ruta>}                                    existe, sin "PENDIENTE" (mayúsculas) ni casillas "- [ ]"
+# ============================================================
+etapas:
+  - id: recepcion
+    nombre: Recepción de bases y calendario
+    que_hacer: >
+      Cargar bases, anexos, formularios y aclaraciones; extraer texto; barrido de requisitos; fichas de bases;
+      calendario completo (consultas, visita, cierre, apertura, adjudicación) con alertas.
+    compuerta:
+      - {tipo: metrica, metrica: barrido_total, operador: ">", valor: 0}
+      - {tipo: metrica, metrica: calendario_con_cierre, operador: "==", valor: 1}
+
+  - id: go_no_go
+    nombre: Decisión Go / No-Go
+    que_hacer: >
+      Evaluar elegibilidad del postulante, capacidad, plazo, probabilidad de ganar, costo de postular y
+      conveniencia; registrar la decisión y sus fundamentos en postulacion/go-no-go.md.
+    compuerta:
+      - {tipo: sin_pendientes, ruta: postulacion/go-no-go.md}
+      - {tipo: campo, campo: postulacion.decision_go, valor: go}
+
+  - id: cumplimiento
+    nombre: Matriz de cumplimiento, pauta inversa y consultas
+    que_hacer: >
+      Revisar cada candidato del barrido (incorporar a la matriz o descartar con motivo); asignar dueño y forma
+      de cumplimiento; construir la pauta inversa; enviar consultas dentro del plazo del foro.
+    compuerta:
+      - {tipo: metrica, metrica: requisitos_total, operador: ">", valor: 0}
+      - {tipo: metrica, metrica: barrido_sin_revisar, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: requisitos_sin_responsable, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: consultas_por_enviar, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: pauta_criterios, operador: ">", valor: 0}
+
+  - id: estrategia
+    nombre: Estrategia de solución (revisión azul)
+    que_hacer: >
+      Solución, propuesta de valor, temas ganadores por criterio, diferenciadores, competidores probables,
+      equipo, socios y cartas de compromiso.
+    compuerta:
+      - {tipo: sin_pendientes, ruta: postulacion/estrategia.md}
+
+  - id: redaccion
+    nombre: Redacción por secciones (revisión rosa)
+    que_hacer: >
+      Redactar cada sección del formulario respondiendo a los requisitos y criterios que declara en su
+      encabezado; revisión rosa del primer borrador completo (estructura, cumplimiento y temas ganadores).
+    compuerta:
+      - {tipo: metrica, metrica: secciones_total, operador: ">", valor: 0}
+      - {tipo: metrica, metrica: secciones_sin_trazabilidad, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: rondas_redteam, operador: ">=", valor: 1}
+
+  - id: economico
+    nombre: Presupuesto y evaluación económica
+    que_hacer: >
+      Presupuesto por ítem y fuente de financiamiento con controles contra las bases (presupuesto_postulacion.py);
+      evaluación económica si las bases la piden (modelo_economico.py).
+    compuerta:
+      - {tipo: archivo, ruta: economico/controles.csv}
+      - {tipo: metrica, metrica: presupuesto_con_datos, operador: "==", valor: 1}
+      - {tipo: metrica, metrica: controles_economicos_incumplidos, operador: "==", valor: 0}
+
+  - id: riesgos_impacto
+    nombre: Riesgos, impacto e indicadores
+    que_hacer: >
+      Riesgos del proyecto y de la postulación con mitigación (levantar-riesgos); impacto esperado con
+      indicadores medibles y línea base; plan de ejecución (Gantt de la propuesta).
+    compuerta:
+      - {tipo: metrica, metrica: riesgos_registrados, operador: ">=", valor: 3}
+
+  - id: red_team
+    nombre: Red team (revisión roja)
+    que_hacer: >
+      Panel de revisores aislados puntúa como el comité; se responde cada observación; segunda ronda si hubo
+      fallas fatales.
+    compuerta:
+      - {tipo: metrica, metrica: redteam_sobre_objetivo, operador: "==", valor: 1}
+      - {tipo: metrica, metrica: fallas_fatales_abiertas, operador: "==", valor: 0}
+
+  - id: entrega
+    nombre: Revisión oro, guante blanco y entrega
+    que_hacer: >
+      Aprobación final de precio, riesgos y compromisos (oro); revisión formal (formatos, firmas, anexos,
+      límites, nombres de archivo); verificación de autoría; carga anticipada en la plataforma.
+    compuerta:
+      - {tipo: metrica, metrica: excluyentes_pendientes, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: cumplimiento_pct, operador: ">=", valor: 1}
+      - {tipo: metrica, metrica: contenidos_vencidos, operador: "==", valor: 0}
+      - {tipo: metrica, metrica: entrega_archivos, operador: ">", valor: 0}
+      - {tipo: metrica, metrica: entrega_autoria_errores, operador: "==", valor: 0}
+      - {tipo: sin_pendientes, ruta: entrega/checklist.md}
+
+  - id: post_entrega
+    nombre: Post-entrega
+    que_hacer: >
+      Comprobante de envío; responder aclaraciones o subsanaciones dentro de plazo; seguir la evaluación y la
+      adjudicación; registrar el resultado.
+    compuerta:
+      - {tipo: campo, campo: postulacion.resultado, valor_distinto: pendiente}
+
+  - id: cierre
+    nombre: Cierre y lecciones aprendidas
+    que_hacer: >
+      Lecciones aprendidas y actualización del banco de contenidos; si se adjudicó, transición al arquetipo
+      ejecucion (los compromisos de la propuesta pasan a ser la línea base).
+    compuerta:
+      - {tipo: sin_pendientes, ruta: postulacion/lecciones.md}

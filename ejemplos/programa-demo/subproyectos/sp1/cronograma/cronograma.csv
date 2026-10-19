@@ -1,0 +1,5 @@
+id,subproyecto,tarea,responsable,inicio_plan,fin_plan,inicio_real,fin_real,avance_pct,predecesoras,es_hito,estado,comentario,costo_plan,costo_real
+T01,sp1,Levantamiento de procesos,Pedro Soto,2026-06-02,2026-07-15,2026-06-02,2026-07-15,100,,no,terminada,,,
+T02,sp1,Configuración del ERP,Pedro Soto,2026-07-16,2026-10-31,2026-07-16,,80,T01,no,en curso,,,
+T03,sp1,Migración de datos,Pedro Soto,2026-11-01,2026-12-31,,,0,T02,no,no iniciada,,,
+T04,sp1,ERP en producción,Pedro Soto,2027-01-15,2027-01-15,,,0,T03,si,no iniciada,,,

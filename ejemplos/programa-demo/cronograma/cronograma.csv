@@ -1,0 +1,3 @@
+id,subproyecto,tarea,responsable,inicio_plan,fin_plan,inicio_real,fin_real,avance_pct,predecesoras,es_hito,estado,comentario,costo_plan,costo_real
+T01,Programa,Kickoff del programa,Ana Rivas,2026-06-01,2026-06-01,2026-06-01,2026-06-01,100,,si,terminada,,,
+T02,Programa,Cierre del programa,Ana Rivas,2027-04-30,2027-04-30,,,0,sp1:T04;sp2:T04;sp3:T03,si,no iniciada,,,

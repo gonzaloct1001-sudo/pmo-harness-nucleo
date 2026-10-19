@@ -1,0 +1,31 @@
+# ============================================================
+# Ciclo de vida de los ítems de la cartera (en orden).
+# requisitos: condiciones que un ítem debe cumplir para ESTAR en esa etapa.
+#   - tipo: metrica  → metrica, operador (<= < >= > == !=), valor
+#   - tipo: archivo  → ruta (usa {id} para el id del ítem)
+# evaluar_metricas.py revisa si cada ítem cumple los requisitos de su etapa y cuáles
+# podrían avanzar a la siguiente. Con sugerir_avance: false, una etapa no se sugiere
+# automáticamente (útil para etapas a las que se entra por decisión, como "en revisión").
+# ============================================================
+
+etapas:
+  - id: propuesto
+    nombre: Propuesto
+    descripcion: Ítem identificado, aún sin evaluar.
+    requisitos: []
+  - id: en_evaluacion
+    nombre: En evaluación
+    descripcion: Se está analizando con las métricas y criterios del proyecto.
+    requisitos:
+      - tipo: archivo
+        ruta: items/fichas/{id}.md
+  - id: activo
+    nombre: Activo
+    descripcion: Aprobado y en operación / en cartera.
+    requisitos:
+      - tipo: archivo
+        ruta: items/fichas/{id}.md
+  - id: retirado
+    nombre: Retirado
+    descripcion: Descartado, vendido, cerrado o finalizado.
+    requisitos: []

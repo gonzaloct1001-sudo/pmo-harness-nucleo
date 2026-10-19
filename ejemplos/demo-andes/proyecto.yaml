@@ -1,0 +1,61 @@
+# ============================================================
+# PROYECTO FICTICIO DE PRUEBA — todos los datos son inventados.
+# Incluye 3 inconsistencias sembradas a propósito para probar la skill "consistencia".
+# ============================================================
+
+arquetipos: [ejecucion]
+
+proyecto:
+  nombre: Programa Andes Digital
+  slug: demo-andes
+  codigo: PAD-2026
+  cliente: Distribuidora Andes S.A. (ficticio)
+  tipo: programa
+  descripcion: Modernización de la operación de distribución mediante nuevo ERP, app móvil de despacho, integración con tableros BI y portal de clientes.
+  fecha_inicio: 2026-06-01
+  confidencialidad: alta
+
+responsable:
+  nombre: Jefa de Programa (demo)
+  cargo: Jefa de programa
+  correo: ""
+
+gobierno:
+  sponsor: Carolina Pérez (Gerente General)
+  aprueba_presupuesto: Rodrigo Soto (Gerente de Finanzas)
+  aprueba_cambios: Comité de dirección
+  comite:
+    nombre: Comité de dirección del programa
+    frecuencia: mensual
+
+linea_base:
+  fecha_termino_vigente: 2027-04-30
+  monto_vigente: 895000000
+  moneda: CLP
+  ultima_actualizacion: 2026-08-20
+
+reportes:
+  semana_inicia: lunes
+  dia_reporte_semanal: viernes
+  catalogo: reportes/catalogo/
+
+formato:
+  idioma: es-CL
+  formato_fecha: DD-MM-AAAA
+  tamano_pagina: carta
+  logo: marca/logo.png
+  color_primario: "0F4C5C"
+  color_secundario: "E36414"
+  fuente: Arial
+  pie_de_pagina: "Documento confidencial — uso interno del programa"
+
+umbrales:
+  desvio_amarillo_pct: 5
+  desvio_rojo_pct: 10
+  dias_revision_riesgos: 30
+
+induccion:
+  estado: parcial
+  bloques_completos: [1, 2, 3, 4, 5, 7]
+  pendientes: [bloque 6 - tipografía corporativa del cliente por confirmar]
+  ultima_actualizacion: 2026-09-01

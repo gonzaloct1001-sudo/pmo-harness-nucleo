@@ -1,0 +1,8 @@
+id,requisito,tipo,origen,prioridad,adr,historias,pruebas,estado,comentario
+RQ-01,El chofer inicia sesión con credenciales corporativas,funcional,Especificación v1,alta,,H-01,PR-AUTH-01,vigente,
+RQ-02,El chofer ve las rutas asignadas del día,funcional,Especificación v1,alta,,H-02,PR-RUT-01,vigente,
+RQ-03,Toda entrega registra foto y firma,funcional,Especificación v1,alta,,H-04,PR-POD-01;PR-POD-02,vigente,
+RQ-04,Las entregas se envían al ERP en menos de 5 minutos,no funcional,Especificación v1,alta,ADR-001,H-07;H-08,PR-INT-01,vigente,
+RQ-05,La app registra entregas sin conexión y sincroniza al recuperar señal,funcional,CC-002 (modo sin conexión),alta,ADR-002,H-09;H-10,,vigente,Pruebas pendientes
+RQ-06,No se duplican entregas en la sincronización,no funcional,Postmortem PM-002,alta,ADR-002,H-12,,vigente,
+RQ-07,Los datos personales del destinatario se eliminan a los 90 días,no funcional,Legal,media,,,,vigente,Sin historia aún

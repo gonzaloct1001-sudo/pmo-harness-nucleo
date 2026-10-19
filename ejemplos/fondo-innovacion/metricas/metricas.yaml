@@ -1,0 +1,44 @@
+# Métricas propias de este proceso: un puntaje por criterio de la pauta (las agrega definir-pauta).
+metricas:
+- id: crit_C1
+  nombre: Grado de innovación
+  nivel: item
+  unidad: ''
+  direccion: mayor_mejor
+  frecuencia: a_pedido
+  fuente: herramientas/puntaje_pauta.py
+  definicion: Puntaje del criterio C1 (1 a 5)
+  umbral_rojo: 3
+- id: crit_C2
+  nombre: Impacto económico
+  nivel: item
+  unidad: ''
+  direccion: mayor_mejor
+  frecuencia: a_pedido
+  fuente: herramientas/puntaje_pauta.py
+  definicion: Puntaje del criterio C2 (1 a 5)
+- id: crit_C3
+  nombre: Capacidad del equipo
+  nivel: item
+  unidad: ''
+  direccion: mayor_mejor
+  frecuencia: a_pedido
+  fuente: herramientas/puntaje_pauta.py
+  definicion: Puntaje del criterio C3 (1 a 5)
+- id: crit_C4
+  nombre: Plan y presupuesto
+  nivel: item
+  unidad: ''
+  direccion: mayor_mejor
+  frecuencia: a_pedido
+  fuente: herramientas/puntaje_pauta.py
+  definicion: Puntaje del criterio C4 (1 a 5)
+- id: crit_C5
+  nombre: Sostenibilidad
+  nivel: item
+  unidad: ''
+  direccion: mayor_mejor
+  frecuencia: a_pedido
+  fuente: herramientas/puntaje_pauta.py
+  definicion: Puntaje del criterio C5 (1 a 5)
+reglas: []

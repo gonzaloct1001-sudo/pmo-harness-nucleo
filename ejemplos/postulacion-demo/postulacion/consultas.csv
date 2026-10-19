@@ -1,0 +1,2 @@
+id,fecha,pregunta,fuente_bases,estado,fecha_envio,fecha_respuesta,respuesta,impacto,requisitos_afectados
+Q-01,2026-10-12,¿Pueden considerarse como aporte no pecuniario las horas del equipo del postulante?,B01 num. 3,respondida,2026-10-13,2026-10-27,"Sí, valorizadas a precio de mercado y respaldadas con carta del aportante (Aclaración N°1, punto 3)",Agrega el requisito de carta del aportante,REQ-12

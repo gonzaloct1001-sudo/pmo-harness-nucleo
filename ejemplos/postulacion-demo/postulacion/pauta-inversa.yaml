@@ -1,0 +1,42 @@
+# Pauta inversa construida desde B01 num. 7 (criterios, ponderaciones y umbrales). Descriptores: (propuesto).
+convocatoria:
+  nombre: Fondo Impulsa Innovación Regional 2026
+  bases: "B01 Bases + Anexo 2 + Aclaración N°1"
+  fecha_cierre: 2026-11-10
+  monto_maximo_por_postulacion: 40000000
+  moneda: CLP
+
+escala: {minimo: 1, maximo: 5}
+
+criterios:
+  - id: C1
+    nombre: Calidad técnica e innovación
+    ponderacion: 0.35
+    fuente: "B01 num. 7"
+    descripcion: Grado de novedad, solidez técnica y plan de trabajo.
+    niveles: {1: "Sin novedad ni plan", 3: "Novedad acotada y plan general", 5: "Novedad demostrada con validación previa y plan con hitos verificables (propuesto)"}
+    temas_ganadores: ["Piloto en 3 predios con datos de ahorro de agua", "Sensor calibrado por la Universidad"]
+  - id: C2
+    nombre: Mercado e impacto
+    ponderacion: 0.25
+    fuente: "B01 num. 7"
+    descripcion: Tamaño y validación del mercado; impacto económico regional.
+    niveles: {1: "Mercado no identificado", 3: "Mercado estimado sin validación", 5: "Mercado cuantificado y validado con clientes (propuesto)"}
+  - id: C3
+    nombre: Capacidades del equipo
+    ponderacion: 0.20
+    fuente: "B01 num. 7"
+    descripcion: Experiencia y dedicación del equipo y sus asociados.
+    niveles: {1: "Equipo sin experiencia pertinente", 3: "Experiencia parcial", 5: "Equipo completo con experiencia probada y asociados comprometidos (propuesto)"}
+  - id: C4
+    nombre: Presupuesto y sostenibilidad
+    ponderacion: 0.20
+    fuente: "B01 num. 7"
+    descripcion: Coherencia del presupuesto y sostenibilidad posterior.
+    niveles: {1: "Presupuesto incoherente", 3: "Presupuesto coherente sin plan de sostenibilidad", 5: "Presupuesto coherente y modelo de negocio posterior claro (propuesto)"}
+
+umbrales:
+  puntaje_minimo: 3.5
+  minimo_por_criterio: {C1: 3, C2: 3, C3: 3, C4: 3}
+  puntaje_objetivo: 4.0
+desempate: [C1]

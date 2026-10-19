@@ -1,0 +1,14 @@
+postulacion:                   # [postulacion] convocatoria y estado de la postulación (lo lee postulacion.py)
+  tipo: PENDIENTE              # fondo | licitacion_publica | licitacion_privada | rfp | concurso
+  entidad: PENDIENTE           # quien convoca (ej.: CORFO, ANID, Gobierno Regional, municipalidad, empresa)
+  instrumento: ""              # nombre del concurso, fondo o licitación (ID de Mercado Público si aplica)
+  postulante: PENDIENTE        # empresa o persona que postula (cliente)
+  plataforma: ""               # dónde se presenta: sistema de postulación en línea, Mercado Público, correo, oficina de partes
+  fecha_cierre: PENDIENTE      # AAAA-MM-DD
+  hora_cierre: ""              # HH:MM, hora que indiquen las bases
+  monto_solicitado: 0          # monto que se pide a la entidad
+  moneda: CLP
+  etapa: recepcion             # id de la etapa actual (postulacion/etapas.yaml)
+  decision_go: pendiente       # pendiente | go | no_go
+  resultado: pendiente         # pendiente | adjudicada | no_adjudicada | inadmisible | desistida
+  declaracion_ia_exigida: pendiente   # pendiente | no | si  (si las bases exigen declarar o restringen el uso de IA)

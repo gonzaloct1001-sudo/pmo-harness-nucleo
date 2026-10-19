@@ -1,0 +1,26 @@
+# Métricas del arquetipo programa. Las calcula: python herramientas/programa.py <programa> [--registrar]
+# Nivel proyecto = el programa completo. Las mismas métricas por subproyecto se registran con entidad = id del subproyecto.
+metricas:
+  - {id: avance_real_programa, nombre: Avance real del programa, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: semanal,
+     fuente: herramientas/programa.py, definicion: Avance real de los subproyectos ponderado según programa_info.ponderacion_avance}
+  - {id: desviacion_avance_programa, nombre: Desviación de avance del programa, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: semanal,
+     fuente: herramientas/programa.py, definicion: Avance real − avance planificado del programa, umbral_amarillo: -0.05, umbral_rojo: -0.10}
+  - {id: subproyectos_atrasados, nombre: Subproyectos que terminan después de su línea base, nivel: proyecto, unidad: "", direccion: menor_mejor,
+     frecuencia: semanal, fuente: herramientas/programa.py, definicion: Subproyectos cuyo fin planificado supera su término vigente, umbral_amarillo: 1, umbral_rojo: 2}
+  - {id: presupuesto_vigente_programa, nombre: Presupuesto vigente del programa, nivel: proyecto, unidad: CLP, direccion: informativa, frecuencia: mensual,
+     fuente: herramientas/programa.py, definicion: Presupuesto base más modificaciones aprobadas}
+  - {id: ejecucion_programa, nombre: Ejecución presupuestaria del programa, nivel: proyecto, unidad: "%", direccion: informativa, frecuencia: mensual,
+     fuente: herramientas/programa.py, definicion: (Real + comprometido) / presupuesto vigente}
+  - {id: vac_programa, nombre: Desviación al término (presupuesto − estimado), nivel: proyecto, unidad: CLP, direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/programa.py, definicion: Presupuesto vigente − estimado al término (negativo = sobrecosto), umbral_amarillo: 0, umbral_rojo: -1}
+  - {id: contingencia_saldo_pct, nombre: Saldo de contingencia, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/programa.py, definicion: Contingencia vigente / contingencia base, umbral_amarillo: 0.5, umbral_rojo: 0.25}
+  - {id: personas_sobreasignadas, nombre: Personas sobreasignadas, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: semanal,
+     fuente: herramientas/programa.py, definicion: Personas con dedicación total mayor a su capacidad en algún mes, umbral_amarillo: 1, umbral_rojo: 3}
+  - {id: afectaciones_pendientes, nombre: Afectaciones de enmiendas sin aplicar, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: a_pedido,
+     fuente: herramientas/programa.py, definicion: Filas de contractual/afectaciones.csv con aplicado distinto de si}
+reglas:
+  - {id: PRG-01, descripcion: Ningún subproyecto termina después de su línea base, aplica_a: {nivel: proyecto}, metrica: subproyectos_atrasados, operador: "<=", valor: 0, severidad: critico}
+  - {id: PRG-02, descripcion: El estimado al término no supera el presupuesto vigente, aplica_a: {nivel: proyecto}, metrica: vac_programa, operador: ">=", valor: 0, severidad: critico}
+  - {id: PRG-03, descripcion: Nadie asignado por sobre su capacidad, aplica_a: {nivel: proyecto}, metrica: personas_sobreasignadas, operador: "<=", valor: 0, severidad: advertencia}
+  - {id: PRG-04, descripcion: Toda enmienda aplicada en los subproyectos afectados, aplica_a: {nivel: proyecto}, metrica: afectaciones_pendientes, operador: "<=", valor: 0, severidad: advertencia}

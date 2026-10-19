@@ -1,0 +1,34 @@
+# Ciclo de vida de una postulación / propuesta.
+etapas:
+  - id: recibida
+    nombre: Recibida
+    descripcion: Registrada; documentos en postulaciones/<id>/.
+    requisitos: []
+  - id: admisibilidad
+    nombre: En revisión de admisibilidad
+    descripcion: Se verifican los requisitos formales y excluyentes.
+    requisitos: []
+  - id: en_evaluacion
+    nombre: En evaluación
+    descripcion: Admisible; se evalúa contra la pauta.
+    requisitos:
+      - {tipo: metrica, metrica: admisible, operador: "==", valor: 1}
+  - id: evaluada
+    nombre: Evaluada
+    descripcion: Evaluación terminada y revisada por el evaluador responsable.
+    requisitos:
+      - {tipo: archivo, ruta: "evaluacion/evaluaciones/{id}.md"}
+      - {tipo: metrica, metrica: puntaje_ponderado, operador: ">=", valor: 0}
+  - id: seleccionada
+    nombre: Seleccionada
+    descripcion: Adjudicada o recomendada para adjudicación.
+    sugerir_avance: false
+    requisitos:
+      - {tipo: metrica, metrica: cumple_umbrales, operador: "==", valor: 1}
+  - id: lista_espera
+    nombre: Lista de espera
+    sugerir_avance: false
+    requisitos: []
+  - id: retirado
+    nombre: No seleccionada / inadmisible / desistida
+    requisitos: []

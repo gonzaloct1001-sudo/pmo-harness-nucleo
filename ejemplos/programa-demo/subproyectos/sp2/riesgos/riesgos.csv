@@ -1,0 +1,2 @@
+id,fecha_registro,titulo,descripcion,categoria,probabilidad,impacto,severidad,responsable,estrategia,plan_accion,fecha_revision,estado
+R-01,2026-09-25,Modo sin conexión más complejo,"Si el modo sin conexión toma más de lo previsto, se atrasa el piloto",Técnico,3,4,12,Carla Vidal,Mitigar,Prototipo en noviembre,2026-11-01,abierto

@@ -1,0 +1,53 @@
+# ============================================================
+# Panel del red team: cada perspectiva la asume un revisor independiente, en contexto aislado
+# (subagente revisor-red-team), que lee las bases, la pauta inversa y la propuesta, pero NO los borradores ni
+# las discusiones internas. Configurable por proyecto: agrega, quita o ajusta perspectivas y su foco.
+# puntua: true → entrega puntaje por criterio de la pauta inversa (se promedia en el puntaje estimado).
+# ============================================================
+perspectivas:
+  - id: evaluador_tecnico
+    nombre: Evaluador técnico de la entidad
+    puntua: true
+    foco: >
+      Puntúa criterio por criterio con la pauta inversa, como un evaluador cansado que lee muchas propuestas:
+      si la evidencia no está donde la busca, no existe. Cita sección y frase para cada puntaje.
+  - id: admisibilidad
+    nombre: Fiscalizador de admisibilidad
+    puntua: false
+    foco: >
+      Busca cualquier causal de inadmisibilidad o requisito formal incumplido: documentos, firmas, formatos,
+      límites de extensión, vigencias, plazos, montos fuera de rango, anexos obligatorios, declaraciones.
+  - id: financiero
+    nombre: Evaluador financiero
+    puntua: true
+    foco: >
+      Coherencia del presupuesto con las actividades, topes y porcentajes de las bases, gastos no elegibles,
+      aportes pecuniarios y no pecuniarios, supuestos sin fuente, VAN/TIR y sensibilidad si corresponde.
+  - id: experto_esceptico
+    nombre: Experto sectorial escéptico
+    puntua: true
+    foco: >
+      Factibilidad técnica, estado del arte, riesgo tecnológico, promesas exageradas, plazos irreales,
+      indicadores que no miden lo que dicen medir.
+  - id: competidor
+    nombre: Competidor
+    puntua: false
+    foco: >
+      Qué ofrecería un rival para ganar esta convocatoria y en qué criterios esta propuesta pierde frente a él.
+  - id: beneficiario
+    nombre: Beneficiario o usuario final
+    puntua: false
+    foco: >
+      Si el problema y el impacto son reales, relevantes y medibles para quien recibe el beneficio; si la
+      propuesta habla su idioma.
+  - id: auditor
+    nombre: Auditor de ejecución y rendición
+    puntua: false
+    foco: >
+      Si cada compromiso es cumplible, verificable y rendible; riesgos contractuales, garantías, multas,
+      obligaciones de informar y costos no considerados que aparecerán al ejecutar.
+  - id: abogado_diablo
+    nombre: Abogado del diablo
+    puntua: false
+    foco: >
+      Las 10 preguntas más difíciles que haría el comité o la entidad, y dónde la propuesta no tiene respuesta.

@@ -1,0 +1,8 @@
+subproyecto,cuenta,descripcion,monto_base,documento
+PROGRAMA,GESTION,Oficina del programa,40000000,C00
+PROGRAMA,CONTINGENCIA,Contingencia del programa,60000000,C00
+sp1,RRHH,Consultores ERP,300000000,C00
+sp1,LICENCIAS,Licencias ERP,150000000,C00
+sp1,CONTINGENCIA,Contingencia ERP,30000000,C00
+sp2,RRHH,Desarrollo de la app,250000000,C00
+sp2,EQUIPOS,Dispositivos para choferes,60000000,C00

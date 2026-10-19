@@ -1,0 +1,209 @@
+fecha,entidad,metrica,valor,fuente,comentario
+2026-07-31,AGUA,deuda_ebitda,3.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,AGUA,dividend_yield,0.048,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,AGUA,drawdown_max_12m,0.04387755102,scripts/calcular_cartera.py,
+2026-07-31,AGUA,peso,0.1940344025,scripts/calcular_cartera.py,
+2026-07-31,AGUA,pu,16.3,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,AGUA,rentabilidad,0.08932400236,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,AGUA,retorno_12m,0.107244898,scripts/calcular_cartera.py,
+2026-07-31,AGUA,roe,0.11,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,AGUA,valor_mercado,11936100,scripts/calcular_cartera.py,
+2026-07-31,AGUA,volatilidad_12m,0.08569747564,scripts/calcular_cartera.py,
+2026-07-31,ANDE,deuda_ebitda,2.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ANDE,dividend_yield,0.055,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ANDE,drawdown_max_12m,0.05933306222,scripts/calcular_cartera.py,
+2026-07-31,ANDE,peso,0.1812554844,scripts/calcular_cartera.py,
+2026-07-31,ANDE,pu,11.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ANDE,rentabilidad,0.1602980353,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,ANDE,retorno_12m,0.1614583333,scripts/calcular_cartera.py,
+2026-07-31,ANDE,roe,0.14,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ANDE,valor_mercado,11150000,scripts/calcular_cartera.py,
+2026-07-31,ANDE,volatilidad_12m,0.1068757271,scripts/calcular_cartera.py,
+2026-07-31,BPAC,dividend_yield,0.06,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,BPAC,drawdown_max_12m,0.05472896959,scripts/calcular_cartera.py,
+2026-07-31,BPAC,peso,0.161021195,scripts/calcular_cartera.py,
+2026-07-31,BPAC,pu,8.5,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,BPAC,rentabilidad,0.1893491124,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,BPAC,retorno_12m,0.1905384615,scripts/calcular_cartera.py,
+2026-07-31,BPAC,roe,0.17,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,BPAC,valor_mercado,9905280,scripts/calcular_cartera.py,
+2026-07-31,BPAC,volatilidad_12m,0.124181313,scripts/calcular_cartera.py,
+2026-07-31,CDSUR,deuda_ebitda,1.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,CDSUR,dividend_yield,0.04,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,CDSUR,drawdown_max_12m,0.3588091535,scripts/calcular_cartera.py,
+2026-07-31,CDSUR,peso,0.1067830517,scripts/calcular_cartera.py,
+2026-07-31,CDSUR,pu,9.1,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,CDSUR,rentabilidad,-0.2943830363,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,CDSUR,retorno_12m,-0.2936774194,scripts/calcular_cartera.py,
+2026-07-31,CDSUR,roe,0.16,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,CDSUR,valor_mercado,6568800,scripts/calcular_cartera.py,
+2026-07-31,CDSUR,volatilidad_12m,0.311244822,scripts/calcular_cartera.py,
+2026-07-31,FARA,deuda_ebitda,2.1,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,FARA,dividend_yield,0.03,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,FARA,drawdown_max_12m,0.04707142857,scripts/calcular_cartera.py,
+2026-07-31,FARA,pu,9.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,FARA,retorno_12m,0.4004285714,scripts/calcular_cartera.py,
+2026-07-31,FARA,roe,0.15,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,FARA,volatilidad_12m,0.1260035438,scripts/calcular_cartera.py,
+2026-07-31,ICOS,deuda_ebitda,5.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ICOS,dividend_yield,0.01,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ICOS,drawdown_max_12m,0.05974697571,scripts/calcular_cartera.py,
+2026-07-31,ICOS,pu,21,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ICOS,retorno_12m,0.3233707865,scripts/calcular_cartera.py,
+2026-07-31,ICOS,roe,0.06,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,ICOS,volatilidad_12m,0.1732800714,scripts/calcular_cartera.py,
+2026-07-31,PNOR,deuda_ebitda,3.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,PNOR,dividend_yield,0.035,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,PNOR,drawdown_max_12m,0.2588192191,scripts/calcular_cartera.py,
+2026-07-31,PNOR,peso,0.1128303198,scripts/calcular_cartera.py,
+2026-07-31,PNOR,pu,12.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,PNOR,rentabilidad,-0.152302869,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,PNOR,retorno_12m,-0.1662702703,scripts/calcular_cartera.py,
+2026-07-31,PNOR,roe,0.13,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,PNOR,valor_mercado,6940800,scripts/calcular_cartera.py,
+2026-07-31,PNOR,volatilidad_12m,0.1941859436,scripts/calcular_cartera.py,
+2026-07-31,PROYECTO,drawdown_cartera_12m,0.05271461112,scripts/calcular_cartera.py,
+2026-07-31,PROYECTO,exceso_retorno_12m,-0.1268816973,scripts/calcular_cartera.py,
+2026-07-31,PROYECTO,n_posiciones,6,scripts/calcular_cartera.py,
+2026-07-31,PROYECTO,peso_max_accion,0.2440755466,scripts/calcular_cartera.py,TCOR
+2026-07-31,PROYECTO,peso_max_sector,0.2440755466,scripts/calcular_cartera.py,Tecnología
+2026-07-31,PROYECTO,retorno_benchmark_12m,0.13795,scripts/calcular_cartera.py,IDX
+2026-07-31,PROYECTO,retorno_cartera_12m,0.01106830266,scripts/calcular_cartera.py,TWR mensual 2025-08-31 a 2026-07-31
+2026-07-31,PROYECTO,sharpe_12m,-0.3927414561,scripts/calcular_cartera.py,rf 5.0%
+2026-07-31,PROYECTO,valor_cartera,61515380,scripts/calcular_cartera.py,
+2026-07-31,PROYECTO,volatilidad_cartera_12m,0.09912805671,scripts/calcular_cartera.py,
+2026-07-31,RAUS,deuda_ebitda,2.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,RAUS,dividend_yield,0.03,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,RAUS,drawdown_max_12m,0.318818225,scripts/calcular_cartera.py,
+2026-07-31,RAUS,pu,10.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,RAUS,retorno_12m,-0.2446052632,scripts/calcular_cartera.py,
+2026-07-31,RAUS,roe,0.13,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,RAUS,volatilidad_12m,0.3276722482,scripts/calcular_cartera.py,
+2026-07-31,SALI,deuda_ebitda,1.5,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,SALI,dividend_yield,0.02,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,SALI,drawdown_max_12m,0.04742857143,scripts/calcular_cartera.py,
+2026-07-31,SALI,pu,18.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,SALI,retorno_12m,0.1784285714,scripts/calcular_cartera.py,
+2026-07-31,SALI,roe,0.09,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,SALI,volatilidad_12m,0.1193461977,scripts/calcular_cartera.py,
+2026-07-31,TAND,deuda_ebitda,3.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TAND,dividend_yield,0.065,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TAND,drawdown_max_12m,0.1068227812,scripts/calcular_cartera.py,
+2026-07-31,TAND,pu,11.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TAND,retorno_12m,0.048125,scripts/calcular_cartera.py,
+2026-07-31,TAND,roe,0.12,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TAND,volatilidad_12m,0.1784742303,scripts/calcular_cartera.py,
+2026-07-31,TCOR,deuda_ebitda,0.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TCOR,dividend_yield,0.005,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TCOR,drawdown_max_12m,0.09899183869,scripts/calcular_cartera.py,
+2026-07-31,TCOR,peso,0.2440755466,scripts/calcular_cartera.py,
+2026-07-31,TCOR,pu,28.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TCOR,rentabilidad,0.24995005,scripts/calcular_cartera.py,vs costo promedio
+2026-07-31,TCOR,retorno_12m,0.2512,scripts/calcular_cartera.py,
+2026-07-31,TCOR,roe,0.22,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-07-31,TCOR,valor_mercado,15014400,scripts/calcular_cartera.py,
+2026-07-31,TCOR,volatilidad_12m,0.2536536063,scripts/calcular_cartera.py,
+2026-08-31,AGUA,deuda_ebitda,3.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,AGUA,dividend_yield,0.048,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,AGUA,drawdown_max_12m,0.04387755102,scripts/calcular_cartera.py,
+2026-08-31,AGUA,peso,0.1868180738,scripts/calcular_cartera.py,
+2026-08-31,AGUA,pu,16.3,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,AGUA,rentabilidad,0.05007179658,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,AGUA,retorno_12m,0.06734693878,scripts/calcular_cartera.py,
+2026-08-31,AGUA,roe,0.11,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,AGUA,valor_mercado,11506000,scripts/calcular_cartera.py,
+2026-08-31,AGUA,volatilidad_12m,0.09358028025,scripts/calcular_cartera.py,
+2026-08-31,ANDE,deuda_ebitda,2.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ANDE,dividend_yield,0.055,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ANDE,drawdown_max_12m,0.05933306222,scripts/calcular_cartera.py,
+2026-08-31,ANDE,peso,0.1837980702,scripts/calcular_cartera.py,
+2026-08-31,ANDE,pu,11.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ANDE,rentabilidad,0.177988678,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,ANDE,retorno_12m,0.1791666667,scripts/calcular_cartera.py,
+2026-08-31,ANDE,roe,0.14,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ANDE,valor_mercado,11320000,scripts/calcular_cartera.py,
+2026-08-31,ANDE,volatilidad_12m,0.1019081594,scripts/calcular_cartera.py,
+2026-08-31,BPAC,dividend_yield,0.06,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,BPAC,drawdown_max_12m,0.05472896959,scripts/calcular_cartera.py,
+2026-08-31,BPAC,peso,0.1637504418,scripts/calcular_cartera.py,
+2026-08-31,BPAC,pu,8.5,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,BPAC,rentabilidad,0.2109621148,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,BPAC,retorno_12m,0.2121730769,scripts/calcular_cartera.py,
+2026-08-31,BPAC,roe,0.17,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,BPAC,valor_mercado,10085280,scripts/calcular_cartera.py,
+2026-08-31,BPAC,volatilidad_12m,0.1184133369,scripts/calcular_cartera.py,
+2026-08-31,CDSUR,deuda_ebitda,1.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,CDSUR,dividend_yield,0.04,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,CDSUR,drawdown_max_12m,0.3588091535,scripts/calcular_cartera.py,
+2026-08-31,CDSUR,peso,0.1009168309,scripts/calcular_cartera.py,
+2026-08-31,CDSUR,pu,9.1,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,CDSUR,rentabilidad,-0.3323450743,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,CDSUR,retorno_12m,-0.3316774194,scripts/calcular_cartera.py,
+2026-08-31,CDSUR,roe,0.16,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,CDSUR,valor_mercado,6215400,scripts/calcular_cartera.py,
+2026-08-31,CDSUR,volatilidad_12m,0.2979465897,scripts/calcular_cartera.py,
+2026-08-31,FARA,deuda_ebitda,2.1,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,FARA,dividend_yield,0.03,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,FARA,drawdown_max_12m,0.04707142857,scripts/calcular_cartera.py,
+2026-08-31,FARA,pu,9.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,FARA,retorno_12m,0.4117142857,scripts/calcular_cartera.py,
+2026-08-31,FARA,roe,0.15,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,FARA,volatilidad_12m,0.1224402229,scripts/calcular_cartera.py,
+2026-08-31,ICOS,deuda_ebitda,5.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ICOS,dividend_yield,0.01,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ICOS,drawdown_max_12m,0.1579215487,scripts/calcular_cartera.py,
+2026-08-31,ICOS,pu,21,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ICOS,retorno_12m,0.1143820225,scripts/calcular_cartera.py,
+2026-08-31,ICOS,roe,0.06,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,ICOS,volatilidad_12m,0.2478918818,scripts/calcular_cartera.py,
+2026-08-31,PNOR,deuda_ebitda,3.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,PNOR,dividend_yield,0.035,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,PNOR,drawdown_max_12m,0.2588192191,scripts/calcular_cartera.py,
+2026-08-31,PNOR,peso,0.1161800266,scripts/calcular_cartera.py,
+2026-08-31,PNOR,pu,12.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,PNOR,rentabilidad,-0.1260871318,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,PNOR,retorno_12m,-0.1404864865,scripts/calcular_cartera.py,
+2026-08-31,PNOR,roe,0.13,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,PNOR,valor_mercado,7155450,scripts/calcular_cartera.py,
+2026-08-31,PNOR,volatilidad_12m,0.190749546,scripts/calcular_cartera.py,
+2026-08-31,PROYECTO,drawdown_cartera_12m,0.05271461112,scripts/calcular_cartera.py,
+2026-08-31,PROYECTO,exceso_retorno_12m,-0.1285262533,scripts/calcular_cartera.py,
+2026-08-31,PROYECTO,n_posiciones,6,scripts/calcular_cartera.py,
+2026-08-31,PROYECTO,peso_max_accion,0.2485365566,scripts/calcular_cartera.py,TCOR
+2026-08-31,PROYECTO,peso_max_sector,0.2485365566,scripts/calcular_cartera.py,Tecnología
+2026-08-31,PROYECTO,retorno_benchmark_12m,0.14081,scripts/calcular_cartera.py,IDX
+2026-08-31,PROYECTO,retorno_cartera_12m,0.01228374669,scripts/calcular_cartera.py,TWR mensual 2025-08-31 a 2026-08-31
+2026-08-31,PROYECTO,sharpe_12m,-0.3990502312,scripts/calcular_cartera.py,rf 5.0%
+2026-08-31,PROYECTO,valor_cartera,61589330,scripts/calcular_cartera.py,
+2026-08-31,PROYECTO,volatilidad_cartera_12m,0.09451505191,scripts/calcular_cartera.py,
+2026-08-31,RAUS,deuda_ebitda,2.9,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,RAUS,dividend_yield,0.03,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,RAUS,drawdown_max_12m,0.318818225,scripts/calcular_cartera.py,
+2026-08-31,RAUS,pu,10.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,RAUS,retorno_12m,-0.1906578947,scripts/calcular_cartera.py,
+2026-08-31,RAUS,roe,0.13,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,RAUS,volatilidad_12m,0.3257690087,scripts/calcular_cartera.py,
+2026-08-31,SALI,deuda_ebitda,1.5,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,SALI,dividend_yield,0.02,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,SALI,drawdown_max_12m,0.04742857143,scripts/calcular_cartera.py,
+2026-08-31,SALI,pu,18.2,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,SALI,retorno_12m,0.1855714286,scripts/calcular_cartera.py,
+2026-08-31,SALI,roe,0.09,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,SALI,volatilidad_12m,0.1141888887,scripts/calcular_cartera.py,
+2026-08-31,TAND,deuda_ebitda,3.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TAND,dividend_yield,0.065,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TAND,drawdown_max_12m,0.1068227812,scripts/calcular_cartera.py,
+2026-08-31,TAND,pu,11.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TAND,retorno_12m,-0.01625,scripts/calcular_cartera.py,
+2026-08-31,TAND,roe,0.12,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TAND,volatilidad_12m,0.1828449766,scripts/calcular_cartera.py,
+2026-08-31,TCOR,deuda_ebitda,0.8,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TCOR,dividend_yield,0.005,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TCOR,drawdown_max_12m,0.09899183869,scripts/calcular_cartera.py,
+2026-08-31,TCOR,peso,0.2485365566,scripts/calcular_cartera.py,
+2026-08-31,TCOR,pu,28.4,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TCOR,rentabilidad,0.2743256743,scripts/calcular_cartera.py,vs costo promedio
+2026-08-31,TCOR,retorno_12m,0.2756,scripts/calcular_cartera.py,
+2026-08-31,TCOR,roe,0.22,scripts/calcular_cartera.py,estados al 2026-06-30
+2026-08-31,TCOR,valor_mercado,15307200,scripts/calcular_cartera.py,
+2026-08-31,TCOR,volatilidad_12m,0.2418741243,scripts/calcular_cartera.py,

@@ -1,0 +1,7 @@
+
+linea_base:                    # [ejecucion] resumen numérico; detalle en contractual/linea-base-vigente.md
+  fecha_termino_vigente: PENDIENTE   # AAAA-MM-DD
+  monto_vigente: PENDIENTE           # número sin separadores
+  moneda: CLP                        # CLP | UF | USD
+  ultima_actualizacion: ""
+cronograma_actualizado: ""           # [ejecucion] AAAA-MM-DD de la última actualización del avance real (la mantiene actualizar-gantt)

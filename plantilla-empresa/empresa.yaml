@@ -1,0 +1,39 @@
+# ============================================================
+# Empresa dueña de esta carpeta (una carpeta = un repositorio privado = una empresa).
+# Todos sus proyectos heredan de aquí lo que no definen: responsable, marca y formato, autoría y la política de
+# réplicas. Para otra empresa se crea otra carpeta con herramientas/nueva_empresa.py.
+# Valores "PENDIENTE" se completan en instalar o alta-proyecto.
+# ============================================================
+
+empresa:
+  nombre: PENDIENTE            # nombre de fantasía o como se la conoce
+  razon_social: ""
+  rut: ""
+  representante_legal: ""      # quien firma postulaciones y declaraciones (el harness nunca firma ni declara por él)
+  sitio_web: ""
+  descripcion: ""              # dos o tres frases; los textos largos van en contenidos/
+
+responsable:                   # quien gestiona los proyectos de la empresa (cada proyecto puede definir el suyo)
+  nombre: ""
+  cargo: ""
+  correo: ""
+
+formato:                       # marca común: los proyectos la heredan si no definen la suya
+  logo: marca/logo.png         # relativo a empresa/
+  color_primario: "1F3864"     # hexadecimal sin #
+  color_secundario: "2E75B6"
+  fuente: Arial
+  pie_de_pagina: "Documento confidencial"
+  formato_fecha: DD-MM-AAAA
+  tamano_pagina: carta         # carta | a4
+
+autoria:                       # los entregables salen a nombre de esta persona u organización
+  nombre: ""                   # vacío = responsable.nombre
+  organizacion: ""             # vacío = empresa.nombre
+  terminos_prohibidos: []
+  terminos_permitidos: []
+
+replicas:                      # qué documentos de _entrada/ se replican completos en fuentes/ (texto fiel, en el repositorio privado)
+  completas: [bases, contrato, lineamientos, minuta, reporte]   # bases, anexos, aclaraciones, lineamientos, contratos, actas, informes
+  solo_ficha: [cv, financiero, certificado, correo, chat-ia]     # quedan locales; en Git solo su ficha resumen
+  # Lo que no calce con ninguna lista no se replica y se decide en el alta. Un proyecto puede redefinir este bloque.

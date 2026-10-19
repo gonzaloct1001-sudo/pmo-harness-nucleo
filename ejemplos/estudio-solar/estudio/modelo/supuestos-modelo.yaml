@@ -1,0 +1,23 @@
+nombre: Planta solar para autoconsumo (ficticio)
+moneda: CLP
+tipo_evaluacion: privada
+tasa_descuento: 0.10
+horizonte_anios: 10
+tasa_impuesto: 0.27
+inversiones:
+  - {concepto: Paneles e inversores, anio: 0, monto: 180000000}
+  - {concepto: Obras e instalación, anio: 0, monto: 40000000}
+  - {concepto: Recambio de inversores, anio: 6, monto: 15000000}
+ingresos:
+  - {concepto: Ahorro en energía, anio_inicio: 1, monto_anual: 42000000, crecimiento_anual: 0.03}
+  - {concepto: Venta de excedentes, anio_inicio: 1, monto_anual: 6000000, crecimiento_anual: 0.0}
+costos:
+  - {concepto: Operación y mantención, anio_inicio: 1, monto_anual: 5500000, crecimiento_anual: 0.03}
+depreciacion:
+  - {activo: Paneles e inversores, monto: 180000000, vida_util: 10}
+  - {activo: Obras e instalación, monto: 40000000, vida_util: 20}
+capital_trabajo: {porcentaje_ingresos: 0.05}
+valor_residual: {metodo: valor_libro}
+sensibilidad:
+  variaciones: [-0.2, -0.1, 0.1, 0.2]
+  variables: [ingresos, costos, inversion]
