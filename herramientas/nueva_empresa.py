@@ -163,6 +163,7 @@ def main():
     git(destino, "checkout", "-q", "-b", "main")
     git(destino, "config", "core.hooksPath", ".githooks")
     git(destino, "config", "core.longpaths", "true")  # Windows: rutas de más de 260 caracteres
+    git(destino, "config", "core.pager", "cat")  # la consola del asistente no deja salir de un paginador
     git(destino, "add", "-A")
     git(destino, "update-index", "--chmod=+x", *[e for e in _nucleo.EJECUTABLES if (destino / e).exists()])
     rc, salida = git(destino, "commit", "-q", "-m", f"Instalación del harness para {a.nombre}")

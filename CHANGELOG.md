@@ -1,5 +1,26 @@
 # Cambios
 
+## 2.2.2 — 2026-10-20
+
+### Instalador que nunca se queda detenido
+- **Windows sin permisos de administrador:** Python, Git y GitHub CLI se instalan solo para el usuario (winget
+  `--scope user`), así que no aparece la ventana de permiso de Windows, que a veces queda escondida. Si winget falta o
+  falla, se usa la descarga oficial (python.org y las versiones publicadas de Git y GitHub CLI).
+- **Nada puede esperar una respuesta:** cada programa externo recibe una entrada vacía y tiene un tiempo máximo; las
+  preguntas solo existen en la ventana del doble clic (abierta desde el Explorador), con tiempo máximo y respuesta por
+  defecto. Ejecutado por un asistente de IA, el instalador nunca pregunta. Sin opciones, solo revisa.
+- **Doble clic recomendado antes de abrir la IA:** instala lo necesario sin preguntas técnicas, pide nombre y correo, y
+  conecta GitHub.
+- **GitHub sin preguntas en inglés:** se abre el navegador en la página del código, que queda copiado; se pega,
+  Continue y Authorize. Después configura Git para usar esa cuenta y desactiva las preguntas de GitHub CLI.
+- `INSTALAR-WINDOWS.bat` llama al script con ruta relativa: algunos controles de seguridad detienen PowerShell si su
+  línea de comando trae la ruta completa de la carpeta abierta en un editor con IA (se reprodujo en Windows 11).
+- Las carpetas de empresa quedan con `core.pager cat` (`git log` o `git diff` no esperan una tecla en la consola del
+  asistente). Lo opcional (LibreOffice, rutas largas) solo se instala si se pide, y avisa del permiso de Windows.
+- Mac: mismas reglas (preguntas solo con doble clic y con tiempo máximo; Homebrew sin confirmaciones en inglés).
+- Guía de inicio, manual, README e `instalar` actualizados; regla 18 de `AGENTS.md` ampliada (rutas relativas, sin
+  paginador, el asistente no ejecuta los instaladores de doble clic).
+
 ## 2.2.1 — 2026-10-20
 
 ### Correcciones

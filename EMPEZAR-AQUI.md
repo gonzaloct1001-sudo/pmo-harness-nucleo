@@ -1,7 +1,8 @@
 # Guía de inicio del PMO Harness
 
 En unos 15 minutos tendrás tu carpeta de trabajo lista, con un asistente de IA que te ayuda a gestionar tus proyectos y
-postulaciones. No necesitas saber programar: el asistente hace la parte técnica y te pide permiso antes de instalar algo.
+postulaciones. No necesitas saber programar: un instalador de doble clic deja listo tu computador y el asistente hace
+el resto de la parte técnica.
 
 ---
 
@@ -18,10 +19,10 @@ postulaciones. No necesitas saber programar: el asistente hace la parte técnica
 Cada herramienta te pedirá su propia cuenta (algunas son de pago). Un chat en el navegador, como ChatGPT o Gemini en la
 web, **no sirve**: la IA necesita trabajar dentro de tu carpeta.
 
-**2. Una cuenta de GitHub** (gratuita) para respaldar tu trabajo en la nube de forma **privada**. Si no la tienes, el
-asistente te abre la página de registro en el paso 4. No necesitas una cuenta de pago ni una "organización".
+**2. Una cuenta de GitHub** (gratuita) para respaldar tu trabajo en la nube de forma **privada**. Si no la tienes, la
+creas en el paso 3 (te aparece la opción al conectar). No necesitas una cuenta de pago ni una "organización".
 
-Python, Git y lo demás **no los instalas tú**: lo hace el asistente con tu permiso.
+Python, Git y lo demás **no los instalas tú a mano**: lo hace el instalador del paso 3.
 
 ---
 
@@ -52,23 +53,40 @@ Mi-Empresa dentro de Documentos.»* Luego sigue en el paso 3.
 > **Una carpeta = una empresa.** Si llevas proyectos de varias empresas, después el asistente te crea una carpeta para
 > cada una, con un solo pedido.
 
-## Paso 3. Abre la carpeta en tu herramienta de IA
+## Paso 3. Doble clic en el instalador
 
-1. En tu herramienta: menú **Archivo → Abrir carpeta** (*File → Open Folder*) y elige la carpeta del paso 2.
+Dentro de tu carpeta, haz **doble clic** en:
+- **Windows:** `INSTALAR-WINDOWS.bat`. Si aparece «Windows protegió su PC», haz clic en **Más información** y luego en
+  **Ejecutar de todas formas** (pasa con los archivos descargados de internet).
+- **Mac:** `INSTALAR-MAC.command`. Si macOS no lo deja abrir: clic derecho → **Abrir** → **Abrir**. En Mac te pedirá la
+  contraseña del computador (no se ve mientras la escribes).
+
+Se abre una ventana que hace todo sola:
+1. Presiona **Enter** para comenzar. Instala Python, Git y GitHub CLI (en Windows, solo para tu usuario: no pide
+   permisos de administrador). Tarda unos minutos.
+2. Te pide tu **nombre y apellido** y tu **correo** (así aparecerás en tus documentos). Escríbelos y presiona Enter.
+3. Te ofrece **conectar tu cuenta de GitHub**: presiona Enter. Se abre el navegador:
+   - inicia sesión en GitHub, o crea tu cuenta gratuita;
+   - donde pide un código, pega con **Ctrl+V** (Mac: **Cmd+V**): ya está copiado, y también aparece en la ventana;
+   - presiona **Continue** y luego **Authorize**.
+
+   Si creaste la cuenta en ese momento, vuelve a abrir github.com/login/device y pega el código.
+4. Cuando diga **«Listo»**, presiona Enter para cerrar la ventana.
+
+Si no respondes una pregunta, la ventana sigue sola después de unos minutos: nada queda detenido. Lo que falte, el
+asistente lo completa contigo en el chat.
+
+## Paso 4. Abre la carpeta en tu herramienta de IA y escribe «hola»
+
+1. En tu herramienta: menú **Archivo → Abrir carpeta** (*File → Open Folder*) y elige la carpeta del paso 2. Si ya la
+   tenías abierta, ciérrala y vuelve a abrirla para que vea lo recién instalado.
 2. Si pregunta si confías en los autores de la carpeta, responde **Sí**.
-3. Abre el **chat** de la IA (en VS Code, el ícono de la extensión en la barra lateral).
+3. Abre el **chat** de la IA (en VS Code, el ícono de la extensión en la barra lateral) y escribe **«hola»**.
 
-## Paso 4. Escribe «hola» y responde
-
-El asistente se presenta y te guía. Durante la instalación:
-
-- **Permisos.** Tu herramienta te preguntará si permites ejecutar comandos. Acepta los del harness (instalar, revisar el
+El asistente se presenta y te guía:
+- **Permisos.** Tu herramienta te preguntará si permites ejecutar comandos. Acepta los del harness (revisar el
   computador, guardar en Git). Si algo te parece raro, pregunta: «¿para qué es esto?».
-- **Instalación.** Te dirá qué falta (por ejemplo, Python o Git) y te pedirá permiso. Responde **sí**. En Windows pueden
-  aparecer ventanas pidiendo confirmación: acéptalas. En Mac puede pedirte hacer doble clic en `INSTALAR-MAC.command`
-  (si no abre: clic derecho → **Abrir**) y escribir la contraseña del Mac.
-- **GitHub.** Si no tienes cuenta, te abre la página para crearla. Para conectar tu cuenta abre una ventana: presiona
-  **Enter**, pega en el navegador el código que aparece y presiona **Authorize**. Luego vuelve al chat y avisa.
+- Si te saltaste el paso 3, el asistente te ofrece instalar desde el chat o hacer el doble clic.
 - Al final crea **tu repositorio privado** y te confirma que tu trabajo queda respaldado.
 
 ## Paso 5. Elige las opciones que calzan contigo
@@ -114,8 +132,10 @@ Pídele las cosas con tus palabras, por ejemplo:
 | Pasa esto | Haz esto |
 |---|---|
 | La IA no reconoce el harness al decir «hola» | Escríbele: «lee el archivo AGENTS.md y sigue sus instrucciones» |
-| La instalación se queda detenida, o pregunta «[Y] Sí [N] No» y no puedes escribir | Dile en el chat «cancela esa tarea». Luego, en el Explorador de archivos, abre tu carpeta y haz doble clic en `INSTALAR-WINDOWS.bat`: se abre una ventana donde sí puedes responder (escribe S y Enter). Al terminar, cierra y vuelve a abrir tu herramienta de IA y escribe «ya corrí el instalador» |
-| Te piden aceptar un permiso de Windows y no ves ninguna ventana | Busca en la barra de tareas un ícono con escudo que parpadea y haz clic en él; ahí está la ventana para presionar **Sí** |
+| En el chat, algo se queda detenido o pregunta «[Y] Sí [N] No» y no puedes escribir | Dile «cancela esa tarea». Luego haz el paso 3 (doble clic en el instalador). Al terminar, vuelve a abrir tu herramienta de IA y escribe «ya corrí el instalador» |
+| Windows dice «Windows protegió su PC» al abrir el instalador | Haz clic en **Más información** y luego en **Ejecutar de todas formas** |
+| Te piden aceptar un permiso de Windows y no ves ninguna ventana | Busca en la barra de tareas un ícono con escudo que parpadea y haz clic en él (solo pasa con instalaciones opcionales, como LibreOffice) |
+| La conexión con GitHub no se completó | Pide en el chat «conecta mi cuenta de GitHub»: se abre de nuevo el navegador con el código copiado |
 | Dice que falta Python aunque se instaló | Cierra y vuelve a abrir tu herramienta de IA |
 | «El nombre del archivo es demasiado largo» (Windows) | Usa una carpeta más corta (por ejemplo, `Documentos/Consultora-Sur`) o deja que el asistente active las rutas largas |
 | Un control no deja guardar un archivo | Es a propósito: ese archivo es confidencial y no debe subirse. El asistente te explica qué hacer |

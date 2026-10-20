@@ -16,21 +16,23 @@ y presentaciones con la marca y los formatos de tu empresa.
 ## 2. Lo que necesitas (una sola vez)
 1. **Una herramienta de IA que trabaje con carpetas:** Google Antigravity, VS Code con una extensión de IA (Claude Code,
    Codex, Gemini Code Assist o GitHub Copilot), Claude Code o Cursor. Un chat en el navegador no sirve.
-2. **Una cuenta de GitHub** gratuita (personal; no hace falta plan de pago ni organización). Si no la tienes, el
-   asistente te abre la página para crearla.
+2. **Una cuenta de GitHub** gratuita (personal; no hace falta plan de pago ni organización). Si no la tienes, la
+   creas al conectarla durante la instalación.
 3. **El harness**, descargado desde su página pública: botón **Code → Download ZIP**. **No uses «Fork»**: crearía
    una copia pública.
-4. **Python y Git no tienes que instalarlos tú:** el asistente los instala con tu permiso.
+4. **Python y Git no tienes que instalarlos a mano:** los instala el instalador de doble clic (o el asistente).
 
 ## 3. Instalación
 Paso a paso en la guía de inicio. En resumen:
 1. Descomprime el zip, cambia el nombre de la carpeta por el de tu empresa y déjala en `Documentos`.
 2. **Opcional:** completa `FICHA-DE-INICIO.md`. Así la instalación casi no te hace preguntas.
-3. En tu herramienta de IA: **Archivo → Abrir carpeta** → tu carpeta. Abre el chat y escribe **«hola»**.
-4. El asistente revisa el computador y, **con tu permiso**, instala lo que falta. Windows puede pedirte confirmar en
-   pantalla. En Mac puede pedirte doble clic en `INSTALAR-MAC.command` y la contraseña del Mac.
-5. Te ayuda con GitHub: abre una ventana para conectar tu cuenta (Enter, pegar el código en el navegador, autorizar)
-   y crea tu **repositorio privado**.
+3. **Doble clic en el instalador** (`INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`, en la carpeta). Instala Python,
+   Git y GitHub CLI (en Windows, solo para tu usuario: sin permisos de administrador), te pide nombre y correo, y conecta
+   tu cuenta de GitHub: se abre el navegador con el código ya copiado; lo pegas, **Continue** y **Authorize**. No hace
+   preguntas técnicas y nunca se queda detenido: si no respondes, sigue solo.
+4. En tu herramienta de IA: **Archivo → Abrir carpeta** → tu carpeta. Abre el chat y escribe **«hola»**.
+5. El asistente revisa que todo esté listo (si te saltaste el paso 3, lo instala desde el chat con tu permiso) y crea
+   tu **repositorio privado** en GitHub.
 6. Te pregunta lo de la sección 4 y crea tu primer proyecto. Al final te muestra la **guía de tu proyecto** (`GUIA.md`).
 
 ## 4. Lo que te va a preguntar (y conviene tener a mano)
@@ -174,8 +176,14 @@ Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
 ## 13. Si algo falla
 - **La IA no reconoce el harness:** escríbele «lee el archivo AGENTS.md y sigue sus instrucciones».
 - **«python no se reconoce»:** pide «instala lo que falte». Si recién se instaló, cierra y vuelve a abrir tu herramienta.
-- **La instalación se queda detenida** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes escribir): dile «cancela esa tarea» y haz doble clic en `INSTALAR-WINDOWS.bat` (o `INSTALAR-MAC.command`) desde la carpeta: abre una ventana donde sí puedes responder. Después vuelve al chat y escribe «ya corrí el instalador».
-- **Windows pide permiso pero no ves la ventana:** busca en la barra de tareas un ícono con escudo que parpadea.
+- **En el chat, algo se queda detenido** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes
+  escribir): dile «cancela esa tarea» y haz doble clic en `INSTALAR-WINDOWS.bat` (o `INSTALAR-MAC.command`) desde la
+  carpeta. Después vuelve al chat y escribe «ya corrí el instalador».
+- **«Windows protegió su PC» al abrir el instalador:** **Más información** → **Ejecutar de todas formas**.
+- **Windows pide permiso pero no ves la ventana** (solo en instalaciones opcionales, como LibreOffice): busca en la
+  barra de tareas un ícono con escudo que parpadea.
+- **La conexión con GitHub no se completó:** pide «conecta mi cuenta de GitHub»; se abre de nuevo el navegador con el
+  código copiado.
 - **Un control bloqueó un envío a GitHub:** el asistente te dirá qué archivo era confidencial; déjalo fuera.
 - **«El nombre del archivo es demasiado largo» (Windows):** usa una carpeta más corta (por ejemplo,
   `Documentos/Consultora-Sur`) o deja que el asistente active las rutas largas.

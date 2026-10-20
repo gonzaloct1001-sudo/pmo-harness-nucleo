@@ -20,31 +20,35 @@ Según el resultado:
 - **Todo listo**: dilo en una línea y pasa al paso 3 para un proyecto nuevo (las mismas tres preguntas).
 
 ## Paso 1 — Entorno (se instala solo, con permiso)
-1. Revisa qué falta, sin instalar nada:
+Lo más simple para el usuario es el **instalador de doble clic** (`INSTALAR-WINDOWS.bat` / `INSTALAR-MAC.command`):
+instala Python, Git y GitHub CLI, pide su nombre y correo y conecta su cuenta de GitHub, en una ventana donde sí puede
+responder. Si ya lo usó, el diagnóstico sale completo y este paso se salta.
+1. Revisa qué falta, sin instalar nada (desde la carpeta, **con la ruta relativa** tal cual; ver regla 18):
    - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -SoloRevisar`
    - Mac: `bash herramientas/preparar_pc.sh --solo-revisar`
-2. Si falta algo, muestra en **un solo mensaje** qué falta y para qué sirve (necesario: Python y Git; opcional:
-   GitHub CLI para crear el repositorio desde el chat, LibreOffice para revisar documentos y generar PDF) y pide
-   permiso para instalarlo. En el mismo mensaje, si Git no tiene nombre y correo, pídelos.
-3. Con el permiso, instala solo lo aprobado:
+2. Si falta algo, muestra en **un solo mensaje** qué falta y para qué sirve (Python, Git y GitHub CLI, para conectar
+   su cuenta y crear el repositorio privado) y ofrece dos caminos: que lo instales tú desde aquí, o que él haga doble
+   clic en el instalador. En el mismo mensaje, si Git no tiene nombre y correo, pídelos.
+3. Si te pide instalarlo tú:
    - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -Instalar python,git,gh -NombreGit "<nombre>" -CorreoGit "<correo>"`
    - Mac: `bash herramientas/preparar_pc.sh --instalar python,git,gh --nombre-git "<nombre>" --correo-git "<correo>"`
-   El script instala también las librerías de `requirements.txt` (en Mac, dentro de `.venv`) y termina con el diagnóstico.
+   En Windows todo se instala solo para su usuario: **no aparece ninguna ventana de permiso** y nada pregunta; cada
+   programa tiene un tiempo máximo y, si winget falla, usa la descarga oficial. Instala también las librerías de
+   `requirements.txt` (en Mac, en `.venv`) y termina con el diagnóstico. Tarda unos minutos: avísale.
    **Instala solo con este script.** Nunca ejecutes winget, choco, brew ni instaladores por tu cuenta (tampoco
    `winget show` o `winget list` para revisar): tu consola no es interactiva y, si un comando pregunta algo (por
    ejemplo, «¿Está de acuerdo con los términos…? [Y] Sí [N] No»), queda esperando para siempre sin que el usuario
-   pueda responder. El script ya acepta esas condiciones y no pregunta nada.
-4. Avisos según el sistema:
-   - Windows puede pedir permiso (Control de cuentas de usuario): que el usuario acepte. Si no ve la ventana, suele
-     estar minimizada: un ícono con escudo que parpadea en la barra de tareas.
-   - **Si la instalación desde el chat se queda detenida** o el usuario no puede responder algo: detén esa tarea y
-     pídele hacer doble clic en `INSTALAR-WINDOWS.bat` (en la carpeta, desde el Explorador de archivos). Se abre una
-     ventana donde sí puede responder S/N a cada cosa; al terminar, que cierre y vuelva a abrir su herramienta de IA y
-     escriba «ya corrí el instalador». Entonces revisa con `-SoloRevisar` y sigue con el paso 2.
-   - Si después de instalar Python este aún no responde, la terminal de VS Code no ve el cambio: pide al usuario
-     cerrar y abrir VS Code, y retoma con «continúa la instalación».
-   - **Mac sin Homebrew:** su instalación pide la contraseña del Mac y no puede hacerse desde el chat. Pide al usuario
-     hacer doble clic en `INSTALAR-MAC.command` (si macOS no lo deja abrir: clic derecho → Abrir) y avisar al terminar.
+   pueda responder. Tampoco ejecutes tú los instaladores de doble clic: son para el usuario.
+4. Avisos:
+   - Si después de instalar, Python o Git aún no responden, tu terminal no ve el cambio: pide al usuario cerrar y
+     abrir su herramienta de IA, y retoma con «continúa la instalación».
+   - **Si algo se queda detenido** o falla: detén esa tarea y pídele doble clic en el instalador (desde el Explorador
+     de archivos o el Finder, en la carpeta). Al terminar, que vuelva a abrir su herramienta de IA y escriba «ya corrí el
+     instalador»; revisa con `-SoloRevisar` y sigue con el paso 2.
+   - **Mac sin Homebrew:** su instalación pide la contraseña del Mac y no puede hacerse desde el chat: doble clic en
+     `INSTALAR-MAC.command` (si macOS no lo deja abrir: clic derecho → Abrir).
+   - LibreOffice (opcional, revisión visual y PDF) se ofrece después, solo si hace falta: en Windows pide permiso de
+     administrador (`-Instalar libreoffice`; avisa que aparecerá la ventana de permiso).
 5. Si el usuario prefiere instalar a mano, o el instalador falla, usa los enlaces de `README.md` y espera.
 
 ## Paso 2 — Empresa, Git y GitHub (repositorio siempre privado)
@@ -71,14 +75,18 @@ Según el resultado:
    (`git update-index --chmod=+x .githooks/pre-commit herramientas/py.sh herramientas/preparar_pc.sh INSTALAR-MAC.command`)
    y `git commit -m "Instalación del harness"` (sin líneas de coautoría).
 4. **Control de Git:** `git config core.hooksPath .githooks` (una vez por computador). Desde aquí, cada commit revisa
-   confidenciales y planillas con cualquier asistente.
+   confidenciales y planillas con cualquier asistente. Además `git config core.pager cat`: tu consola no deja salir
+   de un paginador, y sin esto `git log` o `git diff` se quedarían esperando una tecla.
 5. **Cuenta de GitHub** (explícalo en simple; no hace falta saber de Git):
    - Pregunta si ya tiene cuenta. Si no: basta una **cuenta personal gratuita** (no se necesita plan de pago ni
      organización). Abre la página de registro (`Start-Process https://github.com/signup` en Windows, `open
      https://github.com/signup` en Mac) y espera a que diga que la creó.
-   - **Sesión:** si `gh auth status` falla, abre la ventana de inicio de sesión (`preparar_pc.ps1 -IniciarGitHub` /
-     `bash herramientas/preparar_pc.sh --iniciar-github`) y explícale: «presiona Enter, pega el código en el
-     navegador y autoriza; luego avísame». Verifica con `gh auth status`.
+   - **Sesión:** si `gh auth status` falla, ejecuta `powershell -NoProfile -ExecutionPolicy Bypass -File
+     herramientas/preparar_pc.ps1 -IniciarGitHub` (Mac: `bash herramientas/preparar_pc.sh --iniciar-github`). Abre el
+     navegador en la página del código y lo deja **copiado**; no hace preguntas. Explícale: «se abrió GitHub en tu
+     navegador: inicia sesión, pega el código con Ctrl+V (Cmd+V en Mac), presiona Continue y luego Authorize; después
+     avísame». Si tuvo que crear la cuenta en ese momento, que vuelva a abrir github.com/login/device y pegue el código.
+     Verifica con `gh auth status`. Si no se completó (el código vence en 15 minutos), repite el comando.
 6. **Repositorio privado de la empresa:**
    - Con `gh` con sesión: `gh repo create <nombre-carpeta> --private --source . --push` y
      `gh repo edit --add-topic pmo-harness-empresa` (así se encuentra desde otro computador). Anota la URL en
@@ -117,7 +125,7 @@ Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créa
 ```yaml
 instalado: true
 fecha_instalacion: AAAA-MM-DD
-version_harness: "2.2.1"
+version_harness: "2.2.2"
 empresa: <nombre>                      # dueña de esta carpeta (detalle en empresa/empresa.yaml)
 nucleo:
   origen: <url del núcleo>   # por defecto, la de NUCLEO.txt (repositorio público); de ahí actualizar_nucleo.py trae las mejoras

@@ -74,8 +74,9 @@ pregunta solo lo que no puede resolver.
    librerías; no toca VS Code). Después define la empresa dueña de la carpeta, prepara Git y GitHub (siempre privado),
    se registra a sí mismo y te pregunta **de qué se trata tu proyecto**, en tus palabras. Con eso propone el diseño
    (arquetipo, etapas, métricas, reglas, reportes), te hace unas pocas preguntas y crea el proyecto.
-   - ¿Prefieres instalar antes, sin el asistente? Doble clic en `INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`:
-     te pregunta Sí/No por cada herramienta.
+   - **Recomendado antes de abrir la IA:** doble clic en `INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`. Instala lo
+     necesario sin preguntas técnicas, pide nombre y correo, y conecta GitHub con el código ya copiado. Nunca se queda
+     detenido: cada pregunta tiene un tiempo máximo.
 
 ### 3. Si tienes documentos: cargarlos y decir "listo"
 1. Deja **todo** el material del programa en `proyectos/<tu-programa>/_entrada/`: contratos, enmiendas,
@@ -131,8 +132,9 @@ Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadore
 - Lo demás lo instala el harness **con tu permiso** (`instalar`, o doble clic en `INSTALAR-WINDOWS.bat` /
   `INSTALAR-MAC.command`): [Python 3.9+](https://www.python.org/downloads/), [Git](https://git-scm.com/downloads),
   [GitHub CLI](https://cli.github.com/) (opcional: crea el repositorio privado desde el chat) y
-  [LibreOffice](https://www.libreoffice.org/) (opcional: revisión visual y PDF). En Windows usa winget; en Mac, Homebrew
-  (pide la contraseña del Mac) y deja las librerías en `.venv/`. Si prefieres instalar a mano, usa los enlaces.
+  [LibreOffice](https://www.libreoffice.org/) (opcional: revisión visual y PDF). En Windows usa winget, solo para el
+  usuario (sin permisos de administrador), con tiempo máximo por programa y la descarga oficial si winget falla; en Mac,
+  Homebrew (pide la contraseña del Mac) y deja las librerías en `.venv/`. Si prefieres instalar a mano, usa los enlaces.
 - Opcional: extensión de VS Code **Markdown Preview Mermaid Support** (ver la carta Gantt).
 - Recomendado con Claude Code: las skills oficiales de documentos de Anthropic (Word, Excel, PowerPoint, PDF), desde
   [github.com/anthropics/skills](https://github.com/anthropics/skills). El harness funciona sin ellas.
@@ -283,7 +285,7 @@ justo después de editarlo (también si se modificó por consola), y al abrir un
 (instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
 aunque en Windows solo responda `py` o en Mac esté en `.venv`.
 
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 194 pruebas sobre copias de los
+**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 200 pruebas sobre copias de los
 ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
 cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
 guion para probar el harness con cada IA.

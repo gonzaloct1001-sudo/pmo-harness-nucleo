@@ -845,6 +845,48 @@ def main():
                            all(x in _ps1 for x in ("--accept-source-agreements", "--accept-package-agreements", "--disable-interactivity"))
                            and "Nunca ejecutes winget" in _inst and "Tu consola no es interactiva" in (repo / "AGENTS.md").read_text(encoding="utf-8"),
                            ["faltan las opciones no interactivas de winget o la regla para el asistente"]))
+        _bat = (repo / "INSTALAR-WINDOWS.bat").read_text(encoding="utf-8")
+        resultados.append(("instalador de Windows: el .bat llama al script con ruta relativa y no espera una tecla",
+                           '-File "herramientas\\preparar_pc.ps1" -DobleClic' in _bat and "\npause" not in _bat.lower(), [_bat]))
+        if _ps and os.name == "nt":
+            def _ps_correr(comando, limite=180):
+                try:
+                    r = subprocess.run([_ps, "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", comando], cwd=repo, capture_output=True,
+                                       text=True, encoding="utf-8", errors="replace", timeout=limite, stdin=subprocess.DEVNULL)
+                    return r.stdout + r.stderr
+                except subprocess.TimeoutExpired:
+                    return "SE DETUVO"
+            _sim = _ps_correr("& .\\herramientas\\preparar_pc.ps1 -Instalar python,git,gh -Simular")
+            resultados.append(("instalador de Windows: Python, Git y GitHub CLI solo para el usuario (sin permiso de administrador)",
+                               _sim.count("--scope user") == 3 and "InstallLauncherAllUsers=0" in _sim and "--accept-source-agreements" in _sim
+                               and "SE DETUVO" not in _sim, [_sim[-1500:]]))
+            _rev = _ps_correr("& .\\herramientas\\preparar_pc.ps1")
+            resultados.append(("instalador de Windows: sin opciones solo revisa (no instala ni pregunta)",
+                               "Instalando" not in _rev and "Presiona Enter" not in _rev and "SE DETUVO" not in _rev and "Python 3.12" in _rev,
+                               [_rev[-800:]]))
+            _anti = _ps_correr(
+                "$a = [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path 'herramientas/preparar_pc.ps1'), [ref]$null, [ref]$null); "
+                "$a.FindAll({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] }, $true) | "
+                "ForEach-Object { . ([scriptblock]::Create($_.Extent.Text)) }; $Simular = $false; $Interactivo = $false; "
+                "$Vacio = Join-Path $env:TEMP 'pmo-pruebas-vacia.txt'; $t = Get-Date; "
+                "$rc = Ejecutar (Get-Command powershell).Source @('-NoProfile', '-Command', \"`$r = Read-Host 'Acepta [Y/N]'; exit 7\"); "
+                "\"codigo=$rc segundos=$([int]((Get-Date) - $t).TotalSeconds) respuesta=$(Leer-Respuesta 'p' 's' 'n' 5)\"", 60)
+            _m = re.search(r"codigo=(-?\d+) segundos=(\d+) respuesta=(\w*)", _anti)
+            resultados.append(("instalador de Windows: un programa que pregunta algo no lo detiene; sin ventana no pregunta",
+                               bool(_m) and _m.group(1) == "7" and int(_m.group(2)) < 15 and _m.group(3) == "n", [_anti[-600:]]))
+        if _bash:
+            def _bash_correr(args, limite=120):
+                try:
+                    r = subprocess.run([_bash] + args, cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                                       timeout=limite, stdin=subprocess.DEVNULL)
+                    return r.stdout + r.stderr
+                except subprocess.TimeoutExpired:
+                    return "SE DETUVO"
+            _mac = _bash_correr(["herramientas/preparar_pc.sh"])
+            _mac2 = _bash_correr(["INSTALAR-MAC.command"])
+            resultados.append(("instalador de Mac: sin opciones solo revisa, y el doble clic ejecutado sin ventana no pregunta",
+                               "SE DETUVO" not in _mac + _mac2 and "Instalando" not in _mac and "Presiona" not in _mac2,
+                               [_mac[-500:], _mac2[-500:]]))
 
 
         # --- v2.2 · Barrido selectivo, OCR, planillas oficiales, formulario de plataforma y status ---
