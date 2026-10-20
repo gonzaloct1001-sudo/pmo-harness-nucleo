@@ -75,7 +75,8 @@ pregunta solo lo que no puede resolver.
    se registra a sí mismo y te pregunta **de qué se trata tu proyecto**, en tus palabras. Con eso propone el diseño
    (arquetipo, etapas, métricas, reglas, reportes), te hace unas pocas preguntas y crea el proyecto.
    - **Recomendado antes de abrir la IA:** doble clic en `INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`. Instala lo
-     necesario sin preguntas técnicas, pide nombre y correo, y conecta GitHub con el código ya copiado. Nunca se queda
+     necesario sin preguntas técnicas, guía la creación de la cuenta de GitHub si falta y la conecta con el código ya
+     copiado; el nombre y correo de Git se toman de esa cuenta. Nunca se queda
      detenido: cada pregunta tiene un tiempo máximo.
 
 ### 3. Si tienes documentos: cargarlos y decir "listo"
@@ -288,7 +289,7 @@ justo después de editarlo (también si se modificó por consola), y al abrir un
 (instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
 aunque en Windows solo responda `py` o en Mac esté en `.venv`.
 
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 201 pruebas sobre copias de los
+**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 202 pruebas sobre copias de los
 ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
 cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
 guion para probar el harness con cada IA.

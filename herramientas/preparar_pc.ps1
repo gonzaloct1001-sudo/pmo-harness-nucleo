@@ -2,7 +2,8 @@
 Prepara un computador Windows para usar el PMO Harness: revisa e instala lo que falte.
 
 Uso:
-  Doble clic en INSTALAR-WINDOWS.bat            -> instala lo necesario y pide solo tu nombre, tu correo y conectar GitHub.
+  Doble clic en INSTALAR-WINDOWS.bat            -> instala lo necesario y conecta GitHub (ayuda a crear la cuenta si no
+                                                    la tiene); la firma del historial sale de la cuenta, sin preguntar.
   powershell -File herramientas\preparar_pc.ps1 -SoloRevisar
                                                  -> solo informa qué falta (no instala nada). Es lo que hace sin opciones.
   powershell -File herramientas\preparar_pc.ps1 -Instalar python,git,gh,libreoffice [-NombreGit "Nombre" -CorreoGit "correo"]
@@ -10,6 +11,9 @@ Uso:
                                                     después de pedir permiso en el chat).
   powershell -File herramientas\preparar_pc.ps1 -IniciarGitHub
                                                  -> conecta la cuenta de GitHub: abre el navegador con el código ya copiado.
+  powershell -File herramientas\preparar_pc.ps1 -IdentidadGitHub
+                                                 -> toma de la cuenta de GitHub conectada el nombre y el correo (privado) que
+                                                    firman el historial de Git, si faltan.
   powershell -File herramientas\preparar_pc.ps1 -Clonar [-Repos "repo1,repo2" | -Repos todas] [-Destino carpeta] [-Propietario cuenta]
                                                  -> descarga las carpetas de empresa (repositorios con el tema
                                                     pmo-harness-empresa) para trabajar en este computador.
@@ -34,6 +38,7 @@ param(
     [string]$Destino = "",
     [string]$Propietario = "",
     [switch]$DobleClic,
+    [switch]$IdentidadGitHub,
     [switch]$Simular
 )
 
@@ -53,7 +58,7 @@ function Abierto-DesdeExplorador {
 }
 # Solo hay preguntas en la ventana del doble clic; si el asistente de IA lo ejecuta, nunca hay preguntas
 $Interactivo = $DobleClic -and (Abierto-DesdeExplorador)
-if (-not $DobleClic -and $Instalar.Count -eq 0 -and -not $IniciarGitHub -and -not $Clonar) { $SoloRevisar = $true }
+if (-not $DobleClic -and $Instalar.Count -eq 0 -and -not $IniciarGitHub -and -not $Clonar -and -not $IdentidadGitHub) { $SoloRevisar = $true }
 $Vacio = Join-Path $env:TEMP "pmo-harness-entrada-vacia.txt"
 $Necesarios = @("python", "git", "gh")
 
@@ -291,6 +296,37 @@ function Configurar-GitParaElAsistente($carpeta) {
     git -C $carpeta config core.pager cat 2>$null
 }
 
+function Identidad-DesdeGitHub {
+    # Nombre y correo que firman el historial de Git, tomados de la cuenta de GitHub conectada. El correo es el privado
+    # que da GitHub (id+usuario@users.noreply.github.com): asocia los cambios a la cuenta sin publicar el correo real.
+    if (-not (Get-Command git -ErrorAction SilentlyContinue) -or -not (Get-Command gh -ErrorAction SilentlyContinue)) { return $false }
+    $nombre = (git config --global user.name) 2>$null
+    $correo = (git config --global user.email) 2>$null
+    if ($nombre -and $correo) { return $true }
+    gh auth status *> $null
+    if ($LASTEXITCODE -ne 0) { return $false }
+    try { $u = (gh api user 2>$null) | Out-String | ConvertFrom-Json } catch { return $false }
+    if (-not $u -or -not $u.login) { return $false }
+    $n = $u.name
+    if (-not $n) { $n = $u.login }
+    if ($Simular) { Linea "  [simulación] firma de Git desde GitHub: $n <$($u.id)+$($u.login)@users.noreply.github.com>"; return $true }
+    if (-not $nombre) { git config --global user.name "$n" }
+    if (-not $correo) { git config --global user.email "$($u.id)+$($u.login)@users.noreply.github.com" }
+    return $true
+}
+
+function Crear-CuentaGitHub {
+    # Solo en la ventana del doble clic: abre el registro de GitHub con los pasos y espera a que termine
+    Linea ""
+    Linea "Crear tu cuenta de GitHub (gratuita). Se abre el navegador; ahí:"
+    Linea "  1) Escribe tu correo, una contraseña y un nombre de usuario, y presiona Continue."
+    Linea "  2) Resuelve el desafío que aparece (es para comprobar que eres una persona)."
+    Linea "  3) Escribe el código que te llega a tu correo."
+    Linea "  4) Si pregunta por planes o preferencias, elige la opción gratuita o sáltala (Skip)."
+    Start-Process "https://github.com/signup"
+    $null = Leer-Respuesta "Cuando termines, vuelve a esta ventana y presiona Enter." "" "" 900
+}
+
 function Conectar-GitHub([switch]$EnEstaVentana) {
     $gh = Get-Command gh -ErrorAction SilentlyContinue
     if (-not $gh) { Falta "Primero instala GitHub CLI: -Instalar gh"; return }
@@ -308,6 +344,10 @@ function Conectar-GitHub([switch]$EnEstaVentana) {
              "Write-Host ''; Start-Process 'https://github.com/login/device'; " +
              "& '$ghExe' auth login --web$copia --git-protocol https --hostname github.com; " +
              "if (`$LASTEXITCODE -eq 0) { & '$ghExe' auth setup-git --hostname github.com; & '$ghExe' config set prompt disabled; " +
+             "if (-not (git config --global user.name) -or -not (git config --global user.email)) { " +
+             "`$u = (& '$ghExe' api user) | Out-String | ConvertFrom-Json; `$n = `$u.name; if (-not `$n) { `$n = `$u.login }; " +
+             "if (-not (git config --global user.name)) { git config --global user.name `$n }; " +
+             "if (-not (git config --global user.email)) { git config --global user.email ('{0}+{1}@users.noreply.github.com' -f `$u.id, `$u.login) } }; " +
              "Write-Host ''; Write-Host 'Listo: tu cuenta quedó conectada.' -ForegroundColor Green } " +
              "else { Write-Host ''; Write-Host 'No se completó. Vuelve al chat y pide conectar GitHub de nuevo.' -ForegroundColor Yellow }"
     if ($Simular) { Linea "  [simulación] $pasos"; return }
@@ -386,16 +426,11 @@ function Preparar-Herramientas {
         }
     }
 
-    # Git: identidad, control del harness y GitHub (en simulación solo se mira)
+    # Git: control del harness, cuenta de GitHub y firma del historial (en simulación solo se mira)
     $soloMirar = $SoloRevisar -or $Simular
     if (Get-Command git -ErrorAction SilentlyContinue) {
-        $nombre = (git config --global user.name) 2>$null
-        $correo = (git config --global user.email) 2>$null
-        if ($NombreGit -and -not $soloMirar) { git config --global user.name $NombreGit; $nombre = $NombreGit }
-        if ($CorreoGit -and -not $soloMirar) { git config --global user.email $CorreoGit; $correo = $CorreoGit }
-        if (-not $nombre) { $n = Leer-Respuesta "Tu nombre y apellido (firma el historial de tus cambios; no es para entrar a GitHub):" "" "" 300; if ($n) { git config --global user.name $n; $nombre = $n } }
-        if (-not $correo) { $c = Leer-Respuesta "Tu correo (conviene el mismo de tu cuenta de GitHub; no se envía a nadie):" "" "" 300; if ($c) { git config --global user.email $c; $correo = $c } }
-        if ($nombre -and $correo) { Ok "Identidad de Git: $nombre <$correo>" } else { Falta "Nombre y correo para Git: el asistente te los pedirá en el chat" }
+        if ($NombreGit -and -not $soloMirar) { git config --global user.name $NombreGit }
+        if ($CorreoGit -and -not $soloMirar) { git config --global user.email $CorreoGit }
         if (-not $soloMirar) { git config --global core.longpaths true }  # Git en Windows: rutas de más de 260 caracteres
 
         Push-Location $Raiz
@@ -415,10 +450,30 @@ function Preparar-Herramientas {
         if (Get-Command gh -ErrorAction SilentlyContinue) {
             gh auth status *> $null
             if ($LASTEXITCODE -eq 0) { Ok "Cuenta de GitHub conectada" }
-            elseif ($Interactivo -and (Es-Si (Leer-Respuesta "¿Conectar ahora tu cuenta de GitHub? Se abre el navegador. (Enter = sí, escribe N = después)" "s" "n" 120))) {
-                Conectar-GitHub -EnEstaVentana
-            } else { Falta "Cuenta de GitHub: el asistente te ayuda a conectarla en el chat" }
+            else {
+                # Una sola pregunta: con Enter se conecta; con N primero se crea la cuenta; sin respuesta queda para el chat
+                $r = ""
+                if ($Interactivo) {
+                    Linea ""
+                    Linea "Ahora conectamos tu cuenta de GitHub, donde se respalda tu trabajo en privado."
+                    $r = Leer-Respuesta "¿Ya tienes cuenta en GitHub? (Enter = sí; escribe N si no la tienes y te ayudo a crearla)" "s" "" 300
+                }
+                if ($r -eq "") { Falta "Cuenta de GitHub: el asistente te ayuda a conectarla en el chat" }
+                else {
+                    if (-not (Es-Si $r)) { Crear-CuentaGitHub }
+                    Conectar-GitHub -EnEstaVentana
+                }
+            }
         }
+        # Firma del historial: nombre y correo de la cuenta de GitHub (sin preguntar nada)
+        $nombre = (git config --global user.name) 2>$null
+        $correo = (git config --global user.email) 2>$null
+        if (-not ($nombre -and $correo) -and -not $soloMirar -and (Identidad-DesdeGitHub)) {
+            $nombre = (git config --global user.name) 2>$null
+            $correo = (git config --global user.email) 2>$null
+        }
+        if ($nombre -and $correo) { Ok "Firma de tus cambios: $nombre <$correo>" }
+        else { Falta "Firma de tus cambios: se toma de tu cuenta de GitHub cuando la conectes (el asistente te ayuda)" }
     }
 
     Linea ""
@@ -503,7 +558,11 @@ function Clonar-Empresas {
     Linea "Abre en tu herramienta de IA la carpeta de la empresa con la que vas a trabajar y escribe 'hola'."
 }
 
-if ($IniciarGitHub) { Conectar-GitHub }
+if ($IdentidadGitHub) {
+    if (Identidad-DesdeGitHub) { Ok "Firma de tus cambios: $((git config --global user.name) 2>$null) <$((git config --global user.email) 2>$null)>" }
+    else { Falta "No se pudo tomar la firma desde GitHub: primero conecta la cuenta (-IniciarGitHub)" }
+}
+elseif ($IniciarGitHub) { Conectar-GitHub }
 elseif ($Clonar) { Clonar-Empresas }
 else { Preparar-Herramientas }
 exit 0

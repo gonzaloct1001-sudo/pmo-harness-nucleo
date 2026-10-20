@@ -1,5 +1,16 @@
 # Cambios
 
+## 2.2.4 — 2026-10-20
+
+### Menos pasos en la instalación
+- El instalador ya no pide nombre ni correo: la «firma» del historial de Git se toma de la cuenta de GitHub conectada
+  (nombre o usuario, y el correo privado `id+usuario@users.noreply.github.com`, que asocia los cambios a la cuenta sin
+  publicar el correo real). `preparar_pc.ps1 -IdentidadGitHub` / `preparar_pc.sh --identidad-github` lo hacen por
+  separado; la ventana de conexión de GitHub también lo hace al terminar.
+- Una sola pregunta para GitHub: «¿Ya tienes cuenta?». Con Enter se conecta; con N se abre el registro con los pasos
+  en español y espera a que termine. Sin respuesta, queda para el chat.
+- `instalar` no pide nombre ni correo: conecta GitHub y toma la firma de la cuenta; guía la creación de la cuenta.
+
 ## 2.2.3 — 2026-10-20
 
 ### Otro computador sin duplicar la empresa, y carpetas sincronizadas

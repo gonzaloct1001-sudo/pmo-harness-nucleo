@@ -883,6 +883,22 @@ def main():
                 "$Vacio = Join-Path $env:TEMP 'pmo-pruebas-vacia.txt'; $t = Get-Date; "
                 "$rc = Ejecutar (Get-Command powershell).Source @('-NoProfile', '-Command', \"`$r = Read-Host 'Acepta [Y/N]'; exit 7\"); "
                 "\"codigo=$rc segundos=$([int]((Get-Date) - $t).TotalSeconds) respuesta=$(Leer-Respuesta 'p' 's' 'n' 5)\"", 60)
+            _cfg_tmp = tmp / "gitconfig-identidad"
+            _cfg_tmp.write_text("", encoding="utf-8")
+            try:
+                _idr = subprocess.run([_ps, "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& .\\herramientas\\preparar_pc.ps1 -IdentidadGitHub"],
+                                      cwd=repo, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90,
+                                      stdin=subprocess.DEVNULL, env={**os.environ, "GIT_CONFIG_GLOBAL": str(_cfg_tmp)})
+                _id_sal = _idr.stdout + _idr.stderr
+            except subprocess.TimeoutExpired:
+                _id_sal = "SE DETUVO"
+            _id_cfg = _cfg_tmp.read_text(encoding="utf-8")
+            _sin_preguntas = not any("Tu nombre y apellido" in (repo / f).read_text(encoding="utf-8-sig")
+                                     for f in ("herramientas/preparar_pc.ps1", "herramientas/preparar_pc.sh"))
+            resultados.append(("instalador: la firma de Git sale de la cuenta de GitHub (correo privado), sin preguntar nombre ni correo",
+                               _sin_preguntas and "SE DETUVO" not in _id_sal
+                               and (("users.noreply.github.com" in _id_cfg and "Firma de tus cambios" in _id_sal) or "primero conecta la cuenta" in _id_sal),
+                               [_id_sal[-400:], _id_cfg]))
             _m = re.search(r"codigo=(-?\d+) segundos=(\d+) respuesta=(\w*)", _anti)
             resultados.append(("instalador de Windows: un programa que pregunta algo no lo detiene; sin ventana no pregunta",
                                bool(_m) and _m.group(1) == "7" and int(_m.group(2)) < 15 and _m.group(3) == "n", [_anti[-600:]]))

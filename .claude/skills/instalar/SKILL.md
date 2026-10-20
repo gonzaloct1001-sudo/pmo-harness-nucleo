@@ -29,17 +29,17 @@ Según el resultado:
 
 ## Paso 1 — Entorno (se instala solo, con permiso)
 Lo más simple para el usuario es el **instalador de doble clic** (`INSTALAR-WINDOWS.bat` / `INSTALAR-MAC.command`):
-instala Python, Git y GitHub CLI, pide su nombre y correo y conecta su cuenta de GitHub, en una ventana donde sí puede
+instala Python, Git y GitHub CLI y conecta su cuenta de GitHub (y le ayuda a crearla si no la tiene), en una ventana donde sí puede
 responder. Si ya lo usó, el diagnóstico sale completo y este paso se salta.
 1. Revisa qué falta, sin instalar nada (desde la carpeta, **con la ruta relativa** tal cual; ver regla 18):
    - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -SoloRevisar`
    - Mac: `bash herramientas/preparar_pc.sh --solo-revisar`
 2. Si falta algo, muestra en **un solo mensaje** qué falta y para qué sirve (Python, Git y GitHub CLI, para conectar
    su cuenta y crear el repositorio privado) y ofrece dos caminos: que lo instales tú desde aquí, o que él haga doble
-   clic en el instalador. En el mismo mensaje, si Git no tiene nombre y correo, pídelos.
+   clic en el instalador. No le pidas nombre ni correo para Git: se toman de su cuenta de GitHub al conectarla (punto 2.5).
 3. Si te pide instalarlo tú:
-   - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -Instalar python,git,gh -NombreGit "<nombre>" -CorreoGit "<correo>"`
-   - Mac: `bash herramientas/preparar_pc.sh --instalar python,git,gh --nombre-git "<nombre>" --correo-git "<correo>"`
+   - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -Instalar python,git,gh`
+   - Mac: `bash herramientas/preparar_pc.sh --instalar python,git,gh`
    En Windows todo se instala solo para su usuario: **no aparece ninguna ventana de permiso** y nada pregunta; cada
    programa tiene un tiempo máximo y, si winget falla, usa la descarga oficial. Instala también las librerías de
    `requirements.txt` (en Mac, en `.venv`) y termina con el diagnóstico. Tarda unos minutos: avísale.
@@ -73,7 +73,9 @@ responder. Si ya lo usó, el diagnóstico sale completo y este paso se salta.
    `python herramientas/nueva_empresa.py "<Nombre de la empresa>" --aqui` (crea `empresa/` desde `plantilla-empresa/`
    y su registro). Si la carpeta es para **otra** empresa distinta de una ya configurada, no la mezcles: ofrece
    crear una carpeta aparte con `python herramientas/nueva_empresa.py "<Nombre>" --destino <carpeta padre>`.
-2. Si la carpeta no es repositorio: `git init`, `git branch -M main`. Si Git no tiene nombre/correo configurado, pídelos y configúralos.
+2. Si la carpeta no es repositorio: `git init`, `git branch -M main`. Si Git no tiene nombre y correo (la «firma» de cada
+   cambio guardado), no los pidas: haz antes el punto 5 (cuenta de GitHub), que los toma de la cuenta. Solo si no
+   usará GitHub, pídele su nombre y un correo y configúralos con `git config --global user.name` / `user.email`.
    **Si el diagnóstico dice que la carpeta está DENTRO de otro repositorio**, no hagas commit ahí: explica en
    simple que el harness conviene tenerlo en un repositorio propio y privado, pide confirmación y ejecuta
    `git init` y `git branch -M main` en la carpeta del harness. Luego agrega la ruta de la carpeta (relativa a la
@@ -86,15 +88,22 @@ responder. Si ya lo usó, el diagnóstico sale completo y este paso se salta.
    confidenciales y planillas con cualquier asistente. Además `git config core.pager cat`: tu consola no deja salir
    de un paginador, y sin esto `git log` o `git diff` se quedarían esperando una tecla.
 5. **Cuenta de GitHub** (explícalo en simple; no hace falta saber de Git):
+   - Si ya la conectó con el instalador de doble clic, `gh auth status` sale bien: salta al punto 6.
    - Pregunta si ya tiene cuenta. Si no: basta una **cuenta personal gratuita** (no se necesita plan de pago ni
      organización). Abre la página de registro (`Start-Process https://github.com/signup` en Windows, `open
-     https://github.com/signup` en Mac) y espera a que diga que la creó.
+     https://github.com/signup` en Mac) y guíalo: correo, contraseña y nombre de usuario → **Continue**; resolver el
+     desafío (comprueba que es una persona); escribir el código que le llega al correo; si pregunta por planes o
+     preferencias, la opción gratuita o **Skip**. Espera a que diga que la creó.
    - **Sesión:** si `gh auth status` falla, ejecuta `powershell -NoProfile -ExecutionPolicy Bypass -File
      herramientas/preparar_pc.ps1 -IniciarGitHub` (Mac: `bash herramientas/preparar_pc.sh --iniciar-github`). Abre el
      navegador en la página del código y lo deja **copiado**; no hace preguntas. Explícale: «se abrió GitHub en tu
      navegador: inicia sesión, pega el código con Ctrl+V (Cmd+V en Mac), presiona Continue y luego Authorize; después
      avísame». Si tuvo que crear la cuenta en ese momento, que vuelva a abrir github.com/login/device y pegue el código.
      Verifica con `gh auth status`. Si no se completó (el código vence en 15 minutos), repite el comando.
+   - **Firma del historial:** con la sesión lista, `powershell -NoProfile -ExecutionPolicy Bypass -File
+     herramientas/preparar_pc.ps1 -IdentidadGitHub` (Mac: `bash herramientas/preparar_pc.sh --identidad-github`) toma
+     de la cuenta el nombre y el correo privado de GitHub (`id+usuario@users.noreply.github.com`) si faltan. No es para
+     entrar a GitHub ni define el autor de los documentos (eso va en `empresa/empresa.yaml`, paso 3).
 6. **Repositorio privado de la empresa:**
    - Con `gh` con sesión: `gh repo create <nombre-carpeta> --private --source . --push` y
      `gh repo edit --add-topic pmo-harness-empresa` (así se encuentra desde otro computador). Anota la URL en
@@ -133,7 +142,7 @@ Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créa
 ```yaml
 instalado: true
 fecha_instalacion: AAAA-MM-DD
-version_harness: "2.2.3"
+version_harness: "2.2.4"
 empresa: <nombre>                      # dueña de esta carpeta (detalle en empresa/empresa.yaml)
 nucleo:
   origen: <url del núcleo>   # por defecto, la de NUCLEO.txt (repositorio público); de ahí actualizar_nucleo.py trae las mejoras

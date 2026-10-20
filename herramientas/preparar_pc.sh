@@ -2,12 +2,15 @@
 # Prepara un Mac para usar el PMO Harness: revisa e instala lo que falte.
 #
 # Uso:
-#   Doble clic en INSTALAR-MAC.command               -> instala lo necesario y pide solo tu nombre, tu correo y conectar GitHub.
+#   Doble clic en INSTALAR-MAC.command               -> instala lo necesario y conecta GitHub (ayuda a crear la cuenta si no
+#                                                       la tiene); la firma del historial sale de la cuenta, sin preguntar.
 #   bash herramientas/preparar_pc.sh --solo-revisar  -> solo informa qué falta (no instala nada). Es lo que hace sin opciones.
 #   bash herramientas/preparar_pc.sh --instalar python,git,gh,libreoffice [--nombre-git "Nombre" --correo-git "correo"]
 #                                                    -> instala lo indicado sin preguntar (lo usa el asistente de IA
 #                                                       después de pedir permiso en el chat).
 #   bash herramientas/preparar_pc.sh --iniciar-github -> conecta la cuenta de GitHub: abre el navegador con el código ya copiado.
+#   bash herramientas/preparar_pc.sh --identidad-github -> toma de la cuenta de GitHub el nombre y el correo (privado) que
+#                                                       firman el historial de Git, si faltan.
 #   bash herramientas/preparar_pc.sh --clonar [--repos "a,b" | --repos todas] [--destino carpeta] [--propietario cuenta]
 #                                                    -> descarga las carpetas de empresa (repositorios con el tema
 #                                                       pmo-harness-empresa) para trabajar en este computador.
@@ -19,7 +22,7 @@
 # Compatible con el bash 3.2 que trae macOS.
 
 RAIZ="$(cd "$(dirname "$0")/.." && pwd)"
-SOLO_REVISAR=0; CLONAR=0; INICIAR_GITHUB=0; DOBLE_CLIC=0; INSTALAR=""; NOMBRE_GIT=""; CORREO_GIT=""; REPOS=""; DESTINO=""; PROPIETARIO=""
+SOLO_REVISAR=0; CLONAR=0; INICIAR_GITHUB=0; IDENTIDAD=0; DOBLE_CLIC=0; INSTALAR=""; NOMBRE_GIT=""; CORREO_GIT=""; REPOS=""; DESTINO=""; PROPIETARIO=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --solo-revisar) SOLO_REVISAR=1 ;;
@@ -28,6 +31,7 @@ while [ $# -gt 0 ]; do
     --correo-git) CORREO_GIT="$2"; shift ;;
     --clonar) CLONAR=1 ;;
     --iniciar-github) INICIAR_GITHUB=1 ;;
+    --identidad-github) IDENTIDAD=1 ;;
     --doble-clic) DOBLE_CLIC=1 ;;
     --repos) REPOS="$2"; shift ;;
     --destino) DESTINO="$2"; shift ;;
@@ -39,7 +43,7 @@ done
 # Solo hay preguntas en la ventana del doble clic (Terminal de macOS); si el asistente de IA lo ejecuta, nunca
 INTERACTIVO=0
 if [ $DOBLE_CLIC -eq 1 ] && [ -t 0 ] && [ "${TERM_PROGRAM:-}" != "vscode" ]; then INTERACTIVO=1; fi
-if [ $DOBLE_CLIC -eq 0 ] && [ -z "$INSTALAR" ] && [ $INICIAR_GITHUB -eq 0 ] && [ $CLONAR -eq 0 ]; then SOLO_REVISAR=1; fi
+if [ $DOBLE_CLIC -eq 0 ] && [ -z "$INSTALAR" ] && [ $INICIAR_GITHUB -eq 0 ] && [ $CLONAR -eq 0 ] && [ $IDENTIDAD -eq 0 ]; then SOLO_REVISAR=1; fi
 NECESARIOS="python git gh"
 export HOMEBREW_NO_ENV_HINTS=1 HOMEBREW_NO_INSTALL_CLEANUP=1
 
@@ -143,6 +147,30 @@ avisar_sincronizada() {
   info "computadores ya los da tu repositorio privado de GitHub. Tus documentos originales pueden seguir en $s."
 }
 
+# Nombre y correo que firman el historial de Git, tomados de la cuenta de GitHub conectada. El correo es el privado que
+# da GitHub (id+usuario@users.noreply.github.com): asocia los cambios a la cuenta sin publicar el correo real.
+identidad_desde_github() {
+  tiene_git && tiene_gh || return 1
+  [ -n "$(git config --global user.name)" ] && [ -n "$(git config --global user.email)" ] && return 0
+  gh auth status >/dev/null 2>&1 || return 1
+  usuario="$(gh api user --jq '.login' </dev/null 2>/dev/null)"
+  [ -n "$usuario" ] || return 1
+  [ -n "$(git config --global user.name)" ] || git config --global user.name "$(gh api user --jq '.name // .login' </dev/null)"
+  [ -n "$(git config --global user.email)" ] || git config --global user.email "$(gh api user --jq '(.id|tostring) + "+" + .login' </dev/null)@users.noreply.github.com"
+}
+
+crear_cuenta_github() {
+  # Solo en la ventana del doble clic: abre el registro de GitHub con los pasos y espera a que termine
+  echo
+  echo "Crear tu cuenta de GitHub (gratuita). Se abre el navegador; ahí:"
+  echo "  1) Escribe tu correo, una contraseña y un nombre de usuario, y presiona Continue."
+  echo "  2) Resuelve el desafío que aparece (es para comprobar que eres una persona)."
+  echo "  3) Escribe el código que te llega a tu correo."
+  echo "  4) Si pregunta por planes o preferencias, elige la opción gratuita o sáltala (Skip)."
+  open "https://github.com/signup"
+  respuesta "Cuando termines, vuelve a esta ventana y presiona Enter." "" "" 900
+}
+
 conectar_github() {
   cargar_brew >/dev/null 2>&1
   GH="$(command -v gh)" || { falta "Primero instala GitHub CLI: --instalar gh"; return 1; }
@@ -156,7 +184,8 @@ echo '2) Donde pide el código, pégalo con Cmd+V (ya está copiado; también ap
 echo '3) Presiona Authorize. Si creaste la cuenta recién, vuelve a abrir github.com/login/device y pega el código.'; echo; \
 open 'https://github.com/login/device'; \
 if '$GH' auth login --web $copia --git-protocol https --hostname github.com </dev/null; then \
-'$GH' auth setup-git --hostname github.com; '$GH' config set prompt disabled; echo; echo 'Listo: tu cuenta quedó conectada. Puedes cerrar esta ventana.'; \
+'$GH' auth setup-git --hostname github.com; '$GH' config set prompt disabled; bash '$RAIZ/herramientas/preparar_pc.sh' --identidad-github; \
+echo; echo 'Listo: tu cuenta quedó conectada. Puedes cerrar esta ventana.'; \
 else echo; echo 'No se completó. Vuelve al chat y pide conectar GitHub de nuevo.'; fi"
   if [ "${1:-}" = "aqui" ]; then bash -c "$pasos"; return; fi
   osascript -e "tell application \"Terminal\" to do script \"$(printf '%s' "$pasos" | sed 's/\\/\\\\/g; s/"/\\"/g')\"" \
@@ -219,11 +248,6 @@ preparar() {
       [ -n "$NOMBRE_GIT" ] && git config --global user.name "$NOMBRE_GIT"
       [ -n "$CORREO_GIT" ] && git config --global user.email "$CORREO_GIT"
     fi
-    nombre="$(git config --global user.name)"; correo="$(git config --global user.email)"
-    if [ -z "$nombre" ]; then respuesta "Tu nombre y apellido (firma el historial de tus cambios; no es para entrar a GitHub):" "" "" 300; nombre="$RESPUESTA"; [ -n "$nombre" ] && git config --global user.name "$nombre"; fi
-    if [ -z "$correo" ]; then respuesta "Tu correo (conviene el mismo de tu cuenta de GitHub; no se envía a nadie):" "" "" 300; correo="$RESPUESTA"; [ -n "$correo" ] && git config --global user.email "$correo"; fi
-    if [ -n "$nombre" ] && [ -n "$correo" ]; then ok "Identidad de Git: $nombre <$correo>"; else falta "Nombre y correo para Git: el asistente te los pedirá en el chat"; fi
-
     top="$(git -C "$RAIZ" rev-parse --show-toplevel 2>/dev/null)"
     if [ -n "$top" ] && [ "$(cd "$top" && pwd -P)" = "$(cd "$RAIZ" && pwd -P)" ]; then
       if [ "$(git -C "$RAIZ" config --get core.hooksPath)" = ".githooks" ]; then ok "Control de Git del harness activo"
@@ -236,11 +260,25 @@ preparar() {
     if tiene_gh; then
       if gh auth status >/dev/null 2>&1; then ok "Cuenta de GitHub conectada"
       else
-        respuesta "¿Conectar ahora tu cuenta de GitHub? Se abre el navegador. (Enter = sí, escribe N = después)" "s" "n" 120
-        if [ $INTERACTIVO -eq 1 ] && es_si "$RESPUESTA"; then conectar_github aqui
-        else falta "Cuenta de GitHub: el asistente te ayuda a conectarla en el chat"; fi
+        # Una sola pregunta: con Enter se conecta; con N primero se crea la cuenta; sin respuesta queda para el chat
+        RESPUESTA=""
+        if [ $INTERACTIVO -eq 1 ]; then
+          echo
+          echo "Ahora conectamos tu cuenta de GitHub, donde se respalda tu trabajo en privado."
+          respuesta "¿Ya tienes cuenta en GitHub? (Enter = sí; escribe N si no la tienes y te ayudo a crearla)" "s" "" 300
+        fi
+        if [ -z "$RESPUESTA" ]; then falta "Cuenta de GitHub: el asistente te ayuda a conectarla en el chat"
+        else
+          es_si "$RESPUESTA" || crear_cuenta_github
+          conectar_github aqui
+        fi
       fi
     fi
+    # Firma del historial: nombre y correo de la cuenta de GitHub (sin preguntar nada)
+    [ $SOLO_REVISAR -eq 1 ] || identidad_desde_github
+    nombre="$(git config --global user.name)"; correo="$(git config --global user.email)"
+    if [ -n "$nombre" ] && [ -n "$correo" ]; then ok "Firma de tus cambios: $nombre <$correo>"
+    else falta "Firma de tus cambios: se toma de tu cuenta de GitHub cuando la conectes (el asistente te ayuda)"; fi
   fi
 
   echo
@@ -310,7 +348,11 @@ clonar() {
   echo; echo "Abre en tu herramienta de IA la carpeta de la empresa con la que vas a trabajar y escribe 'hola'."
 }
 
-if [ $INICIAR_GITHUB -eq 1 ]; then
+if [ $IDENTIDAD -eq 1 ]; then
+  cargar_brew >/dev/null 2>&1
+  if identidad_desde_github; then ok "Firma de tus cambios: $(git config --global user.name) <$(git config --global user.email)>"
+  else falta "No se pudo tomar la firma desde GitHub: primero conecta la cuenta (--iniciar-github)"; fi
+elif [ $INICIAR_GITHUB -eq 1 ]; then
   if [ $INTERACTIVO -eq 1 ]; then conectar_github aqui; else conectar_github; fi
 elif [ $CLONAR -eq 1 ]; then clonar
 else preparar; fi

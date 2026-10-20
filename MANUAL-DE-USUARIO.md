@@ -27,7 +27,8 @@ Paso a paso en la guía de inicio. En resumen:
 1. Descomprime el zip, cambia el nombre de la carpeta por el de tu empresa y déjala en `Documentos`.
 2. **Opcional:** completa `FICHA-DE-INICIO.md`. Así la instalación casi no te hace preguntas.
 3. **Doble clic en el instalador** (`INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`, en la carpeta). Instala Python,
-   Git y GitHub CLI (en Windows, solo para tu usuario: sin permisos de administrador), te pide nombre y correo, y conecta
+   Git y GitHub CLI (en Windows, solo para tu usuario: sin permisos de administrador), te ayuda a crear tu cuenta de
+   GitHub si no la tienes, y conecta
    tu cuenta de GitHub: se abre el navegador con el código ya copiado; lo pegas, **Continue** y **Authorize**. No hace
    preguntas técnicas y nunca se queda detenido: si no respondes, sigue solo.
 4. En tu herramienta de IA: **Archivo → Abrir carpeta** → tu carpeta. Abre el chat y escribe **«hola»**.

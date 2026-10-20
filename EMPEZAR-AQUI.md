@@ -19,8 +19,10 @@ el resto de la parte técnica.
 Cada herramienta te pedirá su propia cuenta (algunas son de pago). Un chat en el navegador, como ChatGPT o Gemini en la
 web, **no sirve**: la IA necesita trabajar dentro de tu carpeta.
 
-**2. Una cuenta de GitHub** (gratuita) para respaldar tu trabajo en la nube de forma **privada**. Si no la tienes, la
-creas en el paso 3 (te aparece la opción al conectar). No necesitas una cuenta de pago ni una "organización".
+**2. Una cuenta de GitHub** (gratuita) para respaldar tu trabajo en la nube de forma **privada**. Si no la tienes, el
+instalador del paso 3 te abre la página y te guía para crearla (correo, contraseña, nombre de usuario y un código que
+llega a tu correo). No necesitas una cuenta de pago ni una "organización". Si prefieres, créala antes en
+https://github.com/signup.
 
 Python, Git y lo demás **no los instalas tú a mano**: lo hace el instalador del paso 3.
 
@@ -66,14 +68,17 @@ Dentro de tu carpeta, haz **doble clic** en:
 Se abre una ventana que hace todo sola:
 1. Presiona **Enter** para comenzar. Instala Python, Git y GitHub CLI (en Windows, solo para tu usuario: no pide
    permisos de administrador). Tarda unos minutos.
-2. Te pide tu **nombre y apellido** y tu **correo** (conviene el mismo de tu cuenta de GitHub). Son la firma del
-   historial de tus cambios, no tu clave ni tu inicio de sesión. Escríbelos y presiona Enter.
-3. Te ofrece **conectar tu cuenta de GitHub**: presiona Enter. Se abre el navegador:
-   - inicia sesión en GitHub, o crea tu cuenta gratuita;
+2. Te pregunta si ya tienes **cuenta en GitHub**:
+   - **Si la tienes**, presiona Enter.
+   - **Si no**, escribe N y presiona Enter: se abre la página para crearla y la ventana te indica los pasos (correo,
+     contraseña y nombre de usuario; un desafío para comprobar que eres una persona; el código que llega a tu correo).
+     Cuando termines, vuelve a la ventana y presiona Enter.
+3. Se abre el navegador para **conectar tu cuenta**:
+   - inicia sesión en GitHub si te lo pide;
    - donde pide un código, pega con **Ctrl+V** (Mac: **Cmd+V**): ya está copiado, y también aparece en la ventana;
    - presiona **Continue** y luego **Authorize**.
 
-   Si creaste la cuenta en ese momento, vuelve a abrir github.com/login/device y pega el código.
+   No tienes que escribir tu nombre ni tu correo: se toman de tu cuenta de GitHub.
 4. Cuando diga **«Listo»**, presiona Enter para cerrar la ventana.
 
 Si no respondes una pregunta, la ventana sigue sola después de unos minutos: nada queda detenido. Lo que falte, el
