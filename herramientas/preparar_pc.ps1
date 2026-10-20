@@ -86,8 +86,13 @@ function Instalar-Paquete($clave) {
         Falta "winget no está disponible: instala 'Instalador de aplicación' desde Microsoft Store, o instala $($p.nombre) a mano (enlaces en README.md)."
         return
     }
-    Linea "  Instalando $($p.nombre)... (Windows puede pedir confirmación)"
+    Linea "  Instalando $($p.nombre)... (Windows puede pedir permiso: si no ves la ventana, haz clic en el ícono con escudo que parpadea en la barra de tareas)"
+    # Nunca debe quedar esperando una respuesta: la consola del asistente de IA no deja escribir S/N
     $a = @("install", "--id", $p.id, "-e", "--source", "winget", "--accept-package-agreements", "--accept-source-agreements", "--silent")
+    try {
+        $vw = ((winget --version) -replace '^v', '') -replace '[-+].*$', ''
+        if ([version]$vw -ge [version]"1.4") { $a += "--disable-interactivity" }
+    } catch { }
     if ($p.override) { $a += @("--override", $p.override) }
     & winget @a
     if ($LASTEXITCODE -eq 0) { Ok "$($p.nombre) instalado" } else { Falta "winget terminó con código $LASTEXITCODE al instalar $($p.nombre)" }

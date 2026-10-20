@@ -30,8 +30,17 @@ Según el resultado:
    - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -Instalar python,git,gh -NombreGit "<nombre>" -CorreoGit "<correo>"`
    - Mac: `bash herramientas/preparar_pc.sh --instalar python,git,gh --nombre-git "<nombre>" --correo-git "<correo>"`
    El script instala también las librerías de `requirements.txt` (en Mac, dentro de `.venv`) y termina con el diagnóstico.
+   **Instala solo con este script.** Nunca ejecutes winget, choco, brew ni instaladores por tu cuenta (tampoco
+   `winget show` o `winget list` para revisar): tu consola no es interactiva y, si un comando pregunta algo (por
+   ejemplo, «¿Está de acuerdo con los términos…? [Y] Sí [N] No»), queda esperando para siempre sin que el usuario
+   pueda responder. El script ya acepta esas condiciones y no pregunta nada.
 4. Avisos según el sistema:
-   - Windows puede pedir confirmación en pantalla: que el usuario acepte.
+   - Windows puede pedir permiso (Control de cuentas de usuario): que el usuario acepte. Si no ve la ventana, suele
+     estar minimizada: un ícono con escudo que parpadea en la barra de tareas.
+   - **Si la instalación desde el chat se queda detenida** o el usuario no puede responder algo: detén esa tarea y
+     pídele hacer doble clic en `INSTALAR-WINDOWS.bat` (en la carpeta, desde el Explorador de archivos). Se abre una
+     ventana donde sí puede responder S/N a cada cosa; al terminar, que cierre y vuelva a abrir su herramienta de IA y
+     escriba «ya corrí el instalador». Entonces revisa con `-SoloRevisar` y sigue con el paso 2.
    - Si después de instalar Python este aún no responde, la terminal de VS Code no ve el cambio: pide al usuario
      cerrar y abrir VS Code, y retoma con «continúa la instalación».
    - **Mac sin Homebrew:** su instalación pide la contraseña del Mac y no puede hacerse desde el chat. Pide al usuario
@@ -108,7 +117,7 @@ Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créa
 ```yaml
 instalado: true
 fecha_instalacion: AAAA-MM-DD
-version_harness: "2.2"
+version_harness: "2.2.1"
 empresa: <nombre>                      # dueña de esta carpeta (detalle en empresa/empresa.yaml)
 nucleo:
   origen: <url del núcleo>   # por defecto, la de NUCLEO.txt (repositorio público); de ahí actualizar_nucleo.py trae las mejoras

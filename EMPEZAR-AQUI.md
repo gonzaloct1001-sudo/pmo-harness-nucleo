@@ -114,6 +114,8 @@ Pídele las cosas con tus palabras, por ejemplo:
 | Pasa esto | Haz esto |
 |---|---|
 | La IA no reconoce el harness al decir «hola» | Escríbele: «lee el archivo AGENTS.md y sigue sus instrucciones» |
+| La instalación se queda detenida, o pregunta «[Y] Sí [N] No» y no puedes escribir | Dile en el chat «cancela esa tarea». Luego, en el Explorador de archivos, abre tu carpeta y haz doble clic en `INSTALAR-WINDOWS.bat`: se abre una ventana donde sí puedes responder (escribe S y Enter). Al terminar, cierra y vuelve a abrir tu herramienta de IA y escribe «ya corrí el instalador» |
+| Te piden aceptar un permiso de Windows y no ves ninguna ventana | Busca en la barra de tareas un ícono con escudo que parpadea y haz clic en él; ahí está la ventana para presionar **Sí** |
 | Dice que falta Python aunque se instaló | Cierra y vuelve a abrir tu herramienta de IA |
 | «El nombre del archivo es demasiado largo» (Windows) | Usa una carpeta más corta (por ejemplo, `Documentos/Consultora-Sur`) o deja que el asistente active las rutas largas |
 | Un control no deja guardar un archivo | Es a propósito: ese archivo es confidencial y no debe subirse. El asistente te explica qué hacer |

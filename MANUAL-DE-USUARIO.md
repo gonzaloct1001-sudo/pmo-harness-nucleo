@@ -174,6 +174,8 @@ Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
 ## 13. Si algo falla
 - **La IA no reconoce el harness:** escríbele «lee el archivo AGENTS.md y sigue sus instrucciones».
 - **«python no se reconoce»:** pide «instala lo que falte». Si recién se instaló, cierra y vuelve a abrir tu herramienta.
+- **La instalación se queda detenida** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes escribir): dile «cancela esa tarea» y haz doble clic en `INSTALAR-WINDOWS.bat` (o `INSTALAR-MAC.command`) desde la carpeta: abre una ventana donde sí puedes responder. Después vuelve al chat y escribe «ya corrí el instalador».
+- **Windows pide permiso pero no ves la ventana:** busca en la barra de tareas un ícono con escudo que parpadea.
 - **Un control bloqueó un envío a GitHub:** el asistente te dirá qué archivo era confidencial; déjalo fuera.
 - **«El nombre del archivo es demasiado largo» (Windows):** usa una carpeta más corta (por ejemplo,
   `Documentos/Consultora-Sur`) o deja que el asistente active las rutas largas.

@@ -1,5 +1,15 @@
 # Cambios
 
+## 2.2.1 — 2026-10-20
+
+### Correcciones
+- Instalación en Windows: un asistente que ejecutaba winget por su cuenta quedaba detenido esperando que se aceptaran
+  los términos de Microsoft Store, en una consola donde el usuario no puede responder. `AGENTS.md` (regla 18) e
+  `instalar` prohíben ahora los comandos que esperan respuesta y obligan a instalar solo con `preparar_pc`; si algo
+  queda detenido, se ofrece el instalador de doble clic. `preparar_pc.ps1` agrega `--disable-interactivity` a winget.
+- Guía de inicio y manual: qué hacer si la instalación se queda detenida y dónde aparece el permiso de Windows cuando
+  no se ve la ventana.
+
 ## 2.2 — 2026-10-19
 
 ### Nuevo: status diario y reporte web

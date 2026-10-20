@@ -150,6 +150,11 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     larga, actualiza `proyectos/<slug>/seguimiento/traspaso.md`: fecha, asistente, tarea en curso y su estado, qué
     se hizo, próximo paso, decisiones pendientes del usuario y archivos clave. Reemplaza el contenido (el historial
     queda en Git). Así otra sesión, otro computador u otro asistente retoma sin que el usuario repita nada.
+18. **Tu consola no es interactiva.** No ejecutes comandos que esperen una respuesta (S/N, términos que aceptar,
+    contraseñas, un editor): quedan detenidos y el usuario no puede contestar. Para instalar usa solo
+    `herramientas/preparar_pc.ps1` o `preparar_pc.sh` (nunca winget, choco ni brew directos); para Git, usa `-m` y
+    nunca `-i`. Si algo queda esperando, detenlo y ofrece el instalador de doble clic (`INSTALAR-WINDOWS.bat` o
+    `INSTALAR-MAC.command`), que abre una ventana donde el usuario sí puede responder.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con

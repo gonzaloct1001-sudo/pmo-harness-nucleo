@@ -839,6 +839,12 @@ def main():
                     "[ref]$null, [ref]$e); if ($e.Count) { $e | ForEach-Object { $_.Message }; exit 1 }")
             _r = subprocess.run([_ps, "-NoProfile", "-Command", _cmd], cwd=repo, capture_output=True, text=True)
             resultados.append(("instalador de Windows: sintaxis de PowerShell", _r.returncode == 0, [_r.stdout, _r.stderr]))
+        _ps1 = (repo / "herramientas" / "preparar_pc.ps1").read_text(encoding="utf-8-sig")
+        _inst = (repo / ".claude" / "skills" / "instalar" / "SKILL.md").read_text(encoding="utf-8")
+        resultados.append(("instalador de Windows: winget nunca queda esperando una respuesta (términos, S/N)",
+                           all(x in _ps1 for x in ("--accept-source-agreements", "--accept-package-agreements", "--disable-interactivity"))
+                           and "Nunca ejecutes winget" in _inst and "Tu consola no es interactiva" in (repo / "AGENTS.md").read_text(encoding="utf-8"),
+                           ["faltan las opciones no interactivas de winget o la regla para el asistente"]))
 
 
         # --- v2.2 · Barrido selectivo, OCR, planillas oficiales, formulario de plataforma y status ---
