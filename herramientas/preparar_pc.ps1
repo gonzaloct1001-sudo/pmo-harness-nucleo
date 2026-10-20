@@ -393,8 +393,8 @@ function Preparar-Herramientas {
         $correo = (git config --global user.email) 2>$null
         if ($NombreGit -and -not $soloMirar) { git config --global user.name $NombreGit; $nombre = $NombreGit }
         if ($CorreoGit -and -not $soloMirar) { git config --global user.email $CorreoGit; $correo = $CorreoGit }
-        if (-not $nombre) { $n = Leer-Respuesta "Tu nombre y apellido (así aparecerás en tus documentos):" "" "" 300; if ($n) { git config --global user.name $n; $nombre = $n } }
-        if (-not $correo) { $c = Leer-Respuesta "Tu correo (el de tu cuenta de GitHub, o el que usarás para crearla):" "" "" 300; if ($c) { git config --global user.email $c; $correo = $c } }
+        if (-not $nombre) { $n = Leer-Respuesta "Tu nombre y apellido (firma el historial de tus cambios; no es para entrar a GitHub):" "" "" 300; if ($n) { git config --global user.name $n; $nombre = $n } }
+        if (-not $correo) { $c = Leer-Respuesta "Tu correo (conviene el mismo de tu cuenta de GitHub; no se envía a nadie):" "" "" 300; if ($c) { git config --global user.email $c; $correo = $c } }
         if ($nombre -and $correo) { Ok "Identidad de Git: $nombre <$correo>" } else { Falta "Nombre y correo para Git: el asistente te los pedirá en el chat" }
         if (-not $soloMirar) { git config --global core.longpaths true }  # Git en Windows: rutas de más de 260 caracteres
 

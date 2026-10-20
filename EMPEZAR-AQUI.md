@@ -66,7 +66,8 @@ Dentro de tu carpeta, haz **doble clic** en:
 Se abre una ventana que hace todo sola:
 1. Presiona **Enter** para comenzar. Instala Python, Git y GitHub CLI (en Windows, solo para tu usuario: no pide
    permisos de administrador). Tarda unos minutos.
-2. Te pide tu **nombre y apellido** y tu **correo** (así aparecerás en tus documentos). Escríbelos y presiona Enter.
+2. Te pide tu **nombre y apellido** y tu **correo** (conviene el mismo de tu cuenta de GitHub). Son la firma del
+   historial de tus cambios, no tu clave ni tu inicio de sesión. Escríbelos y presiona Enter.
 3. Te ofrece **conectar tu cuenta de GitHub**: presiona Enter. Se abre el navegador:
    - inicia sesión en GitHub, o crea tu cuenta gratuita;
    - donde pide un código, pega con **Ctrl+V** (Mac: **Cmd+V**): ya está copiado, y también aparece en la ventana;

@@ -220,8 +220,8 @@ preparar() {
       [ -n "$CORREO_GIT" ] && git config --global user.email "$CORREO_GIT"
     fi
     nombre="$(git config --global user.name)"; correo="$(git config --global user.email)"
-    if [ -z "$nombre" ]; then respuesta "Tu nombre y apellido (así aparecerás en tus documentos):" "" "" 300; nombre="$RESPUESTA"; [ -n "$nombre" ] && git config --global user.name "$nombre"; fi
-    if [ -z "$correo" ]; then respuesta "Tu correo (el de tu cuenta de GitHub, o el que usarás para crearla):" "" "" 300; correo="$RESPUESTA"; [ -n "$correo" ] && git config --global user.email "$correo"; fi
+    if [ -z "$nombre" ]; then respuesta "Tu nombre y apellido (firma el historial de tus cambios; no es para entrar a GitHub):" "" "" 300; nombre="$RESPUESTA"; [ -n "$nombre" ] && git config --global user.name "$nombre"; fi
+    if [ -z "$correo" ]; then respuesta "Tu correo (conviene el mismo de tu cuenta de GitHub; no se envía a nadie):" "" "" 300; correo="$RESPUESTA"; [ -n "$correo" ] && git config --global user.email "$correo"; fi
     if [ -n "$nombre" ] && [ -n "$correo" ]; then ok "Identidad de Git: $nombre <$correo>"; else falta "Nombre y correo para Git: el asistente te los pedirá en el chat"; fi
 
     top="$(git -C "$RAIZ" rev-parse --show-toplevel 2>/dev/null)"
