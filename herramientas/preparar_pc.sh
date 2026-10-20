@@ -124,6 +124,25 @@ instalar_paquete() {
 
 pager_local() { git -C "$1" config core.pager cat 2>/dev/null; }  # la consola del asistente no deja salir de un paginador
 
+# Dropbox, OneDrive, Google Drive o iCloud sincronizan solos: con Git pueden dañar el historial entre computadores
+carpeta_sincronizada() {
+  case "$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')" in
+    *dropbox*) echo "Dropbox" ;;
+    *onedrive*) echo "OneDrive" ;;
+    *googledrive*|*"google drive"*|*"my drive"*|*"mi unidad"*) echo "Google Drive" ;;
+    *"mobile documents"*|*icloud*) echo "iCloud" ;;
+  esac
+}
+avisar_sincronizada() {
+  s="$(carpeta_sincronizada "$RAIZ")"
+  [ -n "$s" ] || return 0
+  echo
+  falta "Esta carpeta está dentro de $s, que la sincroniza por su cuenta."
+  info "Con el historial de Git eso puede dañarse al trabajar desde dos computadores, y si la carpeta es compartida otros ven todo."
+  info "Cierra tu herramienta de IA y mueve esta carpeta a $HOME/Documents. El respaldo y el acceso desde otros"
+  info "computadores ya los da tu repositorio privado de GitHub. Tus documentos originales pueden seguir en $s."
+}
+
 conectar_github() {
   cargar_brew >/dev/null 2>&1
   GH="$(command -v gh)" || { falta "Primero instala GitHub CLI: --instalar gh"; return 1; }
@@ -151,6 +170,7 @@ preparar() {
   echo "PMO Harness - preparación de este computador (Mac)"
   echo "Carpeta: $RAIZ"
   [ $INTERACTIVO -eq 1 ] && echo "No te hará preguntas técnicas."
+  avisar_sincronizada
   echo
   cargar_brew && ok "Homebrew" || info "Homebrew no instalado (se instala si hace falta)"
   pend=""
@@ -225,9 +245,32 @@ preparar() {
 
   echo
   if [ -x "$VENV" ]; then "$VENV" "$RAIZ/herramientas/verificar_entorno.py" </dev/null; elif [ -n "$PY" ]; then "$PY" "$RAIZ/herramientas/verificar_entorno.py" </dev/null; fi
+
+  # Otro computador: si esta carpeta aún no es de una empresa y la cuenta ya tiene carpetas de empresa, se ofrecen
+  descargadas=""
+  if [ $INTERACTIVO -eq 1 ] && [ ! -f "$RAIZ/.harness/estado.yaml" ] && tiene_gh && gh auth status >/dev/null 2>&1; then
+    suyas="$(gh repo list --topic pmo-harness-empresa --limit 200 --json name --jq '.[].name' </dev/null 2>/dev/null | tr '\n' ' ')"
+    if [ -n "${suyas// /}" ]; then
+      echo
+      echo "Ya tienes carpetas de empresa en GitHub: $suyas"
+      respuesta "¿Es otro computador y quieres descargarlas a Documents/PMO-Empresas? (Enter = sí, escribe N = no)" "s" "n" 120
+      if es_si "$RESPUESTA"; then REPOS="todas"; clonar; descargadas="$suyas"; fi
+    fi
+  fi
   if [ $DOBLE_CLIC -eq 1 ]; then
     echo
-    echo "Listo. Ahora abre esta carpeta en tu herramienta de IA (Antigravity, VS Code...) y escribe «hola»."
+    if [ -n "$descargadas" ]; then
+      primera="$(echo $descargadas | cut -d' ' -f1)"
+      echo "Listo. Ahora abre en tu herramienta de IA (Antigravity, VS Code...) la carpeta de tu empresa, dentro de"
+      echo "$HOME/Documents/PMO-Empresas (por ejemplo, $HOME/Documents/PMO-Empresas/$primera), y escribe «hola»."
+      echo "Esta carpeta (la que descargaste como zip) ya no la necesitas: puedes borrarla."
+    elif [ -n "$(carpeta_sincronizada "$RAIZ")" ]; then
+      avisar_sincronizada
+      echo
+      echo "Cuando la hayas movido, abre la carpeta en su nueva ubicación en tu herramienta de IA y escribe «hola»."
+    else
+      echo "Listo. Ahora abre esta carpeta en tu herramienta de IA (Antigravity, VS Code...) y escribe «hola»."
+    fi
     echo "Si tu herramienta de IA ya estaba abierta, ciérrala y vuelve a abrirla para que vea lo instalado."
   fi
 }
@@ -236,6 +279,7 @@ clonar() {
   tiene_gh || { falta "Para descargar las empresas se necesita GitHub CLI: --instalar gh"; return 1; }
   gh auth status >/dev/null 2>&1 || { falta "Primero conecta tu cuenta de GitHub: --iniciar-github"; return 1; }
   [ -n "$DESTINO" ] || DESTINO="$HOME/Documents/PMO-Empresas"
+  gh auth setup-git --hostname github.com >/dev/null 2>&1  # que Git use la cuenta conectada (sin otra ventana de inicio de sesión)
   lista="$(gh repo list $PROPIETARIO --topic pmo-harness-empresa --limit 200 --json nameWithOwner,description \
            --jq '.[] | .nameWithOwner + "\t" + (.description // "")' </dev/null)"
   [ -n "$lista" ] || { echo "No hay repositorios con el tema pmo-harness-empresa en esta cuenta."; return 0; }

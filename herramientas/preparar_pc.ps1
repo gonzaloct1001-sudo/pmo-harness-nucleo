@@ -243,6 +243,33 @@ function Instalar-Paquete($clave) {
     if ($listo) { Ok "$($p.nombre) instalado" } else { Falta "No se pudo instalar $($p.nombre). Descárgalo de $($p.web), instálalo y vuelve a ejecutar el instalador." }
 }
 
+function Carpeta-Sincronizada($ruta) {
+    # Dropbox, OneDrive, Google Drive o iCloud sincronizan solos: con Git pueden dañar el historial entre computadores
+    $r = "$ruta".ToLower()
+    if ($r -match "dropbox") { return "Dropbox" }
+    if ($r -match "onedrive") { return "OneDrive" }
+    if ($r -match "google ?drive|\\my drive|\\mi unidad") { return "Google Drive" }
+    if ($r -match "icloud ?drive") { return "iCloud" }
+    return ""
+}
+
+function Lugar-Sugerido {
+    # Documentos si no se sincroniza solo (en muchos Windows está dentro de OneDrive); si no, una carpeta PMO del usuario
+    $docs = [Environment]::GetFolderPath("MyDocuments")
+    if ($docs -and -not (Carpeta-Sincronizada $docs)) { return $docs }
+    return (Join-Path $env:USERPROFILE "PMO")
+}
+
+function Avisar-Sincronizada {
+    $s = Carpeta-Sincronizada $Raiz
+    if (-not $s) { return }
+    Linea ""
+    Falta "Esta carpeta está dentro de $s, que la sincroniza por su cuenta."
+    Info "Con el historial de Git eso puede dañarse al trabajar desde dos computadores, y si la carpeta es compartida otros ven todo."
+    Info "Cierra tu herramienta de IA y mueve esta carpeta a $(Lugar-Sugerido). El respaldo y el acceso desde otros"
+    Info "computadores ya los da tu repositorio privado de GitHub. Tus documentos originales pueden seguir en $s."
+}
+
 function Rutas-Largas-Activas {
     try { return ((Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem" -Name LongPathsEnabled -ErrorAction Stop).LongPathsEnabled -eq 1) }
     catch { return $false }
@@ -301,6 +328,7 @@ function Preparar-Herramientas {
     Linea "PMO Harness - preparación de este computador (Windows)"
     Linea "Carpeta: $Raiz"
     if ($Interactivo) { Linea "No necesita permisos de administrador ni te hará preguntas técnicas." }
+    Avisar-Sincronizada
     Linea ""
     if (-not $SoloRevisar -and -not $Simular) {
         # Archivos descargados de internet: que Windows no vuelva a advertir al abrir los instaladores del harness
@@ -400,9 +428,39 @@ function Preparar-Herramientas {
         if ($py.Count -gt 1) { $pyArgs = $py[1..($py.Count - 1)] }
         & $py[0] @pyArgs (Join-Path $Raiz "herramientas\verificar_entorno.py")
     }
+
+    # Otro computador: si esta carpeta aún no es de una empresa y la cuenta ya tiene carpetas de empresa, se ofrecen
+    $descargadas = @()
+    if ($Interactivo -and -not (Test-Path (Join-Path $Raiz ".harness\estado.yaml")) -and (Get-Command gh -ErrorAction SilentlyContinue)) {
+        gh auth status *> $null
+        if ($LASTEXITCODE -eq 0) {
+            $suyas = @(gh repo list --topic pmo-harness-empresa --limit 200 --json name --jq ".[].name" 2>$null | Where-Object { $_ })
+            if ($suyas.Count) {
+                Linea ""
+                Linea "Ya tienes carpetas de empresa en GitHub: $($suyas -join ', ')."
+                $r = Leer-Respuesta "¿Es otro computador y quieres descargarlas a $(Join-Path (Lugar-Sugerido) 'PMO-Empresas')? (Enter = sí, escribe N = no)" "s" "n" 120
+                if (Es-Si $r) {
+                    $script:Repos = "todas"
+                    Clonar-Empresas
+                    $descargadas = $suyas
+                }
+            }
+        }
+    }
     if ($DobleClic) {
         Linea ""
-        Linea "Listo. Ahora abre esta carpeta en tu herramienta de IA (Antigravity, VS Code...) y escribe «hola»."
+        if ($descargadas.Count) {
+            $base = Join-Path (Lugar-Sugerido) "PMO-Empresas"
+            Linea "Listo. Ahora abre en tu herramienta de IA (Antigravity, VS Code...) la carpeta de tu empresa, dentro de"
+            Linea "$base (por ejemplo, $(Join-Path $base $descargadas[0])), y escribe «hola»."
+            Linea "Esta carpeta (la que descargaste como zip) ya no la necesitas: puedes borrarla."
+        } elseif (Carpeta-Sincronizada $Raiz) {
+            Avisar-Sincronizada
+            Linea ""
+            Linea "Cuando la hayas movido, abre la carpeta en su nueva ubicación en tu herramienta de IA y escribe «hola»."
+        } else {
+            Linea "Listo. Ahora abre esta carpeta en tu herramienta de IA (Antigravity, VS Code...) y escribe «hola»."
+        }
         Linea "Si tu herramienta de IA ya estaba abierta, ciérrala y vuelve a abrirla para que vea lo instalado."
         $null = Leer-Respuesta "Presiona Enter para cerrar esta ventana." "" "" 600
     }
@@ -412,7 +470,8 @@ function Clonar-Empresas {
     if (-not (Get-Command gh -ErrorAction SilentlyContinue)) { Falta "Para descargar las empresas se necesita GitHub CLI: -Instalar gh"; return }
     gh auth status *> $null
     if ($LASTEXITCODE -ne 0) { Falta "Primero conecta tu cuenta de GitHub: -IniciarGitHub"; return }
-    if (-not $Destino) { $Destino = Join-Path ([Environment]::GetFolderPath("MyDocuments")) "PMO-Empresas" }
+    if (-not $Destino) { $Destino = Join-Path (Lugar-Sugerido) "PMO-Empresas" }
+    gh auth setup-git --hostname github.com 2>$null | Out-Null  # que Git use la cuenta conectada (sin otra ventana de inicio de sesión)
     $a = @("repo", "list")
     if ($Propietario) { $a += $Propietario }
     $a += @("--topic", "pmo-harness-empresa", "--limit", "200", "--json", "name,nameWithOwner,description")

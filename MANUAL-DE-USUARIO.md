@@ -120,8 +120,12 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 ## 9. Varias empresas, otro computador y otra IA
 - **Una carpeta por empresa.** Cada empresa tiene su carpeta y su repositorio privado, con su marca, sus formatos y su
   banco de antecedentes. Para otra empresa: «crea la carpeta para la empresa X». Los datos de dos empresas nunca se mezclan.
-- **Otro computador:** instala tu herramienta de IA, abre cualquier carpeta del harness y pide «descarga mis empresas».
-  Quedan en `Documentos/PMO-Empresas/`. Abre la que necesites y escribe «hola».
+- **Otro computador:** descarga el zip y haz doble clic en el instalador. Después de conectar GitHub te ofrece
+  descargar tus empresas a `Documentos/PMO-Empresas/` (también puedes pedirle al asistente «es otro computador, trae
+  mis empresas»). Abre la de la empresa, no la del zip, y escribe «hola». Al cambiar de computador: «guarda» al
+  terminar en uno y «hola» al empezar en el otro, que te ofrece traer lo último.
+- **No pongas la carpeta del harness en Dropbox, OneDrive ni Google Drive:** sincronizan por su cuenta y pueden dañar
+  el historial al usar dos computadores. Tus documentos originales sí pueden seguir ahí.
 - **Otra IA, o cambiar a mitad de camino:** abre la carpeta con la otra IA y escribe «hola» o «¿en qué íbamos?». La
   primera vez se configura sola. Cada proyecto guarda un **traspaso** (qué se hizo, en qué quedó, el próximo paso), así
   que la nueva IA retoma sin que repitas nada. Antes de cambiar, di «guarda».

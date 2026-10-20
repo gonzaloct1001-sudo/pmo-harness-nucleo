@@ -158,11 +158,14 @@ Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadore
   "Empresa 2" --destino <carpeta>` crea la carpeta con el núcleo, su `empresa/` (marca, autoría, banco de antecedentes,
   formatos comunes) y el repositorio. Las postulaciones y proyectos de esa empresa viven en su `proyectos/` y heredan
   su marca y formatos. Los datos de dos empresas nunca se mezclan.
-- **Otro computador:** abre VS Code con tu IA en cualquier carpeta del harness y pide «descarga mis empresas», o ejecuta
+- **Otro computador:** el instalador de doble clic, después de conectar GitHub, ofrece descargar las empresas de la
+  cuenta; también se puede pedir al asistente «es otro computador, trae mis empresas», o ejecutar
   `INSTALAR-WINDOWS.bat -Clonar` / `bash herramientas/preparar_pc.sh --clonar`: lista los repositorios con el tema
   `pmo-harness-empresa` de tu cuenta y descarga los que elijas. Luego abre la carpeta de la empresa y escribe «hola».
   Los originales de `_entrada/`, CVs y paquetes firmados no viajan por GitHub (son confidenciales): las réplicas fieles
-  de las bases y documentos de definición, las fichas y todo lo configurado, sí.
+  de las bases y documentos de definición, las fichas y todo lo configurado, sí. La carpeta del harness no debe quedar
+  dentro de Dropbox, OneDrive o Google Drive (pueden dañar el historial de Git): el estado de inicio y el instalador lo
+  advierten.
 - **Mejoras del núcleo:** cada carpeta trae su copia del núcleo (así cualquier IA la entiende sin instalar nada aparte).
   «Actualiza el harness» (`actualizar_nucleo.py`) trae la versión nueva desde el repositorio del núcleo o un zip, sin
   tocar proyectos ni datos, con respaldo, pruebas y reversión si algo falla.
@@ -285,7 +288,7 @@ justo después de editarlo (también si se modificó por consola), y al abrir un
 (instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
 aunque en Windows solo responda `py` o en Mac esté en `.venv`.
 
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 200 pruebas sobre copias de los
+**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 201 pruebas sobre copias de los
 ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
 cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
 guion para probar el harness con cada IA.

@@ -1,5 +1,17 @@
 # Cambios
 
+## 2.2.3 — 2026-10-20
+
+### Otro computador sin duplicar la empresa, y carpetas sincronizadas
+- En una carpeta nueva, `instalar` pregunta primero si es la primera vez o si ya usa el harness en otro computador
+  (y nombra las carpetas de empresa que ya tiene en GitHub). Antes, un «hola» en la carpeta del zip de un segundo
+  computador empezaba una instalación nueva y podía duplicar la empresa.
+- El instalador de doble clic, después de conectar GitHub, ofrece descargar las carpetas de empresa de la cuenta y
+  dice cuál abrir. Al descargar, configura Git para usar la cuenta conectada.
+- Aviso cuando la carpeta del harness está dentro de Dropbox, OneDrive, Google Drive o iCloud (estado de inicio e
+  instaladores), con la ubicación recomendada. Las empresas descargadas quedan fuera de OneDrive aunque Documentos
+  esté sincronizado.
+
 ## 2.2.2 — 2026-10-20
 
 ### Instalador que nunca se queda detenido

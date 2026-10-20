@@ -46,7 +46,9 @@ Mi-Empresa dentro de Documentos.»* Luego sigue en el paso 3.
 2. Aparece una carpeta llamada **`pmo-harness-nucleo-main`** (en Windows puede quedar una dentro de otra con el mismo
    nombre: usa la de adentro).
 3. **Cámbiale el nombre** por el de tu empresa, sin tildes ni espacios. Por ejemplo, `Consultora-Sur`.
-4. **Muévela a Documentos.** Evita carpetas muy profundas o con nombres largos.
+4. **Muévela a Documentos.** Evita carpetas muy profundas o con nombres largos, y **no la dejes dentro de Dropbox,
+   OneDrive ni Google Drive**: sincronizan por su cuenta y pueden dañar el historial. El respaldo y el acceso desde
+   otros computadores los da GitHub. Si tu carpeta Documentos está en OneDrive, el instalador te dice dónde dejarla.
 5. **Comprueba:** al abrirla, debes ver archivos como `AGENTS.md`, `README.md` y la carpeta `herramientas`. Si solo ves
    otra carpeta, entra en ella: esa es la correcta.
 
@@ -123,7 +125,10 @@ Pídele las cosas con tus palabras, por ejemplo:
 - **Otra empresa:** «crea la carpeta para la empresa X». Te preguntará si son empresas independientes o de una misma
   entidad, y si quieres ver todas juntas en un **tablero único** (va en una carpeta y un repositorio privado aparte, solo
   tuyo) o el status de cada una por separado.
-- **Otro computador:** instala tu herramienta de IA, abre cualquier carpeta y pide «descarga mis empresas».
+- **Otro computador:** antes de dejar el primero, dile «guarda». En el otro, instala tu herramienta de IA, descarga el
+  zip y haz doble clic en el instalador (pasos 1 a 3): después de conectar GitHub te ofrece descargar tus empresas.
+  Abre en tu herramienta de IA la carpeta descargada (no la del zip) y escribe «hola». Desde ahí, cada vez que cambies
+  de computador: «guarda» al terminar en uno y «hola» al empezar en el otro (te ofrece traer lo último).
 - **Otra IA:** abre la carpeta con la nueva y escribe «hola». Retoma donde quedaste.
 - **Versión nueva del harness:** «actualiza el harness». Tus proyectos y datos no se tocan.
 

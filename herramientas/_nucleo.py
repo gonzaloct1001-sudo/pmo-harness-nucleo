@@ -61,6 +61,26 @@ def es_mantenedor(raiz):
         return False
 
 
+SINCRONIZADAS = [("Dropbox", r"dropbox"), ("OneDrive", r"onedrive"), ("Google Drive", r"google ?drive|my drive|mi unidad"),
+                 ("iCloud", r"icloud ?drive|mobile documents")]
+
+
+def carpeta_sincronizada(ruta):
+    """Nombre del servicio (Dropbox, OneDrive, Google Drive, iCloud) si `ruta` está dentro de una carpeta que se
+    sincroniza sola, o cadena vacía. Git dentro de esas carpetas se puede dañar al usarlas desde dos computadores."""
+    partes = [p.lower() for p in Path(ruta).parts]
+    for nombre, patron in SINCRONIZADAS:
+        if any(re.search(patron, p) for p in partes):
+            return nombre
+    return ""
+
+
+def lugar_sugerido():
+    """Carpeta recomendada para el harness: Documentos si no se sincroniza sola; si no, una carpeta PMO en el usuario."""
+    documentos = Path.home() / "Documents"
+    return documentos if documentos.exists() and not carpeta_sincronizada(documentos.resolve()) else Path.home() / "PMO"
+
+
 def misma_url(a, b):
     """True si dos URL de Git apuntan al mismo repositorio (https o ssh, con o sin .git)."""
     def norma(u):

@@ -845,6 +845,18 @@ def main():
                            all(x in _ps1 for x in ("--accept-source-agreements", "--accept-package-agreements", "--disable-interactivity"))
                            and "Nunca ejecutes winget" in _inst and "Tu consola no es interactiva" in (repo / "AGENTS.md").read_text(encoding="utf-8"),
                            ["faltan las opciones no interactivas de winget o la regla para el asistente"]))
+        _sinc = subprocess.run([PY, "-c", "import _nucleo; print([_nucleo.carpeta_sincronizada(r) for r in "
+                                "[r'C:\\Users\\m\\Dropbox\\Compartida\\x', r'C:\\Users\\m\\OneDrive\\Documentos\\x', "
+                                "'/Users/m/Library/CloudStorage/GoogleDrive-a@b.cl/Mi unidad/x', r'C:\\Users\\m\\Documents\\x']])"],
+                               cwd=repo / "herramientas", capture_output=True, text=True, encoding="utf-8").stdout.strip()
+        _caja = tmp / "Dropbox" / "Compartida" / "Consorcios"
+        shutil.copytree(repo / "herramientas", _caja / "herramientas", ignore=shutil.ignore_patterns("__pycache__"))
+        shutil.copy2(repo / "NUCLEO.txt", _caja / "NUCLEO.txt")
+        _est_caja = subprocess.run([PY, str(_caja / "herramientas" / "estado.py")], cwd=_caja, capture_output=True, text=True,
+                                   encoding="utf-8", errors="replace").stdout
+        resultados.append(("estado: avisa si la carpeta está dentro de Dropbox, OneDrive, Google Drive o iCloud",
+                           _sinc == "['Dropbox', 'OneDrive', 'Google Drive', '']" and "dentro de Dropbox" in _est_caja,
+                           [_sinc, _est_caja[:600]]))
         _bat = (repo / "INSTALAR-WINDOWS.bat").read_text(encoding="utf-8")
         resultados.append(("instalador de Windows: el .bat llama al script con ruta relativa y no espera una tecla",
                            '-File "herramientas\\preparar_pc.ps1" -DobleClic' in _bat and "\npause" not in _bat.lower(), [_bat]))

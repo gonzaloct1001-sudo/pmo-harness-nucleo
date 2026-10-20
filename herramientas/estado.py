@@ -113,6 +113,14 @@ def resumen(remoto=False):
     elif instalado and _nucleo.misma_url(origin, oficial):
         lineas.append("- ATENCIÓN: el repositorio remoto de esta carpeta es el núcleo PÚBLICO. Los datos de la empresa no deben ir ahí: "
                       "sigue el paso 2 de `instalar` para crear el repositorio privado de la empresa antes de guardar.")
+    servicio = "" if mantenedor else _nucleo.carpeta_sincronizada(RAIZ)
+    if servicio:
+        lineas.append(f"- ATENCIÓN: esta carpeta está dentro de {servicio}, que la sincroniza por su cuenta. Con Git eso puede "
+                      "dañar el historial y crear copias en conflicto al trabajar desde dos computadores; si la carpeta es "
+                      "compartida, otros ven todo, incluidos los documentos confidenciales. Explícaselo en simple y recomiéndale "
+                      f"mover la carpeta a {_nucleo.lugar_sugerido()} (cerrando antes su herramienta de IA). El respaldo y el acceso "
+                      "desde otros computadores ya los da su repositorio privado de GitHub; sus documentos originales pueden "
+                      "seguir en " + servicio + " (los copia a `_entrada/` cuando quiera cargarlos).")
     if mantenedor:
         pass
     elif not instalado:

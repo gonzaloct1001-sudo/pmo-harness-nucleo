@@ -14,7 +14,15 @@ Ejecuta `python herramientas/verificar_entorno.py` (en Windows, si `python` no r
 `.venv/bin/python` o `python3`). Si ninguno responde, Python falta: pasa directo al paso 1, que no lo necesita.
 Según el resultado:
 - **Carpeta del núcleo del mantenedor** (el estado lo indica): no instales; ofrece una carpeta de empresa aparte.
-- **Carpeta nueva** (no existe `.harness/estado.yaml`, descargada como zip o clonada del núcleo): sigue todos los pasos.
+- **Carpeta nueva** (no existe `.harness/estado.yaml`, descargada como zip o clonada del núcleo): **antes de crear
+  nada**, pregunta si es su primera vez con el harness o si ya lo usa en otro computador. Si `gh auth status` está OK,
+  revisa además `gh repo list --topic pmo-harness-empresa --json name --jq ".[].name"`: si ya tiene carpetas de
+  empresa, nómbralas en la pregunta.
+  - **Primera vez:** sigue todos los pasos.
+  - **Ya lo usa en otro computador:** no crees una empresa nueva (quedaría duplicada). Haz el paso 1 si faltan
+    herramientas, conecta su cuenta de GitHub (paso 2.5) y descarga sus empresas (sección «Otra empresa, u otro
+    computador»). Luego pídele abrir en su herramienta de IA la carpeta descargada (`Documentos/PMO-Empresas/<nombre>`),
+    no esta, y escribir «hola»; esta carpeta del zip ya no la necesita.
 - **Computador nuevo** (existe `estado.yaml` pero faltan herramientas o librerías, o el control de Git está inactivo):
   pasos 1 y 2.4, luego `git pull`, el paso 4b y termina.
 - **Todo listo**: dilo en una línea y pasa al paso 3 para un proyecto nuevo (las mismas tres preguntas).
@@ -125,7 +133,7 @@ Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créa
 ```yaml
 instalado: true
 fecha_instalacion: AAAA-MM-DD
-version_harness: "2.2.2"
+version_harness: "2.2.3"
 empresa: <nombre>                      # dueña de esta carpeta (detalle en empresa/empresa.yaml)
 nucleo:
   origen: <url del núcleo>   # por defecto, la de NUCLEO.txt (repositorio público); de ahí actualizar_nucleo.py trae las mejoras
@@ -178,7 +186,8 @@ Si el usuario dice que ya dejó los documentos antes de instalar, verifica `_ent
   la carpeta padre) y ejecuta `python herramientas/nueva_empresa.py "<Nombre>" --destino <carpeta padre>` (sin
   `--sin-github` si `gh` tiene sesión: crea el repositorio privado con el tema `pmo-harness-empresa`). Luego indica que
   abra esa carpeta en VS Code y escriba «hola»; ahí se crean sus proyectos. Nunca crees proyectos de otra empresa aquí.
-- **Computador nuevo con varias empresas** («descarga mis empresas»): requiere GitHub CLI con sesión. Lista y descarga:
+- **Computador nuevo** («es otro computador», «trae mis empresas», «descarga mis empresas»; también lo ofrece el
+  instalador de doble clic): requiere GitHub CLI con sesión. Lista y descarga:
   - Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File herramientas/preparar_pc.ps1 -Clonar -Repos <a,b|todas>`
   - Mac: `bash herramientas/preparar_pc.sh --clonar --repos <a,b|todas>`
   Primero muestra la lista (ejecuta sin `-Repos` / `--repos` solo en modo interactivo; desde el chat usa
