@@ -197,6 +197,15 @@ def resumen(remoto=False):
             lineas.append(f"- {p.name}: {n_cambios} archivo(s) modificados sin guardar en Git; si el traspaso no los explica, "
                           "revisa `git status` y `git diff` antes de seguir, y ofrece `guardar-cambios`.")
     if instalado and proyectos and not mantenedor:
+        try:  # investigaciones abiertas: etapa y quién debe actuar (firmas de la persona que decide)
+            import investigacion as _inv
+            abiertas = _inv.resumen_estado(RAIZ)
+            if abiertas:
+                lineas.append("- Investigaciones abiertas (el siguiente paso de cada una, con la skill `investigar`):")
+                lineas += [f"  - {x}" for x in abiertas]
+        except Exception:
+            pass
+    if instalado and proyectos and not mantenedor:
         try:  # status breve: dónde estamos (semáforo, lo que vence, decisiones); requiere las librerías instaladas
             import status as _status
             breve = _status.resumen_breve(RAIZ)

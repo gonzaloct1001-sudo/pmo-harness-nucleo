@@ -1,0 +1,8 @@
+que_responde,fuente,nivel,acceso,costo,latencia,equivalente_abierto,que_se_pierde,nota
+Qué planta está autorizada para compostar y hasta cuándo,Registro de autorizaciones sanitarias,N1,abierto en línea,gratis,inmediata,es la fuente primaria,nada,
+Cuánto recibe cada planta y su capacidad autorizada,Declaraciones anuales obligatorias de residuos,N2,abierto en línea,gratis,un año de desfase,es la fuente primaria,la declaración del año en curso,
+Sumarios y clausuras,Actas de fiscalización sanitaria,N2,abierto en línea,gratis,semanas,es la fuente primaria,nada,
+Contratos de las plantas con el Estado,Registro de contratos públicos,N1,abierto en línea,gratis,días,es la fuente primaria,nada,
+Estatutos vigentes de la cooperativa,Registro de cooperativas,N1,abierto en línea,gratis,días,es la fuente primaria,nada,
+Planes y anuncios de las plantas,Sitios web de las plantas,N4,abierto,gratis,inmediata,no aplica,solo dicen lo que la empresa afirma,
+Noticias del rubro,Prensa regional,N5,abierto,gratis,inmediata,no aplica,solo pistas,

@@ -1,5 +1,44 @@
 # Cambios
 
+## 2.3.0 — 2026-11-09
+
+### Investigación auditable (arquetipo `investigacion`)
+- Nuevo arquetipo para cuando la respuesta depende de hechos del mundo que hay que verificar con fuentes, en cualquier
+  área: a quién ofrecer una licencia o alianza, qué socios o proveedores califican, estado del arte, patentes, due
+  diligence, normativa. Trae el **Protocolo de Investigación Auditable 1.1**: encuadre con la decisión y su negación,
+  mapa de fuentes, hipótesis asesinas antes de construir, expediente con marcas (H, D, T, P, I, S, V) y niveles de
+  fuente (N1 a N6), refutador en contexto estéril, árbitro, ocho pruebas de auditoría y seis puertas, tres de ellas
+  firmadas por la persona que decide.
+- **Tres formas de uso, a elección:** integrada en otro proyecto (por ejemplo, para sostener la sección de mercado de
+  una postulación), como proyecto propio o aislada en otra carpeta de empresa. Cada investigación vive en
+  `investigaciones/<AAAA-NN-nombre>/` y no usa hechos de otra (el validador lo controla).
+- **Se activa sola cuando corresponde:** `nuevo-proyecto` y `alta-proyecto` reconocen las señales; una regla nueva
+  de AGENTS.md (19) pide no escribir hechos del mundo de memoria y ofrecer el protocolo en cualquier proyecto;
+  `preparar-postulacion` y `revisar-estudio` lo usan en las secciones que afirman hechos de afuera.
+- **`herramientas/investigacion.py`:** dice el siguiente paso en palabras simples (qué hacer, qué leer, qué pedirle a
+  la persona, con la frase exacta para firmar); valida todo lo verificable (marcas, fuentes, ID, puertas en orden,
+  construir antes de matar, aislamiento); **corrige solo lo mecánico** con vista previa y lo deja anotado; corre las
+  pruebas mecánicas de auditoría y la muestra al azar con semilla repetible; sube la intensidad.
+- **Aprende de cada empresa:** `--ajustar`, `--preferencia` y `--aprender` guardan valores por defecto, preferencias
+  de las personas y lecciones de método en `empresa/investigacion/`, con quién y cuándo. Las investigaciones nuevas
+  los aplican. Ninguna actualización del núcleo toca esa carpeta. Las lecciones que valgan para todos se exportan sin
+  datos del caso (`--exportar-lecciones`).
+- Skill `investigar` (orquesta el flujo y explica cada firma en dos líneas), subagentes `bibliotecario`, `refutador`
+  y `arbitro`, fichas de los siete roles, reporte `informe-investigacion`, cartuchos de dominio en
+  `biblioteca/dominios/` (incluye `propiedad-industrial`; los propios de la empresa se conservan al actualizar) y
+  ejemplo ficticio `ejemplos/investigacion-demo`.
+- Arreglos sobre la versión 1.0 del protocolo: quién escribe las hipótesis asesinas, un solo momento para las ocho
+  pruebas, registro de las seis puertas, «no buscado» separado de «buscado sin resultado», marca P para pistas,
+  columna de origen para la independencia, numeración de archivos por etapa, intensidades precisas y fuente de
+  verdad en los archivos (detalle en `arquetipos/investigacion/protocolo/PROTOCOLO.md`).
+- Controles: el hook de edición y el control de Git validan los registros de investigación; el material descargado
+  (`investigaciones/<id>/_crudo/`) no se sube a Git; el estado de inicio lista las investigaciones abiertas y quién
+  debe firmar.
+
+### Corrección
+- `actualizar_nucleo.py`: dos actualizaciones en el mismo segundo ya no comparten la carpeta de respaldo (la segunda
+  usa `_2`, `_3`…); antes, revertir la segunda podía restaurar también lo de la primera.
+
 ## 2.2.4 — 2026-10-20
 
 ### Menos pasos en la instalación

@@ -19,6 +19,7 @@ SENSIBLES = [
     (r"(^|/)contenidos/archivos/", "documento del banco de contenidos (CV, certificados, antecedentes legales)"),
     (r"(^|/)entrega/final/", "paquete final presentado (firmas, declaraciones juradas, garantías)"),
     (r"(^|/)proyectos/[^/]+/postulaciones/(?!LEEME\.md$)", "documento de una postulación de terceros"),
+    (r"(^|/)investigaciones/[^/]+/_crudo/", "material descargado sin procesar de una investigación (páginas y documentos de terceros)"),
     (r"(^|/)\.env(\.|$)", "archivo de variables de entorno"),
     (r"\.(pem|key|p12|pfx)$", "llave o certificado"),
     (r"(credencial|password|contrasena|contraseña|secret|token)", "posible credencial"),
@@ -105,10 +106,24 @@ def revisar_yaml(ruta):
     return problemas
 
 
+def revisar_investigacion(ruta):
+    """Registros de una investigación (investigaciones/<id>/*.csv): columnas y valores del protocolo. Nunca rompe el hook."""
+    if "investigaciones" not in Path(ruta).parts:
+        return []
+    try:
+        carpeta = str(Path(__file__).resolve().parent.parent)
+        if carpeta not in sys.path:
+            sys.path.insert(0, carpeta)
+        import investigacion
+        return investigacion.revisar_archivo(ruta)
+    except Exception:
+        return []
+
+
 def revisar(ruta):
     ext = Path(ruta).suffix.lower()
     if ext == ".csv":
-        return revisar_csv(ruta)
+        return revisar_csv(ruta) + revisar_investigacion(ruta)
     if ext in (".yaml", ".yml"):
         return revisar_yaml(ruta)
     return []

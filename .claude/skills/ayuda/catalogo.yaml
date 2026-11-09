@@ -43,6 +43,14 @@ arquetipos:
     rutina: ["Cada vez que llega material de las bases (aclaraciones, foro): barrer requisitos y actualizar la matriz.",
              "Cada semana, y a diario en la última semana: revisar el estado (etapa, compuerta, vencimientos).",
              "Antes de entregar: red team, revisión oro y guante blanco, verificación de autoría."]
+  investigacion:
+    nombre: Investigación auditable
+    que_es: La respuesta depende de hechos del mundo que hay que verificar con fuentes (contrapartes, candidatos, estado del arte, patentes, normativa); cada afirmación con marca y fuente, puertas que firma quien decide y un refutador independiente.
+    carpetas: ["investigaciones/<AAAA-NN-nombre>/ (encuadre, mapa de fuentes, hipótesis asesinas, expediente, bitácora, vacíos, conclusiones, impugnaciones, auditoría, entregable)",
+               "empresa/investigacion/ (ajustes y lecciones de la empresa: no los toca una actualización)"]
+    rutina: ["Preguntar «¿cuál es el siguiente paso de la investigación?»: el asistente lo dice y pide solo las firmas que te tocan (P0, P2 y P5).",
+             "Antes de usar un resultado en una postulación o informe: que la investigación esté cerrada y su validador en OK.",
+             "Al cerrar: revisar las lecciones y decir cuáles valen para las próximas."]
   programa:
     nombre: Programa con subproyectos
     que_es: Un contrato general ejecutado en varios subproyectos, cada uno con su Gantt, presupuesto, equipo, riesgos, minutas y reportes; visión consolidada del programa.
@@ -92,6 +100,8 @@ skills:
      ejemplos: ["revísalo como el comité", "hazle un red team a la propuesta", "¿qué le falta para ganar?"]}
   - {id: gestionar-programa, para: "Programa con subproyectos: personas, presupuesto, contingencia, enmiendas por subproyecto y estado consolidado", arquetipos: [programa],
      ejemplos: ["¿cómo va el programa completo?", "agrega un subproyecto de integración", "Luis pasa al 50% en el portal", "usa 10 millones de contingencia en el ERP"]}
+  - {id: investigar, para: "Investigación auditable: hechos del mundo verificados con fuente, hipótesis asesinas, refutador y entregable que un tercero puede auditar", arquetipos: [todos],
+     ejemplos: ["investiga a quién le podemos ofrecer la licencia", "¿es cierto lo que dice este informe?", "¿cuál es el siguiente paso de la investigación?", "firmo P2"]}
   - {id: guardar-cambios, para: "Guardar y subir el trabajo a GitHub de forma segura", arquetipos: [todos],
      ejemplos: ["guarda", "respalda el trabajo del día", "sube los cambios"]}
   - {id: actualizar-gantt, para: "Actualizar avance y fechas del cronograma", arquetipos: [ejecucion, obra],

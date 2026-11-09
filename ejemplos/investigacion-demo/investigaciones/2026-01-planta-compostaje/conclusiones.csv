@@ -1,0 +1,5 @@
+id,conclusion,marca,confianza,sustento,se_revierte_si,portante,estado,nota
+C-01,"Planta Norte Compost SpA debe ser la principal: autorización vigente hasta 2029 y 900 t de capacidad ociosa, más que las 400 t que se necesitan",D,alta,E-01 E-03 E-04 E-06,Aparece un sumario sanitario de Planta Norte o un contrato que cope su capacidad ociosa,si,vigente,
+C-02,"Biorresiduos del Valle sirve de respaldo parcial: autorización vigente, pero solo 150 t ociosas",D,alta,E-02 E-03 E-05 E-06,Su declaración 2026 muestra 400 t o más de capacidad ociosa,si,vigente,
+C-03,La ampliación anunciada permitiría usar Biorresiduos del Valle como principal en 2027,I,baja,E-07,Se inscribe la ampliación en el registro de autorizaciones,no,retirada,retirada por I-02
+C-04,La gerenta puede firmar sin el consejo mientras el monto anual no supere UF 1.000,D,alta,E-09 E-13,El contrato supera UF 1.000 al año o se inscribe una reforma de estatutos,si,vigente,

@@ -1,0 +1,5 @@
+id,pase,objeto,impugnacion,letalidad,resultado,evidencia,refutador,nota
+I-01,1,HA-3,"La capacidad autorizada no es la capacidad usada: hay que mirar lo recibido, no lo permitido",media,sostenida,E-04 E-05,"refutador (subagente, contexto estéril)",la hipótesis se corrió con lo declarado como recibido
+I-02,2,C-03,"Descansa solo en lo que afirma la propia empresa (T, N4): no prueba capacidad futura",alta,retirada,,"refutador (subagente, contexto estéril)",
+I-03,2,C-01,La prensa sugiere que Planta Norte comprometería su capacidad con otra ciudad,alta,sostenida,E-12,"refutador (subagente, contexto estéril)",el registro de contratos no lo confirma
+I-04,2,C-04,Los estatutos entregados por la solicitante podrían no ser los vigentes,media,sostenida,E-13,"refutador (subagente, contexto estéril)",

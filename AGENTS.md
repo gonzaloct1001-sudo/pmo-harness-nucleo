@@ -64,7 +64,9 @@ privado**, independiente de los de las empresas (skill `status`).
    cumplimiento, pauta inversa, red team, presupuesto con controles) · `programa` (contrato padre con varios
    subproyectos: presupuesto macro y por subproyecto, contingencia, personas compartidas, Gantt macro y por
    subproyecto, enmiendas que afectan subproyectos) · `estudio` (preguntas, supuestos, modelo económico,
-   recomendación). Un proyecto puede combinar arquetipos.
+   recomendación) · `investigacion` (investigación auditable: hechos del mundo verificados con fuente, hipótesis
+   asesinas, refutador, árbitro y puertas que firma quien decide; integrada en otro proyecto, como proyecto propio o
+   aislada en otra carpeta). Un proyecto puede combinar arquetipos.
 3. **Empresa** — `empresa/`: lo común a todos los proyectos de la empresa dueña de la carpeta: `empresa.yaml`
    (identidad, autoría, marca, formato, política de réplicas), banco de antecedentes (`contenidos/`: descripción,
    experiencia, CVs, certificados con vigencia), `estilo.md`, `marca/`, `plantillas/` y formatos de reportes
@@ -75,9 +77,13 @@ privado**, independiente de los de las empresas (skill `status`).
 Además:
 - `biblioteca/perfiles/` → diseños reutilizables. Incluye perfiles de convocatorias: `fondo-corfo`, `fondo-anid`,
   `licitacion-mercado-publico`, `fondo-regional-o-sectorial`, `licitacion-privada-rfp` (siempre se confirman contra las bases).
+- `biblioteca/dominios/` → cartuchos de dominio para investigaciones (mapa de fuentes y modos de falla de un rubro);
+  el núcleo trae `propiedad-industrial`; los demás son de la empresa.
+- `empresa/investigacion/` → ajustes, preferencias y lecciones de investigación de la empresa (los escribe
+  `investigacion.py`; una actualización del núcleo nunca los toca).
 - `ejemplos/` → material ficticio de prueba (`demo-andes`, `paquete-alta-andes`, `portafolio-acciones`,
-  `fondo-innovacion`, `estudio-solar`, `equipo-software`, `paquete-postulacion-demo`, `postulacion-demo`, `programa-demo`).
-  No son proyectos reales.
+  `fondo-innovacion`, `estudio-solar`, `equipo-software`, `paquete-postulacion-demo`, `postulacion-demo`, `programa-demo`,
+  `investigacion-demo`). No son proyectos reales.
 - `.harness/estado.yaml` → registro de la instalación (empresa, origen del núcleo) · `.harness/asistentes.yaml` →
   asistentes de IA configurados · `pruebas/` → batería de pruebas.
 
@@ -158,6 +164,11 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     trae la ruta completa de la carpeta abierta en el editor. Si algo queda esperando, detenlo y ofrece el instalador
     de doble clic (`INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`), que abre una ventana donde el usuario sí puede
     responder; tú no lo ejecutes.
+19. **Hechos del mundo, con protocolo.** En cualquier proyecto, si una tarea exige afirmar hechos de afuera (terceros,
+    registros, mercado, normativa, tecnología) que sostendrán una decisión o un entregable, no los escribas de
+    memoria: ofrece en una línea abrir una investigación (skill `investigar`; parte en sondeo, que toma horas) y, si
+    el usuario prefiere seguir sin ella, marca esas afirmaciones como estimadas o sin verificar. Las firmas de las
+    puertas P0, P2 y P5 son siempre del usuario; nunca las pongas tú.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con
@@ -205,6 +216,7 @@ reemplaza al actualizarlo; las skills propias no.
 | `matriz-cumplimiento` | Todos los requisitos de las bases (barrido exhaustivo), dueños, evidencia y checklist de entrega | `.claude/skills/matriz-cumplimiento/SKILL.md` |
 | `red-team` | Panel de revisores con perspectivas distintas: puntaje estimado, fallas fatales y plan de respuesta | `.claude/skills/red-team/SKILL.md` |
 | `gestionar-programa` | Programa con subproyectos: personas, presupuesto y contingencia, enmiendas, estado consolidado | `.claude/skills/gestionar-programa/SKILL.md` |
+| `investigar` | Investigación auditable: hechos verificados con fuente, hipótesis asesinas, refutador, puertas y entregable auditable; también auditar un informe que afirma hechos («investiga a quién ofrecer…», «¿es cierto que…?», «firmo P2») | `.claude/skills/investigar/SKILL.md` |
 | `status` | Status de todos los proyectos (semáforos, lo que vence, decisiones), reporte web semanal y tablero de varias empresas («¿cómo vamos?») | `.claude/skills/status/SKILL.md` |
 | `formulario-plataforma` | Formulario de una plataforma sin documento descargable: reconstruirlo, controlar límites, Word de trabajo y hoja para copiar y pegar | `.claude/skills/formulario-plataforma/SKILL.md` |
 | `ayuda` | Qué puede hacer el harness en el proyecto activo, con frases de ejemplo («¿qué puedo hacer?») | `.claude/skills/ayuda/SKILL.md` |
@@ -215,7 +227,8 @@ reemplaza al actualizarlo; las skills propias no.
 Roles en `.claude/agents/`: `lector-documental` (lee lotes de documentos y devuelve hechos con fuente) ·
 `revisor-independiente` (revisa con ojo crítico antes de entregar) · `evaluador-propuestas` (evalúa una propuesta
 por vez contra la pauta) · `analista-datos` (procesa y revisa datos sin modificarlos) · `revisor-red-team` (una
-perspectiva del red team por vez).
+perspectiva del red team por vez) · `bibliotecario`, `refutador` y `arbitro` (roles de una investigación auditable:
+recuperar sin interpretar, refutar en contexto estéril, aplicar las reglas de evidencia).
 
 - **Con subagentes** (Claude Code): invócalos como dice cada SKILL.md.
 - **Sin subagentes:** aplica el rol tú mismo en un paso separado: lee su `.md`, adopta solo esa perspectiva, lee
@@ -251,6 +264,9 @@ perspectiva del red team por vez).
 - `presupuesto_postulacion.py <presupuesto.yaml>` → Excel del presupuesto con fórmulas, fuentes y controles contra las bases.
 - `guia_proyecto.py <ruta-proyecto> | --general` → guía del usuario (`GUIA.md`).
 - `programa.py <ruta-programa> [--excel] [--registrar]` → estado consolidado del programa, presupuesto, personas, enmiendas y Gantt macro.
+- `investigacion.py <ruta-proyecto> [--instancia id] [--nueva nombre | --revisar | --corregir [--aplicar] | --auditar | --muestra | --subir nivel | --aprender]`
+  → investigaciones: siguiente paso, validación del protocolo, corrección de lo mecánico, auditoría y aprendizaje;
+  `--ajustar clave=valor` y `--preferencia "texto"` guardan los ajustes de la empresa.
 - `modelo_economico.py <supuestos.yaml>` → Excel con flujo de caja, VAN, TIR y sensibilidad (con fórmulas).
 - `comparar_documentos.py <anterior> <nuevo>` → diferencias entre documentos, destacando las sustantivas.
 - `extraer_entrada.py <ruta-proyecto> [--origen carpeta]` → inventario, texto y réplicas en `fuentes/` (incremental).

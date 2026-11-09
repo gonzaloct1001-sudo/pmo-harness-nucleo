@@ -55,6 +55,10 @@ Revisión azul: pide al subagente `revisor-independiente` que critique la estrat
   primero `empresa/contenidos/` (común a todas las postulaciones de la empresa) y luego `contenidos/` de la postulación.
 - Escribe para el evaluador: los términos de la pauta, evidencia concreta, cifras con fuente, nada que no se pueda
   cumplir y rendir. Respeta los límites (cuenta caracteres o páginas).
+- **Secciones que afirman hechos de afuera** (mercado, competencia, estado del arte, propiedad intelectual, socios,
+  normativa): si no hay fuente verificable para lo que se afirma, ofrece en una línea una investigación integrada
+  (skill `investigar`, en sondeo) y cita después sus conclusiones (C-xx) o hechos (E-xx). Un evaluador experto tumba
+  primero esas afirmaciones.
 - Revisión rosa con `red-team` (ronda `rosa`): estructura, cumplimiento y temas ganadores.
 
 ## 6. Presupuesto y evaluación económica

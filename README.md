@@ -117,6 +117,7 @@ combinación) y propone lo propio del dominio. Algunos ejemplos:
 | Postular a un fondo (CORFO, ANID, regional) o presentar una oferta a una licitación | postulación | Go/No-Go, barrido de bases y matriz de cumplimiento, pauta inversa, estrategia, secciones trazables, presupuesto con controles en Excel, red team, checklist de entrega |
 | Programa con un contrato general y varios subproyectos (presupuesto macro y por subproyecto, personas compartidas, enmiendas que afectan subproyectos) | programa + ejecución | Subproyectos con su Gantt, objetivos, riesgos, minutas y reportes; Gantt macro, control presupuestario con contingencia, dotación y sobreasignación, estado consolidado |
 | Prefactibilidad o evaluación económica | estudio | Preguntas, supuestos con fuente, modelo en Excel con VAN/TIR y sensibilidad |
+| Investigar a quién ofrecer una licencia, qué socios o proveedores califican, el estado del arte, patentes, una due diligence o si algo es cierto (en cualquier área) | investigación (sola o junto a postulación o estudio) | Protocolo auditable: encuadre con la decisión, hipótesis asesinas antes de construir, expediente con marcas y niveles de fuente, refutador independiente, ocho pruebas, puertas que firma quien decide; validador que guía, corrige lo mecánico y aprende los ajustes de cada empresa |
 
 Los diseños que quieras reutilizar se guardan como perfiles en `biblioteca/perfiles/`. Vienen incluidos perfiles
 de convocatorias: `fondo-corfo`, `fondo-anid`, `licitacion-mercado-publico`, `fondo-regional-o-sectorial` y
@@ -268,6 +269,17 @@ de IA, un certificado con vigencia máxima y un presupuesto del cliente que no c
    detallado, el de cada subproyecto y el control presupuestario en Excel.
 2. Para uno propio: «nuevo proyecto» → «programa nuevo», y luego «agrega un subproyecto». Un proyecto sin relación con el
    programa se crea aparte («nuevo proyecto» → «independiente»).
+
+### Prueba 9 — Investigación auditable (arquetipo investigación)
+`ejemplos/investigacion-demo/` es una investigación ficticia cerrada (qué planta de compostaje contratar), con todas
+sus puertas firmadas, un testimonio que no se deja pasar como hecho, una conclusión retirada por el refutador y una
+planta en reserva por falta de evidencia.
+1. `python herramientas/investigacion.py ejemplos/investigacion-demo --revisar --hoy 2026-10-30`: 0 errores.
+2. `python herramientas/investigacion.py ejemplos/investigacion-demo --instancia 2026-01-planta-compostaje --auditar --hoy 2026-10-30`
+   y `--muestra --semilla 7`: pruebas mecánicas y muestra al azar repetible.
+3. Para una propia: **«investiga a quién le podríamos ofrecer la licencia de X»**. El asistente abre la investigación
+   en sondeo, te pide la firma del encuadre (P0) y después de las hipótesis asesinas (P2), y en cada momento puedes
+   preguntar **«¿cuál es el siguiente paso de la investigación?»**.
 ---
 
 ## Robustez: subagentes, hooks y pruebas

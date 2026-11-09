@@ -723,6 +723,13 @@ def main():
         (e2 / ".claude" / "skills" / "mi-skill" / "SKILL.md").write_text("---\nname: mi-skill\n---\nPropia.\n", encoding="utf-8")
         with open(e2 / "README.md", "a", encoding="utf-8") as f:
             f.write("\nnota local\n")
+        # Lo propio de la empresa en investigación: un cartucho de su rubro, sus ajustes y sus lecciones
+        (e2 / "biblioteca" / "dominios" / "mi-rubro.md").write_text("# Cartucho de dominio: mi rubro\n", encoding="utf-8")
+        (e2 / "empresa" / "investigacion").mkdir(parents=True, exist_ok=True)
+        (e2 / "empresa" / "investigacion" / "ajustes.yaml").write_text("por_defecto:\n  intensidad: \"estandar\"\n", encoding="utf-8")
+        (e2 / "empresa" / "investigacion" / "lecciones.csv").write_text("id,fecha,leccion\nL-01,2026-11-01,propia\n", encoding="utf-8")
+        _propios_inv = {p: (e2 / p).read_bytes() for p in ("biblioteca/dominios/mi-rubro.md", "empresa/investigacion/ajustes.yaml",
+                                                             "empresa/investigacion/lecciones.csv")}
         prueba("actualizar_nucleo: vista previa sin cambios", [str(e2 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(fuente)], e2,
                ["→ 9.9", "1 nuevos", "1 eliminados", "Modificados a mano", "README.md", ".claude/skills/mi-skill/SKILL.md",
                 "Novedad de prueba", "Vista previa: nada cambió"])
@@ -743,10 +750,31 @@ def main():
                            [f"respaldo: {_resp}", (e2 / ".harness" / "estado.yaml").read_text(encoding="utf-8")[:300]]))
         prueba("estado: anuncia las skills propias de la empresa", [str(e2 / "herramientas" / "estado.py")], e2,
                ["Skills propias de esta carpeta", "mi-skill"])
+        _manif_e2 = (e2 / ".harness" / "nucleo-instalado.csv").read_text(encoding="utf-8")
+        resultados.append(("actualizar_nucleo: conserva el cartucho, los ajustes y las lecciones de investigación de la empresa",
+                           all((e2 / p).exists() and (e2 / p).read_bytes() == b for p, b in _propios_inv.items())
+                           and "biblioteca/dominios/mi-rubro.md" not in _manif_e2 and "biblioteca/dominios/propiedad-industrial.md" in _manif_e2
+                           and (e2 / "herramientas" / "investigacion.py").exists(), [_manif_e2[-400:]]))
+        # Dos actualizaciones en el mismo segundo: cada una con su propia carpeta de respaldo (antes compartían y revertir
+        # la segunda restauraba también lo de la primera)
+        from datetime import datetime as _dt, timedelta as _td
+        _base_resp = e2 / ".harness" / "respaldo-nucleo"
+        _previas = {c.name for c in _base_resp.iterdir()} if _base_resp.exists() else set()
+        _ahora = _dt.now()
+        _ocupadas = [_base_resp / (_ahora + _td(seconds=s)).strftime("%Y-%m-%d_%H%M%S") for s in range(0, 120)]
+        _ocupadas = [c for c in _ocupadas if c.name not in _previas]
+        for _c in _ocupadas:
+            _c.mkdir(parents=True, exist_ok=True)
         (fuente / "herramientas" / "tercero_de_prueba.py").write_text("print('3')\n", encoding="utf-8")
         prueba("actualizar_nucleo: una segunda actualización también se aplica", [str(e2 / "herramientas" / "actualizar_nucleo.py"),
                "--desde", str(fuente), "--aplicar", "--sin-pruebas"], e2, ["1 nuevos", "Aplicado"], ausentes=["mi-skill/SKILL.md\n  - "],
                env=env_git)
+        _con_sufijo = [c for c in _base_resp.iterdir() if c.name.endswith("_2") and any(c.rglob("*"))]
+        resultados.append(("actualizar_nucleo: si la carpeta de respaldo del segundo ya existe, usa otra (sufijo _2)",
+                           bool(_con_sufijo) and not any(any(c.rglob("*")) for c in _ocupadas),
+                           [str(sorted(c.name for c in _base_resp.iterdir())[-5:])]))
+        for _c in _ocupadas:
+            shutil.rmtree(_c, ignore_errors=True)
         resultados.append(("actualizar_nucleo: la skill propia sobrevive a actualizaciones sucesivas",
                            (e2 / ".claude" / "skills" / "mi-skill" / "SKILL.md").exists()
                            and (e2 / "herramientas" / "tercero_de_prueba.py").exists()
@@ -1157,6 +1185,198 @@ def main():
                            ("/SC WEEKLY /D MON /ST 09:00" in _ag) if os.name == "nt" else ("StartCalendarInterval" in _ag or "cron" in _ag), [_ag[:400]]))
         prueba("agendar_status: valida la hora", [H + "agendar_status.py", "--dia", "lunes", "--hora", "25:00", "--simular"], repo,
                ["--hora HH:MM"], codigo=1)
+
+        # --- v2.3 · Investigación auditable (arquetipo investigacion) ---
+        INV = H + "investigacion.py"
+        demo_inv = "ejemplos/investigacion-demo"
+        inst_demo = "2026-01-planta-compostaje"
+        prueba("investigacion: el ejemplo cerrado y correcto da 0 errores", [INV, demo_inv, "--revisar", "--hoy", "2026-10-30"], repo,
+               ["Resultado: 0 error(es). OK.", "P5 firmada (Marta Soto, 2026-10-28)", "Cerrada el 2026-10-30"])
+
+        def _csv_leer(r):
+            with open(r, encoding="utf-8", newline="") as fh:
+                return list(csv.reader(fh))
+
+        def _csv_escribir(r, filas):
+            with open(r, "w", encoding="utf-8", newline="") as fh:
+                csv.writer(fh).writerows(filas)
+
+        def _cambiar(i, nombre, fila_id, col, valor):
+            filas = _csv_leer(i / nombre)
+            k = filas[0].index(col)
+            for f in filas[1:]:
+                if f[0] == fila_id:
+                    f[k] = valor
+            _csv_escribir(i / nombre, filas)
+
+        def _agregar(i, nombre, texto):
+            (i / nombre).write_text((i / nombre).read_text(encoding="utf-8") + texto, encoding="utf-8")
+
+        def _manifiesto(i, antes, despues):
+            (i / "manifiesto.yaml").write_text((i / "manifiesto.yaml").read_text(encoding="utf-8").replace(antes, despues), encoding="utf-8")
+
+        _mutaciones = [
+            ("H con fuente N4", lambda i: _cambiar(i, "expediente.csv", "E-07", "marca", "H"), "H solo con fuentes N1 a N3"),
+            ("P2 firmada por un agente", lambda i: (_cambiar(i, "puertas.csv", "P2", "firma", "árbitro: Claude"),
+                                                    _cambiar(i, "puertas.csv", "P2", "tipo_firma", "arbitro")), "la firma una persona"),
+            ("hipótesis que dispara a medias", lambda i: _cambiar(i, "E2_hipotesis.csv", "HA-3", "estado", "parcial"), "divídela en dos"),
+            ("«no consultado» en la bitácora", lambda i: _agregar(i, "bitacora.csv", "2026-10-26,bibliotecario,Registro,cesion,nulo,,no consultado todavía\n"),
+             "no es una búsqueda hecha"),
+            ("conclusión sin qué la revertiría", lambda i: _cambiar(i, "conclusiones.csv", "C-01", "se_revierte_si", "ninguno"), "qué hallazgo la revertiría"),
+            ("entregable con un ID inexistente", lambda i: _agregar(i, "E6_entregable.md", "\nVer E-99.\n"), "cita E-99, que no existe"),
+            ("entregable con un hecho de otra investigación", lambda i: (shutil.copytree(i, i.parent / "2026-02-otra"),
+                                                                         _agregar(i, "E6_entregable.md", "\nSegún 2026-02-otra/E-03.\n")), "de otra investigación"),
+            ("refutador con lista vacía", lambda i: _csv_escribir(i / "E5_impugnaciones.csv", _csv_leer(i / "E5_impugnaciones.csv")[:2]),
+             "Una lista vacía es fallo del refutador"),
+            ("hipótesis cerrada solo con un testimonio", lambda i: _cambiar(i, "E2_hipotesis.csv", "HA-3", "evidencia", "E-07"), "sin evidencia H o D"),
+            ("construir antes de matar", lambda i: _cambiar(i, "puertas.csv", "P2", "estado", "pendiente"), "antes de firmar P2"),
+            ("vacío buscado sin términos", lambda i: _cambiar(i, "vacios.csv", "V-01", "terminos", ""), "dónde y con qué términos"),
+            ("entregable que cita una conclusión retirada", lambda i: _agregar(i, "E6_entregable.md", "\nAdemás C-03.\n"), "conclusión retirada"),
+            ("forense con un solo refutador", lambda i: _manifiesto(i, 'intensidad: "estandar"', 'intensidad: "forense"'), "dos refutadores distintos"),
+            ("P0 firmada sin decisor", lambda i: _manifiesto(i, 'decisor: "Marta Soto"', 'decisor: ""'), "falta «decisor»"),
+            ("pista con fuente N1", lambda i: _cambiar(i, "expediente.csv", "E-11", "nivel", "N1"), "si se leyó en la fuente misma, es H"),
+            ("D sin operación", lambda i: _cambiar(i, "expediente.csv", "E-06", "operacion", ""), "D sin operación explícita"),
+            ("T sin sujeto", lambda i: _cambiar(i, "expediente.csv", "E-07", "sujeto", ""), "T sin sujeto"),
+            ("excluido sin evidencia en modo conservador", lambda i: _cambiar(i, "E3_universo.csv", "U-04", "sustento", ""), "va a reserva"),
+            ("prueba de auditoría que falla con P5 firmada", lambda i: _cambiar(i, "auditoria.csv", "8", "resultado", "falla"), "pruebas sin pasar"),
+            ("impugnación que tumbó y conclusión que sigue", lambda i: _cambiar(i, "conclusiones.csv", "C-03", "estado", "vigente"), "se retira, no se matiza"),
+            ("registro sin una columna", lambda i: _csv_escribir(i / "vacios.csv", [r[:-1] for r in _csv_leer(i / "vacios.csv")]), "columnas distintas"),
+            ("valor con tilde", lambda i: _cambiar(i, "E2_hipotesis.csv", "HA-1", "estado", "Sobrevivió"), "Corrección automática: sobrevivio"),
+            ("H sin fecha del dato", lambda i: _cambiar(i, "expediente.csv", "E-01", "dato_al", ""), "H sin fecha del dato"),
+            ("fuente N6 citada en el entregable", lambda i: (_cambiar(i, "expediente.csv", "E-11", "nivel", "N6"),
+                                                            _agregar(i, "E6_entregable.md", "\nPista E-11.\n")), "N6 jamás se cita"),
+        ]
+        _no_detectadas = []
+        for _n, (_nombre, _mutar, _esperado) in enumerate(_mutaciones):
+            _copia = tmp / "inv-mut" / f"m{_n:02d}"
+            shutil.copytree(repo / demo_inv, _copia)
+            _mutar(_copia / "investigaciones" / inst_demo)
+            _rc, _sal = correr([INV, str(_copia), "--instancia", inst_demo, "--revisar", "--hoy", "2026-10-30"], repo)
+            if _rc != 1 or _esperado not in _sal:
+                _no_detectadas.append(f"{_nombre}: rc={_rc}; falta {_esperado!r}\n{_sal[-1200:]}")
+        resultados.append((f"investigacion: el validador detecta los {len(_mutaciones)} errores sembrados (uno por copia)",
+                           not _no_detectadas, _no_detectadas))
+
+        # Corrección automática: vista previa sin cambios, luego aplica y lo deja anotado
+        _cor = tmp / "inv-cor"
+        shutil.copytree(repo / demo_inv, _cor)
+        _ci = _cor / "investigaciones" / inst_demo
+        _cambiar(_ci, "expediente.csv", "E-07", "marca", "H")
+        _cambiar(_ci, "expediente.csv", "E-11", "marca", "H")
+        _cambiar(_ci, "E2_hipotesis.csv", "HA-1", "estado", "Sobrevivió")
+        _agregar(_ci, "bitacora.csv", "2026-10-26,bibliotecario,Registro de cesiones,cesion parcial,nulo,,no consultado todavía\n")
+        _antes_cor = (_ci / "expediente.csv").read_bytes()
+        prueba("investigacion --corregir: vista previa de lo mecánico", [INV, str(_cor), "--instancia", inst_demo, "--corregir"], repo,
+               ["H con fuente N4 → T", "H con fuente N5 → P", "«Sobrevivió» → «sobrevivio»", "no se buscó → vacios.csv", "Vista previa: nada cambió"])
+        resultados.append(("investigacion --corregir: la vista previa no modifica nada", (_ci / "expediente.csv").read_bytes() == _antes_cor, []))
+        prueba("investigacion --corregir --aplicar: corrige y deja 0 errores", [INV, str(_cor), "--instancia", inst_demo, "--corregir", "--aplicar"],
+               repo, ["Aplicado", "Queda(n) 0 error(es)"])
+        _exp_cor = (_ci / "expediente.csv").read_text(encoding="utf-8")
+        _vac_cor = (_ci / "vacios.csv").read_text(encoding="utf-8")
+        resultados.append(("investigacion --corregir: cada corrección queda anotada y lo no buscado pasa a vacíos",
+                           "corregido por el validador" in _exp_cor and "[PENDIENTE: quién lo afirma]" not in _exp_cor.split("E-07", 1)[1].split("\n")[0]
+                           and "V-03,cesion parcial,no-buscado" in _vac_cor and "no consultado" not in (_ci / "bitacora.csv").read_text(encoding="utf-8"),
+                           [_exp_cor[-600:], _vac_cor]))
+        prueba("investigacion --corregir: sin nada mecánico, no cambia nada", [INV, str(_cor), "--instancia", inst_demo, "--corregir"], repo,
+               ["Nada mecánico que corregir"])
+
+        # Auditoría mecánica y muestra al azar repetible
+        prueba("investigacion --auditar: pruebas mecánicas del ejemplo", [INV, demo_inv, "--instancia", inst_demo, "--auditar", "--hoy", "2026-10-30"],
+               repo, ["Prueba 4: pasa", "Prueba 5: pasa", "Prueba 7: pasa", "Prueba 8: pasa", "Prueba 6: falta el juicio del árbitro"])
+        _aud = tmp / "inv-aud"
+        shutil.copytree(repo / demo_inv, _aud)
+        _cambiar(_aud / "investigaciones" / inst_demo, "expediente.csv", "E-09", "nota", "")
+        prueba("investigacion --auditar: dato de más de dos años sin verificar vigencia", [INV, str(_aud), "--instancia", inst_demo, "--auditar",
+               "--hoy", "2026-10-30", "--registrar"], repo, ["Prueba 4: falla", "C-04 ← E-09 (dato al 2024-05)", "Anotado en auditoria.csv"])
+        resultados.append(("investigacion --auditar --registrar: anota el resultado en auditoria.csv",
+                           "4,Antigüedad,falla" in (_aud / "investigaciones" / inst_demo / "auditoria.csv").read_text(encoding="utf-8"), []))
+        _m1 = prueba("investigacion --muestra: semilla repetible (1)", [INV, demo_inv, "--instancia", inst_demo, "--muestra", "--semilla", "7"], repo, ["Semilla 7"])
+        _m2 = prueba("investigacion --muestra: semilla repetible (2)", [INV, demo_inv, "--instancia", inst_demo, "--muestra", "--semilla", "7"], repo, ["Semilla 7"])
+        resultados.append(("investigacion --muestra: la misma semilla da la misma muestra", _m1 == _m2 and _m1.count("\n- ") == 10, [_m1[:500]]))
+
+        # Abrir investigaciones: integrada, en un proyecto sin el arquetipo, numeración, ajustes de la empresa
+        prueba("crear_proyecto: postulación con investigación integrada", [H + "crear_proyecto.py", "postu-inv", "--arquetipos",
+               "postulacion,investigacion"], repo, ["postulacion, investigacion"])
+        _pi = repo / "proyectos" / "postu-inv"
+        resultados.append(("crear_proyecto: el arquetipo investigacion agrega su carpeta y su reporte",
+                           (_pi / "investigaciones" / "LEEME.md").exists() and (_pi / "reportes" / "catalogo" / "informe-investigacion.md").exists(), []))
+        prueba("investigacion --nueva: abre una investigación integrada en sondeo", [INV, "proyectos/postu-inv", "--nueva", "Socios licencia",
+               "--hoy", "2026-11-09"], repo, ["Investigación abierta: proyectos/postu-inv/investigaciones/2026-01-socios-licencia (PIA-2026-01)",
+                                              "intensidad sondeo", "forma integrada", "Ajustes de investigación de la empresa creados"])
+        _ni = _pi / "investigaciones" / "2026-01-socios-licencia"
+        _man = (_ni / "manifiesto.yaml").read_text(encoding="utf-8")
+        resultados.append(("investigacion --nueva: manifiesto con versión del protocolo y puertas de sondeo",
+                           'protocolo: "1.1"' in _man and 'apertura: "2026-11-09"' in _man and "# Manifiesto" in _man
+                           and "P1,E1-E2,no-aplica" in (_ni / "puertas.csv").read_text(encoding="utf-8"), [_man[:900]]))
+        prueba("investigacion: una investigación recién abierta no tiene errores y guía el encuadre", [INV, "proyectos/postu-inv", "--revisar"], repo,
+               ["Resultado: 0 error(es)", "Etapa E0 · Encuadre", "No se busca nada todavía", "Falta para P0"])
+        correr([H + "crear_proyecto.py", "estudio-inv", "--arquetipos", "estudio"], repo)
+        prueba("investigacion --nueva: suma el arquetipo a un proyecto que no lo tenía y sigue la numeración",
+               [INV, "proyectos/estudio-inv", "--nueva", "competidores", "--hoy", "2026-11-09"], repo,
+               ["2026-02-competidores (PIA-2026-02)", "se sumó (arquetipos: estudio, investigacion)"])
+        prueba("investigacion --ajustar: no deja debilitar el protocolo", [INV, "--ajustar", "reglas.minimo_hipotesis=2", "--quien", "Ana"], repo,
+               ["no puede ser menor que 3"], codigo=1)
+        prueba("investigacion --ajustar: cambia el valor por defecto de la empresa", [INV, "--ajustar", "por_defecto.intensidad=Estándar",
+               "--quien", "Ana Rojas", "--motivo", "las decisiones de esta empresa son caras"], repo, ["Ajuste guardado: por_defecto.intensidad = 'estandar'"])
+        prueba("investigacion --preferencia: guarda una preferencia de la persona", [INV, "--preferencia", "Buscar también en portugués",
+               "--quien", "Ana Rojas", "--desde", "postu-inv/2026-01-socios-licencia"], repo, ["Preferencia guardada"])
+        _aj = (repo / "empresa" / "investigacion" / "ajustes.yaml").read_text(encoding="utf-8")
+        import yaml as _yaml_inv
+        _ajd = _yaml_inv.safe_load(_aj)
+        resultados.append(("investigacion: ajustes.yaml conserva sus comentarios, el historial y la preferencia",
+                           _aj.startswith("# Ajustes de investigación") and _ajd["por_defecto"]["intensidad"] == "estandar"
+                           and _ajd["historial"][0]["quien"] == "Ana Rojas" and _ajd["preferencias"][0]["texto"] == "Buscar también en portugués",
+                           [_aj]))
+        prueba("investigacion --nueva: aplica los ajustes de la empresa", [INV, "proyectos/postu-inv", "--nueva", "tercera", "--hoy", "2026-11-09"],
+               repo, ["2026-03-tercera", "intensidad estandar"])
+        prueba("investigacion: muestra las preferencias de la empresa al guiar", [INV, "proyectos/postu-inv", "--instancia", "2026-03-tercera"], repo,
+               ["Preferencias de la empresa: Buscar también en portugués"])
+        prueba("investigacion --subir: solo se sube de nivel", [INV, "proyectos/postu-inv", "--instancia", "2026-01-socios-licencia", "--subir",
+               "sondeo", "--quien", "Ana"], repo, ["Solo se sube de nivel"], codigo=1)
+        prueba("investigacion --subir: de sondeo a estándar reabre las puertas", [INV, "proyectos/postu-inv", "--instancia", "2026-01-socios-licencia",
+               "--subir", "estandar", "--quien", "Ana Rojas", "--motivo", "la decisión es cara"], repo, ["sondeo → estandar"])
+        resultados.append(("investigacion --subir: las puertas que no aplicaban vuelven a pendiente",
+                           "no-aplica" not in (_ni / "puertas.csv").read_text(encoding="utf-8"), []))
+
+        # Aprender: de la investigación a la empresa (y propuesta al núcleo sin datos del caso)
+        shutil.copytree(repo / demo_inv, repo / "proyectos" / "inv-demo")
+        prueba("investigacion --aprender: lista las lecciones de método", [INV, "proyectos/inv-demo", "--instancia", inst_demo, "--aprender"], repo,
+               ["M-01 (cartucho)", "--llevar M-01"])
+        prueba("investigacion --aprender --llevar: la lección pasa a la empresa", [INV, "proyectos/inv-demo", "--instancia", inst_demo, "--aprender",
+               "--llevar", "M-01", "--quien", "Marta Soto", "--al-nucleo"], repo, ["Llevadas a la empresa: M-01"])
+        _lec = (repo / "empresa" / "investigacion" / "lecciones.csv").read_text(encoding="utf-8")
+        resultados.append(("investigacion --aprender: lecciones.csv con origen y quién; la investigación la marca llevada",
+                           "L-01" in _lec and "inv-demo/2026-01-planta-compostaje M-01" in _lec and "Marta Soto" in _lec
+                           and "llevada-a-empresa" in (repo / "proyectos" / "inv-demo" / "investigaciones" / inst_demo / "metodo.csv").read_text(encoding="utf-8"),
+                           [_lec]))
+        prueba("investigacion --exportar-lecciones: solo método, sin el origen del caso", [INV, "--exportar-lecciones"], repo,
+               ["La capacidad se mide con la declaración obligatoria"], ausentes=["inv-demo", "planta-compostaje"])
+        prueba("investigacion: las investigaciones nuevas anuncian las lecciones de la empresa", [INV, "proyectos/postu-inv", "--instancia",
+               "2026-03-tercera"], repo, ["1 lección(es) de la empresa"])
+
+        # Integración: estado de inicio, guía, hooks y confidencialidad
+        (repo / ".harness").mkdir(exist_ok=True)
+        (repo / ".harness" / "estado.yaml").write_text("instalado: true\n", encoding="utf-8")
+        prueba("estado: lista las investigaciones abiertas y su etapa", [H + "estado.py"], repo,
+               ["Investigaciones abiertas", "postu-inv · 2026-01-socios-licencia: E0 · Encuadre en curso"], ausentes=["inv-demo · 2026"])
+        shutil.rmtree(repo / ".harness", ignore_errors=True)
+        prueba("guia_proyecto: la guía de una investigación explica el tipo y la skill", [H + "guia_proyecto.py", demo_inv, "--no-escribir"], repo,
+               ["Investigación auditable", "investigar"])
+        _exp_hook = _cor / "investigaciones" / inst_demo / "expediente.csv"
+        _cambiar(_exp_hook.parent, "expediente.csv", "E-01", "marca", "X")
+        prueba("hook: valida un registro de investigación al editarlo", [H + "hooks/validar_edicion.py"], repo,
+               ["«X» no es un valor válido de marca"], codigo=2, entrada=json.dumps({"tool_name": "Edit", "tool_input": {"file_path": str(_exp_hook)}}))
+        _bad = repo / "proyectos" / "inv-demo" / "investigaciones" / inst_demo / "puertas.csv"
+        _cambiar(_bad.parent, "puertas.csv", "P0", "estado", "firmada")
+        prueba("precommit --archivos: detiene un registro de investigación con valores inválidos", [H + "hooks/precommit.py", "--archivos",
+               "proyectos/inv-demo/investigaciones/2026-01-planta-compostaje/puertas.csv"], repo, ["«firmada» no es un valor válido de estado"], codigo=1)
+        (_bad.parent / "_crudo").mkdir()
+        (_bad.parent / "_crudo" / "pagina.html").write_text("<html>tercero</html>", encoding="utf-8")
+        prueba("precommit --archivos: el material descargado de una investigación es confidencial", [H + "hooks/precommit.py", "--archivos",
+               "proyectos/inv-demo/investigaciones/2026-01-planta-compostaje/_crudo/pagina.html"], repo, ["material descargado"], codigo=1)
+        prueba("investigacion: no abre investigaciones en un proyecto inexistente", [INV, "proyectos/no-existe", "--nueva", "x"], repo,
+               ["No encuentro el proyecto"], codigo=1)
+        shutil.rmtree(repo / "empresa", ignore_errors=True)
 
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)

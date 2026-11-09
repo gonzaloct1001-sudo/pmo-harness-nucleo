@@ -1,4 +1,4 @@
-# PMO Harness 2.2: manual de usuario
+# PMO Harness 2.3: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa.
 
@@ -110,7 +110,30 @@ Los CVs, certificados y la descripción de la empresa se guardan una vez en el *
 y sirven para todas sus postulaciones; te avisa si un certificado estará vencido al cierre.
 Si las bases exigen declarar el uso de IA, te lo avisa: esa declaración la decides y la haces tú.
 
-## 8. Varios proyectos y programas
+## 8. Investigaciones: hechos verificados con fuente
+Cuando lo que necesitas saber depende de hechos de afuera (a quién ofrecer una licencia, qué socios o proveedores
+califican, el estado del arte, patentes, normativa, si algo que te dijeron es cierto), di con tus palabras
+**«investiga…»**. El harness abre una **investigación auditable**: cualquier persona, solo con el informe y su
+expediente, puede ver de dónde salió cada afirmación y dónde se rompería.
+
+Cómo se trabaja:
+1. **Tú confirmas la pregunta** antes de que se busque nada (firma P0): qué decidirás con el resultado.
+2. **Primero se intenta matar la idea** con las «hipótesis asesinas»: lo que tendría que ser cierto para que valga
+   la pena seguir. Si alguna se cumple, se reencuadra o se cierra; es el momento más barato para detenerse. Tú
+   confirmas que ninguna disparó (firma P2).
+3. Se arma el **expediente**: cada hecho con su fuente, su fecha y una marca (H hecho verificado, D derivado, T lo que
+   alguien afirma, P pista, V vacío). Lo que dice la propia parte interesada nunca pasa como hecho.
+4. Un **refutador** que no vio el razonamiento intenta tumbar cada conclusión, y un **árbitro** aplica las reglas y
+   ocho pruebas. Lo tumbado se retira. Tú firmas antes del informe final (P5).
+5. El **informe** empieza por la respuesta, dice qué no se sabe y qué la haría cambiar.
+
+No necesitas saber el protocolo: pregunta **«¿cuál es el siguiente paso de la investigación?»** y responde con la
+frase que te propone el asistente (por ejemplo, «firmo P2»). Puede ir **dentro de otro proyecto** (por ejemplo, para
+sostener la sección de mercado de una postulación), como **proyecto propio** o en **otra carpeta** si es de otro
+cliente. Lo que corriges y prefieres («busca también en portugués», «parte en estándar») queda guardado para las
+próximas investigaciones de tu empresa, y una actualización del harness no lo borra.
+
+## 9. Varios proyectos y programas
 Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - **Independiente:** su propio contrato, presupuesto, Gantt, minutas, formatos y objetivos.
 - **Programa:** un contrato general con varios **subproyectos**, cada uno con su Gantt, objetivos, riesgos, minutas y
@@ -118,7 +141,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
   Gantt macro y los reportes generales.
 - **Subproyecto de un programa existente:** hereda la marca, los formatos y las plantillas del programa.
 
-## 9. Varias empresas, otro computador y otra IA
+## 10. Varias empresas, otro computador y otra IA
 - **Una carpeta por empresa.** Cada empresa tiene su carpeta y su repositorio privado, con su marca, sus formatos y su
   banco de antecedentes. Para otra empresa: «crea la carpeta para la empresa X». Los datos de dos empresas nunca se mezclan.
 - **Otro computador:** descarga el zip y haz doble clic en el instalador. Después de conectar GitHub te ofrece
@@ -135,7 +158,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
   entidad, y si prefieres un tablero por empresa o uno general. El tablero general queda en **una carpeta y un
   repositorio privado aparte, solo tuyo**: lee el status de cada empresa sin copiar sus datos ni mezclarlos.
 
-## 10. Privacidad: tu repositorio y el del harness
+## 11. Privacidad: tu repositorio y el del harness
 - El **harness** se publica en un repositorio público de **solo lectura**: cualquiera lo descarga, pero nadie puede
   modificarlo, salvo su autor.
 - **Tus datos van solo a tus repositorios privados**, uno por empresa. Nunca llegan al repositorio del harness, y su
@@ -149,7 +172,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - La IA que usas procesa el contenido de tus documentos según las condiciones de su proveedor. Confirma que tus
   clientes lo permiten (la ficha de inicio lo pregunta).
 
-## 11. Controles automáticos
+## 12. Controles automáticos
 - **No sube a GitHub** documentos confidenciales: la carpeta `_entrada`, originales de contratos, CVs, paquetes firmados.
   El control está en Git y funciona con cualquier IA.
 - **Revisa cada planilla** antes de guardarla (columnas y fechas).
@@ -161,7 +184,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 
 Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
 
-## 12. Preguntas frecuentes
+## 13. Preguntas frecuentes
 - **¿Tengo que saber los nombres de los comandos?** No. Describe lo que necesitas.
 - **¿Cuánto cuesta?** El harness es gratuito (licencia MIT) y GitHub también. La herramienta de IA tiene sus propios planes.
 - **¿Puedo usar Gemini, Codex, Antigravity u otra IA?** Sí, siempre que trabaje sobre la carpeta. Puedes cambiar cuando
@@ -173,12 +196,12 @@ Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
   carpeta de la empresa (o en la carpeta del tablero único).
 - **¿El reporte semanal se envía solo?** Se prepara solo, en tu computador, el día y la hora que elijas, y se abre en tu
   navegador. No se envía a nadie. Para cambiarlo o quitarlo: «cambia el día del reporte semanal», «quita el reporte semanal».
-- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 9).
+- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 10).
 - **¿Necesito los documentos originales en otro computador?** Casi nunca: las bases y los documentos de definición
   están replicados en `fuentes/`. Los originales hacen falta para firmar o presentar, o ante una duda legal.
 - **¿Cómo pruebo sin datos reales?** Pídele «prueba con el paquete de postulación de ejemplo».
 
-## 13. Si algo falla
+## 14. Si algo falla
 - **La IA no reconoce el harness:** escríbele «lee el archivo AGENTS.md y sigue sus instrucciones».
 - **«python no se reconoce»:** pide «instala lo que falte». Si recién se instaló, cierra y vuelve a abrir tu herramienta.
 - **En el chat, algo se queda detenido** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes

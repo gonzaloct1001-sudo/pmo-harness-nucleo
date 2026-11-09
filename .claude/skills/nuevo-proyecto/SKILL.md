@@ -45,8 +45,18 @@ Lee `arquetipos/*/ARQUETIPO.md` (solo las secciones "Cuándo usarlo" al principi
   en `_entrada/`, es la opción natural; ofrece el perfil de la entidad si existe. Con muchas postulaciones a la vez,
   `cartera` para el pipeline; si se adjudica, se agrega `ejecucion`.
 - **estudio** — el producto es una respuesta o recomendación (prefactibilidad, evaluación económica).
+- **investigacion** — la respuesta depende de hechos del mundo que hay que verificar con fuentes: a quién ofrecer una
+  licencia o alianza, qué proveedores o socios califican, competidores, estado del arte, patentes, due diligence,
+  normativa, «¿es cierto que…?». Activa el protocolo de investigación auditable (skill `investigar`): se crea el
+  proyecto y se abre la primera investigación con `investigacion.py <proyecto> --nueva <nombre>`. Se diferencia de
+  `estudio` en que establece qué es cierto afuera (con marcas y fuentes), no qué conviene según un modelo; se combinan
+  si hay de ambos. Si la investigación solo alimenta otro trabajo (por ejemplo, la sección de mercado de una
+  postulación), no es un proyecto aparte: se abre dentro de ese proyecto (forma integrada). Si hay un cartucho en
+  `biblioteca/dominios/` que calce, ofrécelo.
 - Combinaciones cuando corresponda: programa con desarrollo de software = `ejecucion,agil`; obra = `ejecucion,obra`;
-  granja de bots = `cartera` para los bots (+ `agil` si el equipo los desarrolla en sprints).
+  granja de bots = `cartera` para los bots (+ `agil` si el equipo los desarrolla en sprints); postulación que debe
+  sostener con fuentes su mercado, competencia o propiedad intelectual = `postulacion,investigacion`; prefactibilidad
+  que depende de hechos de terceros = `estudio,investigacion`.
   Si existe un perfil en `biblioteca/perfiles/` que calce, ofrécelo como base.
 - Aún no hay arquetipo de *operación continua* (actividades recurrentes con indicadores de servicio): adapta
   `cartera` (ítems = servicios o activos) o `ejecucion`, y dilo.

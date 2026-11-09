@@ -1,0 +1,22 @@
+# Manifiesto de la investigación. Lo crea `investigacion.py --nueva`; se completa en el encuadre (E0).
+# Esta investigación corre aislada: lee el protocolo, el cartucho de dominio y los ajustes de la empresa, y escribe
+# solo dentro de su carpeta. Ningún hecho de otra investigación entra por referencia: se reingresa con su fuente y fecha.
+# EJEMPLO FICTICIO: entidades, registros y direcciones son inventados (dominios .example).
+
+investigacion:
+  id: "2026-01-planta-compostaje"
+  codigo: "PIA-2026-01"
+  nombre: "Planta de compostaje para 2027"
+  protocolo: "1.1"
+  cartucho: ""
+  intensidad: "estandar"
+  tolerancia: "conservador"
+  producto: investigacion
+  restriccion_fuentes: "solo acceso abierto"
+  solicitante: "Cooperativa Agrícola Valle Sur (ficticia)"
+  decisor: "Marta Soto"
+  apertura: "2026-10-19"
+  cierre: "2026-10-30"
+  forma: propia
+  alimenta: ""
+  vista_externa: ""

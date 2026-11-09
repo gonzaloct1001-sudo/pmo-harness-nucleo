@@ -101,6 +101,8 @@ def revisar_proyectos():
                 comandos.append(["postulacion.py"])
             if "programa" in arqs:
                 comandos.append(["programa.py", "--sin-gantt"])
+            if "investigacion" in arqs and (RAIZ / "herramientas" / "investigacion.py").exists():
+                comandos.append(["investigacion.py"])  # sin --revisar: comprueba que el script lee las investigaciones
             rel = c.relative_to(RAIZ).as_posix()
             for script, *extra in comandos:
                 try:
@@ -175,7 +177,11 @@ def main():
 
         # Rutas largas de Windows: todas las operaciones de archivos pasan por el prefijo \\?\
         local, nueva = _nucleo.ruta_larga(RAIZ), _nucleo.ruta_larga(fuente)
-        respaldo = local / ".harness" / "respaldo-nucleo" / datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        base_respaldo = local / ".harness" / "respaldo-nucleo" / datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        respaldo, n = base_respaldo, 1
+        while respaldo.exists():  # dos actualizaciones en el mismo segundo no comparten respaldo (revertir una no toca la otra)
+            n += 1
+            respaldo = base_respaldo.with_name(f"{base_respaldo.name}_{n}")
         for rel in p["reemplazar"] + p["eliminar"] + [_nucleo.MANIFIESTO.as_posix(), ".harness/estado.yaml"]:
             src = local / rel
             if src.exists():

@@ -1,0 +1,18 @@
+# Ajustes de investigación de esta empresa: se aplican a cada investigación nueva.
+# Una actualización del núcleo nunca toca este archivo. Se cambia conversando («de ahora en adelante…»): el asistente
+# usa `investigacion.py --ajustar` o `--preferencia`, que dejan registrado quién lo pidió, cuándo y por qué.
+
+por_defecto:
+  intensidad: sondeo          # sondeo | estandar | forense
+  tolerancia: ""              # conservador | exploratorio; vacío = se decide en cada encuadre
+  restriccion_fuentes: ""     # p. ej. "solo acceso abierto"
+  cartucho: ""                # biblioteca/dominios/<dominio>.md que se usa si no se indica otro
+reglas:
+  antiguedad_max_anios: 2     # prueba 4: antigüedad máxima de un dato sin verificar su vigencia
+  minimo_hipotesis: 5         # cuántas hipótesis asesinas se esperan antes de P2 (bajo 3 no se puede firmar)
+  muestra_trazabilidad: 10    # prueba 1: afirmaciones al azar
+refutador:
+  asistente: ""               # otro asistente de .harness/asistentes.yaml para el pase 2 (vacío = subagente con contexto limpio)
+  modelo: ""                  # en Claude Code, modelo para refutador y árbitro (p. ej. opus); vacío = el de la sesión
+preferencias: []              # cómo quieren trabajar las personas de la empresa: {texto, quien, fecha, desde}
+historial: []                 # cambios a estos ajustes: {fecha, quien, cambio, motivo}

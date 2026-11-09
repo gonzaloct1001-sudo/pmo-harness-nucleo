@@ -1,0 +1,14 @@
+fecha,rol,fuente,terminos,resultado,entradas,nota
+2026-10-20,bibliotecario,Registro de autorizaciones sanitarias,compostaje región,encontrado,E-01 E-02 E-03,
+2026-10-21,bibliotecario,Declaraciones anuales de residuos,76000001 2025,encontrado,E-04,
+2026-10-21,bibliotecario,Declaraciones anuales de residuos,7600000K 2025,encontrado,E-05,
+2026-10-21,bibliotecario,Declaraciones anuales de residuos,Compostera Los Robles 2025,nulo,,ver V-01
+2026-10-21,bibliotecario,Sitio web de Biorresiduos del Valle,capacidad ampliación,encontrado,E-07,
+2026-10-22,bibliotecario,Ordenanzas municipales,residuos orgánicos traslado,encontrado,E-08,
+2026-10-22,bibliotecario,Estatutos entregados por la solicitante,facultades gerencia,encontrado,E-09,
+2026-10-22,bibliotecario,Actas de fiscalización sanitaria,Verde Sur,encontrado,E-10,
+2026-10-22,bibliotecario,Sitios web de las plantas,tarifa por tonelada,nulo,,ver V-02
+2026-10-25,refutador,Prensa regional,Planta Norte contrato,encontrado,E-11,
+2026-10-25,refutador,Registro de contratos públicos,76000001,nulo,E-12,la ausencia quedó como hecho del registro
+2026-10-25,refutador,Actas de fiscalización sanitaria,Planta Norte sumario,nulo,,
+2026-10-26,refutador,Registro de cooperativas,Valle Sur estatutos,encontrado,E-13,

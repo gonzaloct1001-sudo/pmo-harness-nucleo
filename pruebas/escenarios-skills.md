@@ -41,6 +41,10 @@ Repetirlos después de modificar una skill.
 | 33 | "arma la hoja de carga del formulario" con el PDF impreso del portal | `formulario-plataforma`: reconstruye, revisa el borrador con el usuario, controla límites y genera la hoja de carga |
 | 34 | "llena el Excel de indicadores con estos datos" (planilla oficial con listas desplegables) | `inspeccionar_xlsx.py` advierte; usa `llenar_xlsx.py` con vista previa y verifica lo conservado; nunca guarda con openpyxl |
 | 35 | "¿qué exigen las bases?" con una charla y una ley en `_entrada/` | Barre solo bases y formularios; menciona lo omitido; lo de la charla, si se pide, queda como no vinculante |
+| 36 | "investiga a quién le podemos ofrecer la licencia de nuestra tecnología" (proyecto de postulación existente) | `investigar`: detecta investigación, la abre integrada en sondeo (`--nueva`), escribe el encuadre sin buscar nada y pide la firma de P0 en dos líneas con la frase exacta; no firma por el usuario |
+| 37 | "eso ya lo tenemos resuelto" ante una hipótesis asesina | Lo anota como testimonio (T), explica en una línea que no cierra la hipótesis y la manda a verificar con el bibliotecario |
+| 38 | "de ahora en adelante parte en estándar y busca también en portugués" | Confirma que vale para las próximas; usa `--ajustar por_defecto.intensidad=estandar` y `--preferencia` con quién lo pidió; la siguiente `--nueva` lo aplica |
+| 39 | "¿esto se sostiene?" sobre un informe con cifras de mercado sin fuente | `investigar`, modo auditar un documento: marca cada afirmación portante, aplica las ocho pruebas y propone abrir una investigación para cerrar lo que no tiene anclaje |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

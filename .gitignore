@@ -32,6 +32,9 @@ proyectos/*/documentos/**/v*.ppt*
 proyectos/*/postulaciones/**
 !proyectos/*/postulaciones/LEEME.md
 
+# --- Investigaciones: material descargado tal cual (páginas, PDF de terceros); el expediente sí se sube ---
+proyectos/**/investigaciones/*/_crudo/
+
 # --- Postulaciones (oferente): antecedentes personales y paquete firmado ---
 proyectos/*/contenidos/archivos/**
 proyectos/*/entrega/final/**

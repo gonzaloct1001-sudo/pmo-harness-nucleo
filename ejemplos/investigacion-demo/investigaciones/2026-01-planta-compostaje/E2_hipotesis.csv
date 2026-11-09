@@ -1,0 +1,6 @@
+id,dimension,debe_ser_cierto,criterio_de_muerte,donde_se_verifica,costo,estado,evidencia,nota
+HA-1,disponibilidad,Hay al menos una planta con autorización vigente para compostaje en la región,Ninguna planta con autorización vigente,Registro de autorizaciones sanitarias,1 h,sobrevivio,E-01 E-02,
+HA-2,vigencia,Las autorizaciones siguen vigentes durante todo 2027,Vencen antes del 2027-12-31,Registro de autorizaciones sanitarias,1 h,sobrevivio,E-03,
+HA-3,capacidad,Alguna planta tiene 400 t o más de capacidad ociosa,Ninguna declara capacidad ociosa suficiente,Declaraciones anuales obligatorias,2 h,sobrevivio,E-04 E-06,
+HA-4,facultad,La cooperativa puede llevar sus residuos a otra comuna sin permiso adicional,La ordenanza exige permiso o lo prohíbe,Ordenanza municipal,1 h,sobrevivio,E-08,
+HA-5,mandato,La gerencia puede firmar el contrato sin el consejo,Los estatutos vigentes exigen acuerdo del consejo para cualquier contrato,Estatutos y registro de cooperativas,1 h,sobrevivio,E-09 E-13,

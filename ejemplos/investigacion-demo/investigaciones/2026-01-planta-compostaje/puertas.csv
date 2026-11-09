@@ -1,0 +1,7 @@
+puerta,entre,estado,firma,tipo_firma,fecha,nota
+P0,E0-E1,aprobada,Marta Soto,persona,2026-10-19,
+P1,E1-E2,aprobada,árbitro: subagente arbitro,arbitro,2026-10-20,
+P2,E2-E3,aprobada,Marta Soto,persona,2026-10-22,
+P3,E3-E4,aprobada,árbitro: subagente arbitro,arbitro,2026-10-23,
+P4,E4-E5,aprobada,árbitro: subagente arbitro,arbitro,2026-10-25,
+P5,E5-E6,aprobada,Marta Soto,persona,2026-10-28,

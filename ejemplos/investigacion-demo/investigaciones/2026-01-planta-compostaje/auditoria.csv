@@ -1,0 +1,9 @@
+prueba,nombre,resultado,detalle,quien,fecha
+1,Trazabilidad,pasa,Muestra con semilla 4242: 10 de 10 afirmaciones llegan a su fuente,árbitro (subagente),2026-10-27
+2,Tercero hostil,pasa,La planta descartada alegaría que su clausura fue temporal: queda excluida por evidencia negativa vigente en 2026 (E-10),árbitro (subagente),2026-10-27
+3,Ausencia,pasa,"Si Planta Norte tuviera problemas, habría actas de fiscalización: se buscaron y no hay (bitácora 2026-10-25)",árbitro (subagente),2026-10-27
+4,Antigüedad,pasa,Ninguna conclusión portante depende de datos de más de 2 años sin verificar.,validador,2026-10-27
+5,Independencia,pasa,Cada conclusión portante tiene orígenes distintos o un registro N1.,validador,2026-10-27
+6,Entidad,pasa,Plantas con RUT; documentos con número de autorización o URL,árbitro (subagente),2026-10-27
+7,Reversibilidad,pasa,Cada conclusión portante dice qué la revertiría.,validador,2026-10-27
+8,Cobertura,pasa,4 búsqueda(s) nula(s) registrada(s).,validador,2026-10-27

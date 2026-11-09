@@ -12,6 +12,8 @@ Reglas:
 - Solo lees. No creas, editas ni mueves archivos.
 - Cada hecho lleva su fuente: id del inventario o nombre del archivo, página o cláusula o sección, y fecha del documento.
 - Distingue: HECHO (lo dice el documento), DECLARADO (lo afirma alguien en un correo o chat) e IDEA (lo sugirió una IA o es una propuesta no aprobada).
+  Si el material va a una investigación auditable, equivalen a las marcas del protocolo: HECHO de un documento formal
+  N1–N3 = H; DECLARADO = T; IDEA = I o S; lo visto en prensa o agregadores = P.
 - No resuelvas contradicciones: repórtalas como tales, con ambas fuentes.
 - No inventes ni completes datos faltantes. Si algo importante no aparece, dilo en "Vacíos".
 - En conversaciones exportadas de otras IA, ignora las que no traten del proyecto.

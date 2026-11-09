@@ -27,6 +27,13 @@ Si el proyecto se diseñó con `nuevo-proyecto`, ya existe: pasa a la fase B.
 1. Propón un `slug` (minúsculas, guiones, sin tildes) a partir del nombre.
 2. Determina el arquetipo (ver `arquetipos/*/ARQUETIPO.md`). Si no es evidente por la descripción, créalo
    como `ejecucion` y ajústalo en la fase D según los documentos (se puede agregar un arquetipo después).
+   **Investigación:** si los documentos piden establecer hechos de terceros con fuentes (identificar contrapartes,
+   socios o candidatos; estado del arte; patentes, cesiones o licencias; due diligence; «verificar que…»), o un
+   informe de otra IA trae afirmaciones sobre el mundo sin fuente, propón en una línea sumar el arquetipo
+   `investigacion` y abrir la investigación con la skill `investigar` (las afirmaciones de esos documentos entran
+   al expediente como testimonio o pista, no como hechos). Si ya viene una investigación hecha con el protocolo
+   (carpeta con manifiesto, expediente y puertas), cópiala a `investigaciones/<id>/`, conserva los originales en
+   `investigaciones/<id>/_original/` y ejecuta `investigacion.py <proyecto> --instancia <id> --revisar`.
 3. `python herramientas/crear_proyecto.py <slug> --arquetipos <a> --nombre "<Nombre>"`
 4. Completa en `proyecto.yaml` lo que ya sepas (nombre, cliente, responsable) y agrega el slug a `.harness/estado.yaml`.
 

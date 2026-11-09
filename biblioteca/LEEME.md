@@ -19,3 +19,9 @@ Los perfiles **no** llevan datos de un proyecto real (ni mediciones, ni ítems, 
 - Crear: al terminar `nuevo-proyecto`, pide "guarda este diseño como perfil <nombre>".
 - Usar: `nuevo-proyecto` ofrece los perfiles que calcen con lo que describes, o
   `python herramientas/crear_proyecto.py <slug> --arquetipos <a> --perfil biblioteca/perfiles/<nombre>`.
+
+# Cartuchos de dominio
+
+`biblioteca/dominios/` guarda los **cartuchos** que usan las investigaciones (arquetipo `investigacion`): el mapa de
+fuentes y los modos de falla de un rubro. Los que trae el núcleo se actualizan con él; los tuyos (cualquier otro
+archivo de esa carpeta) nunca se tocan. Ver `biblioteca/dominios/LEEME.md`.

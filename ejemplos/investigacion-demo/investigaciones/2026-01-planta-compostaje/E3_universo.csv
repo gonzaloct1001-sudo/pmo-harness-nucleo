@@ -1,0 +1,5 @@
+id,candidato,identificador,senal_entrada,sustento,descalificador,estado,motivo
+U-01,Planta Norte Compost SpA,RUT 76.000.001-1,Autorización sanitaria vigente,E-01 E-03,Sumario sanitario o capacidad copada,entra,
+U-02,Biorresiduos del Valle Ltda.,RUT 76.000.002-K,Autorización sanitaria vigente,E-02 E-03,Sumario sanitario o capacidad copada,entra,
+U-03,Compostera Los Robles,RUT 76.000.003-8,Aparece en el registro de autorizaciones,,,reserva,Sin declaración anual 2025 publicada (V-01)
+U-04,Verde Sur Ltda.,RUT 76.000.004-6,Aparece en el registro de autorizaciones,E-10,Sumario con clausura temporal,excluido,Evidencia negativa: clausura temporal en 2026

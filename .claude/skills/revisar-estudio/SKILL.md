@@ -22,6 +22,10 @@ Aplica `references/checklist-etapas.md` según la etapa. Marca cada punto como C
 - **Alternativas**: ¿se compararon alternativas reales, incluida la situación base optimizada?
 - **Riesgos**: identificados y con mitigación; usa `levantar-riesgos` si el estudio los omite.
 - **Coherencia de la recomendación** con los resultados.
+- **Hechos del mundo** (mercado, competidores, precios de terceros, normativa, tecnología): marca cada afirmación
+  portante según su fuente real (H, D, T, P, I, S o V; ver `arquetipos/investigacion/protocolo/marcas-y-fuentes.md`) y
+  aplica las ocho pruebas de `arquetipos/investigacion/protocolo/auditoria.md` (skill `investigar`, «Auditar un
+  documento existente»). Lo que descansa en testimonios o pistas va como observación crítica.
 
 ## 4. Resultado
 Informe en `estudio/revision_<AAAA-MM-DD>.md` (o el formato que pida el usuario) con: veredicto (apto para

@@ -1,0 +1,7 @@
+puerta,entre,estado,firma,tipo_firma,fecha,nota
+P0,E0-E1,pendiente,,persona,,
+P1,E1-E2,pendiente,,arbitro,,
+P2,E2-E3,pendiente,,persona,,
+P3,E3-E4,pendiente,,arbitro,,
+P4,E4-E5,pendiente,,arbitro,,
+P5,E5-E6,pendiente,,persona,,

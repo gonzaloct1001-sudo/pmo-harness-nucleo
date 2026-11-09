@@ -1,0 +1,21 @@
+# Manifiesto de la investigación. Lo crea `investigacion.py --nueva`; se completa en el encuadre (E0).
+# Esta investigación corre aislada: lee el protocolo, el cartucho de dominio y los ajustes de la empresa, y escribe
+# solo dentro de su carpeta. Ningún hecho de otra investigación entra por referencia: se reingresa con su fuente y fecha.
+
+investigacion:
+  id: ""                   # nombre de la carpeta (AAAA-NN-nombre-corto)
+  codigo: ""               # PIA-AAAA-NN
+  nombre: ""
+  protocolo: ""            # versión del protocolo bajo la que corre (la anota --nueva)
+  cartucho: ""             # biblioteca/dominios/<dominio>.md, si hay uno que calce
+  intensidad: sondeo       # sondeo | estandar | forense (se sube, nunca se empieza arriba)
+  tolerancia: ""           # conservador | exploratorio (se fija en E0 y no cambia)
+  producto: investigacion  # investigacion | informe-de-indicios (si P1 declara el dominio sin ancla registral)
+  restriccion_fuentes: ""  # p. ej. "solo acceso abierto"
+  solicitante: ""
+  decisor: ""              # persona que firma P0, P2 y P5 (nombre, no cargo genérico)
+  apertura: ""             # AAAA-MM-DD
+  cierre: ""               # AAAA-MM-DD, al entregar
+  forma: propia            # propia (la investigación es el producto) | integrada (alimenta otro trabajo del proyecto)
+  alimenta: ""             # si es integrada: qué sección o entregable usa sus resultados
+  vista_externa: ""        # enlace a una página o documento que la muestra (solo vista: la fuente de verdad son estos archivos)
