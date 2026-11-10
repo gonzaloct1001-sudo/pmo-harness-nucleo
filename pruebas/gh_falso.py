@@ -63,6 +63,8 @@ if ruta.endswith("/issues") and metodo == "POST":
 if "/issues/" in ruta and metodo == "GET":
     n = int(ruta.rsplit("/", 1)[1])
     salir(next((i for i in issues if i["number"] == n), {"message": "Not Found"}), 0 if any(i["number"] == n for i in issues) else 1)
+if "/branches/" in ruta and ruta.endswith("/protection") and metodo == "PUT":
+    salir({"url": "https://api.github.com/repos/x/y/branches/main/protection", "required_pull_request_reviews": json.loads(entrada or "{}").get("required_pull_request_reviews")})
 if "/pulls/" in ruta and ruta.endswith("/merge") and metodo == "PUT":
     salir({"merged": True, "sha": "abc123"})
 if "/pulls/" in ruta and metodo == "GET":

@@ -951,6 +951,18 @@ def main():
                entrada=json.dumps({"tool_name": "Skill", "tool_input": {"skill": "status"}}))
         resultados.append(("hook registrar_uso: el registro de uso suma la fila", "status" in (e2 / ".harness" / "uso-skills.csv").read_text(encoding="utf-8"),
                            [(e2 / ".harness" / "uso-skills.csv").read_text(encoding="utf-8")]))
+        # Regla 17 mecánica: el control de Git avisa (sin bloquear) y el validador exige los apartados de evidencia
+        subprocess.run(["git", "add", "proyectos/proy-e2/riesgos/nota-cierre.md"], cwd=e2, capture_output=True)
+        prueba("precommit: avisa cuando un proyecto cambia sin su traspaso, sin bloquear", [str(_hk / "precommit.py")], e2,
+               ["Aviso (regla 17)", "proyectos/proy-e2", "traspaso.md"], env=env_git)
+        subprocess.run(["git", "add", "proyectos/proy-e2/seguimiento/traspaso.md"], cwd=e2, capture_output=True)
+        prueba("precommit: con el traspaso en el commit no avisa", [str(_hk / "precommit.py")], e2, ausentes=["Aviso (regla 17)"], env=env_git)
+        subprocess.run(["git", "reset", "-q"], cwd=e2, capture_output=True)
+        _tp = e2 / "proyectos" / "prev" / "seguimiento" / "traspaso.md"
+        _tp.write_text("fecha: 2026-01-01\nasistente: x\nestado: sin_pendientes\n\n## Hecho en la última sesión\n-\n", encoding="utf-8")
+        os.utime(_tp, (1756684800, 1756684800))
+        prueba("validar_proyecto: traspaso sin apartados de evidencia y más viejo que los datos", [str(e2 / "herramientas" / "validar_proyecto.py"), "proyectos/prev"], e2,
+               ["sin los apartados Comprobado, No se pudo comprobar, Tuve que adivinar", "sin tocarse mientras los datos del proyecto cambiaron"])
 
         # Investigar en paralelo: archivos parciales con rangos de IDs y consolidación
         I = str(e2 / "herramientas" / "investigacion.py")
@@ -1776,6 +1788,7 @@ def main():
         prueba("bandeja --integrar: squash y borra la rama", [BA, "--integrar", "9"] + _r, repo, ["PR #9 integrado (squash) y rama nube/3-minuta borrada"], env=_gh)
         prueba("bandeja --integrar: un PR ya integrado no se repite", [BA, "--integrar", "10"] + _r, repo, ["ya está integrado"], env=_gh)
         prueba("bandeja --etiquetas: crea las que faltan", [BA, "--etiquetas"] + _r, repo, ["harness:tarea: ya existía", "estado:hecho: creada"], env=_gh)
+        prueba("bandeja --proteger-main: pide a GitHub exigir PR para main", [BA, "--proteger-main"] + _r, repo, ["Rama main protegida", "también los de la nube"], env=_gh)
         prueba("bandeja --resumen --publicar: resumen diario con la bandeja, publicado en su issue", [BA, "--resumen", "--publicar", "--hoy", "2026-11-10"] + _r, repo,
                ["# Resumen diario · 2026-11-10", "## Bandeja", "preguntas para ti: 1 (#5)", "Publicado en el issue #7"], env=_gh)
         _ghlog = (tmp / "gh.log").read_text(encoding="utf-8")

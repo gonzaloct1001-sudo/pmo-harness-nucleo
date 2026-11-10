@@ -1,6 +1,6 @@
 ---
 name: adoptar-formatos
-description: Adopta como formato por defecto las plantillas y archivos base propios de la empresa o de un cliente (informes, minutas, presentaciones, planillas, logo y marca) dejados en `_entrada/`: los analiza, dice qué les falta y qué se pierde, propone mejoras en copia y nunca modifica el original. Úsala con «adopta mis formatos», «así hacemos las minutas aquí», «usa nuestro logo», «nuestro formato».
+description: Adopta como formato por defecto las plantillas y archivos base propios de la empresa o de un cliente (informes, minutas, presentaciones, planillas, logo y marca) dejados en `_entrada/`: los analiza, dice qué les falta y qué se pierde, propone mejoras en copia y nunca toca el original. Úsala con «adopta mis formatos», «así hacemos las minutas aquí», «usa nuestro logo».
 ---
 
 > Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.

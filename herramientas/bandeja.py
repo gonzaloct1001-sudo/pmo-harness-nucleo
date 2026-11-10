@@ -143,6 +143,19 @@ def listar(repo, breve):
     return 0
 
 
+def proteger_main(repo, rama="main"):
+    """Regla «nunca main» mecánica: GitHub exige PR para la rama, también a la nube. Solo con el sí del usuario."""
+    datos = {"required_status_checks": None, "enforce_admins": False,
+             "required_pull_request_reviews": {"required_approving_review_count": 0}, "restrictions": None}
+    ok, r = api(f"repos/{repo}/branches/{rama}/protection", "PUT", datos)
+    if ok:
+        print(f"Rama {rama} protegida en {repo}: todo cambio entra por PR, también los de la nube. Se quita en GitHub → Settings → Branches.")
+        return 0
+    print(f"No se pudo proteger {rama}: {str(r)[:200]}\nEn repositorios privados, GitHub solo lo permite en planes de pago. Sin protección, "
+          "la regla «nunca main» sigue por NUBE.md y la bandeja revisa los PR de la nube.")
+    return 1
+
+
 def etiquetas(repo):
     hechas = []
     for nombre, (color, desc) in ETIQUETAS.items():
@@ -315,6 +328,7 @@ def main():
     ap.add_argument("--resumen", action="store_true")
     ap.add_argument("--publicar", action="store_true")
     ap.add_argument("--etiquetas", action="store_true")
+    ap.add_argument("--proteger-main", dest="proteger", action="store_true", help="exigir PR para main en GitHub (con el sí del usuario)")
     ap.add_argument("--repositorio")
     ap.add_argument("--hoy")
     a = ap.parse_args()
@@ -328,6 +342,8 @@ def main():
         return listar(repo, a.breve)
     if a.etiquetas:
         return etiquetas(repo)
+    if a.proteger:
+        return proteger_main(repo)
     if a.nueva:
         return nueva(repo, a.nueva, a.proyecto)
     if a.responder:

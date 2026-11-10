@@ -96,6 +96,18 @@ def main():
         def leer(rel):
             return contenido_preparado(raiz, rel)
 
+    # Regla 17 (aviso, no bloqueo): un proyecto cambia en el commit y su traspaso no viene con él
+    sin_traspaso = []
+    if not a.archivos:
+        tocados = sorted({Path(r).parts[1] for r in relativos if Path(r).parts[:1] == ("proyectos",) and len(Path(r).parts) > 2
+                          and "_entrada" not in Path(r).parts})
+        sin_traspaso = [s for s in tocados if f"proyectos/{s}/seguimiento/traspaso.md" not in relativos
+                        and (raiz / "proyectos" / s / "seguimiento" / "traspaso.md").exists()]
+    if sin_traspaso:
+        print("Aviso (regla 17): " + ", ".join(f"proyectos/{s}" for s in sin_traspaso) + " cambia en este commit y su "
+              "seguimiento/traspaso.md no va en él. Si la tarea terminó, actualízalo (hecho, próximo paso, comprobado, no "
+              "comprobado, tuve que adivinar) y agrégalo al commit.", file=sys.stderr)
+
     confidenciales, invalidos = revisar_archivos(raiz, relativos, leer)
     if not confidenciales and not invalidos:
         if a.archivos:

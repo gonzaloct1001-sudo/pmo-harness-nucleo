@@ -1,6 +1,6 @@
 ---
 name: preparar-postulacion
-description: Orquesta una postulación para ganar un fondo (CORFO, ANID u otro), una licitación (Mercado Público o privada), un RFP o un concurso: desde las bases hasta la entrega, con compuertas Go/No-Go, matriz de cumplimiento con barrido exhaustivo de requisitos, pauta inversa, redacción por secciones, red team y presupuesto. Úsala cuando el usuario quiera postular, reciba bases o aclaraciones, o pregunte qué exigen.
+description: Orquesta una postulación para ganar un fondo (CORFO, ANID…), una licitación (Mercado Público o privada), un RFP o un concurso: desde las bases hasta la entrega, con compuertas Go/No-Go, matriz de cumplimiento (barrido exhaustivo de requisitos), pauta inversa, redacción por secciones, red team y presupuesto. Úsala cuando el usuario quiera postular, reciba bases o aclaraciones, o pregunte qué exigen.
 ---
 
 > Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.

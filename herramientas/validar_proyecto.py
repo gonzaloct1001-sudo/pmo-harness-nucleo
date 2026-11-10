@@ -106,6 +106,30 @@ def duracion(t):
     return 1
 
 
+APARTADOS_TRASPASO = ("## Comprobado", "## No se pudo comprobar", "## Tuve que adivinar")
+
+
+def revisar_traspaso(raiz, inf):
+    """Regla 17, mecánica: el traspaso existe, trae sus apartados de evidencia y no es más viejo que los datos."""
+    traspaso = raiz / "seguimiento" / "traspaso.md"
+    if not traspaso.exists():
+        inf.a("Sin seguimiento/traspaso.md: otra sesión no sabrá en qué quedó el proyecto (regla 17).")
+        return
+    texto = traspaso.read_text(encoding="utf-8", errors="replace")
+    faltan = [x[3:] for x in APARTADOS_TRASPASO if x not in texto]
+    if faltan:
+        inf.a("traspaso.md sin los apartados " + ", ".join(faltan) + " (evidencia de término, regla 17): agrégalos.")
+    try:
+        ultimo = max((x.stat().st_mtime for x in raiz.rglob("*") if x.is_file() and x.suffix.lower() in (".csv", ".yaml", ".yml", ".md")
+                      and x != traspaso and not ({"_entrada", "_procesado", "_crudo"} & set(x.parts))), default=0)
+        if ultimo and ultimo - traspaso.stat().st_mtime > 86400:
+            dias = int((ultimo - traspaso.stat().st_mtime) // 86400)
+            inf.a(f"traspaso.md lleva {dias} día(s) sin tocarse mientras los datos del proyecto cambiaron: la última sesión no lo "
+                  "actualizó (regla 17).")
+    except OSError:
+        pass
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("proyecto")
@@ -127,6 +151,7 @@ def main():
     amarillo = numero(um.get("desvio_amarillo_pct", 5), 5)
     rojo = numero(um.get("desvio_rojo_pct", 10), 10)
     inf = Informe()
+    revisar_traspaso(raiz, inf)
 
     # --- Inducción ---
     pend = buscar_pendientes(cfg)

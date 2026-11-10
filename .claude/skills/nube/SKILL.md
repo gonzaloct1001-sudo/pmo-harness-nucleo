@@ -28,6 +28,9 @@ sin cambiar nada.
    Claude → *Repository access* y agregue el repositorio de la empresa (si no tiene la app, github.com/apps/claude).
    No puedes comprobarlo desde aquí: se confirma con la corrida de prueba del paso 4.
 3. `python herramientas/nube.py --habilitar --quien "<nombre>"` y `python herramientas/bandeja.py --etiquetas`.
+4. Opcional, con su sí: `python herramientas/bandeja.py --proteger-main` hace que GitHub exija PR para `main`,
+   también a la nube (la regla «nunca main» deja de ser solo texto). En repositorios privados de plan gratuito no
+   está disponible: la regla sigue por `NUBE.md` y la bandeja revisa los PR de la nube.
 
 ## 3. Elegir qué programar (una decisión por tarea, dos líneas cada una)
 Para cada tarea del catálogo (`nube.py --catalogo`), en este orden: `resumen-manana`, `bandeja`, `status-semanal`,
