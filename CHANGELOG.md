@@ -1,5 +1,18 @@
 # Cambios
 
+## 2.7.0 — en curso
+
+### El harness se observa
+- **Mejoras al núcleo** (`herramientas/mejoras.py`, registro `.harness/mejoras-nucleo.csv`): en una carpeta de empresa
+  nadie edita el núcleo; lo que falta, sobra, estorba o falla se anota con su versión, dónde, qué, por qué y evidencia.
+  Anotan solos el actualizador (cuando revierte) y la batería (cuando falla en una empresa); el asistente anota por la
+  regla 17 cuando tuvo que adivinar o una skill no cubrió el caso. `--exportar` produce un archivo **anonimizado**
+  (sin nombres de empresa, personas, proyectos, correos, RUT ni montos) que el usuario revisa y entrega; el
+  mantenedor lo incorpora a `MEJORAS.md` con `--procesar` y decide con `--decidir`; al actualizar, la carpeta cierra
+  lo resuelto (`--cerrar-resueltas`). El estado de inicio avisa cuántas hay sin enviar; `configurar` (M) y
+  `guardar-cambios` lo recuerdan.
+- `traspaso.md` con tres apartados nuevos: *Comprobado*, *No se pudo comprobar* y *Tuve que adivinar* (regla 17).
+
 ## 2.6.1 — 2026-11-10
 
 ### Actualizar sin perder lo propio

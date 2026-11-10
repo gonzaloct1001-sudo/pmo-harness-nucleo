@@ -26,6 +26,7 @@ Si no está claro, muestra el menú en un mensaje y pide la letra:
 | J | Un proyecto: nombre, cliente, responsable, umbrales, comité, reportes | `proyectos/<slug>/proyecto.yaml`, `reportes/catalogo/` | Editas; `nuevo-tipo-reporte` para reportes |
 | K | Idioma y formato de fechas de los documentos | `formato.idioma`, `formato.formato_fecha` | Editas |
 | L | Una regla de cómo trabajar («siempre…», «nunca…») | `proyectos/<slug>/CLAUDE.md` o `empresa/estilo.md` | Agregas la regla en palabras simples |
+| M | Mejoras al harness mismo: ver lo anotado, entregarlo al mantenedor | `.harness/mejoras-nucleo.csv` | `mejoras.py --listar`; `--exportar` produce el archivo anonimizado que el usuario revisa y envía (nunca se edita el núcleo) |
 
 ## 2. Aplicar
 1. Di en dos líneas qué vas a cambiar, dónde y qué efecto tiene («el logo nuevo saldrá en todos los documentos de la

@@ -108,6 +108,15 @@ def completar_empresa(fuente, aplicar=False):
     return hechos
 
 
+def anotar_fallo(que, evidencia):
+    """Deja en el registro de mejoras de la carpeta que una actualización se revirtió: el mantenedor debe saberlo."""
+    try:
+        import mejoras
+        return mejoras.anotar(RAIZ, "fallo", "actualizar_nucleo.py", que, evidencia, quien="sistema")
+    except Exception:
+        return None
+
+
 def origen_configurado():
     """`nucleo.origen` de .harness/estado.yaml o, si no hay, el repositorio público del núcleo (NUCLEO.txt)."""
     estado = RAIZ / ".harness" / "estado.yaml"
@@ -332,6 +341,7 @@ def main():
                 print("Con el núcleo nuevo, estos proyectos dejarían de funcionar: se revirtió la actualización. Nada cambió.\n"
                       + "\n".join(f"- {k}" for k in rotos)
                       + "\nAvísale a quien mantiene el núcleo (puede ser un cambio de formato de los datos).")
+                anotar_fallo(f"Actualizar a {v_nueva or '?'} deja de funcionar proyectos reales: se revirtió", "; ".join(rotos)[:300])
                 return 1
             print("Proyectos: todos siguen funcionando.")
 
@@ -344,6 +354,7 @@ def main():
                 revertir()
                 print(f"Las pruebas fallaron ({ultima[0]}): se revirtió la actualización. Nada cambió.\n"
                       "Avísale a quien mantiene el núcleo; el detalle sale con: python pruebas/ejecutar_pruebas.py")
+                anotar_fallo(f"La batería falla tras actualizar a {v_nueva or '?'}: se revirtió", ultima[0][:300])
                 return 1
             print(f"Pruebas: {ultima[0]}")
 
@@ -351,11 +362,19 @@ def main():
         completados = completar_empresa(fuente, aplicar=True)
         if completados:
             print("Completado en empresa/ (solo lo que faltaba): " + ", ".join(d for _, d in completados))
+        try:  # las mejoras que esta carpeta envió y el núcleo nuevo ya respondió
+            import mejoras
+            cerradas = mejoras.cerrar_resueltas(RAIZ)
+            if cerradas:
+                print("Mejoras al núcleo con respuesta del mantenedor: " + ", ".join(f"{i} {e}" for i, e in cerradas)
+                      + " (python herramientas/mejoras.py --listar --todas)")
+        except Exception:
+            pass
 
         rc, top = git("rev-parse", "--show-toplevel")
         if not a.sin_commit and rc == 0 and Path(top).resolve() == RAIZ.resolve():
-            rutas_git = ([e.rstrip("/") for e in p["union"]] + [".harness/estado.yaml", _nucleo.MANIFIESTO.as_posix()]
-                         + [r for r, _ in completados])
+            rutas_git = ([e.rstrip("/") for e in p["union"]] + [".harness/estado.yaml", _nucleo.MANIFIESTO.as_posix(),
+                          ".harness/mejoras-nucleo.csv"] + [r for r, _ in completados])
             git("add", "-A", "--", *[x for x in rutas_git if (RAIZ / x).exists() or any(r.startswith(x) for r in p["eliminar"])])
             git("update-index", "--chmod=+x", *[e for e in _nucleo.EJECUTABLES if (RAIZ / e).exists()])
             rc_c, salida = git("commit", "-q", "-m", f"Actualización del núcleo a {v_nueva or 'la versión nueva'}")

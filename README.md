@@ -389,6 +389,7 @@ guion para probar el harness con cada IA.
 | Otra empresa | "Crea la carpeta para la empresa X" (repositorio propio, sin mezclar datos) |
 | Trabajar en otro computador | "Descarga mis empresas" (o `INSTALAR-WINDOWS.bat -Clonar`) |
 | Actualizar el harness | "Actualiza el harness" (muestra antes qué cambia; no toca proyectos ni datos) |
+| Mejorar el harness | "¿Qué mejoras al harness hay anotadas?" / "Exporta las mejoras" (archivo anonimizado para el mantenedor; nadie edita el núcleo en una empresa) |
 
 ## Personalización: dónde está cada cosa
 

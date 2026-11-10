@@ -180,6 +180,16 @@ def resumen(remoto=False):
             lineas.append(f"- Formatos propios sin adoptar en empresa/_entrada/: {len(sueltos)} archivo(s) ({', '.join(x.name for x in sueltos[:4])}"
                           + ("…" if len(sueltos) > 4 else "") + "): ofrece la skill `adoptar-formatos`.")
 
+    # Mejoras al núcleo anotadas en esta carpeta (ideas, aprendizajes y fallos del harness mismo, para el mantenedor)
+    if (RAIZ / ".harness" / "mejoras-nucleo.csv").exists() and not mantenedor:
+        try:
+            import mejoras
+            sin_enviar = mejoras.resumen(RAIZ)["nueva"]
+            if sin_enviar:
+                lineas.append(f"- Mejoras al núcleo: {sin_enviar} anotación(es) sin enviar al mantenedor (`python herramientas/mejoras.py` "
+                              "para verlas; `--exportar` solo cuando el usuario quiera entregarlas).")
+        except Exception:
+            pass
     nube_yaml = RAIZ / ".harness" / "nube.yaml"
     if nube_yaml.exists() and not mantenedor:
         texto_nube = nube_yaml.read_text(encoding="utf-8", errors="replace")

@@ -16,5 +16,14 @@ proximo_paso:
 ## Decisiones pendientes del usuario
 -
 
+## Comprobado
+-
+
+## No se pudo comprobar
+-
+
+## Tuve que adivinar (anotado con mejoras.py --anotar)
+-
+
 ## Archivos clave
 -

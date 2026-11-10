@@ -842,6 +842,60 @@ def main():
                            and (e2 / "pruebas" / "ejecutar_pruebas.py").read_text(encoding="utf-8") == _bateria_antes
                            and 'version_harness: "9.9"' in (e2 / ".harness" / "estado.yaml").read_text(encoding="utf-8"),
                            ["la reversión dejó cambios"]))
+        # Mejoras al núcleo: lo que el harness detecta solo y lo que la IA anota en una carpeta de empresa, para el mantenedor
+        _mej = e2 / ".harness" / "mejoras-nucleo.csv"
+        _mej_txt = _mej.read_text(encoding="utf-8") if _mej.exists() else ""
+        resultados.append(("mejoras: las dos actualizaciones revertidas (proyecto roto, pruebas rotas) quedan anotadas solas como fallo",
+                           "deja de funcionar proyectos reales" in _mej_txt and "falla tras actualizar" in _mej_txt and _mej_txt.count(",fallo,") >= 2,
+                           [_mej_txt[-500:]]))
+        (e2 / "herramientas" / "se_cae.py").write_text("import _consola\n_consola.preparar()\nraise KeyError('columna x')\n", encoding="utf-8")
+        prueba("mejoras: un script del núcleo que se cae con traceback queda anotado", [str(e2 / "herramientas" / "se_cae.py"), "proyectos/proy-e2"], e2,
+               ["KeyError"], codigo=1)
+        resultados.append(("mejoras: la anotación del traceback trae el script, el error y el comando",
+                           "se_cae.py,se_cae.py falló" in _mej.read_text(encoding="utf-8") and "columna x" in _mej.read_text(encoding="utf-8")
+                           and "proyectos/proy-e2" in _mej.read_text(encoding="utf-8"), [_mej.read_text(encoding="utf-8")[-400:]]))
+        M = str(e2 / "herramientas" / "mejoras.py")
+        prueba("mejoras: anotar exige evidencia", [M, "--anotar", "--tipo", "cambiar", "--donde", "skill minuta", "--que", "x"], e2, ["evidencia"], codigo=1)
+        prueba("mejoras: anota una idea con su versión", [M, "--anotar", "--tipo", "agregar", "--donde", "skill minuta", "--que",
+               "Falta un campo de ausentes para Empresa Dos y el cliente Acme con $ 1.500.000", "--por-que", "el comité lo pide",
+               "--evidencia", "proyectos/proy-e2/seguimiento/traspaso.md", "--quien", "claude-code"], e2, ["Anotada M-00", "Sin enviar", "--exportar"])
+        prueba("mejoras: la misma idea no se duplica", [M, "--anotar", "--tipo", "agregar", "--donde", "skill minuta", "--que",
+               "falta un campo de ausentes para empresa dos y el cliente acme con $ 1.500.000", "--evidencia", "otra"], e2, ["Ya estaba anotada"])
+        prueba("mejoras: lista las abiertas", [M, "--listar"], e2, ["[nueva]", "skill minuta", "por qué: el comité lo pide"])
+        prueba("estado: avisa las mejoras sin enviar", [str(e2 / "herramientas" / "estado.py")], e2, ["Mejoras al núcleo", "sin enviar"])
+        prueba("mejoras: exporta anonimizado y marca enviada", [M, "--exportar", "--hoy", "2026-11-10"], e2, ["mejoras-export-2026-11-10.md", "Revisa el archivo"])
+        _exp = e2 / ".harness" / "mejoras-export-2026-11-10.md"
+        _exp_txt = _exp.read_text(encoding="utf-8") if _exp.exists() else ""
+        resultados.append(("mejoras: la exportación no lleva nombre de empresa, proyecto ni montos, y trae el bloque csv",
+                           "Empresa Dos" not in _exp_txt and "1.500.000" not in _exp_txt and "proy-e2" not in _exp_txt
+                           and "[nombre]" in _exp_txt and "[monto]" in _exp_txt and "```csv" in _exp_txt
+                           and "enviada" in _mej.read_text(encoding="utf-8") and "nueva" not in _mej.read_text(encoding="utf-8").split("\n", 1)[1],
+                           [_exp_txt[:700]]))
+        prueba("mejoras: sin nuevas, exportar no crea archivo", [M, "--exportar"], e2, ["No hay anotaciones sin enviar"])
+        prueba("mejoras: en una empresa no se procesa ni se decide", [M, "--procesar", str(_exp)], e2, ["mantenedor"], codigo=1)
+        # El mantenedor procesa el archivo en la carpeta del núcleo y decide; la carpeta cierra lo suyo al actualizar
+        mant = tmp / "nucleo-mantenedor"
+        shutil.copytree(fuente, mant, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+        subprocess.run(["git", "init", "-q"], cwd=mant, capture_output=True)
+        subprocess.run(["git", "config", "--local", "pmo.mantenedor", "true"], cwd=mant, capture_output=True)
+        MM = str(mant / "herramientas" / "mejoras.py")
+        prueba("mejoras: en la carpeta del núcleo no se anota (se cambia directamente)",
+               [MM, "--anotar", "--tipo", "fallo", "--donde", "x", "--que", "y", "--evidencia", "z"], mant, ["carpeta del núcleo"], codigo=1)
+        prueba("mejoras: el mantenedor procesa el archivo exportado", [MM, "--procesar", str(_exp), "--hoy", "2026-11-11"], mant,
+               ["anotación(es) nueva(s) en MEJORAS.md", "--decidir"])
+        _tabla = (mant / "MEJORAS.md").read_text(encoding="utf-8")
+        _m_id = re.search(r"\| ([0-9a-f]{6}-M-\d+) \|", _tabla)
+        _id_envio = _m_id.group(1) if _m_id else "ninguno"
+        resultados.append(("mejoras: MEJORAS.md recibe la fila como pendiente, sin datos del cliente",
+                           bool(_m_id) and "| pendiente |" in _tabla and "Empresa Dos" not in _tabla and "evidencia:" in _tabla, [_tabla[-500:]]))
+        prueba("mejoras: procesar dos veces no duplica", [MM, "--procesar", str(_exp)], mant, ["0 anotación(es) nueva(s)"])
+        prueba("mejoras: el mantenedor decide", [MM, "--decidir", _id_envio, "aceptada", "--version", "9.9", "--nota", "entra en la 9.9"], mant,
+               [_id_envio + ": aceptada en la versión 9.9", "entra en la 9.9", "CHANGELOG.md"])
+        shutil.copy2(mant / "MEJORAS.md", e2 / "MEJORAS.md")  # la versión nueva trae MEJORAS.md a la carpeta
+        prueba("mejoras: tras actualizar, la carpeta cierra las resueltas", [M, "--cerrar-resueltas"], e2, ["M-00", "resuelta"])
+        prueba("mejoras: la lista completa muestra la respuesta del mantenedor", [M, "--listar", "--todas"], e2, ["[resuelta]", "entra en la 9.9"])
+        prueba("mejoras: el resumen cuenta por estado", [M], e2, ["resueltas 1"])
+        (e2 / "herramientas" / "se_cae.py").unlink()
         # El actualizador se renueva solo: si el núcleo nuevo trae otro actualizador, es ese el que corre sobre esta carpeta
         fuente3 = tmp / "nucleo-otro-actualizador"
         shutil.copytree(fuente, fuente3, ignore=shutil.ignore_patterns(".git", "__pycache__"))
@@ -1686,6 +1740,16 @@ def main():
     for nombre, bien, fallas in resultados:
         print(f"{'OK   ' if bien else 'FALLA'} {nombre}" + ("" if bien else "\n      " + "\n      ".join(fallas)))
     print(f"\n{ok}/{len(resultados)} pruebas correctas.")
+    if ok != len(resultados):
+        try:  # en una carpeta de empresa, una batería que falla es un hecho que el mantenedor del núcleo debe conocer
+            sys.path.insert(0, str(RAIZ / "herramientas"))
+            import _nucleo
+            import mejoras
+            if not _nucleo.es_mantenedor(RAIZ):
+                mejoras.anotar(RAIZ, "fallo", "pruebas/ejecutar_pruebas.py", "La batería de pruebas falla en esta carpeta",
+                               "; ".join(n for n, b, _ in resultados if not b)[:300], quien="sistema")
+        except Exception:
+            pass
     return 0 if ok == len(resultados) else 1
 
 

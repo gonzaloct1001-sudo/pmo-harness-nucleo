@@ -148,9 +148,10 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     editar `python herramientas/hooks/precommit.py --archivos <ruta>`; además, el control de Git lo revisa todo
     antes de cada commit.
 17. **Traspaso entre sesiones y asistentes.** Al terminar cada tarea que cambió algo, y en cada hito de una tarea
-    larga, actualiza `proyectos/<slug>/seguimiento/traspaso.md`: fecha, asistente, tarea en curso y su estado, qué
-    se hizo, próximo paso, decisiones pendientes del usuario y archivos clave. Reemplaza el contenido (el historial
-    queda en Git). Así otra sesión, otro computador u otro asistente retoma sin que el usuario repita nada.
+    larga, actualiza `proyectos/<slug>/seguimiento/traspaso.md`: fecha, asistente, tarea y estado, hecho, próximo
+    paso, decisiones pendientes, archivos clave, qué comprobaste y qué no pudiste. Reemplaza el contenido (el
+    historial queda en Git). Si tuviste que adivinar, una skill no cubrió el caso o un script falló, anótalo con
+    `python herramientas/mejoras.py --anotar` (con evidencia, sin datos del cliente); nunca edites el núcleo.
 18. **Tu consola no es interactiva.** No ejecutes comandos que esperen una respuesta (S/N, términos que aceptar,
     contraseñas, un editor): quedan detenidos y el usuario no puede contestar. Para instalar usa solo
     `herramientas/preparar_pc.ps1` o `preparar_pc.sh` (nunca winget, choco ni brew directos); para Git, usa `-m`,

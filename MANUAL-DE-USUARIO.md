@@ -186,6 +186,14 @@ adelante…». El asistente te dice qué va a cambiar y qué efecto tiene, pide 
 Nada de esto se pierde al actualizar el harness: tus ajustes viven en tu carpeta, fuera del núcleo. Y todo queda en el
 historial, así que se puede deshacer: «vuelve a dejar el logo anterior».
 
+### Ideas para mejorar el harness
+Tú no editas el núcleo (las skills, herramientas y plantillas comunes): lo mantiene una persona para todas las
+empresas. Lo que sí pasa es que el harness **anota solo** lo que detecta sobre sí mismo (una actualización que se
+revirtió, una prueba que falla, algo que el asistente tuvo que adivinar o que una skill no cubrió) en un registro de tu
+carpeta. Cuando quieras, pides «exporta las mejoras al harness»: se produce un archivo **sin nombres, correos, RUT ni
+montos**, lo revisas y se lo envías al mantenedor. Él decide, y cuando actualizas, tu carpeta marca cuáles entraron.
+Para verlas: «¿qué mejoras al harness hay anotadas?».
+
 ## 12. Privacidad y seguridad
 Tu trabajo vive en tu computador y en un repositorio **privado** de tu cuenta de GitHub, que solo tú ves. El harness
 que descargas es público, pero al instalarlo se desconecta de él: nada tuyo va a parar allá.

@@ -59,6 +59,7 @@ Repetirlos después de modificar una skill.
 | 51 | "hola" en una carpeta nueva | `instalar` con preguntas de opción (para quién, qué lleva primero, en qué punto, formatos propios, status semanal, modo nube) y una recomendación por pregunta; nada de nube sin el sí |
 | 52 | "actualiza el harness" en una carpeta creada con una versión anterior y con permisos propios en `settings.json` | `actualizar-nucleo`: la vista previa dice «se fusionan» y «se completa en empresa/»; un solo sí; conserva lo propio, agrega lo que falta, pruebas y commit; sin más preguntas |
 | 53 | "tengo una carpeta con artículos y fichas de proveedores para mi estudio de tecnologías" | `investigar`: proyecto `investigacion`; pide copiar todo a `_entrada/` sin ordenar; inventario; cada documento al mapa de fuentes con nivel; sus afirmaciones como T o P, nunca H |
+| 54 | la IA tuvo que adivinar cómo llenar un campo que la skill no cubre / "¿qué mejoras al harness hay anotadas?" / "exporta las mejoras" | Regla 17: `mejoras.py --anotar` con evidencia y sin datos del cliente, nunca edita el núcleo; `--listar`; `--exportar` solo cuando el usuario lo pide, y le dice que revise el archivo antes de enviarlo |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

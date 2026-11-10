@@ -8,7 +8,9 @@ description: Guarda el trabajo del día en Git y lo sube a GitHub de forma segur
 ## Guardar y subir
 1. `git status --short`. Si no hay cambios, dilo y termina.
 2. **Traspaso:** si en la sesión se modificó un proyecto, verifica que su `seguimiento/traspaso.md` esté al día
-   (regla 17 de `AGENTS.md`): qué se hizo, en qué quedó y el próximo paso. Actualízalo si falta.
+   (regla 17 de `AGENTS.md`): qué se hizo, en qué quedó, el próximo paso, qué se comprobó y qué no se pudo.
+   Actualízalo si falta. Si `python herramientas/mejoras.py` muestra anotaciones sin enviar, dilo en una línea;
+   no exportes sin que el usuario lo pida.
 3. **Revisión de seguridad** antes de agregar: si aparece algún archivo dentro de `_entrada/`, cualquier
    `.pdf` dentro de `contractual/`, archivos de `contenidos/archivos/` o `entrega/final/`, o archivos que parezcan
    credenciales (`.env`, claves, contraseñas), detente y pregunta. Refuerza `.gitignore` si corresponde.
