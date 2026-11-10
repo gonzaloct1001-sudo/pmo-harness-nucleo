@@ -1,6 +1,6 @@
 # Cambios
 
-## 3.1.0 — en curso
+## 3.1.0 — 2026-11-10
 
 ### Plan estratégico (3YP / 5YP)
 - **Arquetipo `estrategia`**: diagnóstico con fuentes (`estrategia/diagnostico.md`), lineamientos, cascada de

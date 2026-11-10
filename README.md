@@ -270,6 +270,9 @@ actualización los toca; todo queda en el historial y se puede deshacer.
   herramienta.
 
 ## Historial de versiones (completo en `CHANGELOG.md`)
+- **3.1** — Plan estratégico a 3 o 5 años (arquetipo `estrategia`, skill `plan-estrategico`, `estrategia.py`):
+  diagnóstico con fuentes, cascada de objetivos, metas e iniciativas que cuadra, plan financiero sobre finanzas,
+  revisión trimestral con decisiones.
 - **3.0** — Mapa, no enciclopedia: `AGENTS.md` de 2.400 tokens con el detalle en `reglas/`; skills de 39 a 31 (nombres
   anteriores en el índice); contexto fijo real por sesión de 12.200 a 6.300 tokens; tres reglas mecánicas (traspaso,
   control de Git, `--proteger-main`); revisión de integridad. Una carpeta en 2.x se actualiza con un solo sí.
