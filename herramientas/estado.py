@@ -18,6 +18,20 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
+
+
+def problemas_previos(proyecto):
+    """«N crítico(s)» que validar_proyecto.py ya encuentra en el proyecto antes de que el asistente toque nada (así no
+    se los atribuye a su último cambio), o "" si no hay."""
+    import json
+    try:
+        r = subprocess.run([sys.executable, "herramientas/validar_proyecto.py", f"proyectos/{proyecto.name}", "--json"], cwd=RAIZ,
+                           capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=40)
+        d = json.loads(r.stdout)
+        n = len(d.get("criticos") or [])
+        return f"{n} crítico(s)" if n else ""
+    except Exception:
+        return ""
 TERMINADA = re.compile(r"^\s*[-*]?\s*estado:\s*terminada\b", re.I | re.M)
 
 
@@ -236,10 +250,26 @@ def resumen(remoto=False):
                     and not x.name.startswith("_LEEME") and "_procesado" not in x.parts and "_archivo" not in x.parts)
             if n:
                 lineas.append(f"- {p.name}: {n} archivo(s) en _entrada/ (pueden estar sin procesar).")
+        if instalado and not mantenedor:
+            previos = problemas_previos(p)
+            if previos:
+                lineas.append(f"- {p.name}: {previos} de validación previos (vienen de antes: no los atribuyas a tu último cambio; "
+                              f"`python herramientas/validar_proyecto.py proyectos/{p.name}` los lista).")
         n_cambios = (cambios or {}).get(f"proyectos/{p.name}", 0)
         if n_cambios:
             lineas.append(f"- {p.name}: {n_cambios} archivo(s) modificados sin guardar en Git; si el traspaso no los explica, "
                           "revisa `git status` y `git diff` antes de seguir, y ofrece `guardar-cambios`.")
+    if instalado and proyectos and not mantenedor:
+        from datetime import date
+        ultima = RAIZ / ".harness" / "entropia-ultima.txt"
+        try:
+            dias = (date.today() - date.fromisoformat(ultima.read_text(encoding="utf-8").strip())).days if ultima.exists() else None
+        except (OSError, ValueError):
+            dias = None
+        if dias is None or dias > 30:
+            lineas.append("- Revisión de entropía " + ("nunca hecha" if dias is None else f"hace {dias} días")
+                          + ": `python herramientas/entropia.py` propone qué retirar (instrucciones repetidas, memoria vieja, respaldos); "
+                          "no borra nada. Ofrécela cuando el usuario tenga un rato.")
     if instalado and proyectos and not mantenedor:
         try:  # investigaciones abiertas: etapa y quién debe actuar (firmas de la persona que decide)
             import investigacion as _inv

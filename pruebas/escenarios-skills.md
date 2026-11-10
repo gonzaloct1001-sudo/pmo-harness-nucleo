@@ -60,6 +60,8 @@ Repetirlos después de modificar una skill.
 | 52 | "actualiza el harness" en una carpeta creada con una versión anterior y con permisos propios en `settings.json` | `actualizar-nucleo`: la vista previa dice «se fusionan» y «se completa en empresa/»; un solo sí; conserva lo propio, agrega lo que falta, pruebas y commit; sin más preguntas |
 | 53 | "tengo una carpeta con artículos y fichas de proveedores para mi estudio de tecnologías" | `investigar`: proyecto `investigacion`; pide copiar todo a `_entrada/` sin ordenar; inventario; cada documento al mapa de fuentes con nivel; sus afirmaciones como T o P, nunca H |
 | 54 | la IA tuvo que adivinar cómo llenar un campo que la skill no cubre / "¿qué mejoras al harness hay anotadas?" / "exporta las mejoras" | Regla 17: `mejoras.py --anotar` con evidencia y sin datos del cliente, nunca edita el núcleo; `--listar`; `--exportar` solo cuando el usuario lo pide, y le dice que revise el archivo antes de enviarlo |
+| 55 | "revisa la salud del harness" / el estado dice «revisión de entropía hace 45 días» | `configurar` (N): `entropia.py --informe`; muestra las propuestas (repetidos, memoria vieja, pendientes, respaldos, skills sin uso) y retira solo lo que el usuario aprueba |
+| 56 | investigación estándar con tres familias de fuentes | `investigar`: el líder escribe tres encargos (objetivo, salida, fuentes, límites, presupuesto 10-15 búsquedas), lanza tres bibliotecarios en paralelo con archivos parciales y rangos E-101/E-201/E-301, consolida con `--consolidar` y recién entonces `--revisar` |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

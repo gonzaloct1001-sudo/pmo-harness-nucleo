@@ -896,6 +896,80 @@ def main():
         prueba("mejoras: la lista completa muestra la respuesta del mantenedor", [M, "--listar", "--todas"], e2, ["[resuelta]", "entra en la 9.9"])
         prueba("mejoras: el resumen cuenta por estado", [M], e2, ["resueltas 1"])
         (e2 / "herramientas" / "se_cae.py").unlink()
+
+        # Arranque comprobado: las instrucciones se importan y los críticos previos de un proyecto se avisan al iniciar
+        resultados.append(("carga comprobada: CLAUDE.md y GEMINI.md importan AGENTS.md",
+                           all("@AGENTS.md" in (repo / n).read_text(encoding="utf-8") for n in ("CLAUDE.md", "GEMINI.md")), ["falta @AGENTS.md"]))
+        correr([str(e2 / "herramientas" / "crear_proyecto.py"), "prev", "--arquetipos", "ejecucion", "--nombre", "Previo"], e2)
+        _cron = e2 / "proyectos" / "prev" / "cronograma" / "cronograma.csv"
+        _enc = _cron.read_text(encoding="utf-8-sig").splitlines()[0].split(",")
+        _fila = ["T-99" if c == "id" else "2026-05-01" if c == "inicio_plan" else "2026-01-01" if c == "fin_plan" else "Al revés" if c == "tarea" else "" for c in _enc]
+        with open(_cron, "a", encoding="utf-8", newline="") as f:
+            f.write(",".join(_fila) + "\n")
+        prueba("estado: avisa los críticos de validación previos de un proyecto (no son del asistente)", [str(e2 / "herramientas" / "estado.py")], e2,
+               ["prev: 1 crítico(s) de validación previos", "no los atribuyas", "Revisión de entropía nunca hecha"])
+
+        # Recolector de entropía: propone, no borra
+        _lecc = e2 / "empresa" / "investigacion" / "lecciones.csv"
+        _lecc.write_text("id,fecha,leccion,regla,donde,cartucho,origen,quien,estado\nL-01,2025-01-10,Pedir siempre el RUT,,,,,,propuesta\n"
+                         "L-02,2026-11-01,Reciente,,,,,,propuesta\n", encoding="utf-8")
+        _viejo = e2 / "proyectos" / "proy-e2" / "contexto" / "viejo.md"
+        _viejo.parent.mkdir(parents=True, exist_ok=True)
+        _viejo.write_text("# Nota\n\nFalta [PENDIENTE: el monto del contrato].\n", encoding="utf-8")
+        os.utime(_viejo, (1756684800, 1756684800))  # 2025-09-01
+        (e2 / ".harness" / "uso-skills.csv").write_text("fecha,skill\n2027-01-10,minuta\n", encoding="utf-8")
+        correr([M, "--anotar", "--tipo", "aprendizaje", "--donde", "skill status", "--que", "Olvidada hace meses", "--evidencia", "x", "--hoy", "2026-11-10"], e2)
+        prueba("entropia: informe con contexto real, repetidos, lecciones viejas, pendientes, respaldos, mejoras sin enviar y skills sin uso",
+               [str(e2 / "herramientas" / "entropia.py"), "--hoy", "2027-01-15", "--informe"], e2,
+               ["Contexto fijo real", "descripciones de", "skills", "L-01 (2025-01-10)", "contexto/viejo.md: 1 marcador(es)", "respaldo-nucleo",
+                "Mejoras al núcleo sin enviar", "Olvidada hace meses", "Skills sin uso", "alta-proyecto", "propuesta(s)", "Nada se borró", "Informe guardado"],
+               ausentes=["L-02"])
+        resultados.append(("entropia: deja la fecha de la última revisión y el informe",
+                           (e2 / ".harness" / "entropia-ultima.txt").read_text(encoding="utf-8").strip() == "2027-01-15"
+                           and (e2 / ".harness" / "entropia-2027-01-15.md").exists() and _viejo.exists() and _lecc.exists(), ["borró o no guardó"]))
+        prueba("estado: con la revisión reciente no insiste", [str(e2 / "herramientas" / "estado.py")], e2, ausentes=["Revisión de entropía"])
+        prueba("entropia: el núcleo está bajo el presupuesto de contexto real", [H + "entropia.py", "--techo"], repo, ["bajo el presupuesto"])
+
+        # Hooks de Claude Code: sesión larga, cierre y registro de uso de skills
+        _hk = e2 / "herramientas" / "hooks"
+        (e2 / ".harness" / "sesiones").mkdir(exist_ok=True)
+        (e2 / ".harness" / "sesiones" / "abc.txt").write_text("119", encoding="utf-8")
+        prueba("hook sesion_larga: a las 120 acciones pide cerrar el hito y abrir una sesión nueva", [str(_hk / "sesion_larga.py")], e2,
+               ["additionalContext", "120 acciones", "traspaso"], entrada=json.dumps({"session_id": "abc", "tool_name": "Edit"}))
+        prueba("hook sesion_larga: en el resto de las acciones no dice nada", [str(_hk / "sesion_larga.py")], e2, ausentes=["additionalContext"],
+               entrada=json.dumps({"session_id": "abc", "tool_name": "Edit"}))
+        (e2 / "proyectos" / "proy-e2" / "riesgos" / "nota-cierre.md").write_text("cambio sin traspaso\n", encoding="utf-8")
+        _trasp = e2 / "proyectos" / "proy-e2" / "seguimiento" / "traspaso.md"
+        os.utime(_trasp, (1756684800, 1756684800))
+        prueba("hook cierre_sesion: con cambios sin guardar y traspaso viejo, pide cerrar bien una vez", [str(_hk / "cierre_sesion.py")], e2,
+               ["\"decision\": \"block\"", "proy-e2", "traspaso"], entrada="{}")
+        prueba("hook cierre_sesion: no insiste la segunda vez", [str(_hk / "cierre_sesion.py")], e2, ausentes=["block"],
+               entrada=json.dumps({"stop_hook_active": True}))
+        _trasp.write_text(_trasp.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        prueba("hook cierre_sesion: con el traspaso al día no dice nada", [str(_hk / "cierre_sesion.py")], e2, ausentes=["block"], entrada="{}")
+        prueba("hook registrar_uso: anota la skill usada", [str(_hk / "registrar_uso.py")], e2,
+               entrada=json.dumps({"tool_name": "Skill", "tool_input": {"skill": "status"}}))
+        resultados.append(("hook registrar_uso: el registro de uso suma la fila", "status" in (e2 / ".harness" / "uso-skills.csv").read_text(encoding="utf-8"),
+                           [(e2 / ".harness" / "uso-skills.csv").read_text(encoding="utf-8")]))
+
+        # Investigar en paralelo: archivos parciales con rangos de IDs y consolidación
+        I = str(e2 / "herramientas" / "investigacion.py")
+        prueba("investigacion: abre una investigación en el proyecto de prueba", [I, "proyectos/proy-e2", "--nueva", "paralelo", "--hoy", "2026-11-10"], e2)
+        _inst = next((e2 / "proyectos" / "proy-e2" / "investigaciones").glob("*paralelo*"))
+        _cab = "id,marca,afirmacion,fuente,nivel,origen,dato_al,fecha_consulta,sujeto,operacion,estado,nota\n"
+        (_inst / "expediente.parcial-registros.csv").write_text(_cab + "E-101,H,Sociedad vigente,https://registro/x,N1,registro,2026-01-01,2026-11-10,,,vigente,\n", encoding="utf-8")
+        (_inst / "expediente.parcial-prensa.csv").write_text(_cab + "E-201,P,Anuncian fusión,https://diario/y,N5,prensa,2026-10-01,2026-11-10,,,vigente,\n", encoding="utf-8")
+        (_inst / "bitacora.parcial-registros.csv").write_text("fecha,rol,fuente,terminos,resultado,entradas,nota\n2026-11-10,bibliotecario,registro,sociedad x,hallado,E-101,\n", encoding="utf-8")
+        prueba("investigacion --consolidar: une los parciales y los aparta", [I, "proyectos/proy-e2", "--instancia", _inst.name, "--consolidar"], e2,
+               ["expediente.csv: 2 fila(s) de 2 parcial(es)", "bitacora.csv: 1 fila(s)", "_parciales-consolidados"])
+        _exp2 = (_inst / "expediente.csv").read_text(encoding="utf-8")
+        resultados.append(("investigacion --consolidar: el expediente trae E-101 y E-201 y no quedan parciales sueltos",
+                           "E-101" in _exp2 and "E-201" in _exp2 and not list(_inst.glob("*.parcial-*.csv"))
+                           and (_inst / "_parciales-consolidados" / "expediente.parcial-prensa.csv").exists(), [_exp2[-300:]]))
+        (_inst / "expediente.parcial-otro.csv").write_text(_cab + "E-101,H,Repetido,https://registro/x,N1,registro,2026-01-01,2026-11-10,,,vigente,\n", encoding="utf-8")
+        prueba("investigacion --consolidar: un ID repetido entre parciales no consolida nada", [I, "proyectos/proy-e2", "--instancia", _inst.name, "--consolidar"], e2,
+               ["ID repetido E-101", "No se consolidó"], codigo=1)
+        (_inst / "expediente.parcial-otro.csv").unlink()
         # El actualizador se renueva solo: si el núcleo nuevo trae otro actualizador, es ese el que corre sobre esta carpeta
         fuente3 = tmp / "nucleo-otro-actualizador"
         shutil.copytree(fuente, fuente3, ignore=shutil.ignore_patterns(".git", "__pycache__"))

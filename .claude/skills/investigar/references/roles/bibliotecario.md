@@ -29,6 +29,14 @@ Registra **todas** las búsquedas hechas en `bitacora.csv`, incluidas las que no
 búsquedas nulas permiten auditar la cobertura. Lo que todavía no buscaste **no** va a la bitácora: va a `vacios.csv`
 como `no-buscado`.
 
+## Cómo buscar
+- **Amplio primero, luego acota.** Una consulta corta y general enseña qué hay; después se estrecha con nombres,
+  fechas o números. Las consultas largas y específicas devuelven poco y gastan el presupuesto.
+- Respeta el **presupuesto** del encargo (búsquedas y fuentes). Al agotarlo, reporta lo encontrado y lo que falta como
+  vacío: parar a tiempo es parte del método.
+- Si el encargo nombra **archivos parciales** y un **rango de IDs**, escribes solo ahí y con esos IDs (el líder
+  consolida). Si no los nombra, escribes en los archivos de la investigación.
+
 ## Correr una hipótesis asesina (E2)
 Busca lo que la mataría, en la fuente que dice la hipótesis. Si aparece, la hipótesis queda `disparo` con su
 evidencia. Si buscaste bien y no aparece, queda `sobrevivio` con la evidencia de lo que sí encontraste (H o D). Una

@@ -31,6 +31,13 @@ El harness pide capacidad según la tarea (regla 20 de `AGENTS.md`): **alta** pa
 - El refutador de una investigación puede correr en otro proveedor (`empresa/investigacion/ajustes.yaml`,
   `refutador.asistente`): el asistente entrega la instrucción lista para pegar en esa herramienta.
 
+## Sesiones largas
+La calidad del contexto baja mucho antes de que la ventana se llene (entre el 20 y el 40 %). Regla para cualquier
+asistente: cada tarea larga se parte en hitos; en cada hito, traspaso al día (regla 17) y `guardar-cambios`; después
+de unas 120 acciones (ediciones, comandos), cerrar el hito y seguir en una sesión nueva: retoma desde el traspaso
+sin perder nada. En Claude Code lo recuerda el hook `sesion_larga.py` y el hook `cierre_sesion.py` no deja terminar
+con cambios sin guardar y traspaso viejo; en las demás herramientas, es el asistente quien lleva la cuenta.
+
 ## Notas por herramienta
 
 ### Claude Code

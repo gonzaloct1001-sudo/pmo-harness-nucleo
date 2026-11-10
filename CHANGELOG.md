@@ -12,6 +12,23 @@
   lo resuelto (`--cerrar-resueltas`). El estado de inicio avisa cuántas hay sin enviar; `configurar` (M) y
   `guardar-cambios` lo recuerdan.
 - `traspaso.md` con tres apartados nuevos: *Comprobado*, *No se pudo comprobar* y *Tuve que adivinar* (regla 17).
+- **Recolector de entropía** (`herramientas/entropia.py`): mide el contexto fijo **real** por sesión (AGENTS.md, puerta
+  y las descripciones de todas las skills y subagentes, que se cargan aunque no se usen) contra un presupuesto que la
+  batería impone; encuentra instrucciones repetidas entre README, MANUAL, EMPEZAR-AQUI, GUIA y NUBE, lecciones de
+  empresa de más de 180 días sin confirmar, `[PENDIENTE` de más de 30 días, respaldos acumulados, mejoras sin enviar y
+  skills sin uso. Propone; nunca borra. El estado de inicio lo recuerda a los 30 días; `configurar` (N).
+- **Frenos al contexto, en Claude Code** (hooks nuevos; se activan pegando sus líneas en `.claude/settings.json`):
+  `sesion_larga.py` avisa a las 120 acciones (la calidad baja entre el 20 y el 40 % de la ventana), `cierre_sesion.py`
+  no deja terminar con cambios sin guardar y traspaso viejo, `registrar_uso.py` anota qué skill se usó. Para las demás
+  IA, la regla está en `asistentes.md` («Sesiones largas»).
+- **Arranque comprobado:** el estado de inicio dice cuántos críticos de validación tenía cada proyecto antes de que el
+  asistente tocara nada (no se los atribuye a su último cambio) y la batería verifica que `CLAUDE.md` y `GEMINI.md`
+  importan `AGENTS.md`.
+- **`investigar` en paralelo:** el líder delega con objetivo, salida, fuentes, límites y presupuesto por intensidad
+  (sondeo 1 bibliotecario y hasta 10 búsquedas; estándar 2 a 4 en paralelo por familia de fuentes, 10 a 15 cada uno;
+  forense sin tope); cada bibliotecario escribe en sus archivos parciales con su rango de IDs y
+  `investigacion.py --consolidar` los une sin pisarse; «amplio primero, luego acota». Lecciones del sistema de agentes
+  de investigación de Anthropic.
 
 ## 2.6.1 — 2026-11-10
 

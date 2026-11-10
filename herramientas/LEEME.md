@@ -4,6 +4,8 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 `.venv/bin/python`). Cada SKILL.md nombra las que usa; esta es la lista completa con sus opciones.
 
 - `estado.py [--remoto]` → estado al iniciar: instalación, empresa, asistentes, controles, proyectos, traspasos, material pendiente y status breve.
+- `entropia.py [--informe] [--techo]` → lo que crece sin que nadie lo retire: contexto fijo real (con descripciones de skills y subagentes), instrucciones repetidas entre documentos, lecciones viejas, `[PENDIENTE` antiguos, respaldos, mejoras sin enviar, skills sin uso. Propone; no borra.
+- `hooks/sesion_larga.py`, `hooks/cierre_sesion.py`, `hooks/registrar_uso.py` → hooks de Claude Code: aviso a las 120 acciones, no terminar con traspaso viejo, registro de uso de skills (`.claude/settings.json`).
 - `mejoras.py [--listar [--todas]] | --anotar --tipo agregar|quitar|cambiar|aprendizaje|fallo --donde ... --que ... --evidencia ... [--por-que ...] [--quien ...] | --exportar [--salida ruta] | --cerrar-resueltas` → ideas, aprendizajes y fallos del harness mismo, para el mantenedor (nunca se edita el núcleo en una empresa). Mantenedor: `--procesar <archivo exportado>`, `--decidir <id> aceptada|rechazada|diferida [--version] [--nota]`.
 - `status.py [--breve] [--formato html,md,xlsx,json] [--abrir] [--panel carpeta] [--crear-panel carpeta --empresas ...]` → status de gestión.
 - `agendar_status.py --dia lunes --hora 09:00 [--panel carpeta] | --ver | --quitar` → reporte web semanal agendado en este computador.

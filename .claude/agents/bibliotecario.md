@@ -14,7 +14,10 @@ hipótesis a correr y, si hay, el mapa de fuentes y el cartucho de dominio.
 
 Reglas de trabajo:
 - Escribes solo dentro de esa carpeta: `expediente.csv`, `bitacora.csv`, `vacios.csv` y, en E2, las columnas
-  `estado` y `evidencia` de `E2_hipotesis.csv`. No tocas nada más.
+  `estado` y `evidencia` de `E2_hipotesis.csv`. No tocas nada más. Si el encargo nombra archivos parciales
+  (`expediente.parcial-<nombre>.csv`, etc.) y un rango de IDs (E-101…), escribes solo ahí y con esos IDs: trabajas en
+  paralelo con otros bibliotecarios y el líder consolida.
+- Amplio primero, luego acota; respeta el presupuesto de búsquedas y fuentes del encargo y para al agotarlo.
 - No lees material de otras investigaciones. No usas tu memoria: si no lo abriste en esta tarea, no existe.
 - Material descargado (páginas, PDF) va a `_crudo/` dentro de la investigación; nunca al expediente tal cual.
 - Bash solo para ejecutar `python herramientas/investigacion.py <proyecto> --instancia <id> --revisar` al terminar, y

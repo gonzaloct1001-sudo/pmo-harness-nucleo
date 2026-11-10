@@ -135,6 +135,47 @@ def version_protocolo():
     return m.group(1) if m else ""
 
 
+def consolidar(inst):
+    """Une los archivos parciales de bibliotecarios que trabajaron en paralelo (expediente.parcial-*.csv,
+    bitacora.parcial-*.csv, vacios.parcial-*.csv) a los archivos de la investigación. Cada parcial usa su rango de IDs
+    (E-101…, E-201…): un ID repetido entre parciales o con lo existente es error y no se escribe nada.
+    Devuelve (resumen, errores); los parciales consolidados quedan en _parciales-consolidados/."""
+    plan, errores = [], []
+    for nombre in ("expediente.csv", "bitacora.csv", "vacios.csv"):
+        parciales = sorted(inst.carpeta.glob(f"{nombre[:-4]}.parcial-*.csv"))
+        if not parciales:
+            continue
+        enc, filas = leer_csv(inst.carpeta / nombre)
+        enc = enc or ESQUEMAS[nombre]
+        ids = {f.get("id") for f in filas if f.get("id")}
+        nuevas = []
+        for p in parciales:
+            _, pf = leer_csv(p)
+            for f in pf:
+                i = f.get("id", "")
+                if "id" in enc:
+                    if not i:
+                        errores.append(f"{p.name}: fila sin id")
+                        continue
+                    if i in ids:
+                        errores.append(f"{p.name}: ID repetido {i} (cada bibliotecario usa el rango que le dio el líder: E-101…, E-201…)")
+                        continue
+                    ids.add(i)
+                nuevas.append(f)
+        plan.append((nombre, enc, filas + nuevas, parciales, len(nuevas)))
+    if errores:
+        return [], errores
+    resumen = []
+    destino = inst.carpeta / "_parciales-consolidados"
+    for nombre, enc, filas, parciales, n in plan:
+        escribir_csv(inst.carpeta / nombre, enc, filas)
+        destino.mkdir(exist_ok=True)
+        for p in parciales:
+            p.rename(destino / p.name)
+        resumen.append(f"{nombre}: {n} fila(s) de {len(parciales)} parcial(es)")
+    return resumen, errores
+
+
 def leer_csv(ruta):
     """(encabezado, filas como dict). Archivo ausente = ([], [])."""
     if not ruta.exists():
@@ -1300,6 +1341,7 @@ def main():
     ap.add_argument("--semilla", type=int)
     ap.add_argument("--registrar", action="store_true", help="con --auditar o --muestra, anotar en auditoria.csv")
     ap.add_argument("--subir", metavar="NIVEL", help="subir la intensidad (estandar o forense)")
+    ap.add_argument("--consolidar", action="store_true", help="unir los archivos parciales de bibliotecarios en paralelo (expediente, bitácora, vacíos)")
     ap.add_argument("--aprender", action="store_true", help="lecciones de método de la investigación")
     ap.add_argument("--llevar", help="con --aprender: ID de metodo.csv a llevar a la empresa (L-01,L-02)")
     ap.add_argument("--al-nucleo", action="store_true", help="con --llevar: marcarlas además como propuesta para el núcleo")
@@ -1333,9 +1375,16 @@ def main():
         if not insts:
             sys.exit(f"No hay una investigación «{a.instancia}» en {rel(proyecto)}/{CARPETA}/.")
     unica = insts[0] if len(insts) == 1 else None
-    if a.corregir or a.auditar or a.muestra or a.subir or a.aprender:
+    if a.corregir or a.auditar or a.muestra or a.subir or a.aprender or a.consolidar:
         if not unica:
             sys.exit("Indica --instancia <carpeta> (el proyecto tiene varias investigaciones o ninguna).")
+    if a.consolidar:
+        resumen, errores = consolidar(unica)
+        if errores:
+            sys.exit("No se consolidó nada:\n- " + "\n- ".join(errores))
+        print(("Consolidado: " + "; ".join(resumen) + ". Los parciales quedaron en _parciales-consolidados/. Ahora --revisar.")
+              if resumen else "No hay archivos parciales (expediente.parcial-*.csv, bitacora.parcial-*.csv, vacios.parcial-*.csv).")
+        return 0
     if a.corregir:
         cambios = corregir(unica, aplicar=a.aplicar, hoy=hoy)
         print(f"# Corrección automática · {unica.id}\n")
