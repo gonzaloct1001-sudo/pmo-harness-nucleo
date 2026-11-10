@@ -39,11 +39,11 @@ usuario>"`. La zona horaria sale de `empresa.yaml` o se pregunta una vez. Las qu
 ## 4. Crear cada tarea en la nube (solo las aprobadas)
 Por cada tarea registrada sin `id_remoto`:
 1. `python herramientas/nube.py --instruccion <tarea>` → el texto de la instrucción.
-2. Si tienes la herramienta `RemoteTrigger`: primero `list` para ver cómo están armadas las tareas existentes de la
-   cuenta (nombre, cron, repositorios, modelo); luego `create` con: nombre `harness · <empresa> · <tarea>`, el cron
-   con la zona horaria del usuario, solo el repositorio de la empresa, modelo `sonnet` (la tarea decide poco y lee
-   mucho; `opus` solo para `bandeja` si el usuario lo pide), la instrucción del punto 1, y sin conectores externos
-   salvo que el usuario los pida. Relaya al usuario la hora de la próxima corrida y el enlace que devuelve.
+2. Si tienes la herramienta `RemoteTrigger`: primero `list` para tomar de una tarea existente el `environment_id` y el
+   conector `Claude_Code_Remote`; luego `create` con el cuerpo de `references/tarea-remota.md` (forma comprobada):
+   nombre `harness · <empresa> · <tarea>`, el cron con la zona horaria del usuario, solo el repositorio de la empresa,
+   modelo `sonnet` (`opus` solo para `bandeja` si el usuario lo pide), la instrucción del punto 1 y solo ese conector.
+   Relaya al usuario la hora de la próxima corrida y el enlace que devuelve.
    Si no tienes la herramienta: dale los pasos para crearla en claude.ai/code → *Routines* (nombre, horario,
    repositorio, modelo, y el texto de la instrucción para pegar).
 3. Anota el id: `python herramientas/nube.py --id-remoto-de <tarea> <id>`.
