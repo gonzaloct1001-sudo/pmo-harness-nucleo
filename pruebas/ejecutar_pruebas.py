@@ -929,6 +929,9 @@ def main():
                            and (e2 / ".harness" / "entropia-2027-01-15.md").exists() and _viejo.exists() and _lecc.exists(), ["borró o no guardó"]))
         prueba("estado: con la revisión reciente no insiste", [str(e2 / "herramientas" / "estado.py")], e2, ausentes=["Revisión de entropía"])
         prueba("entropia: el núcleo está bajo el presupuesto de contexto real", [H + "entropia.py", "--techo"], repo, ["bajo el presupuesto"])
+        prueba("integridad: todo contra todo (rutas, skills, subagentes, índice, catálogo, NUCLEO.txt, hooks, herramientas, nombres viejos, compilación)",
+               [H + "integridad.py", "--nombres-viejos", "alta-proyecto,configurar-asistente,preparar-reunion,riesgos-issues,levantar-riesgos,generar-reporte,"
+                "nuevo-tipo-reporte,registrar-documento,versiones-documentos,definir-pauta,matriz-cumplimiento"], repo, ["Todo cuadra"])
 
         # Hooks de Claude Code: sesión larga, cierre y registro de uso de skills
         _hk = e2 / "herramientas" / "hooks"

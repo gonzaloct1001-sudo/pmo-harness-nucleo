@@ -9,8 +9,8 @@ Las reglas de esta carpeta están en `AGENTS.md`, la fuente única para cualquie
   `herramientas/estado.py --remoto`); úsalo y no vuelvas a ejecutar el script.
 - **Identidad:** en `.harness/asistentes.yaml` te corresponde el id `claude-code`. Si no figura, sigue
   `configurar`.
-- **Skills:** las de `.claude/skills/` se activan solas según su descripción; la tabla de procedimientos de
-  `AGENTS.md` es la misma lista.
+- **Skills:** las de `.claude/skills/` se activan solas según su descripción; el índice `.claude/skills/LEEME.md` es
+  la misma lista. Cada SKILL.md dice qué `reglas/` cargar.
 - **Subagentes:** los de `.claude/agents/` están disponibles; invócalos como indica cada skill.
 - **Hooks** (`.claude/settings.json`): al iniciar sesión, resumen de estado; antes de comandos Git, bloqueo de
   archivos confidenciales; después de editar CSV o YAML, validación de columnas, fechas y métricas. Además corre el

@@ -1,5 +1,33 @@
 # Cambios
 
+## 3.0.0 — 2026-11-10
+
+### Mapa, no enciclopedia
+Versión mayor porque cambia dónde viven las reglas y cómo se llaman las skills. Una carpeta en 2.x se actualiza con
+un solo sí (`actualizar_nucleo.py` retira las skills viejas que no se tocaron, respalda las modificadas, fusiona
+`settings.json` y completa `empresa/`); los nombres anteriores están en la tabla «Nombres anteriores» del índice.
+- **`AGENTS.md` es un mapa** de ~2.400 tokens (antes 5.100): arranque, organización, proyecto activo, los 22
+  principios en una línea cada uno (conservan su número), modo por defecto, nube, procedimientos, roles y
+  herramientas. El detalle de cada principio vive en **`reglas/`** (`datos`, `trabajo`, `confidencialidad`,
+  `entregables`, `nucleo`, `organizacion`) y cada SKILL.md dice qué reglas carga («Reglas que aplican»). Nada crítico
+  deja de cargarse: la esencia de cada regla sigue en el mapa; lo que se mueve es la elaboración.
+- **Skills: de 39 a 31.** `nuevo-proyecto` absorbe `alta-proyecto` (dos caminos: desde la descripción o con documentos,
+  `references/alta.md`); `configurar` absorbe `configurar-asistente` (opción D, `references/asistente.md`);
+  `reuniones` = `preparar-reunion` + `minuta`; `riesgos` = `riesgos-issues` + `levantar-riesgos`; `reportes` =
+  `generar-reporte` + `nuevo-tipo-reporte`; `documentos` = `registrar-documento` + `versiones-documentos`;
+  `evaluar-propuestas` absorbe `definir-pauta` (paso 1); `preparar-postulacion` absorbe `matriz-cumplimiento`.
+  Las descripciones de skills bajan a 60 palabras o menos y las de subagentes a 45: son lo que toda sesión carga.
+- **Contexto fijo real por sesión: de ~12.200 a ~6.300 tokens** (mapa 2.400 + puerta 300 + descripciones de skills
+  2.900 + subagentes 700). Techos impuestos por la batería: `medir_contexto.py --techo` 2.800 para el texto fijo,
+  `entropia.py --techo` 7.000 para el contexto real.
+- **Tres reglas que dejan de ser solo texto:** `validar_proyecto.py` avisa si el traspaso no tiene sus apartados de
+  evidencia o lleva días sin tocarse mientras los datos cambiaron; el control de Git (todas las IA) avisa cuando un
+  proyecto cambia y su traspaso no va en el commit; `bandeja.py --proteger-main` hace que GitHub exija PR para
+  `main`, también a la nube (solo con el sí del usuario; en privados de plan gratuito no está disponible).
+- **`herramientas/integridad.py`**: todo contra todo antes de publicar (rutas citadas que no existen, skills y
+  subagentes, índice, catálogo, `NUCLEO.txt`, hooks, herramientas, nombres viejos, compilación). Corre en la batería.
+- Guías de los ejemplos regeneradas con los nombres nuevos.
+
 ## 2.7.0 — 2026-11-10
 
 ### El harness se observa

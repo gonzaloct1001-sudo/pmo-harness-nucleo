@@ -60,6 +60,7 @@ pregunta solo lo que no puede resolver.
    Consultora-Sur/
    ├── .claude/
    ├── AGENTS.md
+   ├── reglas/
    ├── herramientas/
    ├── plantilla-proyecto/
    └── ...
@@ -143,8 +144,10 @@ Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadore
   [github.com/anthropics/skills](https://github.com/anthropics/skills). El harness funciona sin ellas.
 
 ## Con qué IA funciona, y cómo cambiar de una a otra
-- **Reglas únicas:** `AGENTS.md` tiene todas las reglas y la tabla de procedimientos. `CLAUDE.md` y `GEMINI.md` solo la
-  importan; Codex, Cursor y Copilot la leen directamente. Así todas operan igual desde el primer mensaje.
+- **Reglas únicas:** `AGENTS.md` es el mapa de reglas (cada principio en una línea; el detalle, en `reglas/`, que
+  cada procedimiento carga cuando aplica) y `.claude/skills/LEEME.md` es el índice de procedimientos. `CLAUDE.md` y
+  `GEMINI.md` solo importan el mapa; Codex, Cursor y Copilot lo leen directamente. Así todas operan igual desde el
+  primer mensaje, con un contexto fijo pequeño.
 - **Primera vez con una IA:** se configura sola (skill `configurar`): revisa qué archivo lee, activa los
   controles, hace una prueba rápida y queda registrada en `.harness/asistentes.yaml`. Si es una IA que el harness no
   conoce, averigua y te pregunta lo necesario.
@@ -403,7 +406,7 @@ guion para probar el harness con cada IA.
 | Pauta de evaluación | `proyectos/<slug>/evaluacion/pauta.yaml` |
 | Supuestos del modelo económico | `proyectos/<slug>/estudio/modelo/supuestos-modelo.yaml` |
 | Flujo del tablero ágil, definición de hecho | `proyectos/<slug>/agil/estados.yaml` |
-| Reglas para todas las IA | `AGENTS.md` (núcleo: se reemplaza al actualizar; lo propio va al proyecto o a la empresa) |
+| Reglas para todas las IA | `AGENTS.md` (mapa) y `reglas/` (detalle por dominio); son núcleo: se reemplazan al actualizar; lo propio va al proyecto o a la empresa |
 | Subagentes y hooks | `.claude/agents/`, `.claude/settings.json` y `.githooks/` |
 | Etapas de los ítems y requisitos para avanzar | `proyectos/<slug>/items/etapas.yaml` |
 | Cálculos propios del dominio | `proyectos/<slug>/scripts/` |
@@ -454,6 +457,11 @@ permisos se configuran en la propia herramienta: conviene un modo que pida confi
 la carpeta o borren archivos.
 
 ## Historial de versiones
+- **3.0** — Mapa, no enciclopedia: `AGENTS.md` de 2.400 tokens con el detalle en `reglas/`; skills de 39 a 31 (nombres
+  anteriores en el índice); contexto fijo real por sesión de 12.200 a 6.300 tokens; tres reglas mecánicas (traspaso,
+  control de Git, `--proteger-main`); `integridad.py`. Una carpeta en 2.x se actualiza con un solo sí.
+- **2.7** — El harness se observa: mejoras al núcleo anotadas y exportadas anonimizadas para el mantenedor, recolector
+  de entropía, hooks de sesión larga y cierre, arranque comprobado, `investigar` en paralelo con `--consolidar`.
 - **2.6** — Modo nube opcional (tareas programadas con el PC apagado y bandeja en GitHub, solo Claude, con el sí del
   usuario tarea por tarea), instalación por opciones, skill `configurar` para cambiar cualquier cosa después, manual y
   guía rápida para usuarios no técnicos.

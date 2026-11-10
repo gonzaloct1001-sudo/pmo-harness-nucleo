@@ -135,8 +135,8 @@ def main():
     if viejos:
         for x in archivos({".md", ".py", ".yaml", ".txt"}):
             rel = x.relative_to(RAIZ).as_posix()
-            if rel in ("CHANGELOG.md", "MEJORAS.md"):
-                continue
+            if rel in ("CHANGELOG.md", "MEJORAS.md", "pruebas/ejecutar_pruebas.py") or rel.startswith(("empresa/", "proyectos/", ".harness/")):
+                continue  # lo propio de la empresa no es del núcleo; la batería lleva la lista de nombres viejos a propósito
             t = x.read_text(encoding="utf-8", errors="replace")
             if rel == ".claude/skills/LEEME.md":
                 t = t.split("## Nombres anteriores")[0]
