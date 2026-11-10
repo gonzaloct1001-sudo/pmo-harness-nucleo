@@ -1,15 +1,83 @@
 # PMO Harness v3.0
 
-Marco de trabajo para diseñar y gestionar proyectos **de cualquier tipo** con un asistente de IA —Claude Code,
-OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u otro que trabaje sobre carpetas— para un programa
-de implementación, una obra, un portafolio de acciones, la evaluación de postulaciones a un fondo, la preparación de
-una postulación a CORFO o a una licitación, o un estudio de prefactibilidad. Todo vive en una carpeta local por
-empresa, respaldada en un repositorio **privado** de GitHub de quien lo usa.
+Un arnés para que un asistente de IA —Claude Code, OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u
+otro que trabaje sobre carpetas— lleve con método y evidencia **tus proyectos, las finanzas de tu empresa y tus
+investigaciones**, en una carpeta privada tuya. Cargas los documentos que ya tienes y en horas el proyecto queda
+configurado; cada mes cierras las finanzas como un controller; cada afirmación sobre el mundo llega con fuente,
+refutador y puertas que firmas tú. Todo vive en una carpeta local por empresa, respaldada en un repositorio
+**privado** de GitHub de quien lo usa.
 
-> **¿Primera vez?** Sigue la [guía de inicio](EMPEZAR-AQUI.md) (10 minutos, sin conocimientos técnicos). El uso
+> **¿Primera vez?** Sigue la [guía de inicio](EMPEZAR-AQUI.md) (15 minutos, sin conocimientos técnicos). El uso
 > diario está en el [manual de usuario](MANUAL-DE-USUARIO.md). Licencia MIT.
 
+## Qué hace
+
+**Gestión de proyectos de cualquier tipo.** Ejecución por plan (Gantt, hitos, contrato, valor ganado, ruta crítica),
+obra (RFI, no conformidades, inspecciones, estados de pago), equipo ágil (backlog, sprints, DORA, decisiones de
+arquitectura), cartera de ítems con etapas (acciones, bots, iniciativas, proveedores), programa con subproyectos y
+estudios. Se carga desde los documentos que existen y el asistente configura el proyecto en horas: lee todo, decide
+con reglas explícitas, deja registro de cada decisión y pregunta solo lo que no puede resolver. Después: status
+diario, reportes con tus formatos, reuniones (agenda y minuta), riesgos, cambios, documentos y consistencia.
+
+**Finanzas de la empresa, como un controller.** Plan de cuentas mapeado a líneas, presupuesto anual con supuestos y
+versiones, cierre mensual que importa la contabilidad, cuadra, explica desvíos y se puede reabrir con huella;
+resultados, balance y caja; forecast; proyección integrada a tres años en Excel con fórmulas; indicadores con
+semáforo e informe y presentación al directorio. «¿Cómo vamos financieramente?», «cierra septiembre», «¿por qué subió
+el gasto?».
+
+**Investigación auditable, de cualquier ámbito.** Cuando una decisión o un entregable dependen de hechos del mundo
+(a quién ofrecer una licencia, qué socios o proveedores califican, estado del arte, patentes, normativa, una due
+diligence, «¿es cierto que…?»), el harness aplica un protocolo: encuadre con la decisión que se tomará, hipótesis
+asesinas antes de construir, expediente con marcas (hecho, dato calculado, testimonio, pista) y niveles de fuente,
+bibliotecarios que trabajan en paralelo sin interpretar, refutador y árbitro independientes, ocho pruebas y un
+entregable que un tercero hostil puede reconstruir; las puertas las firma quien decide. Un validador guía, corrige lo
+mecánico y aprende los ajustes de cada empresa.
+
+**Evaluación de proyectos.** Estudios de perfil, prefactibilidad y factibilidad con preguntas, supuestos con fuente y
+recomendación; evaluación económica privada (flujos del inversionista, con impuestos) o social (precios sociales y
+tasa social), situación con y sin proyecto, alternativas, modelo en Excel con fórmulas (VAN, TIR, recuperación),
+sensibilidad y escenarios; y revisión de la calidad de un estudio propio o de terceros según su etapa. Los hechos
+externos del estudio entran por la investigación auditable.
+
+**Postulaciones y evaluación de propuestas.** Preparar una postulación a un fondo (CORFO, ANID, regional, privado),
+una oferta a una licitación o una respuesta a un RFP, desde las bases hasta la entrega: compuertas Go/No-Go, matriz
+de cumplimiento con barrido exhaustivo de requisitos, pauta inversa, secciones trazables, presupuesto con controles,
+red team y checklist de entrega. Y del otro lado de la mesa: pauta de evaluación, admisibilidad, evaluación
+fundamentada de cada propuesta en contexto aislado, ranking y acta.
+
+En todo: **tus formatos primero** (se adoptan tus plantillas y archivos base), **autoría limpia** de lo que se entrega,
+**confidencialidad por diseño** (lo sensible nunca sale de tu computador) y evidencia de lo que se comprobó y de lo
+que no.
+
+## Cómo trabaja
+
+- **Una carpeta = una empresa = un repositorio privado.** Para otra empresa, otra carpeta (`herramientas/nueva_empresa.py`);
+  los datos de dos empresas nunca se mezclan. Un tablero único puede ver varias empresas sin copiar sus datos.
+- **Tres capas.** El núcleo genérico (procedimientos, herramientas, reglas, arquetipos, plantillas) sirve para todo;
+  `empresa/` guarda lo común de la empresa (identidad, marca, formatos, banco de antecedentes); `proyectos/<slug>/`
+  guarda todo lo particular. Un proyecto combina arquetipos: `ejecucion`, `obra`, `agil`, `cartera`, `evaluacion`,
+  `postulacion`, `programa`, `estudio`, `investigacion`, `finanzas`.
+- **Reglas únicas, en un mapa.** `AGENTS.md` es un mapa de ~2.400 tokens: cada principio en una línea y el detalle en
+  `reglas/`, que cada procedimiento carga cuando aplica. `CLAUDE.md` y `GEMINI.md` solo lo importan. Así todas las IA
+  operan igual desde el primer mensaje, con un contexto fijo pequeño.
+- **31 procedimientos (skills)** que se piden en lenguaje natural («haz la minuta», «cierra octubre», «investiga a
+  quién…»); el índice está en `.claude/skills/LEEME.md`. **Subagentes** con un rol acotado (lector de documentos,
+  revisor independiente, evaluador, red team, bibliotecario, refutador, árbitro, analistas), cada uno con el modelo
+  que su nivel de capacidad exige; en las IA sin subagentes, el mismo rol se aplica en un paso separado.
+- **Controles que no dependen de que la IA «se acuerde».** El control de Git (todas las IA) bloquea confidenciales y
+  planillas mal formadas antes de cada commit y avisa si un proyecto cambia sin su traspaso; los hooks de Claude Code
+  validan cada CSV o YAML al editarlo, entregan el estado al iniciar, avisan cuando una sesión lleva muchas acciones y
+  no dejan cerrar con cambios sin guardar. Más de 370 pruebas automáticas y una revisión de integridad vigilan el núcleo.
+- **El harness se observa.** Lo que el asistente tuvo que adivinar, lo que una skill no cubrió o un script que falló
+  queda anotado y se exporta anonimizado para el mantenedor; un recolector de entropía propone qué retirar (nunca borra
+  solo); el traspaso de cada proyecto dice qué se comprobó, qué no y dónde se adivinó.
+- **Modo nube, opcional y solo con Claude Code:** tareas programadas con el PC apagado y una bandeja en GitHub para
+  encargar y aprobar desde el celular; nada se programa sin tu sí, tarea por tarea (`NUBE.md`).
+- **Actualizaciones que nunca pisan lo tuyo:** «actualiza el harness» trae la versión nueva con vista previa, respaldo,
+  pruebas y reversión automática; fusiona tus permisos y completa `empresa/` sin tocar lo existente.
+
 ## Cómo obtenerlo
+
 - **Opción simple (zip):** en esta página, botón verde **Code → Download ZIP**. Descomprímelo y sigue la
   [guía de inicio](EMPEZAR-AQUI.md).
 - **Opción con Git:** `git clone https://github.com/gonzaloct1001-sudo/pmo-harness-nucleo.git <Nombre-de-tu-empresa>`.
@@ -31,466 +99,179 @@ Si un usuario te pide «instala el PMO Harness desde este enlace»:
 4. Pídele al usuario abrir esa carpeta en su editor (Archivo → Abrir carpeta) y escribir «hola». Si tu herramienta ya
    trabaja en esa carpeta, lee `AGENTS.md` y sigue su paso 0.
 
-Está organizado en tres capas:
-1. **Núcleo genérico** (`.claude/skills/`, `herramientas/`, `plantilla-proyecto/`): métodos que sirven para todo.
-2. **Arquetipos** (`arquetipos/`): formas de trabajo — `ejecucion` (plan, hitos, contrato, valor ganado),
-   `obra` (terreno: RFI, no conformidades, inspecciones, estados de pago), `agil` (sprints, DORA, ingeniería),
-   `cartera` (muchos ítems con etapas y métricas), `evaluacion` (evaluar propuestas de terceros con pauta),
-   `postulacion` (preparar y presentar una propuesta para ganar un fondo, licitación o concurso), `programa` (un
-   contrato padre ejecutado en varios subproyectos, cada uno con su Gantt, presupuesto, equipo y reportes) y `estudio`
-   (preguntas, supuestos, modelo económico, recomendación).
-3. **Proyecto** (`proyectos/<slug>/`): todo lo particular — métricas, reglas, reportes con nombre propio,
-   plantillas, marca y cálculos del dominio.
-
-**La idea central:** no pasar semanas configurando. Se cargan los documentos que ya existen y el asistente
-configura el proyecto en horas: lee todo, decide con reglas explícitas, deja registro de cada decisión y
-pregunta solo lo que no puede resolver.
-
----
-
 ## Inicio rápido (tres pasos)
 
 > Paso a paso y para cualquier usuario: [guía de inicio](EMPEZAR-AQUI.md). Si quieres que la instalación casi no te
 > pregunte, completa antes `FICHA-DE-INICIO.md`.
 
-### 1. Preparar la carpeta
-1. Crea una carpeta con el nombre de tu empresa, por ejemplo `Consultora-Sur`.
-2. Descomprime el contenido del zip **directamente dentro de ella**. Debe quedar así:
-   ```
-   Consultora-Sur/
-   ├── .claude/
-   ├── AGENTS.md
-   ├── reglas/
-   ├── herramientas/
-   ├── plantilla-proyecto/
-   └── ...
-   ```
-   Si te quedó una subcarpeta intermedia (`Consultora-Sur/pmo-harness-nucleo-main/...`), mueve su contenido un nivel
-   arriba, o abre directamente esa subcarpeta. Lo importante es que la carpeta que abras contenga `AGENTS.md`.
-
-### 2. Abrir e instalar
-1. Abre la carpeta en VS Code (Archivo → Abrir carpeta) y abre tu asistente de IA (Claude Code, Codex, Gemini…).
-2. Escribe **"hola"** (o `/instalar` en Claude Code): el asistente detecta que falta instalar y te lo ofrece.
-3. El asistente revisa el computador y, **con tu permiso, instala lo que falte** (Python, Git, GitHub CLI y
-   librerías; no toca VS Code). Después define la empresa dueña de la carpeta, prepara Git y GitHub (siempre privado),
-   se registra a sí mismo y te pregunta **de qué se trata tu proyecto**, en tus palabras. Con eso propone el diseño
-   (arquetipo, etapas, métricas, reglas, reportes), te hace unas pocas preguntas y crea el proyecto.
-   - **Recomendado antes de abrir la IA:** doble clic en `INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`. Instala lo
-     necesario sin preguntas técnicas, guía la creación de la cuenta de GitHub si falta y la conecta con el código ya
-     copiado; el nombre y correo de Git se toman de esa cuenta. Nunca se queda
-     detenido: cada pregunta tiene un tiempo máximo.
-
-### 3. Si tienes documentos: cargarlos y decir "listo"
-1. Deja **todo** el material del programa en `proyectos/<tu-programa>/_entrada/`: contratos, enmiendas,
-   carta Gantt, reportes emitidos, plantillas, actas, correos, conversaciones de otras IA, logos.
-   No hace falta ordenar ni renombrar. Los archivos de esa carpeta no se suben a GitHub; del texto de las bases y
-   documentos de definición queda una copia fiel en `fuentes/` (en tu repositorio privado), para trabajar desde
-   cualquier computador sin los originales.
-   El archivo `_entrada/LEEME.md` explica qué conviene dejar y cómo exportar chats de otras IA.
-2. Escribe **listo**.
-3. El asistente ejecuta el alta: inventario → lectura → decisiones → configuración → **un solo mensaje con
-   las preguntas pendientes** (máximo 12, cada una con una propuesta) → verificación → informe.
-4. Al terminar tendrás:
-   - `contexto/informe-de-alta.md`: lo que el asistente entendió del programa, cobertura y pendientes.
-   - `contexto/registro-de-alta.md`: cada decisión tomada, con su fuente y nivel de confianza.
-   - El proyecto completo configurado y un reporte semanal de prueba.
-
-Si el alta se interrumpe (se cierra el editor, se acaba la sesión), escribe "continúa el alta": el asistente
-retoma desde su punto de control sin repetir trabajo.
-
-Si partes de cero, este paso no es necesario: el proyecto queda listo después del paso 2.
-
----
+1. **Preparar la carpeta.** Crea una carpeta con el nombre de tu empresa (por ejemplo `Consultora-Sur`) y descomprime
+   el zip **directamente dentro**: `AGENTS.md`, `reglas/`, `herramientas/` y `.claude/` deben quedar en el primer nivel.
+   Si quedó una subcarpeta intermedia, mueve su contenido un nivel arriba.
+2. **Abrir e instalar.** Abre la carpeta en VS Code con tu asistente de IA y escribe **«hola»**: el asistente detecta
+   que falta instalar y, con tu permiso, instala lo que falte (Python, Git, GitHub CLI y librerías), define la
+   empresa, prepara Git y GitHub (siempre privado), se registra y te pregunta de qué se trata tu proyecto, en tus
+   palabras. Con preguntas de opción (para quién es la carpeta, qué llevará primero, formatos propios, status
+   semanal, modo nube) deja todo listo. **Recomendado antes de abrir la IA:** doble clic en `INSTALAR-WINDOWS.bat` o
+   `INSTALAR-MAC.command`, que instala sin preguntas técnicas y nunca se queda detenido.
+3. **Si tienes documentos: cargarlos y decir «listo».** Deja todo el material en `proyectos/<tu-proyecto>/_entrada/`
+   (contratos, cronograma, reportes, plantillas, actas, correos, chats de otras IA, logos; sin ordenar ni renombrar;
+   esa carpeta no se sube a GitHub) y escribe **listo**. El asistente hace el alta: inventario → lectura → decisiones →
+   configuración → **un solo mensaje con las preguntas pendientes** → verificación → informe (`contexto/informe-de-alta.md`
+   y `contexto/registro-de-alta.md`, con cada decisión, su fuente y su confianza). Si se interrumpe, «continúa el alta»
+   retoma desde su punto de control. Si partes de cero, este paso no hace falta.
 
 ## Tipos de proyecto
 
-No hay un catálogo cerrado: describes el proyecto y la skill `nuevo-proyecto` elige el arquetipo (o una
-combinación) y propone lo propio del dominio. Algunos ejemplos:
+No hay un catálogo cerrado: describes el proyecto y el asistente elige el arquetipo (o una combinación) y propone lo
+propio del dominio.
 
-| Proyecto | Arquetipo | Qué propone el generador |
+| Proyecto | Arquetipo | Qué propone |
 |---|---|---|
 | Implementar un sistema para un cliente | ejecución (+ ágil si hay desarrollo) | Gantt, hitos, contrato, valor ganado, ruta crítica, reporte semanal |
 | Construir una casa u obra | ejecución + obra | Partidas, RFI, inspecciones, no conformidades, estados de pago, informe de obra |
 | Equipo de desarrollo de software | ágil | Backlog, sprints, velocidad, DORA, ADR, deuda técnica, trazabilidad |
-| Portafolio de acciones | cartera | Etapas de selección, tesis por acción, política de inversión, revisión mensual vs índice |
-| Granja de bots de trading | cartera (+ ágil para su desarrollo) | Etapas backtest → paper → real, drawdown, profit factor, reglas de promoción y retiro |
-| Evaluar postulaciones a un fondo o licitación | evaluación | Pauta, admisibilidad, evaluación fundamentada por propuesta, ranking, acta |
-| Postular a un fondo (CORFO, ANID, regional) o presentar una oferta a una licitación | postulación | Go/No-Go, barrido de bases y matriz de cumplimiento, pauta inversa, estrategia, secciones trazables, presupuesto con controles en Excel, red team, checklist de entrega |
-| Programa con un contrato general y varios subproyectos (presupuesto macro y por subproyecto, personas compartidas, enmiendas que afectan subproyectos) | programa + ejecución | Subproyectos con su Gantt, objetivos, riesgos, minutas y reportes; Gantt macro, control presupuestario con contingencia, dotación y sobreasignación, estado consolidado |
-| Prefactibilidad o evaluación económica | estudio | Preguntas, supuestos con fuente, modelo en Excel con VAN/TIR y sensibilidad |
-| Llevar el área de finanzas de una empresa (gerente de finanzas, controller o consultor a cargo) | finanzas | Plan de cuentas mapeado a líneas, importación del balance de comprobación, presupuesto con supuestos y versiones, cierre mensual que se puede reabrir, resultados, balance y caja con desvíos, forecast, proyección integrada a 3 años con Excel de fórmulas, indicadores con semáforo, informe y presentación al directorio |
-| Investigar a quién ofrecer una licencia, qué socios o proveedores califican, el estado del arte, patentes, una due diligence o si algo es cierto (en cualquier área) | investigación (sola o junto a postulación o estudio) | Protocolo auditable: encuadre con la decisión, hipótesis asesinas antes de construir, expediente con marcas y niveles de fuente, refutador independiente, ocho pruebas, puertas que firma quien decide; validador que guía, corrige lo mecánico y aprende los ajustes de cada empresa |
-
-Los diseños que quieras reutilizar se guardan como perfiles en `biblioteca/perfiles/`. Vienen incluidos perfiles
-de convocatorias: `fondo-corfo`, `fondo-anid`, `licitacion-mercado-publico`, `fondo-regional-o-sectorial` y
-`licitacion-privada-rfp` (dicen qué revisar; los valores siempre se confirman en las bases vigentes).
-Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadores de servicio).
-
----
-
-## Requisitos
-- [VS Code](https://code.visualstudio.com/) con un asistente de IA que trabaje sobre carpetas y ejecute comandos:
-  **Claude Code**, **OpenAI Codex**, **Gemini** (CLI o Code Assist), **Cursor** o **GitHub Copilot** en modo agente.
-  Un chat en el navegador no sirve: necesita leer la carpeta y ejecutar los scripts.
-- Una cuenta de GitHub (el repositorio de cada empresa es siempre privado).
-- Lo demás lo instala el harness **con tu permiso** (`instalar`, o doble clic en `INSTALAR-WINDOWS.bat` /
-  `INSTALAR-MAC.command`): [Python 3.9+](https://www.python.org/downloads/), [Git](https://git-scm.com/downloads),
-  [GitHub CLI](https://cli.github.com/) (opcional: crea el repositorio privado desde el chat) y
-  [LibreOffice](https://www.libreoffice.org/) (opcional: revisión visual y PDF). En Windows usa winget, solo para el
-  usuario (sin permisos de administrador), con tiempo máximo por programa y la descarga oficial si winget falla; en Mac,
-  Homebrew (pide la contraseña del Mac) y deja las librerías en `.venv/`. Si prefieres instalar a mano, usa los enlaces.
-- Opcional: extensión de VS Code **Markdown Preview Mermaid Support** (ver la carta Gantt).
-- Recomendado con Claude Code: las skills oficiales de documentos de Anthropic (Word, Excel, PowerPoint, PDF), desde
-  [github.com/anthropics/skills](https://github.com/anthropics/skills). El harness funciona sin ellas.
-
-## Con qué IA funciona, y cómo cambiar de una a otra
-- **Reglas únicas:** `AGENTS.md` es el mapa de reglas (cada principio en una línea; el detalle, en `reglas/`, que
-  cada procedimiento carga cuando aplica) y `.claude/skills/LEEME.md` es el índice de procedimientos. `CLAUDE.md` y
-  `GEMINI.md` solo importan el mapa; Codex, Cursor y Copilot lo leen directamente. Así todas operan igual desde el
-  primer mensaje, con un contexto fijo pequeño.
-- **Primera vez con una IA:** se configura sola (skill `configurar`): revisa qué archivo lee, activa los
-  controles, hace una prueba rápida y queda registrada en `.harness/asistentes.yaml`. Si es una IA que el harness no
-  conoce, averigua y te pregunta lo necesario.
-- **Cambiar de IA a mitad de camino:** cada proyecto lleva un traspaso (`seguimiento/traspaso.md`) que se actualiza al
-  cerrar cada tarea: qué se hizo, en qué quedó y el próximo paso. La IA nueva lo lee al empezar (el estado de inicio lo
-  muestra) y retoma sin que repitas nada. Lo que no viaja es la conversación misma; los datos y el estado sí. Antes de
-  cambiar, conviene decir «guarda».
-- **Controles:** los que protegen la información (no subir confidenciales, validar planillas) corren en Git antes de
-  cada commit, con cualquier IA o sin IA. Claude Code agrega sus hooks y subagentes; en las demás, esos pasos los hace
-  la IA según `AGENTS.md`.
-
-## Varias empresas y varios computadores
-- **Una carpeta por empresa**, cada una con su propio repositorio privado: `python herramientas/nueva_empresa.py
-  "Empresa 2" --destino <carpeta>` crea la carpeta con el núcleo, su `empresa/` (marca, autoría, banco de antecedentes,
-  formatos comunes) y el repositorio. Las postulaciones y proyectos de esa empresa viven en su `proyectos/` y heredan
-  su marca y formatos. Los datos de dos empresas nunca se mezclan.
-- **Otro computador:** el instalador de doble clic, después de conectar GitHub, ofrece descargar las empresas de la
-  cuenta; también se puede pedir al asistente «es otro computador, trae mis empresas», o ejecutar
-  `INSTALAR-WINDOWS.bat -Clonar` / `bash herramientas/preparar_pc.sh --clonar`: lista los repositorios con el tema
-  `pmo-harness-empresa` de tu cuenta y descarga los que elijas. Luego abre la carpeta de la empresa y escribe «hola».
-  Los originales de `_entrada/`, CVs y paquetes firmados no viajan por GitHub (son confidenciales): las réplicas fieles
-  de las bases y documentos de definición, las fichas y todo lo configurado, sí. La carpeta del harness no debe quedar
-  dentro de Dropbox, OneDrive o Google Drive (pueden dañar el historial de Git): el estado de inicio y el instalador lo
-  advierten.
-- **Mejoras del núcleo:** cada carpeta trae su copia del núcleo (así cualquier IA la entiende sin instalar nada aparte).
-  «Actualiza el harness» (`actualizar_nucleo.py`) trae la versión nueva desde el repositorio del núcleo o un zip, sin
-  tocar proyectos ni datos, con respaldo, pruebas y reversión si algo falla.
-
-## Status de todos los proyectos
-- **Cada día:** al abrir la sesión, el asistente muestra en pocas líneas el status de los proyectos de la empresa
-  (semáforo, lo que vence pronto, decisiones que esperan). En cualquier momento: «¿cómo vamos?».
-- **Reporte web:** «dame el reporte de status» genera una página (también Markdown, Excel o JSON) en `status/`, con
-  historial y comparación con el anterior. Después pregunta si se deja listo **cada semana**, en qué día y a qué hora
-  (`herramientas/agendar_status.py`: Tareas programadas en Windows, launchd en Mac).
-- **Reglas fijas del semáforo:** salen de los mismos cálculos de `postulacion.py`, `validar_proyecto.py` y
-  `evaluar_metricas.py`, más el calendario, los hitos, los acuerdos y los compromisos propios
-  (`seguimiento/vencimientos.csv`, por ejemplo un reporte semestral).
-- **Varias empresas:** cada una tiene su status en su carpeta. Si se quieren ver juntas, un **tablero único**
-  (`status.py --crear-panel`) va en una carpeta y un repositorio privado aparte, solo del usuario: lee el status de cada
-  empresa sin copiar sus datos. Al sumar otra empresa, el asistente pregunta si son independientes o de una misma
-  entidad, y si se prefiere un tablero por empresa o uno general.
-
----
+| Programa con contrato general y varios subproyectos | programa + ejecución | Subproyectos con Gantt, riesgos y reportes propios; Gantt macro, presupuesto con contingencia, dotación, estado consolidado |
+| Portafolio de acciones, granja de bots, cartera de iniciativas | cartera | Etapas con requisitos para avanzar, tesis por ítem, política como reglas, revisión periódica contra un índice |
+| Prefactibilidad, factibilidad o evaluación económica | estudio | Preguntas, supuestos con fuente, modelo en Excel con VAN, TIR y sensibilidad, recomendación |
+| Llevar el área de finanzas de una empresa | finanzas | Plan de cuentas, presupuesto, cierre mensual reabrible, resultados, balance y caja, forecast, proyección integrada, indicadores, directorio |
+| Investigar a quién ofrecer una licencia, qué socios califican, el estado del arte, patentes o si algo es cierto | investigación (sola o junto a otro arquetipo) | Protocolo auditable: encuadre, hipótesis asesinas, expediente con marcas y niveles de fuente, refutador, árbitro, ocho pruebas, puertas que firma quien decide |
+| Evaluar postulaciones o propuestas de terceros | evaluación | Pauta, admisibilidad, evaluación fundamentada por propuesta, ranking, acta |
+| Postular a un fondo o presentar una oferta a una licitación | postulación | Go/No-Go, matriz de cumplimiento, pauta inversa, secciones trazables, presupuesto con controles, red team, checklist de entrega; perfiles de convocatorias en `biblioteca/perfiles/` |
 
 ## Probar antes con datos ficticios
 
-### Prueba 1 — Portafolio de acciones (arquetipo cartera)
-`ejemplos/portafolio-acciones/` es un portafolio ficticio completo: 12 acciones inventadas en distintas
-etapas, transacciones, precios mensuales con un índice de referencia, datos fundamentales, fichas con tesis,
-política de inversión como reglas y un script propio que calcula rentabilidad, volatilidad, caída máxima,
-Sharpe y concentración. Instrucciones sugeridas en el chat de tu asistente:
+`ejemplos/` trae un proyecto ficticio por capacidad, listo para probar sin tocar datos reales. Los recorridos, paso a
+paso y en orden de relevancia, están en `ejemplos/LEEME.md`:
 
-1. **"Evalúa las métricas del portafolio de ejemplo con corte al 31-08-2026."**
-   Debería encontrar: una acción sobre el límite de 20% (TCOR), una con deuda/EBITDA sobre la política
-   (PNOR), una en análisis sin tesis escrita (RAUS), una en preselección que no cumple el filtro de ROE
-   (SALI), una ficha con revisión vencida (BPAC), una candidata a avanzar (FARA) y la cartera rindiendo
-   bajo el índice.
-2. **"Genera la revisión mensual de agosto del portafolio de ejemplo."**
-3. **"Agrega la métrica 'dividendos recibidos en 12 meses' al portafolio de ejemplo."**
-4. **"Pasa FARA a preselección"** y luego **"crea la ficha de RAUS"** (te ayudará a escribir la tesis).
-5. **"Quiero un reporte trimestral llamado Informe de Gestión, en PowerPoint, con desempeño, política y
-   decisiones."** (diseño de un reporte propio por conversación).
+| Ejemplo | Qué muestra |
+|---|---|
+| `ejemplos/paquete-alta-andes/` | Alta de un proyecto desde una carpeta de documentos: «listo» y el proyecto configurado |
+| `ejemplos/finanzas-demo/` | Finanzas de una distribuidora: estados, cierre, importación de un balance, proyección |
+| `ejemplos/investigacion-demo/` | Investigación cerrada con 0 errores; el validador detecta 24 de 24 mutaciones sembradas |
+| `ejemplos/paquete-formatos-demo/` | Adopción de formatos propios: qué falta, qué se pierde, versión mejorada |
+| `ejemplos/programa-demo/` | Programa con subproyectos, presupuesto macro y enmiendas |
+| `ejemplos/portafolio-acciones/` | Cartera con etapas, tesis y script propio de rentabilidad y riesgo |
+| `ejemplos/estudio-solar/` | Estudio económico con modelo en Excel, sensibilidad y escenarios |
+| `ejemplos/equipo-software/` | Equipo ágil: sprints, velocidad, DORA, ADR |
+| `ejemplos/fondo-innovacion/` | Evaluación de postulaciones con pauta y ranking |
+| `ejemplos/postulacion-demo/` | Postulación a un fondo: matriz de cumplimiento, pauta inversa, red team |
 
-Todo es ficticio y sirve para probar la herramienta: no es información ni recomendación de inversión.
+## Requisitos
+- [VS Code](https://code.visualstudio.com/) con un asistente de IA que trabaje sobre carpetas y ejecute comandos:
+  **Claude Code**, **OpenAI Codex**, **Gemini** (CLI o Code Assist), **Google Antigravity**, **Cursor** o **GitHub
+  Copilot** en modo agente. Un chat en el navegador no sirve: necesita leer la carpeta y ejecutar los scripts.
+- Una cuenta de GitHub (el repositorio de cada empresa es siempre privado).
+- Lo demás lo instala el harness **con tu permiso** (`instalar`, o doble clic en `INSTALAR-WINDOWS.bat` /
+  `INSTALAR-MAC.command`): [Python 3.9+](https://www.python.org/downloads/), [Git](https://git-scm.com/downloads),
+  [GitHub CLI](https://cli.github.com/) (opcional) y [LibreOffice](https://www.libreoffice.org/) (opcional: revisión
+  visual y PDF). En Windows usa winget solo para el usuario, sin permisos de administrador; en Mac, Homebrew y `.venv/`.
+- Opcional: extensión de VS Code **Markdown Preview Mermaid Support** (ver la carta Gantt) y, con Claude Code, las
+  skills oficiales de documentos de Anthropic ([github.com/anthropics/skills](https://github.com/anthropics/skills)).
 
-### Prueba 2 — Evaluación de postulaciones (arquetipo evaluación)
-`ejemplos/fondo-innovacion/` trae las bases de un fondo ficticio, la pauta ya construida y 3 postulaciones.
-1. **"Evalúa las postulaciones del fondo de ejemplo."** Debería: recordarte la confidencialidad, declarar
-   inadmisible a P-003 (menos de 2 años de actividad), evaluar cada postulación con un subagente citando
-   evidencia, dejar los puntajes como *propuesta* y pedirte la revisión antes del acta.
-2. **"Construye de nuevo la pauta desde las bases"** para probar `evaluar-propuestas`.
+## Con qué IA funciona, y cómo cambiar de una a otra
+- **Primera vez con una IA:** se configura sola (skill `configurar`, opción D): revisa qué archivo lee, activa los
+  controles, hace una prueba rápida y queda registrada en `.harness/asistentes.yaml`.
+- **Cambiar de IA a mitad de camino:** cada proyecto lleva un traspaso (`seguimiento/traspaso.md`) que se actualiza al
+  cerrar cada tarea: qué se hizo, en qué quedó, el próximo paso, qué se comprobó y qué no. La IA nueva lo lee al empezar
+  y retoma sin que repitas nada. Lo que no viaja es la conversación; los datos y el estado sí. Antes de cambiar, «guarda».
+- **Controles:** los que protegen la información corren en Git antes de cada commit, con cualquier IA o sin IA. Claude
+  Code agrega hooks y subagentes; en las demás, esos pasos los hace la IA según `AGENTS.md`.
 
-### Prueba 3 — Estudio económico (arquetipo estudio)
-`ejemplos/estudio-solar/` tiene los supuestos de una planta solar ficticia y su modelo en Excel.
-**"Revisa la evaluación económica del estudio solar: ¿qué tan robusta es?"** Debería explicar VAN, TIR y
-recuperación, señalar que con 10% menos de ahorro el VAN queda cerca de cero y que dos supuestos críticos
-tienen confianza baja o media.
+## Varias empresas y varios computadores
+- **Una carpeta por empresa**, cada una con su repositorio privado: `python herramientas/nueva_empresa.py "Empresa 2"
+  --destino <carpeta>`. Los proyectos de cada empresa heredan su marca y sus formatos.
+- **Otro computador:** el instalador de doble clic, después de conectar GitHub, ofrece descargar las empresas de la
+  cuenta (`INSTALAR-WINDOWS.bat -Clonar` / `bash herramientas/preparar_pc.sh --clonar`), o pídele al asistente «es otro
+  computador, trae mis empresas». Los originales de `_entrada/`, CVs y paquetes firmados no viajan por GitHub; las
+  réplicas fieles, las fichas y todo lo configurado, sí. La carpeta no debe quedar dentro de Dropbox, OneDrive o Google
+  Drive (dañan el historial de Git): el instalador y el estado de inicio lo advierten.
+- **Mejoras del núcleo:** cada carpeta trae su copia del núcleo. «Actualiza el harness» (`herramientas/actualizar_nucleo.py`)
+  trae la versión nueva desde el repositorio del núcleo o un zip, con vista previa, respaldo, pruebas y reversión si
+  algo falla; si el núcleo nuevo trae un actualizador distinto, es ese el que actualiza.
 
-### Prueba 4 — Equipo de software (arquetipo ágil)
-`ejemplos/equipo-software/` tiene 5 sprints, backlog, despliegues, deuda técnica, requisitos, ADR y un postmortem.
-1. **"Planifiquemos el sprint S5 del equipo de software de ejemplo."**
-2. **"¿Cómo estamos en entrega? Dame las métricas DORA."** (tasa de falla de 33%, dos incidentes).
-3. **"¿Qué requisitos no tienen pruebas?"**
-
-### Prueba 5 — Diseño desde cero
-Escribe algo como **"quiero llevar el seguimiento de una granja de bots de trading, con sus métricas"** o
-**"quiero llevar la construcción de una casa"** y revisa qué diseño propone `nuevo-proyecto`.
-
-### Prueba 6 — Alta a partir de documentos (arquetipo ejecución)
-`ejemplos/` también trae un programa inventado ("Programa Andes Digital"):
-- `paquete-alta-andes/`: documentos en bruto (contrato, enmienda, Gantt, informe semanal, PEP, acta,
-  correos, exportación de ChatGPT, logo), con contradicciones sembradas a propósito.
-- `demo-andes/`: cómo debería quedar el proyecto después del alta. Sirve como "respuesta correcta".
-
-Prueba sugerida:
-1. `/instalar` y como nombre del programa responde "Prueba Andes".
-2. Copia las subcarpetas de `ejemplos/paquete-alta-andes/` dentro de `proyectos/prueba-andes/_entrada/`.
-3. Escribe **listo** y compara el resultado con `ejemplos/demo-andes/`.
-
-El `_LEEME-paquete.md` del paquete indica qué debería resolver sola y qué debería preguntar. Los datos están
-fechados en torno al 25-09-2026: si pruebas después, pide "usa fecha de corte 25-09-2026".
-Con el demo ya cargado, prueba también **"¿vamos atrasados? usa fecha de corte 25-09-2026"**: debería usar
-valor ganado y ruta crítica (SPI 0,79, CPI 0,87, término pronosticado 29 días después del contractual).
-
-### Prueba 7 — Postulación a un fondo (arquetipo postulación)
-`ejemplos/paquete-postulacion-demo/` trae bases ficticias de un fondo de innovación con trampas sembradas: un
-requisito excluyente escondido en un anexo, una aclaración que cambia el límite de páginas y exige declarar el uso
-de IA, un certificado con vigencia máxima y un presupuesto del cliente que no cumple el cofinanciamiento.
-`ejemplos/postulacion-demo/` muestra cómo debería verse a mitad de camino (etapa red team). Prueba:
-1. `python herramientas/postulacion.py ejemplos/postulacion-demo --hoy 2026-11-03`: etapa, compuertas, fallas fatales.
-2. `python herramientas/presupuesto_postulacion.py ejemplos/postulacion-demo/economico/presupuesto.yaml --salida prueba.xlsx`:
-   abre `prueba.xlsx` y cambia un aporte en la hoja Presupuesto: la hoja Controles se recalcula sola (para cambios
-   definitivos se edita el YAML y se vuelve a generar).
-3. Crea `prueba-postulacion` con el arquetipo `postulacion`, copia las subcarpetas del paquete a `_entrada/` y di
-   "prepara la postulación".
-
-
-### Prueba 8 — Programa con subproyectos (arquetipo programa)
-`ejemplos/programa-demo/` es un programa ficticio con un contrato padre, dos enmiendas y tres subproyectos (ERP, app
-ágil y portal) con dependencias entre ellos, contingencia del programa y por subproyecto, y una persona compartida.
-1. `python herramientas/programa.py ejemplos/programa-demo --hoy 2026-10-15 --excel`: avance y plazo por subproyecto,
-   presupuesto y contingencia, sobreasignación, enmienda pendiente y ruta crítica del programa; genera el Gantt macro, el
-   detallado, el de cada subproyecto y el control presupuestario en Excel.
-2. Para uno propio: «nuevo proyecto» → «programa nuevo», y luego «agrega un subproyecto». Un proyecto sin relación con el
-   programa se crea aparte («nuevo proyecto» → «independiente»).
-
-### Prueba 9 — Investigación auditable (arquetipo investigación)
-`ejemplos/investigacion-demo/` es una investigación ficticia cerrada (qué planta de compostaje contratar), con todas
-sus puertas firmadas, un testimonio que no se deja pasar como hecho, una conclusión retirada por el refutador y una
-planta en reserva por falta de evidencia.
-1. `python herramientas/investigacion.py ejemplos/investigacion-demo --revisar --hoy 2026-10-30`: 0 errores.
-2. `python herramientas/investigacion.py ejemplos/investigacion-demo --instancia 2026-01-planta-compostaje --auditar --hoy 2026-10-30`
-   y `--muestra --semilla 7`: pruebas mecánicas y muestra al azar repetible.
-3. Para una propia: **«investiga a quién le podríamos ofrecer la licencia de X»**. El asistente abre la investigación
-   en sondeo, te pide la firma del encuadre (P0) y después de las hipótesis asesinas (P2), y en cada momento puedes
-   preguntar **«¿cuál es el siguiente paso de la investigación?»**.
-
-### Prueba 10 — Formatos propios
-`ejemplos/paquete-formatos-demo/` trae los formatos ficticios de una cooperativa: un informe mensual sin sección de
-riesgos, un acta sin decisiones, una planilla con fórmulas, una presentación completa, un plan de cuentas y un logo.
-1. Copia el paquete a `empresa/_entrada/` y di **«adopta mis formatos»**: debería detectar el tipo de cada archivo,
-   avisar lo que falta en el informe y el acta, proponer la versión mejorada y reconocer el plan de cuentas como
-   archivo base.
-2. Adopta el informe mejorado y la marca; luego **«genera el informe mensual de octubre»**: sale con tu plantilla,
-   tus estilos y tu logo, con las secciones vacías eliminadas.
-
-### Prueba 11 — Finanzas (arquetipo finanzas)
-`ejemplos/finanzas-demo/` es la gestión financiera ficticia de una distribuidora: plan de cuentas mapeado, enero a
-septiembre de 2026 importados, presupuesto 2026, enero a agosto cerrados, una cuenta sin mapear en septiembre (6999) y
-un exceso de arriendo en julio.
-1. `python herramientas/finanzas.py ejemplos/finanzas-demo --hoy 2026-10-12`: dónde va y el siguiente paso (mapear la 6999).
-2. `python herramientas/finanzas.py ejemplos/finanzas-demo --estados --periodo 2026-08 --excel estados.xlsx`: resultados
-   mes y acumulado contra presupuesto, balance que cuadra, flujo de caja e indicadores; el Excel lleva fórmulas.
-3. `python herramientas/finanzas.py ejemplos/finanzas-demo --importar ejemplos/paquete-finanzas-demo/balance_comprobacion_2026-10.xlsx --periodo 2026-10 --vista-previa`:
-   detecta la fila de encabezados y las columnas de una exportación «de sistema contable» y comprueba que cuadra.
-4. Para una propia: **«quiero llevar las finanzas de mi empresa»** y después, cada mes, **«cierra octubre»**.
----
+## Status de todos los proyectos
+- **Cada día**, al abrir la sesión, el asistente muestra en pocas líneas el status de los proyectos (semáforo, lo que
+  vence pronto, decisiones que esperan, críticos previos). En cualquier momento: «¿cómo vamos?».
+- **Reporte web:** «dame el reporte de status» genera una página (también Markdown, Excel o JSON) en `status/`, con
+  historial; se puede dejar **cada semana** en el computador (`herramientas/agendar_status.py`).
+- **Varias empresas:** un **tablero único** (`herramientas/status.py --crear-panel`) va en una carpeta y un repositorio
+  privado aparte, solo del usuario: lee el status de cada empresa sin copiar sus datos.
 
 ## Tus formatos, primero
-
-Si tu empresa ya tiene sus informes, minutas, presentaciones, cartas o planillas, no tienes que adaptarte al harness:
-deja los archivos en `empresa/_entrada/` y di **«adopta mis formatos»**. El harness analiza cada uno y te dice, en
-simple, qué es, qué sección le falta respecto de lo que él sabe llenar (y qué se pierde si se adopta tal cual), qué
-parte tuya no sabe llenar solo, y te propone una versión mejorada que puedes aceptar o no. Lo adoptado pasa a ser el
-formato por defecto de todos tus proyectos (proyecto → empresa → harness); tus originales nunca se modifican y
-ninguna actualización del harness los toca. Los formatos de un cliente se adoptan igual, dentro de su proyecto.
+Si tu empresa ya tiene sus informes, minutas, presentaciones, cartas o planillas, deja los archivos en
+`empresa/_entrada/` y di **«adopta mis formatos»**. El harness analiza cada uno y te dice, en simple, qué es, qué
+sección le falta respecto de lo que él sabe llenar (y qué se pierde si se adopta tal cual), qué parte tuya no sabe
+llenar solo, y te propone una versión mejorada que puedes aceptar o no. Lo adoptado pasa a ser el formato por defecto
+(proyecto → empresa → harness); tus originales nunca se modifican. Los formatos de un cliente se adoptan igual, dentro
+de su proyecto.
 
 ## Modo nube (opcional) y cambiar cosas después
-
 Con Claude Code puedes activar el **modo nube**: tareas programadas que corren en la nube sobre tu repositorio privado
-con el PC apagado (resumen de la mañana, trabajar la bandeja, status semanal, recordatorio de cierre) y una bandeja
-en GitHub para encargar, responder y aprobar desde el celular. Es opcional: nada se programa sin tu sí, tarea por
-tarea, y se pausa o se quita cuando quieras («¿puedo revisar las cosas desde el celular?»). Las reglas están en
-`NUBE.md`: la nube trabaja en ramas propias y PRs, nunca en `main`. Las otras IA operan solo en el PC.
+con el PC apagado (resumen de la mañana, trabajar la bandeja, status semanal, recordatorio de cierre) y una bandeja en
+GitHub para encargar, responder y aprobar desde el celular. Nada se programa sin tu sí, tarea por tarea, y se pausa o
+se quita cuando quieras. La nube trabaja en ramas propias y PR, nunca en `main` (`NUBE.md`); con tu sí, GitHub puede
+exigirlo (`herramientas/bandeja.py --proteger-main`). Las otras IA operan solo en el PC.
 
 Todo lo que decidiste al instalar se cambia conversando («quiero cambiar…», «configura…»): empresa, marca, formatos,
 IA y modelos, umbrales, confidencialidad, modo nube, status semanal. Tus ajustes viven fuera del núcleo y ninguna
 actualización los toca; todo queda en el historial y se puede deshacer.
 
-## Robustez: subagentes, hooks y pruebas
-
-**Subagentes** (`.claude/agents/`): asistentes con un rol acotado que Claude Code invoca solo cuando conviene (las
-demás IA aplican el mismo rol en un paso separado).
-`lector-documental` lee muchos documentos en paralelo durante el alta; `revisor-independiente` revisa
-reportes y evaluaciones antes de entregarlos; `evaluador-propuestas` evalúa cada postulación por separado
-para evitar sesgos; `revisor-red-team` asume una perspectiva del red team (evaluador, fiscalizador, financiero,
-experto escéptico, competidor, beneficiario, auditor, abogado del diablo); `analista-datos` procesa y verifica datos.
-
-**Control de Git** (`.githooks/pre-commit`, para cualquier IA o sin IA): antes de cada commit bloquea material
-confidencial y planillas mal formadas. Se activa una vez por computador (`git config core.hooksPath .githooks`; el
-instalador y `instalar` lo hacen, y el estado de inicio avisa si falta).
-
-**Hooks de Claude Code** (`.claude/settings.json`): controles adicionales que no dependen de que la IA "se acuerde".
-Bloquean subir a GitHub archivos confidenciales (vigilan la consola Bash y PowerShell), validan cada CSV o YAML
-justo después de editarlo (también si se modificó por consola), y al abrir una sesión informan el estado
-(instalación, traspasos, material pendiente, altas en curso). Usan `sh herramientas/py.sh`, que encuentra Python
-aunque en Windows solo responda `py` o en Mac esté en `.venv`.
-
-**Pruebas** (`pruebas/`): `python pruebas/ejecutar_pruebas.py` ejecuta 202 pruebas sobre copias de los
-ejemplos (no modifica nada) y verifica que cada herramienta detecte lo sembrado. Ejecútala después de
-cambiar el núcleo. `pruebas/escenarios-skills.md` lista instrucciones para probar el comportamiento de las skills y un
-guion para probar el harness con cada IA.
-
----
-
-## Uso diario
+## Uso diario (las frases más comunes; el resto, en el manual)
 
 | Quiero… | Pídele al asistente |
 |---|---|
-| Crear otro proyecto | Descríbelo: "quiero llevar…" |
-| Incorporar documentos nuevos | Déjalos en `_entrada/` y di "procesa la entrada" |
-| Agregar o cambiar una métrica o regla | "Quiero medir también…", "sube el límite a 25%" |
-| Cargar datos | "Importa este CSV de resultados", "actualiza los precios de septiembre" |
-| Mover un ítem de etapa | "Pasa el bot B-07 a paper trading", "descarta la postulación 12" |
-| Crear un reporte propio | "Quiero un reporte mensual llamado PEP, en Excel, con…" (queda solo en ese proyecto) |
-| Reporte semanal | "Genera el reporte semanal" (te pedirá los insumos de la semana si faltan) |
-| Otro reporte del catálogo | Por su nombre: "genera la revisión mensual", "arma la presentación para el comité" |
-| Agregar un formato nuevo de reporte | Deja el modelo en `_entrada/` y di "agrega este formato de reporte" |
-| Minuta | Pega tus notas: "haz la minuta de esta reunión" |
-| Riesgos | "Registra un riesgo: …", "revisa la matriz de riesgos" |
-| Avance | "SP1 va en 60%, la migración parte el lunes" |
-| Contratos | "Registra esta enmienda" (con el PDF en `_entrada/`) |
-| Cambios | "El cliente pidió…, abre una solicitud de cambio" |
-| Revisar un correo | Pega el correo: "¿qué implica esto para el proyecto?" |
-| Comparar versiones | "Compara la v3 con la v4 de la propuesta", "registra esta nueva versión de las bases" |
-| Preparar una reunión | "Prepara el comité del jueves" |
-| Buscar riesgos nuevos | "Levanta los riesgos antes del hito de migración" |
-| Valor ganado y ruta crítica | "¿Vamos atrasados? ¿cuál es la ruta crítica?" |
-| Sprints | "Planifiquemos el sprint", "daily: H-12 pasó a revisión", "hagamos la retro" |
-| Ingeniería | "Registra esta decisión de arquitectura", "tuvimos una caída, hagamos el postmortem" |
-| Obra | "Registra la RFI de fundaciones", "la inspección de moldajes salió rechazada" |
-| Evaluar propuestas | "Evalúa las postulaciones", "compara las tres ofertas", "arma el acta" |
-| Evaluación económica | "Arma el flujo de caja con estos supuestos", "¿qué pasa si la demanda cae 20%?" |
-| Chequear que todo cuadre | "Revisa la consistencia antes del comité" |
-| Dar de alta otro proyecto | "Da de alta un proyecto nuevo" |
-| Status | "¿Cómo vamos?", "dame el reporte de status", "agenda el reporte semanal los lunes a las 9" |
-| Compromiso con fecha | "El reporte semestral SSM vence el 30 de julio" (queda en el status hasta cerrarlo) |
-| Formulario de la plataforma | "Arma la hoja de carga del formulario" (límites de caracteres y botón Copiar por campo) |
-| Llenar una planilla oficial | "Llena el Excel de indicadores con estos datos" (sin romper listas desplegables ni formas) |
-| Guardar | "Guarda los cambios" |
-| Cambiar de IA | Abre la carpeta con la otra IA y di "hola" o "¿en qué íbamos?" (retoma desde el traspaso) |
-| Otra empresa | "Crea la carpeta para la empresa X" (repositorio propio, sin mezclar datos) |
-| Trabajar en otro computador | "Descarga mis empresas" (o `INSTALAR-WINDOWS.bat -Clonar`) |
-| Actualizar el harness | "Actualiza el harness" (muestra antes qué cambia; no toca proyectos ni datos) |
-| Mejorar el harness | "¿Qué mejoras al harness hay anotadas?" / "Exporta las mejoras" (archivo anonimizado para el mantenedor; nadie edita el núcleo en una empresa) |
+| Empezar un proyecto | «Quiero llevar…» (de cero) o deja los documentos en `_entrada/` y di «listo» |
+| Saber cómo vamos | «¿Cómo vamos?», «dame el reporte de status» |
+| Un reporte | «Genera el reporte semanal», «arma la presentación para el comité» |
+| Una reunión | «Prepara el comité del jueves»; después, pega tus notas: «haz la minuta» |
+| Riesgos | «Registra un riesgo: …», «levanta los riesgos antes del hito» |
+| Finanzas | «Arma el presupuesto», «cierra octubre», «¿por qué subió el gasto?», «proyecta a tres años» |
+| Investigar | «Investiga a quién le podríamos ofrecer la licencia de X», «¿en qué va la investigación?», «firmo P2» |
+| Evaluar un proyecto | «Arma el flujo de caja con estos supuestos», «¿qué pasa si la demanda cae 20 %?», «revisa este estudio» |
+| Postular o evaluar propuestas | «Prepara la postulación», «¿cumplimos todo?», «evalúa las postulaciones y arma el acta» |
+| Documentos | «Registra esta enmienda», «¿qué cambió entre la v3 y la v4?», pega un correo: «¿qué implica?» |
+| Guardar, cambiar de IA, otro computador | «Guarda», «¿en qué íbamos?», «descarga mis empresas» |
+| Mantener el harness | «Actualiza el harness», «¿qué mejoras al harness hay anotadas?», «revisa la salud del harness» |
 
 ## Personalización: dónde está cada cosa
 
 | Qué quiero cambiar | Dónde |
 |---|---|
-| Marca, autoría, responsable y formatos comunes de la empresa | `empresa/empresa.yaml`, `empresa/marca/`, `empresa/plantillas/`, `empresa/reportes/catalogo/` |
-| Banco de antecedentes de la empresa (CVs, certificados con vigencia) | `empresa/contenidos/` (los archivos no se suben a Git) |
+| Marca, autoría, responsable, capacidad y formatos comunes de la empresa | `empresa/empresa.yaml`, `empresa/marca/`, `empresa/plantillas/`, `empresa/reportes/catalogo/` |
+| Banco de antecedentes (CVs, certificados con vigencia) | `empresa/contenidos/` (los archivos no se suben a Git) |
 | Qué documentos se replican en `fuentes/` | `replicas` en `empresa/empresa.yaml` (o en `proyecto.yaml`) |
-| Datos, stakeholders, umbrales, colores de un proyecto | `proyectos/<slug>/proyecto.yaml` y `contexto/` |
-| Métricas y reglas (políticas, límites) | `proyectos/<slug>/metricas/metricas.yaml` (y `metricas-<arquetipo>.yaml`) |
-| Pauta de evaluación | `proyectos/<slug>/evaluacion/pauta.yaml` |
-| Supuestos del modelo económico | `proyectos/<slug>/estudio/modelo/supuestos-modelo.yaml` |
-| Flujo del tablero ágil, definición de hecho | `proyectos/<slug>/agil/estados.yaml` |
-| Reglas para todas las IA | `AGENTS.md` (mapa) y `reglas/` (detalle por dominio); son núcleo: se reemplazan al actualizar; lo propio va al proyecto o a la empresa |
-| Subagentes y hooks | `.claude/agents/`, `.claude/settings.json` y `.githooks/` |
-| Etapas de los ítems y requisitos para avanzar | `proyectos/<slug>/items/etapas.yaml` |
-| Cálculos propios del dominio | `proyectos/<slug>/scripts/` |
-| Reglas y estilo del cliente | `proyectos/<slug>/CLAUDE.md` |
-| Secciones o reglas de un reporte | `proyectos/<slug>/reportes/catalogo/<tipo>.md` |
-| Plantillas Word/Excel/PPT | `proyectos/<slug>/reportes/plantillas/` |
-| Logo | `proyectos/<slug>/marca/logo.png` |
-| Formato de minuta de un proyecto | crear `proyectos/<slug>/minutas/_formato.md` |
-| Cómo decide el asistente en el alta | `.claude/skills/nuevo-proyecto/references/reglas-de-decision.md` |
-| Qué datos debe cubrir el alta | `.claude/skills/nuevo-proyecto/references/cobertura.md` |
-| Valores por defecto para todos los proyectos futuros | `plantilla-proyecto/` y `arquetipos/` |
-| Diseños reutilizables | `biblioteca/perfiles/` |
-| Cómo trabaja una skill | `.claude/skills/<skill>/SKILL.md` |
-| Crear una skill nueva | Pídele al asistente que la cree en `.claude/skills/<nombre>/SKILL.md` (en Claude Code, con la skill `skill-creator` de Anthropic); es propia de tu carpeta y no se borra al actualizar |
+| Datos, umbrales y reglas de un proyecto | `proyectos/<slug>/proyecto.yaml`, `metricas/`, `CLAUDE.md` del proyecto |
+| Pauta de evaluación · supuestos del modelo económico · etapas de los ítems · flujo ágil | `evaluacion/pauta.yaml` · `estudio/modelo/supuestos-modelo.yaml` · `items/etapas.yaml` · `agil/estados.yaml` |
+| Secciones de un reporte y sus plantillas | `proyectos/<slug>/reportes/catalogo/<tipo>.md`, `reportes/plantillas/` |
+| Reglas para todas las IA | `AGENTS.md` (mapa) y `reglas/` (detalle); son núcleo y se reemplazan al actualizar: lo propio va al proyecto o a la empresa |
+| Cómo decide el asistente en el alta y qué debe cubrir | `.claude/skills/nuevo-proyecto/references/reglas-de-decision.md` y `cobertura.md` |
+| Valores por defecto para proyectos futuros · diseños reutilizables | `plantilla-proyecto/`, `arquetipos/` · `biblioteca/perfiles/` |
+| Una skill propia | `.claude/skills/<nombre>/SKILL.md` (es tuya y no se borra al actualizar) |
 
-## Autoría limpia de los entregables
-Los documentos que se entregan (Word, Excel, PowerPoint, PDF) salen a nombre del usuario (`autoria.nombre` en
-`proyecto.yaml`, o el responsable) y sin rastros del proceso: propiedades con autor y fecha actuales, sin partes
-heredadas de plantillas genéricas, sin marcadores internos ni caracteres invisibles, y con el estilo del usuario
-(`contexto/estilo.md`). `python herramientas/verificar_autoria.py <archivo|carpeta> --proyecto <ruta> [--corregir]`
-lo verifica antes de entregar. **Integridad:** si unas bases o un contrato exigen declarar el uso de herramientas
-de IA, o lo restringen, es un requisito más: se registra, se avisa y la decisión es del usuario.
-
-## Guía de cada proyecto
-Al instalar o crear un proyecto se genera `proyectos/<slug>/GUIA.md`: qué tipo de proyecto es, dónde está cada
-cosa, la rutina, los reportes, las skills útiles con frases de ejemplo y los controles automáticos. Para verla
-en cualquier momento, pregunta «¿qué puedo hacer?» (skill `ayuda`). No hace falta usar el nombre exacto de las skills.
-
-## Confidencialidad: qué queda en GitHub
-- **No se suben** a GitHub: `_entrada/` completa (los originales), los PDF u originales dentro de `contractual/`, las
-  versiones originales de `documentos/`, los documentos de `postulaciones/` de terceros, el banco de archivos
-  (`contenidos/archivos/` y `empresa/contenidos/archivos/`) y el paquete firmado que se presenta (`entrega/final/`).
-- **Sí se sube**, al repositorio privado: lo configurado (registros, fichas, matrices, reportes en Markdown) y las
-  **réplicas fieles** en `fuentes/` del texto de bases, anexos, aclaraciones, lineamientos, contratos, actas e
-  informes. De CVs, estados financieros y datos personales nunca se sube el texto: solo su ficha.
-- El control de Git (y, en Claude Code, también un hook) bloquea cualquier intento de agregar lo confidencial, aunque
-  se pida por error.
-- **Status:** el reporte de cada empresa queda en su carpeta (`status/`). El tablero único de varias empresas va en un
-  repositorio privado aparte, para que quien tenga acceso a una empresa no vea las demás.
+## Robustez, autoría y confidencialidad
+- **Subagentes** (`.claude/agents/`), **control de Git** (`.githooks/pre-commit`, se activa una vez por computador),
+  **hooks de Claude Code** (`.claude/settings.json`) y **pruebas** (`pruebas/ejecutar_pruebas.py`, sobre copias de los
+  ejemplos; `pruebas/escenarios-skills.md` para probar el comportamiento con cada IA). El mantenedor corre además
+  `herramientas/integridad.py` antes de cada versión.
+- **Autoría limpia:** lo que se entrega (Word, Excel, PowerPoint, PDF) sale a nombre del usuario y sin rastros del
+  proceso; `herramientas/verificar_autoria.py` lo verifica. Si unas bases exigen declarar el uso de IA, es un requisito
+  más: se registra, se avisa y la decisión es del usuario.
+- **No se sube a GitHub:** `_entrada/` completa, originales contractuales, versiones originales, postulaciones de
+  terceros, el banco de archivos y el paquete firmado. **Sí se sube**, al repositorio privado: lo configurado y las
+  réplicas fieles de bases, contratos, actas e informes; de CVs y datos personales, solo la ficha. El control de Git
+  bloquea lo confidencial aunque se pida por error. Lo que se exporta para el mantenedor sale anonimizado.
 - El repositorio debe ser **privado**. Aun así, confirma que la política de la empresa y de sus clientes permite usar
-  herramientas de IA y GitHub con su información. La IA que uses procesa el contenido de los documentos.
-- `guardar-cambios` revisa que no se suban archivos sensibles antes de cada envío.
+  herramientas de IA y GitHub con su información.
+- **Permisos:** `.claude/settings.json` deja a Claude Code ejecutar sin confirmar los scripts de `herramientas/`, las
+  pruebas y los comandos básicos de Git; todo lo demás pide permiso. En otras IA, los permisos se configuran en la
+  herramienta.
 
-## Permisos
-`.claude/settings.json` permite a Claude Code, sin pedir confirmación cada vez, ejecutar los scripts de
-`herramientas/`, las pruebas y los comandos básicos de Git. Todo lo demás sigue pidiendo permiso. En otras IA, los
-permisos se configuran en la propia herramienta: conviene un modo que pida confirmación antes de comandos que salgan de
-la carpeta o borren archivos.
-
-## Historial de versiones
+## Historial de versiones (completo en `CHANGELOG.md`)
 - **3.0** — Mapa, no enciclopedia: `AGENTS.md` de 2.400 tokens con el detalle en `reglas/`; skills de 39 a 31 (nombres
   anteriores en el índice); contexto fijo real por sesión de 12.200 a 6.300 tokens; tres reglas mecánicas (traspaso,
-  control de Git, `--proteger-main`); `integridad.py`. Una carpeta en 2.x se actualiza con un solo sí.
+  control de Git, `--proteger-main`); revisión de integridad. Una carpeta en 2.x se actualiza con un solo sí.
 - **2.7** — El harness se observa: mejoras al núcleo anotadas y exportadas anonimizadas para el mantenedor, recolector
   de entropía, hooks de sesión larga y cierre, arranque comprobado, `investigar` en paralelo con `--consolidar`.
-- **2.6** — Modo nube opcional (tareas programadas con el PC apagado y bandeja en GitHub, solo Claude, con el sí del
-  usuario tarea por tarea), instalación por opciones, skill `configurar` para cambiar cualquier cosa después, manual y
-  guía rápida para usuarios no técnicos.
-- **2.5** — Arquetipo finanzas: plan de cuentas mapeado, importación de la contabilidad, presupuesto, cierre mensual
-  reabrible con huella, resultados, balance, caja, forecast, proyección integrada e indicadores con semáforo.
-- **2.4** — Tus formatos primero: adopción de formatos y archivos base propios con análisis de qué falta y qué se
-  pierde, versión mejorada opcional y llenado de plantillas Word respetando su estructura.
-- **2.3** — Arquetipo investigación (protocolo auditable con validador que guía, corrige y aprende), capacidad según
-  la tarea (modelo por subagente) y menos contexto por sesión.
-- **2.2** — Status diario en el chat y al iniciar, reporte web con historial y agenda semanal, tablero único de varias
-  empresas en su propio repositorio privado; formulario de la plataforma (límites, caracteres raros, hoja de carga);
-  llenado de planillas oficiales sin pérdidas; barrido de requisitos selectivo (charlas y normativa aparte) y manejo de
-  escaneos (ver CHANGELOG.md).
-- **2.1** — Funciona con cualquier asistente de IA (`AGENTS.md` como fuente única, `configurar`, traspaso entre
-  sesiones e IA, controles en Git); instalación automática con permiso en Windows y Mac; una empresa por carpeta y
-  repositorio, con herencia de marca y banco común, y actualización del núcleo sin tocar los datos; réplicas fieles en
-  Markdown de bases y documentos de definición (ver CHANGELOG.md).
-- **2.0** — Importación de cronogramas de MS Project (XML); programas con subproyectos (presupuesto macro y por
-  subproyecto, contingencia, personas compartidas, enmiendas por subproyecto, Gantt macro); manual de usuario y ficha de
-  inicio. Arquetipo postulación (lado del oferente) con barrido exhaustivo de bases, matriz de cumplimiento,
-  pauta inversa, red team de 8 perspectivas, presupuesto con controles en Excel y 5 perfiles de convocatorias;
-  autoría limpia de los entregables; guía por proyecto y skill `ayuda`; 13 correcciones del núcleo (ver CHANGELOG.md).
-- **1.5** — Valor ganado, ruta crítica y pronóstico de término; arquetipo obra (RFI, no conformidades,
-  inspecciones, estados de pago).
-- **1.4** — Arquetipo ágil: sprints, métricas DORA, ADR, deuda técnica, trazabilidad, postmortems,
-  importación desde GitHub o Jira.
-- **1.3** — Subagentes, hooks, batería de pruebas; comparación y versiones de documentos, preparación de
-  reuniones, levantamiento de riesgos; arquetipo evaluación (pauta y propuestas); evaluación económica en Excel.
-- **1.2** — Núcleo genérico con arquetipos ejecución, cartera y estudio; métricas y reglas; reportes propios por proyecto.
-- **1.1** — Instalación guiada y alta documental.
-- **Próximo** — Cartuchos de dominio para investigaciones (mercado, proveedores, normativa, tecnología), perfil del
-  consultor para varias carpetas, arquetipo *operación continua*.
+- **2.6** — Modo nube opcional, instalación por opciones, skill `configurar`, manual y guía rápida para usuarios no
+  técnicos. Antes: 2.5 finanzas · 2.4 tus formatos primero · 2.3 investigación auditable y capacidad por tarea ·
+  2.2 status diario y tablero único · 2.1 cualquier IA y una empresa por repositorio.

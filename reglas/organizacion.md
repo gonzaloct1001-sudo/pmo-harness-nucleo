@@ -48,7 +48,7 @@ Además:
 - `biblioteca/finanzas/` → plan de cuentas base, definiciones de indicadores y notas por país.
 - `empresa/investigacion/` → ajustes, preferencias y lecciones de investigación de la empresa (los escribe
   `investigacion.py`; una actualización del núcleo nunca los toca).
-- `ejemplos/` → material ficticio de prueba (uno por arquetipo, listados en `README.md`). No son proyectos reales.
+- `ejemplos/` → material ficticio de prueba (uno por capacidad; recorridos en `ejemplos/LEEME.md`). No son proyectos reales.
 - `.harness/estado.yaml` → registro de la instalación (empresa, origen del núcleo) · `.harness/asistentes.yaml` →
   asistentes de IA configurados · `.harness/mejoras-nucleo.csv` → mejoras anotadas para el mantenedor ·
   `.harness/nube.yaml` → tareas en la nube aprobadas · `pruebas/` → batería de pruebas.
