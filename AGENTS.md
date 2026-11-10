@@ -169,6 +169,18 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     memoria: ofrece en una línea abrir una investigación (skill `investigar`; parte en sondeo, que toma horas) y, si
     el usuario prefiere seguir sin ella, marca esas afirmaciones como estimadas o sin verificar. Las firmas de las
     puertas P0, P2 y P5 son siempre del usuario; nunca las pongas tú.
+20. **Capacidad según la tarea, no según el costo.** Nivel **alto** (juicio que nadie puede comprobar: diseñar un
+    proyecto, evaluar, refutar, red team, encuadrar una investigación, revisar antes de entregar): el modelo más capaz
+    disponible, con contexto limpio. Nivel **medio** (análisis con datos, borradores, lectura con extracción): un
+    modelo competente y rápido. Nivel **bajo** (transcribir, formatear, validar, buscar): el más rápido. Los subagentes
+    de `.claude/agents/` traen su nivel en `model:`; si `empresa/empresa.yaml` define `capacidad`, invoca cada subagente
+    con ese modelo. El nivel de cada skill está en `.claude/skills/ayuda/catalogo.yaml` (`capacidad`). Si una tarea de
+    nivel alto corre en un modelo liviano, dilo en una línea al usuario y sigue. Cómo se elige el modelo en cada
+    herramienta: `.claude/skills/configurar-asistente/references/asistentes.md`.
+21. **Cuida el contexto.** No releas archivos que ya tienes en la conversación; pide resúmenes a los scripts (`estado.py`,
+    `status.py --breve`, `evaluar_metricas.py`) en vez de leer CSV o YAML enteros; para lotes de documentos usa el
+    subagente `lector-documental`; lee las `references/` de una skill solo en la fase que las usa. Para ver cuánto pesa
+    cada pieza: `python herramientas/medir_contexto.py`.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con
@@ -176,51 +188,15 @@ los valores por defecto. Menciona una sola vez, al final, qué pendientes críti
 
 ## Procedimientos (skills)
 
-Cada procedimiento está en `.claude/skills/<nombre>/SKILL.md` (la carpeta se llama `.claude` por compatibilidad;
-sirve para cualquier asistente). En Claude Code se activan solos. **En otras herramientas, cuando el pedido del
-usuario calce con una fila, lee ese SKILL.md completo y síguelo paso a paso**, aunque el usuario no lo nombre.
-Si un SKILL.md menciona un subagente o un hook, usa las equivalencias de la sección siguiente.
-**Skills propias de la empresa:** las carpetas de `.claude/skills/` que no están en esta tabla también valen (el
-estado de inicio las lista): lee su SKILL.md cuando su descripción calce con el pedido. Esta tabla es del núcleo y se
-reemplaza al actualizarlo; las skills propias no.
-
-| Procedimiento | Para qué (frases típicas del usuario) | Archivo |
-|---|---|---|
-| `instalar` | Primer paso: prepara carpeta, computador y GitHub, y encamina el primer proyecto («instala», «empecemos», «computador nuevo») | `.claude/skills/instalar/SKILL.md` |
-| `configurar-asistente` | Deja lista una IA nueva o distinta para operar igual que las demás («voy a usar Gemini», «cambié de IA») | `.claude/skills/configurar-asistente/SKILL.md` |
-| `actualizar-nucleo` | Trae la última versión del núcleo sin tocar los datos de la empresa («actualiza el harness») | `.claude/skills/actualizar-nucleo/SKILL.md` |
-| `nuevo-proyecto` | Diseña y crea un proyecto de cualquier tipo desde una descripción y una mini entrevista («quiero postular a…») | `.claude/skills/nuevo-proyecto/SKILL.md` |
-| `alta-proyecto` | Carga documentos existentes: lee todo, configura, registra decisiones y pregunta lo mínimo («listo», «procesa la entrada») | `.claude/skills/alta-proyecto/SKILL.md` |
-| `metricas` | Agregar métricas y reglas, cargar o importar datos, evaluar semáforos («quiero medir también…») | `.claude/skills/metricas/SKILL.md` |
-| `gestionar-items` | Ítems de una cartera: agregar, mover de etapa, fichas, retirar, pipeline | `.claude/skills/gestionar-items/SKILL.md` |
-| `nuevo-tipo-reporte` | Crear un reporte propio, desde un modelo o por conversación («este Word es la plantilla del informe») | `.claude/skills/nuevo-tipo-reporte/SKILL.md` |
-| `generar-reporte` | Generar cualquier reporte del catálogo («prepara el informe de avance», «arma la presentación») | `.claude/skills/generar-reporte/SKILL.md` |
-| `minuta` | Convertir notas de reunión en minuta con acuerdos y decisiones («estas son mis notas del comité») | `.claude/skills/minuta/SKILL.md` |
-| `preparar-reunion` | Agenda, estado, decisiones a pedir y preguntas difíciles («tengo comité el jueves») | `.claude/skills/preparar-reunion/SKILL.md` |
-| `riesgos-issues` | Registrar, actualizar y revisar riesgos y problemas | `.claude/skills/riesgos-issues/SKILL.md` |
-| `levantar-riesgos` | Identificar sistemáticamente riesgos nuevos (checklist, premortem, supuestos) | `.claude/skills/levantar-riesgos/SKILL.md` |
-| `actualizar-gantt` | Actualizar avance y fechas del cronograma; importar MS Project | `.claude/skills/actualizar-gantt/SKILL.md` |
-| `registrar-documento` | Incorporar contratos, anexos, enmiendas y propuestas | `.claude/skills/registrar-documento/SKILL.md` |
-| `versiones-documentos` | Comparar documentos o versiones y llevar la bitácora («¿qué cambió en las bases?») | `.claude/skills/versiones-documentos/SKILL.md` |
-| `control-cambios` | Gestionar solicitudes de cambio y su impacto | `.claude/skills/control-cambios/SKILL.md` |
-| `consistencia` | Detectar contradicciones e incumplimientos en todo el proyecto («¿cuadra todo?») | `.claude/skills/consistencia/SKILL.md` |
-| `revisar-documento` | Analizar correos, informes o documentos recibidos («mira este correo», «¿qué implica?») | `.claude/skills/revisar-documento/SKILL.md` |
-| `definir-pauta` | Pauta de evaluación desde las bases (también la pauta inversa del postulante) | `.claude/skills/definir-pauta/SKILL.md` |
-| `evaluar-propuestas` | Admisibilidad, evaluación con evidencia, ranking y comparación de propuestas de terceros | `.claude/skills/evaluar-propuestas/SKILL.md` |
-| `evaluacion-economica` | Flujo de caja en Excel con fórmulas: VAN, TIR, recuperación y sensibilidad; presupuesto de postulación | `.claude/skills/evaluacion-economica/SKILL.md` |
-| `revisar-estudio` | Revisar calidad y completitud de un estudio según su etapa | `.claude/skills/revisar-estudio/SKILL.md` |
-| `gestionar-sprint` | Planificación, seguimiento, revisión y retrospectiva de sprints; backlog e importación | `.claude/skills/gestionar-sprint/SKILL.md` |
-| `registro-ingenieria` | ADR, deuda técnica, trazabilidad, despliegues (DORA), postmortems | `.claude/skills/registro-ingenieria/SKILL.md` |
-| `registros-obra` | RFI, no conformidades, inspecciones, estados de pago, libro de obra, valor ganado | `.claude/skills/registros-obra/SKILL.md` |
-| `preparar-postulacion` | Preparar y presentar una postulación, oferta o propuesta para ganar: flujo con compuertas («prepara la postulación») | `.claude/skills/preparar-postulacion/SKILL.md` |
-| `matriz-cumplimiento` | Todos los requisitos de las bases (barrido exhaustivo), dueños, evidencia y checklist de entrega | `.claude/skills/matriz-cumplimiento/SKILL.md` |
-| `red-team` | Panel de revisores con perspectivas distintas: puntaje estimado, fallas fatales y plan de respuesta | `.claude/skills/red-team/SKILL.md` |
-| `gestionar-programa` | Programa con subproyectos: personas, presupuesto y contingencia, enmiendas, estado consolidado | `.claude/skills/gestionar-programa/SKILL.md` |
-| `investigar` | Investigación auditable: hechos verificados con fuente, hipótesis asesinas, refutador, puertas y entregable auditable; también auditar un informe que afirma hechos («investiga a quién ofrecer…», «¿es cierto que…?», «firmo P2») | `.claude/skills/investigar/SKILL.md` |
-| `status` | Status de todos los proyectos (semáforos, lo que vence, decisiones), reporte web semanal y tablero de varias empresas («¿cómo vamos?») | `.claude/skills/status/SKILL.md` |
-| `formulario-plataforma` | Formulario de una plataforma sin documento descargable: reconstruirlo, controlar límites, Word de trabajo y hoja para copiar y pegar | `.claude/skills/formulario-plataforma/SKILL.md` |
-| `ayuda` | Qué puede hacer el harness en el proyecto activo, con frases de ejemplo («¿qué puedo hacer?») | `.claude/skills/ayuda/SKILL.md` |
-| `guardar-cambios` | Guardar y subir el trabajo a GitHub («guarda», «terminé por hoy») | `.claude/skills/guardar-cambios/SKILL.md` |
+Cada procedimiento está en `.claude/skills/<nombre>/SKILL.md` (la carpeta se llama `.claude` por compatibilidad; sirve
+para cualquier asistente). En Claude Code se activan solos. **En otras herramientas, lee el índice
+`.claude/skills/LEEME.md` al recibir el primer pedido de la sesión** (una fila por skill, con las frases típicas del
+usuario) y, cuando el pedido calce con una fila, lee ese SKILL.md completo y síguelo paso a paso, aunque el usuario no
+lo nombre. Si un SKILL.md menciona un subagente o un hook, usa las equivalencias de la sección siguiente.
+Los que todos usan: `instalar` (primer paso) · `nuevo-proyecto` y `alta-proyecto` (crear o cargar un proyecto) ·
+`status` («¿cómo vamos?») · `generar-reporte` · `minuta` · `riesgos-issues` · `investigar` (hechos del mundo con
+fuente) · `ayuda` («¿qué puedo hacer?») · `guardar-cambios`. **Skills propias de la empresa:** las carpetas de
+`.claude/skills/` que no están en el índice también valen (el estado de inicio las lista).
 
 ## Roles (subagentes) y equivalencias por herramienta
 
@@ -240,40 +216,7 @@ recuperar sin interpretar, refutar en contexto estéril, aplicar las reglas de e
 - Detalle por herramienta (qué archivo lee, qué soporta): `.claude/skills/configurar-asistente/references/asistentes.md`.
 
 ## Herramientas (`python`, o `py` en Windows; `.venv/bin/python` en Mac)
-- `estado.py [--remoto]` → estado al iniciar: instalación, empresa, asistentes, controles, proyectos, traspasos, material pendiente y status breve.
-- `status.py [--breve] [--formato html,md,xlsx,json] [--abrir] [--panel carpeta] [--crear-panel carpeta --empresas ...]` → status de gestión.
-- `agendar_status.py --dia lunes --hora 09:00 [--panel carpeta] | --ver | --quitar` → reporte web semanal agendado en este computador.
-- `formulario.py <proyecto> [--reconstruir archivos] [--limpiar] [--word] [--hoja-carga]` → formulario de una plataforma de postulación.
-- `llenar_xlsx.py <planilla> --valores valores.yaml [--vista-previa]` → llena planillas oficiales sin borrar listas, formas ni fórmulas.
-- `crear_proyecto.py <slug> --arquetipos a,b [--nombre N] [--perfil ruta]` → crea o amplía un proyecto (hereda de `empresa/`).
-- `crear_proyecto.py <id> --programa <programa>` → crea un subproyecto dentro de un programa.
-- `nueva_empresa.py "<Nombre>" --destino <carpeta> [--sin-github]` → carpeta y repositorio privado nuevos para otra empresa.
-- `actualizar_nucleo.py [--desde url|carpeta] [--aplicar]` → trae la última versión del núcleo sin tocar los datos.
-- `preparar_pc.ps1` (Windows) / `preparar_pc.sh` (Mac) → revisa e instala con permiso Python, Git, GitHub CLI y LibreOffice.
-- `verificar_entorno.py` → diagnóstico del computador y del repositorio.
-- `hooks/precommit.py [--archivos rutas]` → control de confidenciales y validación de CSV/YAML (lo usa Git antes de cada commit).
-- `evaluar_metricas.py <ruta-proyecto>` → métricas, semáforos, reglas, requisitos de etapa, fichas vencidas.
-- `validar_proyecto.py <ruta-proyecto> [--corte-actualizacion]` → cronograma, riesgos, acuerdos, cambios, registros de obra, pendientes.
-- `evm_cpm.py <ruta-proyecto> [--registrar]` → valor ganado, ruta crítica y término pronosticado.
-- `metricas_agil.py <ruta-proyecto>` → velocidad, burndown, trabajo en curso, DORA, deuda, trazabilidad.
-- `importar_backlog.py <ruta-proyecto> --desde github|csv` → trae el backlog desde GitHub o Jira.
-- `importar_msproject.py <archivo.xml> <ruta-proyecto> [--mapa "Rama=sp1"] [--reemplazar] [--linea-base]` → cronograma desde MS Project (XML).
-- `puntaje_pauta.py <ruta-proyecto>` → admisibilidad, puntajes ponderados, umbrales, ranking y presupuesto.
-- `extraer_requisitos.py <ruta-proyecto> [--categorias ...|--todo]` → barrido de bases y formularios: candidatos a requisito con fuente (incremental).
-- `postulacion.py <ruta-proyecto> [--registrar]` → etapa y compuerta, cumplimiento, vencimientos, red team, controles y autoría.
-- `presupuesto_postulacion.py <presupuesto.yaml>` → Excel del presupuesto con fórmulas, fuentes y controles contra las bases.
-- `guia_proyecto.py <ruta-proyecto> | --general` → guía del usuario (`GUIA.md`).
-- `programa.py <ruta-programa> [--excel] [--registrar]` → estado consolidado del programa, presupuesto, personas, enmiendas y Gantt macro.
-- `investigacion.py <ruta-proyecto> [--instancia id] [--nueva nombre | --revisar | --corregir [--aplicar] | --auditar | --muestra | --subir nivel | --aprender]`
-  → investigaciones: siguiente paso, validación del protocolo, corrección de lo mecánico, auditoría y aprendizaje;
-  `--ajustar clave=valor` y `--preferencia "texto"` guardan los ajustes de la empresa.
-- `modelo_economico.py <supuestos.yaml>` → Excel con flujo de caja, VAN, TIR y sensibilidad (con fórmulas).
-- `comparar_documentos.py <anterior> <nuevo>` → diferencias entre documentos, destacando las sustantivas.
-- `extraer_entrada.py <ruta-proyecto> [--origen carpeta]` → inventario, texto y réplicas en `fuentes/` (incremental).
-- `md_a_docx.py <entrada.md> <salida.docx> --proyecto <ruta> [--borrador]` → Word con la marca y autoría del proyecto.
-- `verificar_autoria.py <archivo|carpeta> --proyecto <ruta> [--corregir]` → revisa que un entregable no tenga rastros del proceso.
-- `inspeccionar_xlsx.py <archivo.xlsx>` → estructura de un Excel (hojas, fórmulas, celdas de entrada) y si se puede guardar con openpyxl.
-- `gantt_mermaid.py <ruta-proyecto>` → `cronograma/gantt.md` para visualizar la carta Gantt.
-- `pruebas/ejecutar_pruebas.py` → batería de pruebas del harness (ver también `pruebas/escenarios-skills.md`).
-
-Dependencias: `pip install -r requirements.txt` (en Mac, dentro de `.venv`, que crea el instalador).
+De uso diario: `estado.py` (estado al iniciar) · `status.py` (status de gestión) · `crear_proyecto.py` · `evaluar_metricas.py` ·
+`validar_proyecto.py` · `extraer_entrada.py` · `md_a_docx.py` · `verificar_autoria.py` · `guia_proyecto.py` · `investigacion.py`.
+La lista completa, con las opciones de cada una, está en `herramientas/LEEME.md`: léela solo cuando necesites una herramienta
+que no conozcas (cada SKILL.md nombra las suyas). Dependencias: `pip install -r requirements.txt` (en Mac, dentro de `.venv`).

@@ -33,6 +33,11 @@ autoria:                       # los entregables salen a nombre de esta persona 
   terminos_prohibidos: []
   terminos_permitidos: []
 
+capacidad:                     # modelo por nivel de capacidad (regla 20 de AGENTS.md); vacío = el que trae cada subagente
+  alta: ""                     # juicio no verificable: evaluar, refutar, red team, encuadrar, revisar (por defecto opus)
+  media: ""                    # análisis con datos, borradores, lectura con extracción (por defecto sonnet)
+  baja: ""                     # transcribir, formatear, validar, buscar (por defecto sonnet)
+
 replicas:                      # qué documentos de _entrada/ se replican completos en fuentes/ (texto fiel, en el repositorio privado)
   completas: [bases, formulario, normativa, charla, contrato, lineamientos, minuta, reporte]
   # bases, anexos y aclaraciones; formularios de la plataforma; leyes y decretos; charlas y capacitaciones (transcripción);

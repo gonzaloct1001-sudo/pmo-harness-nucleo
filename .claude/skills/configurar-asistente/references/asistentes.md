@@ -10,11 +10,26 @@ solo remiten a ella y controles en Git que no dependen del asistente.
 | id | Herramienta | Lee al iniciar | Procedimientos (skills) | Controles automáticos | Subagentes |
 |---|---|---|---|---|---|
 | `claude-code` | Claude Code (extensión de VS Code, consola o app) | `CLAUDE.md`, que importa `AGENTS.md` | Nativos (`.claude/skills/`) | Hooks de `.claude/settings.json` + control de Git | Sí (`.claude/agents/`) |
-| `codex` | OpenAI Codex (extensión de VS Code, consola o app) | `AGENTS.md` | Lee el SKILL.md según la tabla de `AGENTS.md` | Control de Git | No: roles en pasos separados |
-| `gemini` | Gemini CLI o Gemini Code Assist en modo agente | `GEMINI.md`, que importa `AGENTS.md` | Lee el SKILL.md según la tabla | Control de Git | No: roles en pasos separados |
-| `antigravity` | Google Antigravity (editor con agentes; Gemini, Claude u otros modelos) | `GEMINI.md` de la raíz (y `AGENTS.md` en versiones recientes) | Lee el SKILL.md según la tabla | Control de Git | Según la versión; si no, roles en pasos separados |
-| `cursor` | Cursor (modo agente) | `AGENTS.md` | Lee el SKILL.md según la tabla | Control de Git | Según la versión; si no, roles en pasos separados |
-| `copilot` | GitHub Copilot en modo agente (VS Code) | `AGENTS.md` (y `.github/copilot-instructions.md` si existe) | Lee el SKILL.md según la tabla | Control de Git | No: roles en pasos separados |
+| `codex` | OpenAI Codex (extensión de VS Code, consola o app) | `AGENTS.md` | Lee el SKILL.md según el índice `.claude/skills/LEEME.md` | Control de Git | No: roles en pasos separados |
+| `gemini` | Gemini CLI o Gemini Code Assist en modo agente | `GEMINI.md`, que importa `AGENTS.md` | Lee el SKILL.md según el índice `.claude/skills/LEEME.md` | Control de Git | No: roles en pasos separados |
+| `antigravity` | Google Antigravity (editor con agentes; Gemini, Claude u otros modelos) | `GEMINI.md` de la raíz (y `AGENTS.md` en versiones recientes) | Lee el SKILL.md según el índice `.claude/skills/LEEME.md` | Control de Git | Según la versión; si no, roles en pasos separados |
+| `cursor` | Cursor (modo agente) | `AGENTS.md` | Lee el SKILL.md según el índice `.claude/skills/LEEME.md` | Control de Git | Según la versión; si no, roles en pasos separados |
+| `copilot` | GitHub Copilot en modo agente (VS Code) | `AGENTS.md` (y `.github/copilot-instructions.md` si existe) | Lee el SKILL.md según el índice `.claude/skills/LEEME.md` | Control de Git | No: roles en pasos separados |
+
+## Capacidad y modelos
+
+El harness pide capacidad según la tarea (regla 20 de `AGENTS.md`): **alta** para el juicio que nadie puede comprobar,
+**media** para análisis y borradores, **baja** para transcribir, validar y buscar. Cómo se traduce en cada herramienta:
+
+- **Claude Code:** los subagentes traen `model:` en su archivo (`opus` = alta; `sonnet` = media y baja). Si
+  `empresa/empresa.yaml` define `capacidad`, el asistente invoca cada subagente con ese modelo en vez del de su archivo.
+  El modelo de la sesión principal lo elige el usuario (`/model`); para una skill de nivel alto conviene el más capaz.
+- **Codex, Gemini, Antigravity, Cursor y Copilot:** no leen `model:`; el usuario elige el modelo en la herramienta
+  (selector o configuración). Regla práctica: nivel alto = el modelo más capaz que ofrezca («pro», «thinking», «high»);
+  medio y bajo = el rápido. Al aplicar un rol de nivel alto en pasos separados, el asistente avisa en una línea si
+  está en un modelo liviano y sigue.
+- El refutador de una investigación puede correr en otro proveedor (`empresa/investigacion/ajustes.yaml`,
+  `refutador.asistente`): el asistente entrega la instrucción lista para pegar en esa herramienta.
 
 ## Notas por herramienta
 

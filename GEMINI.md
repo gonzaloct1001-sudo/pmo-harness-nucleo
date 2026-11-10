@@ -12,7 +12,7 @@ operar esta carpeta.
   `python herramientas/estado.py --remoto` (paso 0 de `AGENTS.md`).
 - **Identidad:** en `.harness/asistentes.yaml` te corresponde el id `gemini` (o `antigravity` si eres Google Antigravity). Si no figura, sigue
   `.claude/skills/configurar-asistente/SKILL.md`.
-- **Procedimientos:** cuando el pedido calce con una fila de la tabla de `AGENTS.md`, lee ese `SKILL.md` completo y
+- **Procedimientos:** cuando el pedido calce con una fila del índice `.claude/skills/LEEME.md`, lee ese `SKILL.md` completo y
   síguelo paso a paso.
 - **Roles (subagentes):** aplícalos tú en pasos separados, como indica `AGENTS.md`.
 - **Controles:** corre el control de Git antes de cada commit. Después de editar un CSV o YAML, valida con

@@ -35,6 +35,18 @@
   (`investigaciones/<id>/_crudo/`) no se sube a Git; el estado de inicio lista las investigaciones abiertas y quién
   debe firmar.
 
+### Capacidad según la tarea y menos contexto
+- Regla 20 de `AGENTS.md`: la capacidad se asigna por verificabilidad (alta, media, baja), no por costo. Los ocho
+  subagentes declaran su modelo: lector-documental, analista-datos y bibliotecario (trabajo verificable) en `sonnet`;
+  evaluador-propuestas, revisor-independiente, revisor-red-team, refutador y arbitro (juicio) en `opus`. Cada empresa
+  puede cambiar el mapa en `empresa/empresa.yaml` (`capacidad`) sin tocar el núcleo. El nivel de cada skill está en
+  `catalogo.yaml`; `asistentes.md` dice cómo se elige el modelo en Codex, Gemini, Antigravity, Cursor y Copilot.
+- Regla 21: cuidar el contexto (no releer, resúmenes por script, lotes al lector-documental, references solo en su fase).
+- `AGENTS.md` pesa un 28% menos (de ~6.900 a ~5.000 tokens): la lista completa de herramientas pasó a `herramientas/LEEME.md` y el índice de
+  procedimientos con sus frases típicas a `.claude/skills/LEEME.md`; Claude Code no los necesita (las skills se activan
+  solas) y las demás IA leen el índice al recibir el primer pedido. `herramientas/medir_contexto.py` mide la carga
+  fija, cada skill y cada subagente; la batería exige que la carga fija no supere el techo.
+
 ### Corrección
 - `actualizar_nucleo.py`: dos actualizaciones en el mismo segundo ya no comparten la carpeta de respaldo (la segunda
   usa `_2`, `_3`…); antes, revertir la segunda podía restaurar también lo de la primera.

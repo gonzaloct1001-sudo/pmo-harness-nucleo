@@ -133,6 +133,17 @@ skills:
   - {id: matriz-cumplimiento, para: "Todos los requisitos de las bases con dueño, evidencia y checklist de entrega", arquetipos: [postulacion],
      ejemplos: ["¿qué exigen las bases?", "llegó una aclaración", "¿cumplimos todo?"]}
 
+# Capacidad que necesita cada skill (regla 20 de AGENTS.md): alta = juicio no verificable; media = análisis con datos y
+# borradores; baja = procedimiento, transcripción o validación. Las skills que no aparecen son de nivel medio.
+capacidad:
+  alta: [nuevo-proyecto, alta-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, definir-pauta,
+         revisar-estudio, revisar-documento, levantar-riesgos, consistencia, preparar-reunion, control-cambios,
+         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa]
+  media: [generar-reporte, minuta, metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra,
+          actualizar-gantt, registrar-documento, versiones-documentos, matriz-cumplimiento, formulario-plataforma, status,
+          riesgos-issues]
+  baja: [instalar, configurar-asistente, actualizar-nucleo, ayuda, guardar-cambios]
+
 hooks:
   - {nombre: Estado al iniciar la sesión, que_hace: "Resume proyectos, traspasos pendientes, material nuevo en _entrada, altas en curso y cambios sin guardar (en Claude Code llega solo; otras IA lo ejecutan al empezar).",
      si_bloquea: "No bloquea: solo informa."}

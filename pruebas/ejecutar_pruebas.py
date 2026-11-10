@@ -559,8 +559,10 @@ def main():
 
         # --- v2.1 · Cualquier asistente de IA: estado, traspaso, control de Git y lanzador de Python ---
         _agents = (repo / "AGENTS.md").read_text(encoding="utf-8")
-        _sin_fila = sorted(d for d in _dirs if f".claude/skills/{d}/SKILL.md" not in _agents)
-        resultados.append(("AGENTS.md: la tabla de procedimientos cubre todas las skills", not _sin_fila, [f"faltan: {_sin_fila}"]))
+        _indice_skills = (repo / ".claude" / "skills" / "LEEME.md").read_text(encoding="utf-8")  # desde 2.3 la tabla vive aquí
+        _sin_fila = sorted(d for d in _dirs if f".claude/skills/{d}/SKILL.md" not in _indice_skills)
+        resultados.append(("índice de skills (.claude/skills/LEEME.md): cubre todas las skills y AGENTS.md remite a él",
+                           not _sin_fila and ".claude/skills/LEEME.md" in _agents, [f"faltan: {_sin_fila}"]))
         _entradas = {n: (repo / n).read_text(encoding="utf-8") for n in ("CLAUDE.md", "GEMINI.md")}
         resultados.append(("CLAUDE.md y GEMINI.md remiten a AGENTS.md sin duplicar reglas",
                            all("@AGENTS.md" in t and "## Principios de trabajo" not in t for t in _entradas.values()),
@@ -1377,6 +1379,28 @@ def main():
         prueba("investigacion: no abre investigaciones en un proyecto inexistente", [INV, "proyectos/no-existe", "--nueva", "x"], repo,
                ["No encuentro el proyecto"], codigo=1)
         shutil.rmtree(repo / "empresa", ignore_errors=True)
+
+        # --- v2.3 · Capacidad según la tarea y contexto acotado ---
+        prueba("medir_contexto: la carga fija por sesión queda bajo el techo", [H + "medir_contexto.py", "--techo"], repo,
+               ["Carga fija por sesión", "bajo el techo", "Subagentes"], ausentes=["(hereda)"])
+        _sin_modelo = [a.stem for a in (repo / ".claude" / "agents").glob("*.md")
+                       if not re.search(r"^model:\s*(opus|sonnet|haiku)\s*$", a.read_text(encoding="utf-8").split("---")[1], re.M)]
+        resultados.append(("agentes: todos declaran su nivel de capacidad (model: opus|sonnet|haiku)", not _sin_modelo, _sin_modelo))
+        import yaml as _yaml_cap
+        _cat = _yaml_cap.safe_load((repo / ".claude" / "skills" / "ayuda" / "catalogo.yaml").read_text(encoding="utf-8"))
+        _niveles = _cat.get("capacidad") or {}
+        _clasificadas = {s for lista in _niveles.values() for s in (lista or [])}
+        _reales = {d.name for d in (repo / ".claude" / "skills").iterdir() if (d / "SKILL.md").exists()}
+        resultados.append(("catalogo: cada skill con nivel de capacidad existe y ninguna está en dos niveles",
+                           _clasificadas <= _reales and sum(len(v or []) for v in _niveles.values()) == len(_clasificadas)
+                           and {"alta", "media", "baja"} <= set(_niveles), [sorted(_clasificadas - _reales)]))
+        _ag = (repo / "AGENTS.md").read_text(encoding="utf-8")
+        _idx = (repo / ".claude" / "skills" / "LEEME.md").read_text(encoding="utf-8")
+        _fuera_idx = sorted(s for s in _reales if f".claude/skills/{s}/SKILL.md" not in _idx)
+        resultados.append(("AGENTS.md: reglas 20 y 21; herramientas en herramientas/LEEME.md; índice de skills completo en .claude/skills/LEEME.md",
+                           "20. **Capacidad según la tarea" in _ag and "herramientas/LEEME.md" in _ag and ".claude/skills/LEEME.md" in _ag
+                           and "investigacion.py <ruta-proyecto>" in (repo / "herramientas" / "LEEME.md").read_text(encoding="utf-8")
+                           and not _fuera_idx, [f"fuera del índice: {_fuera_idx}"]))
 
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)

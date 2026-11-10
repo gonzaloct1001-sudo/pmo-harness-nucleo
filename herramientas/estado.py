@@ -154,12 +154,15 @@ def resumen(remoto=False):
                     lineas.append(f"- Hay {atras} commit(s) en GitHub que no están en este computador: ofrece `git pull` antes de trabajar.")
 
     agents = RAIZ / "AGENTS.md"
+    indice = RAIZ / ".claude" / "skills" / "LEEME.md"  # índice del núcleo (hasta 2.2 la tabla vivía en AGENTS.md)
     if agents.exists() and (RAIZ / ".claude" / "skills").exists():
         tabla = agents.read_text(encoding="utf-8", errors="replace")
+        if indice.exists():
+            tabla += indice.read_text(encoding="utf-8", errors="replace")
         propias = sorted(d.name for d in (RAIZ / ".claude" / "skills").iterdir()
                          if d.is_dir() and (d / "SKILL.md").exists() and f".claude/skills/{d.name}/SKILL.md" not in tabla)
         if propias:
-            lineas.append(f"- Skills propias de esta carpeta (no están en la tabla de AGENTS.md): {', '.join(propias)}; "
+            lineas.append(f"- Skills propias de esta carpeta (no están en el índice del núcleo): {', '.join(propias)}; "
                           "lee su SKILL.md cuando su descripción calce con el pedido.")
 
     proyectos = sorted(p for p in (RAIZ / "proyectos").glob("*") if p.is_dir()) if (RAIZ / "proyectos").exists() else []
