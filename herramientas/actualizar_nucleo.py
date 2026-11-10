@@ -16,6 +16,7 @@ Uso:
   de pruebas y, si falla, revierte todo. Si pasa y la carpeta es un repositorio, hace el commit "Actualización del núcleo a <versión>".
 """
 import argparse
+import json
 import re
 import shutil
 import subprocess
@@ -28,6 +29,83 @@ import _nucleo
 
 RAIZ = Path(__file__).resolve().parent.parent
 NUNCA = ("proyectos/", "empresa/", ".harness/", "FICHA-DE-INICIO.md")
+SETTINGS = ".claude/settings.json"   # se fusiona, no se reemplaza: lo que el usuario agregó se conserva
+
+
+def fusionar_settings(viejo, nuevo):
+    """El settings.json del núcleo nuevo más lo propio del usuario en el viejo: permisos, hooks y claves que el núcleo
+    no trae. Lo del núcleo viejo (menciona `herramientas/`) no se arrastra: lo trae el nuevo en su forma vigente.
+    None si alguno no es JSON válido (entonces se reemplaza y el viejo queda en el respaldo)."""
+    try:
+        v, n = json.loads(viejo), json.loads(nuevo)
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(v, dict) or not isinstance(n, dict):
+        return None
+    propio = lambda x: "herramientas/" not in json.dumps(x)  # noqa: E731
+    if isinstance(v.get("permissions"), dict):
+        destino = n.setdefault("permissions", {})
+        for clave, valor in v["permissions"].items():
+            if isinstance(valor, list) and isinstance(destino.setdefault(clave, []), list):
+                destino[clave].extend(x for x in valor if x not in destino[clave] and propio(x))
+            elif clave not in destino:
+                destino[clave] = valor
+    if isinstance(v.get("hooks"), dict):
+        for evento, entradas in v["hooks"].items():
+            destino = n.setdefault("hooks", {}).setdefault(evento, [])
+            if isinstance(entradas, list) and isinstance(destino, list):
+                vistos = [json.dumps(x, sort_keys=True) for x in destino]
+                destino.extend(x for x in entradas if json.dumps(x, sort_keys=True) not in vistos and propio(x))
+    for clave, valor in v.items():
+        if clave not in n:
+            n[clave] = valor
+    return json.dumps(n, indent=2, ensure_ascii=False) + "\n"
+
+
+def bloques_yaml(texto):
+    """[(clave, bloque)] de nivel superior de un YAML sencillo: la línea `clave:` y lo que sigue hasta la próxima clave."""
+    bloques, clave, lineas = [], None, []
+    for linea in texto.splitlines():
+        m = re.match(r"^([A-Za-z_][\w-]*):", linea)
+        if m:
+            if clave:
+                bloques.append((clave, "\n".join(lineas).rstrip("\n")))
+            clave, lineas = m.group(1), [linea]
+        elif clave is not None:
+            lineas.append(linea)
+    if clave:
+        bloques.append((clave, "\n".join(lineas).rstrip("\n")))
+    return bloques
+
+
+def completar_empresa(fuente, aplicar=False):
+    """[(ruta, descripción)] de lo que la plantilla de empresa del núcleo nuevo trae y empresa/ no tiene: archivos que
+    faltan y bloques nuevos de empresa.yaml. Solo agrega; nunca cambia ni reemplaza lo existente."""
+    plantilla, emp = Path(fuente) / "plantilla-empresa", RAIZ / "empresa"
+    if not plantilla.is_dir() or not emp.is_dir():
+        return []
+    hechos = []
+    for x in sorted(plantilla.rglob("*")):
+        if not x.is_file() or "_procesado" in x.parts or x.name.startswith("~$"):
+            continue
+        rel = x.relative_to(plantilla).as_posix()
+        destino = emp / rel
+        if rel == "empresa.yaml" and destino.exists():
+            local = destino.read_text(encoding="utf-8")
+            claves = {k for k, _ in bloques_yaml(local)}
+            faltan = [(k, b) for k, b in bloques_yaml(x.read_text(encoding="utf-8")) if k not in claves]
+            if faltan:
+                hechos.append(("empresa/empresa.yaml", "empresa/empresa.yaml: bloque(s) " + ", ".join(k for k, _ in faltan)))
+                if aplicar:
+                    destino.write_text(local.rstrip("\n") + "\n\n" + "\n\n".join(b for _, b in faltan) + "\n", encoding="utf-8")
+            continue
+        if destino.exists():
+            continue
+        hechos.append(("empresa/" + rel, "empresa/" + rel))
+        if aplicar:
+            destino.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(x, destino)
+    return hechos
 
 
 def origen_configurado():
@@ -83,6 +161,9 @@ def plan(fuente):
         else:
             p["modificados"].append(rel)
             p["propios"].append(rel)
+    # settings.json con cambios del usuario (o sin registro de lo instalado): se fusiona en vez de reemplazar
+    p["fusionar"] = [SETTINGS] if SETTINGS in p["reemplazar"] and (SETTINGS in p["modificados"] or manifiesto is None) else []
+    p["modificados"] = [x for x in p["modificados"] if x not in p["fusionar"]]
     return p
 
 
@@ -137,7 +218,11 @@ def main():
     ap.add_argument("--aplicar", action="store_true", help="aplicar la actualización (sin esto, solo vista previa)")
     ap.add_argument("--sin-pruebas", action="store_true", help="no ejecutar la batería de pruebas después de aplicar")
     ap.add_argument("--sin-commit", action="store_true", help="no hacer el commit de la actualización")
+    ap.add_argument("--carpeta", help=argparse.SUPPRESS)  # carpeta de empresa a actualizar (la usa el actualizador nuevo al relanzarse)
     a = ap.parse_args()
+    global RAIZ
+    if a.carpeta:
+        RAIZ = Path(a.carpeta).resolve()
 
     if _nucleo.es_mantenedor(RAIZ):
         sys.exit("Esta carpeta es el núcleo que mantienes: se actualiza con Git (git pull / git push), no con este comando.")
@@ -148,13 +233,25 @@ def main():
         fuente = obtener_fuente(origen, tmp)
         if fuente.resolve() == RAIZ.resolve():
             sys.exit("El origen es esta misma carpeta: indica la carpeta o el repositorio del núcleo nuevo.")
+        # Si el núcleo nuevo trae un actualizador distinto, es ese el que actualiza esta carpeta: así las mejoras del
+        # actualizador valen desde esta actualización y no desde la siguiente.
+        nuevo = fuente / "herramientas" / "actualizar_nucleo.py"
+        if (not a.carpeta and nuevo.is_file() and _nucleo.huella(nuevo) != _nucleo.huella(Path(__file__).resolve())
+                and "--carpeta" in nuevo.read_text(encoding="utf-8", errors="replace")):  # uno anterior a 2.6.1 no sabría
+            origen_hijo = str(Path(origen).expanduser().resolve()) if Path(origen).expanduser().is_dir() else origen
+            args = [sys.executable, str(nuevo), "--carpeta", str(RAIZ), "--desde", origen_hijo]
+            args += [x for x, v in (("--aplicar", a.aplicar), ("--sin-pruebas", a.sin_pruebas), ("--sin-commit", a.sin_commit)) if v]
+            return subprocess.run(args, cwd=RAIZ).returncode
         p = plan(fuente)
+        faltantes = completar_empresa(fuente)
         v_local, v_nueva = _nucleo.version(RAIZ), _nucleo.version(fuente)
         out = ["# Actualización del núcleo", "", f"- Origen: {origen}", f"- Versión: {v_local or '?'} → {v_nueva or '?'}",
                f"- Archivos: {len(p['agregar'])} nuevos · {len(p['reemplazar'])} cambiados · {len(p['eliminar'])} eliminados · "
                f"{p['iguales']} iguales"]
         out += lista("Nuevos", p["agregar"]) + lista("Cambiados", p["reemplazar"]) + lista("Eliminados (el núcleo nuevo ya no los trae)", p["eliminar"])
         out += lista("Modificados a mano en esta carpeta (se respaldan antes de reemplazarlos)", p["modificados"])
+        out += lista("Se fusionan (entra lo del núcleo nuevo; tus permisos y hooks propios se conservan)", p["fusionar"])
+        out += lista("Se completa en empresa/ (solo lo que falta; nada existente cambia)", [d for _, d in faltantes])
         out += lista("Propios de la empresa dentro de carpetas del núcleo (se conservan)", p["propios"])
         out += lista("Sin registro del núcleo instalado: no se borran, revísalos", p["revisar"])
         out += [f"- No se tocan: {', '.join(NUNCA)}"]
@@ -162,7 +259,7 @@ def main():
         if nov and v_nueva != v_local:
             lineas = nov.splitlines()
             out += ["", "## Novedades", "", *lineas[:60]] + (["", f"(… {len(lineas) - 60} líneas más en CHANGELOG.md)"] if len(lineas) > 60 else [])
-        cambios = p["agregar"] or p["reemplazar"] or p["eliminar"]
+        cambios = p["agregar"] or p["reemplazar"] or p["eliminar"] or faltantes
         if not a.aplicar:
             out += ["", "Vista previa: nada cambió." + (" Para aplicar: python herramientas/actualizar_nucleo.py "
                     + (f"--desde {origen} " if a.desde else "") + "--aplicar" if cambios else " El núcleo ya está al día.")]
@@ -201,6 +298,11 @@ def main():
 
         for rel in p["agregar"] + p["reemplazar"]:
             (local / rel).parent.mkdir(parents=True, exist_ok=True)
+            if rel in p["fusionar"]:
+                fusion = fusionar_settings((local / rel).read_text(encoding="utf-8"), (nueva / rel).read_text(encoding="utf-8"))
+                if fusion is not None:
+                    (local / rel).write_text(fusion, encoding="utf-8")
+                    continue
             shutil.copy2(nueva / rel, local / rel)
         for rel in p["eliminar"]:
             (local / rel).unlink(missing_ok=True)
@@ -245,9 +347,15 @@ def main():
                 return 1
             print(f"Pruebas: {ultima[0]}")
 
+        # Recién ahora (ya nada puede revertir): lo que la plantilla de empresa nueva trae y esta carpeta no tiene
+        completados = completar_empresa(fuente, aplicar=True)
+        if completados:
+            print("Completado en empresa/ (solo lo que faltaba): " + ", ".join(d for _, d in completados))
+
         rc, top = git("rev-parse", "--show-toplevel")
         if not a.sin_commit and rc == 0 and Path(top).resolve() == RAIZ.resolve():
-            rutas_git = [e.rstrip("/") for e in p["union"]] + [".harness/estado.yaml", _nucleo.MANIFIESTO.as_posix()]
+            rutas_git = ([e.rstrip("/") for e in p["union"]] + [".harness/estado.yaml", _nucleo.MANIFIESTO.as_posix()]
+                         + [r for r, _ in completados])
             git("add", "-A", "--", *[x for x in rutas_git if (RAIZ / x).exists() or any(r.startswith(x) for r in p["eliminar"])])
             git("update-index", "--chmod=+x", *[e for e in _nucleo.EJECUTABLES if (RAIZ / e).exists()])
             rc_c, salida = git("commit", "-q", "-m", f"Actualización del núcleo a {v_nueva or 'la versión nueva'}")

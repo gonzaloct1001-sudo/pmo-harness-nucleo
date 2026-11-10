@@ -35,6 +35,10 @@ cada investigación, qué falta, qué leer y qué pedirle a la persona. Ejecúta
   justifica (lo decide la persona).
 - Si hay un cartucho en `biblioteca/dominios/` que calce con el dominio, úsalo. Si no hay y el dominio se repetirá,
   ofrece crear uno al cerrar.
+- **Material que la persona ya tiene** (artículos, informes, fichas de proveedores, correos): dile que lo copie a
+  `proyectos/<slug>/_entrada/` sin ordenar, e inventaríalo con `extraer_entrada.py` (o con `alta-proyecto` si además
+  define el proyecto). Cada documento entra a `E1_mapa_fuentes.csv` con su nivel N1-N6 (`protocolo/marcas-y-fuentes.md`)
+  y lo que afirma entra al expediente como T (testimonio) o P (pista), nunca como H, hasta que una fuente lo sostenga.
 
 ## 2. Avanzar por etapas (el ciclo)
 Para cada paso:

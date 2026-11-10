@@ -57,6 +57,8 @@ Repetirlos después de modificar una skill.
 | 49 | "pausa el resumen de la mañana" | `configurar` → modo nube: `RemoteTrigger update enabled=false` + `nube.py --pausar resumen-manana --quien`; dice qué cambia |
 | 50 | "quiero cambiar el logo" / "de ahora en adelante los informes en A4" | `configurar`: dice qué cambia, dónde vive y el efecto; pide el sí; edita `empresa/empresa.yaml` (o `adoptar-formatos --marca`); valida; ofrece guardar |
 | 51 | "hola" en una carpeta nueva | `instalar` con preguntas de opción (para quién, qué lleva primero, en qué punto, formatos propios, status semanal, modo nube) y una recomendación por pregunta; nada de nube sin el sí |
+| 52 | "actualiza el harness" en una carpeta creada con una versión anterior y con permisos propios en `settings.json` | `actualizar-nucleo`: la vista previa dice «se fusionan» y «se completa en empresa/»; un solo sí; conserva lo propio, agrega lo que falta, pruebas y commit; sin más preguntas |
+| 53 | "tengo una carpeta con artículos y fichas de proveedores para mi estudio de tecnologías" | `investigar`: proyecto `investigacion`; pide copiar todo a `_entrada/` sin ordenar; inventario; cada documento al mapa de fuentes con nivel; sus afirmaciones como T o P, nunca H |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

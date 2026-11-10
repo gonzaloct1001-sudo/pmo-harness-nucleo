@@ -17,12 +17,19 @@ mejoras se traen con `herramientas/actualizar_nucleo.py`, que solo reemplaza las
    - **modificados a mano** (se respaldan y se reemplazan: si eran ajustes propios, conviene moverlos a la carpeta
      del proyecto o de la empresa, regla 8 de `AGENTS.md`);
    - **propios de la empresa** dentro de carpetas del núcleo (se conservan);
+   - **`.claude/settings.json` se fusiona**: entran los permisos y hooks del núcleo nuevo y se conservan los que el
+     usuario agregó (no se reemplaza);
+   - **se completa `empresa/`** con lo que la plantilla nueva trae y la carpeta no tiene (archivos y bloques nuevos de
+     `empresa.yaml`), sin cambiar nada existente;
    - **sin registro** (carpeta antigua sin `.harness/nucleo-instalado.csv`): no se borran; revisa si son restos de
      una versión anterior.
    Aclara que los proyectos, la empresa y los documentos no se tocan.
 4. **Aplicar**, con el visto bueno: `python herramientas/actualizar_nucleo.py [--desde <origen>] --aplicar`.
    Ejecuta las pruebas (varios minutos) y, si fallan, revierte solo. Si la carpeta es un repositorio, deja el commit
-   «Actualización del núcleo a <versión>».
+   «Actualización del núcleo a <versión>». Si el núcleo nuevo trae un actualizador distinto, es ese el que corre.
+   **Si la carpeta venía de 2.6.0 o anterior** (su actualizador no sabía fusionar ni completar), ejecuta el mismo
+   comando una segunda vez sin preguntar: la segunda pasada completa `empresa/`; y si la vista previa de la primera
+   listó `.claude/settings.json` como «modificado a mano», copia del respaldo los permisos propios que faltaran.
 5. **Después:** si cambiaron `AGENTS.md`, `CLAUDE.md` o una skill, las reglas nuevas rigen desde la próxima sesión:
    sugiere cerrar y abrir la sesión de la IA. Ofrece `guardar-cambios` para subir el commit.
 

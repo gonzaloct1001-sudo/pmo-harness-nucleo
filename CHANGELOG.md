@@ -1,5 +1,22 @@
 # Cambios
 
+## 2.6.1 — 2026-11-10
+
+### Actualizar sin perder lo propio
+- `actualizar_nucleo.py`: `.claude/settings.json` ya no se reemplaza: se **fusiona** (entran los permisos y hooks del
+  núcleo nuevo; se conservan los permisos, hooks y claves que el usuario agregó). Y **completa `empresa/`** con lo que
+  la plantilla nueva trae y la carpeta no tiene (por ejemplo `_entrada/`, `formatos/` y el bloque `capacidad` de
+  `empresa.yaml`), sin cambiar nada existente. Probado el salto 2.2.4 → 2.6 en una carpeta real: una sola
+  confirmación, 103 segundos, sin preguntas.
+- El actualizador **se renueva solo**: si el núcleo nuevo trae un actualizador distinto, es ese el que actualiza la
+  carpeta (las mejoras del actualizador valen desde esa actualización, no desde la siguiente). Una carpeta en 2.6.0 o
+  anterior actualiza esta vez con su actualizador viejo: la skill `actualizar-nucleo` ejecuta una segunda pasada para
+  completar `empresa/`, y los permisos propios que hubiera en `settings.json` quedan en el respaldo.
+- Skill `investigar`: cómo entra el material que la persona ya tiene (`_entrada/` → mapa de fuentes con su nivel; lo
+  que afirma, como T o P, nunca como H).
+- Skill `nube`: `references/tarea-remota.md` con la forma comprobada de crear la tarea en la nube (primera corrida
+  real: resumen diario publicado en el issue y aviso al teléfono).
+
 ## 2.6.0 — 2026-11-10
 
 ### Modo nube opcional, instalación por opciones y «configurar»

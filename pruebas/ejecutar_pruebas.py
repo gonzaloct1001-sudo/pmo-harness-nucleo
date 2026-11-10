@@ -736,9 +736,30 @@ def main():
         _propios_inv = {p: (e2 / p).read_bytes() for p in ("biblioteca/dominios/mi-rubro.md", "empresa/investigacion/ajustes.yaml",
                                                              "empresa/investigacion/lecciones.csv", "empresa/formatos/registro.csv",
                                                              "empresa/plantillas/informe-avance.docx")}
+        # Lo propio del usuario en settings.json, y lo que una empresa creada con una versión anterior no tiene de la plantilla
+        _sj = e2 / ".claude" / "settings.json"
+        _cfg = json.loads(_sj.read_text(encoding="utf-8"))
+        _cfg["permissions"]["allow"].append("Bash(mi-herramienta:*)")
+        _cfg["hooks"].setdefault("PreToolUse", []).append({"matcher": "Bash", "hooks": [{"type": "command", "command": "echo propio"}]})
+        _cfg["env"] = {"MI_VARIABLE": "1"}
+        _sj.write_text(json.dumps(_cfg, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        # El núcleo nuevo trae un permiso más y cambia el comando de un hook: entra lo nuevo y el hook viejo no se duplica
+        _sjf = fuente / ".claude" / "settings.json"
+        _cfgf = json.loads(_sjf.read_text(encoding="utf-8"))
+        _cfgf["permissions"]["allow"].append("Bash(python herramientas/nuevo_de_prueba.py:*)")
+        _cfgf["hooks"]["PostToolUse"][0]["hooks"][0]["command"] += " --nuevo"
+        _sjf.write_text(json.dumps(_cfgf, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        (e2 / "empresa" / "_entrada" / "LEEME.md").unlink()
+        _ey = e2 / "empresa" / "empresa.yaml"
+        _ey.write_text(re.sub(r"^capacidad:.*?(?=^replicas:)", "", _ey.read_text(encoding="utf-8"), flags=re.S | re.M), encoding="utf-8")
         prueba("actualizar_nucleo: vista previa sin cambios", [str(e2 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(fuente)], e2,
                ["→ 9.9", "1 nuevos", "1 eliminados", "Modificados a mano", "README.md", ".claude/skills/mi-skill/SKILL.md",
-                "Novedad de prueba", "Vista previa: nada cambió"])
+                "Se fusionan", ".claude/settings.json", "Se completa en empresa/", "empresa/_entrada/LEEME.md",
+                "empresa/empresa.yaml: bloque(s) capacidad", "Novedad de prueba", "Vista previa: nada cambió"])
+        resultados.append(("actualizar_nucleo: la vista previa no completa empresa/ ni fusiona settings.json",
+                           not (e2 / "empresa" / "_entrada" / "LEEME.md").exists() and "capacidad:" not in _ey.read_text(encoding="utf-8")
+                           and _sj.read_text(encoding="utf-8") == json.dumps(_cfg, indent=2, ensure_ascii=False) + "\n",
+                           ["la vista previa cambió empresa/ o settings.json"]))
         resultados.append(("actualizar_nucleo: la vista previa no modifica nada", not (e2 / "herramientas" / "nuevo_de_prueba.py").exists()
                            and (e2 / "biblioteca" / "LEEME.md").exists(), ["la vista previa cambió archivos"]))
         estado_e2 = (e2 / "proyectos" / "proy-e2" / "proyecto.yaml").read_text(encoding="utf-8")
@@ -754,6 +775,23 @@ def main():
                            and bool(_resp) and "nota local" in _resp[0].read_text(encoding="utf-8")
                            and 'version_harness: "9.9"' in (e2 / ".harness" / "estado.yaml").read_text(encoding="utf-8"),
                            [f"respaldo: {_resp}", (e2 / ".harness" / "estado.yaml").read_text(encoding="utf-8")[:300]]))
+        _sj_txt = _sj.read_text(encoding="utf-8")
+        _sj_cfg = json.loads(_sj_txt)
+        resultados.append(("actualizar_nucleo: settings.json se fusiona (permisos, hooks y claves propias se conservan; entra lo del núcleo nuevo)",
+                           "Bash(mi-herramienta:*)" in _sj_cfg["permissions"]["allow"] and "MI_VARIABLE" in _sj_txt
+                           and any("echo propio" in json.dumps(h) for h in _sj_cfg["hooks"]["PreToolUse"])
+                           and "Bash(python herramientas/nuevo_de_prueba.py:*)" in _sj_cfg["permissions"]["allow"]
+                           and _sj_cfg["permissions"]["allow"].count("Bash(mi-herramienta:*)") == 1
+                           and [h["command"][-8:] for e in _sj_cfg["hooks"]["PostToolUse"] for h in e["hooks"] if "validar_edicion" in h["command"]] == [" --nuevo"],
+                           [_sj_txt[-400:]]))
+        _ey_txt = _ey.read_text(encoding="utf-8")
+        resultados.append(("actualizar_nucleo: completa en empresa/ lo que falta de la plantilla sin cambiar lo existente",
+                           (e2 / "empresa" / "_entrada" / "LEEME.md").exists() and "capacidad:" in _ey_txt and "Empresa Dos" in _ey_txt
+                           and _ey_txt.count("replicas:") == 1 and _ey_txt.count("capacidad:") == 1
+                           and (e2 / "empresa" / "formatos" / "registro.csv").read_text(encoding="utf-8") == "id,archivo\nF-01,_entrada/x.docx\n"
+                           and "empresa/empresa.yaml" in _git_e2("show", "--name-only", "--format=", "HEAD")
+                           and not any(x in _git_e2("status", "--short", "--", "empresa") for x in ("empresa.yaml", "_entrada")),  # commit hecho; el LEEME restaurado es igual al del primer commit
+                           [_ey_txt[-500:], _git_e2("show", "--name-only", "--format=", "HEAD")[-300:], _git_e2("status", "--short", "--", "empresa")]))
         prueba("estado: anuncia las skills propias de la empresa", [str(e2 / "herramientas" / "estado.py")], e2,
                ["Skills propias de esta carpeta", "mi-skill"])
         _manif_e2 = (e2 / ".harness" / "nucleo-instalado.csv").read_text(encoding="utf-8")
@@ -804,6 +842,14 @@ def main():
                            and (e2 / "pruebas" / "ejecutar_pruebas.py").read_text(encoding="utf-8") == _bateria_antes
                            and 'version_harness: "9.9"' in (e2 / ".harness" / "estado.yaml").read_text(encoding="utf-8"),
                            ["la reversión dejó cambios"]))
+        # El actualizador se renueva solo: si el núcleo nuevo trae otro actualizador, es ese el que corre sobre esta carpeta
+        fuente3 = tmp / "nucleo-otro-actualizador"
+        shutil.copytree(fuente, fuente3, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+        (fuente3 / "herramientas" / "actualizar_nucleo.py").write_text(
+            "# acepta --carpeta\nimport sys\nprint('ACTUALIZADOR NUEVO', ' '.join(sys.argv[1:]))\n", encoding="utf-8")
+        prueba("actualizar_nucleo: si el núcleo nuevo trae otro actualizador, es ese el que actualiza la carpeta",
+               [str(e2 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(fuente3), "--aplicar", "--sin-pruebas"], e2,
+               ["ACTUALIZADOR NUEVO", "--carpeta", e2.name, "--desde", fuente3.name, "--aplicar --sin-pruebas"])
         shutil.rmtree(repo / ".harness", ignore_errors=True)
         shutil.rmtree(repo / "empresa", ignore_errors=True)
 
