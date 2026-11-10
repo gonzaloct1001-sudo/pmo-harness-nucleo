@@ -1,4 +1,4 @@
-# PMO Harness 2.4: manual de usuario
+# PMO Harness 2.5: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa.
 
@@ -110,7 +110,27 @@ proyectos (si un proyecto tiene el suyo, manda el del proyecto; si la empresa no
 originales nunca se modifican y ninguna actualización del harness los toca. Los formatos de un cliente se adoptan
 igual, dentro de su proyecto.
 
-## 8. Postulaciones a fondos y licitaciones
+## 8. Finanzas: llevar el área como un controller
+Si eres gerente de finanzas, controller o el consultor a cargo de las finanzas de una empresa, di **«quiero llevar las
+finanzas de la empresa»**. El harness arma el proyecto y te acompaña en el ciclo completo:
+1. **Arranque:** tu plan de cuentas se mapea a las líneas del reporte (ingresos, costo, margen, gastos, EBITDA, caja,
+   cuentas por cobrar…) y se carga el histórico desde la contabilidad.
+2. **Presupuesto anual:** supuestos con fuente, montos por línea y mes, escenarios, y una versión aprobada por quien
+   corresponda.
+3. **Cierre mensual:** exportas el balance de comprobación del sistema contable a `_entrada/10-contabilidad/` y dices
+   **«cierra octubre»**: se importa, se cuadra, te pregunta a qué línea van las cuentas nuevas, te explica los desvíos
+   contra el presupuesto, calcula los indicadores, emite el informe y cierra el mes. Si llega algo tarde, **«reabre
+   octubre»** con el motivo, se corrige y se vuelve a cerrar; todo queda anotado.
+4. **Forecast y proyección:** cómo cierra el año con lo que va, y una proyección a tres años (resultados, balance y
+   caja) desde supuestos que puedes cambiar en un Excel con fórmulas.
+5. **Directorio:** informe mensual y presentación con tus formatos (sección 7).
+
+Lo que no hace: no lleva la contabilidad formal, no declara impuestos ni paga; eso sigue en tu sistema contable, en el
+contador y en tesorería. El harness consume lo que ellos producen y nunca inventa una cifra: si falta un dato, lo pide.
+La referencia por país (impuestos, calendario) está en `biblioteca/finanzas/paises/` y siempre se confirma con el
+contador.
+
+## 9. Postulaciones a fondos y licitaciones
 Deja las bases, anexos y aclaraciones en `_entrada/00-bases-y-aclaraciones/` y di «prepara la postulación». El harness:
 1. revisa todas las bases y arma la lista de requisitos, incluidos los escondidos en anexos y aclaraciones;
 2. te ayuda a decidir si conviene postular;
@@ -126,7 +146,7 @@ Los CVs, certificados y la descripción de la empresa se guardan una vez en el *
 y sirven para todas sus postulaciones; te avisa si un certificado estará vencido al cierre.
 Si las bases exigen declarar el uso de IA, te lo avisa: esa declaración la decides y la haces tú.
 
-## 9. Investigaciones: hechos verificados con fuente
+## 10. Investigaciones: hechos verificados con fuente
 Cuando lo que necesitas saber depende de hechos de afuera (a quién ofrecer una licencia, qué socios o proveedores
 califican, el estado del arte, patentes, normativa, si algo que te dijeron es cierto), di con tus palabras
 **«investiga…»**. El harness abre una **investigación auditable**: cualquier persona, solo con el informe y su
@@ -149,7 +169,7 @@ sostener la sección de mercado de una postulación), como **proyecto propio** o
 cliente. Lo que corriges y prefieres («busca también en portugués», «parte en estándar») queda guardado para las
 próximas investigaciones de tu empresa, y una actualización del harness no lo borra.
 
-## 10. Varios proyectos y programas
+## 11. Varios proyectos y programas
 Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - **Independiente:** su propio contrato, presupuesto, Gantt, minutas, formatos y objetivos.
 - **Programa:** un contrato general con varios **subproyectos**, cada uno con su Gantt, objetivos, riesgos, minutas y
@@ -157,7 +177,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
   Gantt macro y los reportes generales.
 - **Subproyecto de un programa existente:** hereda la marca, los formatos y las plantillas del programa.
 
-## 11. Varias empresas, otro computador y otra IA
+## 12. Varias empresas, otro computador y otra IA
 - **Una carpeta por empresa.** Cada empresa tiene su carpeta y su repositorio privado, con su marca, sus formatos y su
   banco de antecedentes. Para otra empresa: «crea la carpeta para la empresa X». Los datos de dos empresas nunca se mezclan.
 - **Otro computador:** descarga el zip y haz doble clic en el instalador. Después de conectar GitHub te ofrece
@@ -174,7 +194,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
   entidad, y si prefieres un tablero por empresa o uno general. El tablero general queda en **una carpeta y un
   repositorio privado aparte, solo tuyo**: lee el status de cada empresa sin copiar sus datos ni mezclarlos.
 
-## 12. Privacidad: tu repositorio y el del harness
+## 13. Privacidad: tu repositorio y el del harness
 - El **harness** se publica en un repositorio público de **solo lectura**: cualquiera lo descarga, pero nadie puede
   modificarlo, salvo su autor.
 - **Tus datos van solo a tus repositorios privados**, uno por empresa. Nunca llegan al repositorio del harness, y su
@@ -188,7 +208,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 - La IA que usas procesa el contenido de tus documentos según las condiciones de su proveedor. Confirma que tus
   clientes lo permiten (la ficha de inicio lo pregunta).
 
-## 13. Controles automáticos
+## 14. Controles automáticos
 - **No sube a GitHub** documentos confidenciales: la carpeta `_entrada`, originales de contratos, CVs, paquetes firmados.
   El control está en Git y funciona con cualquier IA.
 - **Revisa cada planilla** antes de guardarla (columnas y fechas).
@@ -200,7 +220,7 @@ Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
 
 Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
 
-## 14. Preguntas frecuentes
+## 15. Preguntas frecuentes
 - **¿Tengo que saber los nombres de los comandos?** No. Describe lo que necesitas.
 - **¿Cuánto cuesta?** El harness es gratuito (licencia MIT) y GitHub también. La herramienta de IA tiene sus propios planes.
 - **¿Puedo usar Gemini, Codex, Antigravity u otra IA?** Sí, siempre que trabaje sobre la carpeta. Puedes cambiar cuando
@@ -212,12 +232,12 @@ Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
   carpeta de la empresa (o en la carpeta del tablero único).
 - **¿El reporte semanal se envía solo?** Se prepara solo, en tu computador, el día y la hora que elijas, y se abre en tu
   navegador. No se envía a nadie. Para cambiarlo o quitarlo: «cambia el día del reporte semanal», «quita el reporte semanal».
-- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 11).
+- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 12).
 - **¿Necesito los documentos originales en otro computador?** Casi nunca: las bases y los documentos de definición
   están replicados en `fuentes/`. Los originales hacen falta para firmar o presentar, o ante una duda legal.
 - **¿Cómo pruebo sin datos reales?** Pídele «prueba con el paquete de postulación de ejemplo».
 
-## 15. Si algo falla
+## 16. Si algo falla
 - **La IA no reconoce el harness:** escríbele «lee el archivo AGENTS.md y sigue sus instrucciones».
 - **«python no se reconoce»:** pide «instala lo que falte». Si recién se instaló, cierra y vuelve a abrir tu herramienta.
 - **En el chat, algo se queda detenido** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes

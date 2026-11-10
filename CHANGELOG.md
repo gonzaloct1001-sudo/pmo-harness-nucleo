@@ -1,5 +1,27 @@
 # Cambios
 
+## 2.5.0 — 2026-11-10
+
+### Finanzas: llevar el área como un controller (arquetipo `finanzas`)
+- Nuevo arquetipo para gestionar las finanzas de una empresa en cualquier rubro y país: plan de cuentas mapeado a las
+  líneas del reporte (`finanzas/lineas.yaml`, adaptable), importación del balance de comprobación o libro mayor desde
+  cualquier contabilidad (detecta la fila de encabezados y las columnas; `--acumulado`, `--inicial`, `--mapa`),
+  presupuesto por línea y mes con supuestos, escenarios y versiones, **cierre mensual que se puede reabrir** con quién
+  y motivo (cada cierre guarda la huella de sus movimientos: si cambian, `--revisar` lo detecta), resultados mes y
+  acumulado contra presupuesto y forecast, balance con cuadre, flujo de caja por método indirecto, indicadores (margen,
+  EBITDA, caja y meses de caja, DSO, DPO, DIO, liquidez, endeudamiento, desvíos) con semáforos en el status
+  (`metricas-finanzas.yaml`, reglas FIN-01 a FIN-06), forecast (presupuesto o tendencia) y **proyección integrada a
+  varios años** (resultados, balance y caja cuadrados por construcción). Los Excel salen con fórmulas.
+- Skill `gestion-financiera` con un modo por proceso (arranque, presupuesto, cierre, desvíos y forecast, proyección,
+  directorio), subagente `analista-financiero` (sonnet), reportes `informe-financiero-mensual`, `presupuesto-anual`
+  y `reporte-directorio` (usan los formatos de la empresa si están adoptados), `biblioteca/finanzas/` (plan de cuentas
+  base, definiciones de indicadores, referencia por país: `paises/chile.md`, siempre a confirmar con el contador),
+  `_entrada/10-contabilidad/` para las exportaciones (no se suben a Git).
+- Principios: el harness consume la contabilidad, no la reemplaza; ninguna cifra se escribe a mano; cuadres antes que
+  análisis; lo tributario y contable lo decide el contador. Ejemplo ficticio `ejemplos/finanzas-demo` y paquete
+  `ejemplos/paquete-finanzas-demo` (exportación de octubre para probar la importación). `nuevo-proyecto` y
+  `alta-proyecto` reconocen las señales; `actualizar_nucleo.py` revisa los proyectos de finanzas antes y después.
+
 ## 2.4.0 — 2026-11-10
 
 ### Tus formatos, primero

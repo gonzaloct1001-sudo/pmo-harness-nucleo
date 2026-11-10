@@ -53,6 +53,12 @@ Lee `arquetipos/*/ARQUETIPO.md` (solo las secciones "Cuándo usarlo" al principi
   si hay de ambos. Si la investigación solo alimenta otro trabajo (por ejemplo, la sección de mercado de una
   postulación), no es un proyecto aparte: se abre dentro de ese proyecto (forma integrada). Si hay un cartucho en
   `biblioteca/dominios/` que calce, ofrécelo.
+- **finanzas** — llevar el área de finanzas de una empresa (como gerente de finanzas, controller o consultor a cargo):
+  presupuesto anual, cierre mensual, estado de resultados, balance, caja, forecast, proyección, indicadores, reporte al
+  directorio. Señales: «llevar las finanzas», «cierre mensual», «P&L», «control de gestión», un balance de comprobación
+  en `_entrada/`. Activa la skill `gestion-financiera` (modo arranque). Se diferencia de `estudio` (evalúa una
+  inversión) y del presupuesto de una `postulacion`; se combina con `investigacion` para supuestos que dependen de
+  afuera. Una empresa cliente = su carpeta; sus finanzas = un proyecto dentro.
 - Combinaciones cuando corresponda: programa con desarrollo de software = `ejecucion,agil`; obra = `ejecucion,obra`;
   granja de bots = `cartera` para los bots (+ `agil` si el equipo los desarrolla en sprints); postulación que debe
   sostener con fuentes su mercado, competencia o propiedad intelectual = `postulacion,investigacion`; prefactibilidad

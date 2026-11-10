@@ -27,6 +27,10 @@ Si el proyecto se diseñó con `nuevo-proyecto`, ya existe: pasa a la fase B.
 1. Propón un `slug` (minúsculas, guiones, sin tildes) a partir del nombre.
 2. Determina el arquetipo (ver `arquetipos/*/ARQUETIPO.md`). Si no es evidente por la descripción, créalo
    como `ejecucion` y ajústalo en la fase D según los documentos (se puede agregar un arquetipo después).
+   **Finanzas:** si el material trae un balance de comprobación, un libro mayor, un plan de cuentas o un presupuesto
+   anual de la empresa, propón el arquetipo `finanzas` y sigue `gestion-financiera` (modo arranque): el plan de
+   cuentas se mapea a líneas y las exportaciones se importan con `finanzas.py --importar` (quedan en
+   `_entrada/10-contabilidad/`, no se replican en `fuentes/`).
    **Investigación:** si los documentos piden establecer hechos de terceros con fuentes (identificar contrapartes,
    socios o candidatos; estado del arte; patentes, cesiones o licencias; due diligence; «verificar que…»), o un
    informe de otra IA trae afirmaciones sobre el mundo sin fuente, propón en una línea sumar el arquetipo

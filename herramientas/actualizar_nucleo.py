@@ -103,6 +103,8 @@ def revisar_proyectos():
                 comandos.append(["programa.py", "--sin-gantt"])
             if "investigacion" in arqs and (RAIZ / "herramientas" / "investigacion.py").exists():
                 comandos.append(["investigacion.py"])  # sin --revisar: comprueba que el script lee las investigaciones
+            if "finanzas" in arqs and (RAIZ / "herramientas" / "finanzas.py").exists():
+                comandos.append(["finanzas.py"])
             rel = c.relative_to(RAIZ).as_posix()
             for script, *extra in comandos:
                 try:

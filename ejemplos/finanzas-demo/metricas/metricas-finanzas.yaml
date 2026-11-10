@@ -1,0 +1,47 @@
+# Métricas del arquetipo finanzas. Las calcula: python herramientas/finanzas.py <proyecto> --registrar [--periodo AAAA-MM]
+# Umbrales iniciales genéricos: cada empresa los ajusta a su rubro (ver biblioteca/finanzas/kpi-definiciones.md).
+metricas:
+  - {id: ingresos, nombre: Ingresos del mes, nivel: proyecto, unidad: "$", direccion: informativa, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Ingresos por ventas más otros ingresos del período}
+  - {id: margen_bruto_pct, nombre: Margen bruto, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: (ingresos − costo de ventas) / ingresos del período, umbral_amarillo: 0.25, umbral_rojo: 0.15}
+  - {id: ebitda, nombre: EBITDA del mes, nivel: proyecto, unidad: "$", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Margen bruto menos gastos operacionales, umbral_amarillo: 0, umbral_rojo: -1}
+  - {id: margen_ebitda_pct, nombre: Margen EBITDA, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: EBITDA / ingresos del período, umbral_amarillo: 0.08, umbral_rojo: 0}
+  - {id: resultado_neto, nombre: Resultado neto del mes, nivel: proyecto, unidad: "$", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Resultado después de impuestos del período}
+  - {id: resultado_neto_acumulado, nombre: Resultado neto acumulado del año, nivel: proyecto, unidad: "$", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Resultado neto del año fiscal a la fecha}
+  - {id: caja, nombre: Caja y bancos, nivel: proyecto, unidad: "$", direccion: informativa, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Saldo de caja y bancos al cierre del período}
+  - {id: meses_de_caja, nombre: Meses de caja, nivel: proyecto, unidad: meses, direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Caja / promedio mensual de costo de ventas más gastos de los últimos 3 meses, umbral_amarillo: 3, umbral_rojo: 1.5}
+  - {id: dso, nombre: Días de cobro (DSO), nivel: proyecto, unidad: días, direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Cuentas por cobrar / ingresos de los últimos 3 meses × 90, umbral_amarillo: 60, umbral_rojo: 90}
+  - {id: dpo, nombre: Días de pago (DPO), nivel: proyecto, unidad: días, direccion: informativa, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Cuentas por pagar / costo de ventas de los últimos 3 meses × 90}
+  - {id: dio, nombre: Días de inventario (DIO), nivel: proyecto, unidad: días, direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Inventario / costo de ventas de los últimos 3 meses × 90, umbral_amarillo: 60, umbral_rojo: 120}
+  - {id: liquidez_corriente, nombre: Liquidez corriente, nivel: proyecto, unidad: x, direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Activo corriente / pasivo corriente, umbral_amarillo: 1.2, umbral_rojo: 1.0}
+  - {id: endeudamiento, nombre: Endeudamiento, nivel: proyecto, unidad: x, direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Pasivo total / patrimonio, umbral_amarillo: 1.5, umbral_rojo: 2.5}
+  - {id: desvio_ingresos_pct, nombre: Desvío de ingresos vs presupuesto, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: (real − presupuesto) / presupuesto de los ingresos del mes, umbral_amarillo: -0.05, umbral_rojo: -0.15}
+  - {id: desvio_gastos_pct, nombre: Desvío de gastos vs presupuesto, nivel: proyecto, unidad: "%", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: (real − presupuesto) / presupuesto de los gastos operacionales del mes, umbral_amarillo: 0.05, umbral_rojo: 0.15}
+  - {id: cuentas_sin_mapear, nombre: Cuentas sin mapear, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Cuentas con movimientos en real.csv que no están en el plan de cuentas, umbral_amarillo: 1, umbral_rojo: 5}
+  - {id: periodos_sin_cerrar, nombre: Períodos sin cerrar, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: Meses con movimientos que no están cerrados en cierres.csv, umbral_amarillo: 2, umbral_rojo: 3}
+  - {id: balance_cuadra, nombre: Balance cuadra, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: mensual,
+     fuente: herramientas/finanzas.py, definicion: 1 si activo = pasivo + patrimonio + resultado en el período, umbral_amarillo: 1, umbral_rojo: 0}
+
+reglas:
+  - {id: FIN-01, descripcion: La caja cubre al menos dos meses de operación, aplica_a: {nivel: proyecto}, metrica: meses_de_caja, operador: ">=", valor: 2, severidad: critico}
+  - {id: FIN-02, descripcion: No hay cuentas sin mapear al cerrar el mes, aplica_a: {nivel: proyecto}, metrica: cuentas_sin_mapear, operador: "<=", valor: 0, severidad: advertencia}
+  - {id: FIN-03, descripcion: El balance cuadra, aplica_a: {nivel: proyecto}, metrica: balance_cuadra, operador: ">=", valor: 1, severidad: critico}
+  - {id: FIN-04, descripcion: Los gastos no superan el presupuesto en más de 10 %, aplica_a: {nivel: proyecto}, metrica: desvio_gastos_pct, operador: "<=", valor: 0.10, severidad: advertencia}
+  - {id: FIN-05, descripcion: La liquidez corriente se mantiene sobre 1, aplica_a: {nivel: proyecto}, metrica: liquidez_corriente, operador: ">=", valor: 1, severidad: critico}
+  - {id: FIN-06, descripcion: No hay más de un mes sin cerrar, aplica_a: {nivel: proyecto}, metrica: periodos_sin_cerrar, operador: "<=", valor: 1, severidad: advertencia}

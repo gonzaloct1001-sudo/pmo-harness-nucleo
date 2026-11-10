@@ -45,4 +45,9 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 - `llenar_docx.py <plantilla.docx> --valores valores.yaml --salida x.docx [--proyecto ruta] [--vista-previa]` → llena una plantilla
   Word propia (marcadores y secciones por título, respetando estilos, viñetas y tablas) con autoría limpia.
 
+- `finanzas.py <ruta-proyecto> [--importar archivo --periodo AAAA-MM [--vista-previa] | --estados [--excel x.xlsx] | --cerrar P --quien N |
+  --reabrir P --quien N --motivo M | --forecast [--metodo presupuesto|tendencia] | --proyectar [--excel x.xlsx] | --revisar | --registrar]`
+  → finanzas de gestión: importar la contabilidad, resultados/balance/caja con desvíos e indicadores, cierres con huella,
+  forecast, proyección integrada; sin opciones dice dónde va y el siguiente paso.
+
 Dependencias: `pip install -r requirements.txt` (en Mac, dentro de `.venv`, que crea el instalador).

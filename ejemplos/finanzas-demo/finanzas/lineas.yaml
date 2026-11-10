@@ -1,0 +1,46 @@
+# Líneas de los estados financieros de gestión. Cada cuenta del plan (plan-de-cuentas.csv) apunta a una línea por su
+# id. Se pueden renombrar, agregar o quitar líneas; los subtotales se calculan con `formula` (ids de otras líneas con
+# + y -). Las cifras de resultado se leen en su signo natural: ingresos positivos, costos y gastos positivos como
+# magnitud (un resultado financiero negativo es un ingreso financiero neto).
+resultado:
+  - {id: ingresos, nombre: Ingresos por ventas, tipo: ingreso}
+  - {id: otros_ingresos, nombre: Otros ingresos, tipo: ingreso}
+  - {id: costo_ventas, nombre: Costo de ventas, tipo: costo}
+  - {id: margen_bruto, nombre: Margen bruto, formula: "ingresos + otros_ingresos - costo_ventas"}
+  - {id: gastos_personal, nombre: Gastos de personal, tipo: gasto}
+  - {id: gastos_administracion, nombre: Gastos de administración, tipo: gasto}
+  - {id: gastos_ventas, nombre: Gastos de ventas y marketing, tipo: gasto}
+  - {id: ebitda, nombre: EBITDA, formula: "margen_bruto - gastos_personal - gastos_administracion - gastos_ventas"}
+  - {id: depreciacion, nombre: Depreciación y amortización, tipo: gasto}
+  - {id: resultado_operacional, nombre: Resultado operacional, formula: "ebitda - depreciacion"}
+  - {id: resultado_financiero, nombre: Gastos financieros netos, tipo: gasto}
+  - {id: resultado_antes_impuestos, nombre: Resultado antes de impuestos, formula: "resultado_operacional - resultado_financiero"}
+  - {id: impuestos, nombre: Impuesto a la renta, tipo: gasto}
+  - {id: resultado_neto, nombre: Resultado neto, formula: "resultado_antes_impuestos - impuestos"}
+
+# Balance: saldos acumulados (incluido el saldo inicial). Activos con saldo deudor; pasivos y patrimonio con saldo
+# acreedor. La depreciación acumulada es un activo con saldo negativo. `resultado_del_ejercicio` no se mapea: se
+# calcula con el resultado neto acumulado del año fiscal.
+balance:
+  - {id: caja, nombre: Caja y bancos, tipo: activo, grupo: activo_corriente}
+  - {id: cuentas_por_cobrar, nombre: Cuentas por cobrar, tipo: activo, grupo: activo_corriente}
+  - {id: inventario, nombre: Inventario, tipo: activo, grupo: activo_corriente}
+  - {id: otros_activos_corrientes, nombre: Otros activos corrientes, tipo: activo, grupo: activo_corriente}
+  - {id: activo_fijo, nombre: Activo fijo bruto, tipo: activo, grupo: activo_no_corriente}
+  - {id: depreciacion_acumulada, nombre: Depreciación acumulada, tipo: activo, grupo: activo_no_corriente}
+  - {id: otros_activos_no_corrientes, nombre: Otros activos no corrientes, tipo: activo, grupo: activo_no_corriente}
+  - {id: cuentas_por_pagar, nombre: Cuentas por pagar, tipo: pasivo, grupo: pasivo_corriente}
+  - {id: deuda_corto_plazo, nombre: Deuda financiera de corto plazo, tipo: pasivo, grupo: pasivo_corriente}
+  - {id: otros_pasivos_corrientes, nombre: Otros pasivos corrientes, tipo: pasivo, grupo: pasivo_corriente}
+  - {id: deuda_largo_plazo, nombre: Deuda financiera de largo plazo, tipo: pasivo, grupo: pasivo_no_corriente}
+  - {id: otros_pasivos_no_corrientes, nombre: Otros pasivos no corrientes, tipo: pasivo, grupo: pasivo_no_corriente}
+  - {id: capital, nombre: Capital, tipo: patrimonio, grupo: patrimonio}
+  - {id: resultados_acumulados, nombre: Resultados acumulados, tipo: patrimonio, grupo: patrimonio}
+  - {id: resultado_del_ejercicio, nombre: Resultado del ejercicio, tipo: patrimonio, grupo: patrimonio, calculado: true}
+
+grupos:
+  - {id: activo_corriente, nombre: Activo corriente}
+  - {id: activo_no_corriente, nombre: Activo no corriente}
+  - {id: pasivo_corriente, nombre: Pasivo corriente}
+  - {id: pasivo_no_corriente, nombre: Pasivo no corriente}
+  - {id: patrimonio, nombre: Patrimonio}

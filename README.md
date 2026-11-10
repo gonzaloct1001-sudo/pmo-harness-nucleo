@@ -117,6 +117,7 @@ combinación) y propone lo propio del dominio. Algunos ejemplos:
 | Postular a un fondo (CORFO, ANID, regional) o presentar una oferta a una licitación | postulación | Go/No-Go, barrido de bases y matriz de cumplimiento, pauta inversa, estrategia, secciones trazables, presupuesto con controles en Excel, red team, checklist de entrega |
 | Programa con un contrato general y varios subproyectos (presupuesto macro y por subproyecto, personas compartidas, enmiendas que afectan subproyectos) | programa + ejecución | Subproyectos con su Gantt, objetivos, riesgos, minutas y reportes; Gantt macro, control presupuestario con contingencia, dotación y sobreasignación, estado consolidado |
 | Prefactibilidad o evaluación económica | estudio | Preguntas, supuestos con fuente, modelo en Excel con VAN/TIR y sensibilidad |
+| Llevar el área de finanzas de una empresa (gerente de finanzas, controller o consultor a cargo) | finanzas | Plan de cuentas mapeado a líneas, importación del balance de comprobación, presupuesto con supuestos y versiones, cierre mensual que se puede reabrir, resultados, balance y caja con desvíos, forecast, proyección integrada a 3 años con Excel de fórmulas, indicadores con semáforo, informe y presentación al directorio |
 | Investigar a quién ofrecer una licencia, qué socios o proveedores califican, el estado del arte, patentes, una due diligence o si algo es cierto (en cualquier área) | investigación (sola o junto a postulación o estudio) | Protocolo auditable: encuadre con la decisión, hipótesis asesinas antes de construir, expediente con marcas y niveles de fuente, refutador independiente, ocho pruebas, puertas que firma quien decide; validador que guía, corrige lo mecánico y aprende los ajustes de cada empresa |
 
 Los diseños que quieras reutilizar se guardan como perfiles en `biblioteca/perfiles/`. Vienen incluidos perfiles
@@ -289,6 +290,17 @@ riesgos, un acta sin decisiones, una planilla con fórmulas, una presentación c
    archivo base.
 2. Adopta el informe mejorado y la marca; luego **«genera el informe mensual de octubre»**: sale con tu plantilla,
    tus estilos y tu logo, con las secciones vacías eliminadas.
+
+### Prueba 11 — Finanzas (arquetipo finanzas)
+`ejemplos/finanzas-demo/` es la gestión financiera ficticia de una distribuidora: plan de cuentas mapeado, enero a
+septiembre de 2026 importados, presupuesto 2026, enero a agosto cerrados, una cuenta sin mapear en septiembre (6999) y
+un exceso de arriendo en julio.
+1. `python herramientas/finanzas.py ejemplos/finanzas-demo --hoy 2026-10-12`: dónde va y el siguiente paso (mapear la 6999).
+2. `python herramientas/finanzas.py ejemplos/finanzas-demo --estados --periodo 2026-08 --excel estados.xlsx`: resultados
+   mes y acumulado contra presupuesto, balance que cuadra, flujo de caja e indicadores; el Excel lleva fórmulas.
+3. `python herramientas/finanzas.py ejemplos/finanzas-demo --importar ejemplos/paquete-finanzas-demo/balance_comprobacion_2026-10.xlsx --periodo 2026-10 --vista-previa`:
+   detecta la fila de encabezados y las columnas de una exportación «de sistema contable» y comprueba que cuadra.
+4. Para una propia: **«quiero llevar las finanzas de mi empresa»** y después, cada mes, **«cierra octubre»**.
 ---
 
 ## Tus formatos, primero

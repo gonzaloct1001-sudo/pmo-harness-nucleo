@@ -51,6 +51,14 @@ arquetipos:
     rutina: ["Preguntar «¿cuál es el siguiente paso de la investigación?»: el asistente lo dice y pide solo las firmas que te tocan (P0, P2 y P5).",
              "Antes de usar un resultado en una postulación o informe: que la investigación esté cerrada y su validador en OK.",
              "Al cerrar: revisar las lecciones y decir cuáles valen para las próximas."]
+  finanzas:
+    nombre: Finanzas (gestión financiera y control de gestión)
+    que_es: "Llevar el área de finanzas de una empresa como controller: plan de cuentas mapeado, presupuesto anual, cierre mensual que se puede reabrir, resultados, balance, caja, forecast, proyección a varios años, indicadores con semáforo y reporte al directorio. Consume la contabilidad, no la reemplaza."
+    carpetas: ["finanzas/ (plan de cuentas, líneas, real importado, presupuesto, forecast, supuestos, escenarios, cierres, proyección)",
+               "_entrada/10-contabilidad/ (exportaciones de la contabilidad, no se suben a Git)"]
+    rutina: ["Cada mes: exportar el balance de comprobación, importarlo, mapear cuentas nuevas, revisar desvíos e indicadores, emitir el informe y cerrar.",
+             "Cada año: presupuesto con supuestos y versión aprobada; proyección a 3 años cuando cambien las decisiones grandes.",
+             "Si llega algo tarde: reabrir el mes con motivo, corregir y cerrar de nuevo."]
   programa:
     nombre: Programa con subproyectos
     que_es: Un contrato general ejecutado en varios subproyectos, cada uno con su Gantt, presupuesto, equipo, riesgos, minutas y reportes; visión consolidada del programa.
@@ -102,6 +110,8 @@ skills:
      ejemplos: ["revísalo como el comité", "hazle un red team a la propuesta", "¿qué le falta para ganar?"]}
   - {id: gestionar-programa, para: "Programa con subproyectos: personas, presupuesto, contingencia, enmiendas por subproyecto y estado consolidado", arquetipos: [programa],
      ejemplos: ["¿cómo va el programa completo?", "agrega un subproyecto de integración", "Luis pasa al 50% en el portal", "usa 10 millones de contingencia en el ERP"]}
+  - {id: gestion-financiera, para: "Llevar las finanzas: presupuesto, cierre mensual, desvíos, forecast, proyección y reporte al directorio", arquetipos: [finanzas],
+     ejemplos: ["¿cómo vamos financieramente?", "cierra septiembre", "¿por qué subió el gasto de administración?", "arma el presupuesto 2027", "proyecta a tres años"]}
   - {id: investigar, para: "Investigación auditable: hechos del mundo verificados con fuente, hipótesis asesinas, refutador y entregable que un tercero puede auditar", arquetipos: [todos],
      ejemplos: ["investiga a quién le podemos ofrecer la licencia", "¿es cierto lo que dice este informe?", "¿cuál es el siguiente paso de la investigación?", "firmo P2"]}
   - {id: guardar-cambios, para: "Guardar y subir el trabajo a GitHub de forma segura", arquetipos: [todos],
@@ -140,7 +150,7 @@ skills:
 capacidad:
   alta: [nuevo-proyecto, alta-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, definir-pauta,
          revisar-estudio, revisar-documento, levantar-riesgos, consistencia, preparar-reunion, control-cambios,
-         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa, adoptar-formatos]
+         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa, adoptar-formatos, gestion-financiera]
   media: [generar-reporte, minuta, metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra,
           actualizar-gantt, registrar-documento, versiones-documentos, matriz-cumplimiento, formulario-plataforma, status,
           riesgos-issues]

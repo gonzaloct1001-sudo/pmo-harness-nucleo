@@ -1,0 +1,19 @@
+fecha,entidad,metrica,valor,fuente,comentario
+2026-10-12,PROYECTO,ingresos,112000000,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,margen_bruto_pct,0.38,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,ebitda,21860000,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,margen_ebitda_pct,0.195179,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,resultado_neto,17910000,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,resultado_neto_acumulado,126530000,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,caja,195950000,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,meses_de_caja,2.139971,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,dso,23.94,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,dpo,22.646217,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,dio,24.84563,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,liquidez_corriente,4.896382,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,endeudamiento,0.384646,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,desvio_ingresos_pct,-0.00885,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,desvio_gastos_pct,0,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,cuentas_sin_mapear,1,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,periodos_sin_cerrar,1,herramientas/finanzas.py,período 2026-09
+2026-10-12,PROYECTO,balance_cuadra,0,herramientas/finanzas.py,período 2026-09

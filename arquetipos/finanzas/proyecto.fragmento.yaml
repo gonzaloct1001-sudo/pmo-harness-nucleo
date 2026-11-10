@@ -1,0 +1,10 @@
+
+finanzas:                      # [finanzas] gestión financiera; detalle en finanzas/
+  moneda: CLP
+  anio_fiscal_inicio: 1        # mes en que empieza el año fiscal (1 = enero)
+  sistema_contable: ""         # de dónde salen las exportaciones (nombre del sistema)
+  version_presupuesto: ""      # versión vigente del presupuesto (columna version de presupuesto.csv)
+  version_forecast: ""         # versión vigente del forecast
+  aprueba_presupuesto: ""      # quién aprueba el presupuesto anual
+  aprueba_cierre: ""           # quién da por cerrado cada mes
+  dia_cierre: 10               # día hábil objetivo del cierre mensual

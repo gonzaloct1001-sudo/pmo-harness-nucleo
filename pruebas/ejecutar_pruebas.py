@@ -1479,6 +1479,92 @@ def main():
         shutil.rmtree(repo / "empresa", ignore_errors=True)
         shutil.rmtree(repo / ".harness", ignore_errors=True)
 
+        # --- v2.5 · Finanzas: importar, estados, cierres con huella, forecast, proyección ---
+        FIN = H + "finanzas.py"
+        fd = "ejemplos/finanzas-demo"
+        prueba("finanzas --revisar: el ejemplo solo tiene la cuenta sin mapear sembrada", [FIN, fd, "--revisar"], repo,
+               ["aviso: cuenta 6999 sin mapear", "0 error(es), 1 aviso(s). OK."])
+        prueba("finanzas: estado y siguiente paso en palabras simples", [FIN, fd, "--hoy", "2026-10-12"], repo,
+               ["períodos cerrados: 2026-01", "abiertos: 2026-09", "Cuentas sin mapear: 1 (6999)", "Siguiente paso: mapear", "forecast: versión 2026-fc-09"])
+        prueba("finanzas --estados: resultados, balance que cuadra, flujo de caja e indicadores", [FIN, fd, "--estados", "--periodo", "2026-08"], repo,
+               ["| **Margen bruto** | 41.800.000 | 41.800.000 | 0 |", "| **Resultado neto** | 17.150.000 |", "| **Activo** | 397.713.600 |",
+                "El balance cuadra.", "| Caja final | 180.200.000 |", "| liquidez_corriente |"], ausentes=["Diferencia no explicada"])
+        prueba("finanzas --estados: julio marca el exceso de gastos de administración", [FIN, fd, "--estados", "--periodo", "2026-07"], repo,
+               ["Desvíos relevantes del mes", "Gastos de administración 3.500.000 (+83.3%, desfavorable)"])
+        prueba("finanzas --estados: septiembre avisa que el balance no cuadra por la cuenta sin mapear", [FIN, fd, "--estados", "--periodo", "2026-09"], repo,
+               ["NO cuadra", "hay cuentas sin mapear: 6999"])
+        _fdc = tmp / "fin-copia"
+        shutil.copytree(repo / fd, _fdc)
+        prueba("finanzas --cerrar: no cierra con cuentas sin mapear ni balance descuadrado", [FIN, str(_fdc), "--cerrar", "2026-09", "--quien", "Ana"], repo,
+               ["No se cierra 2026-09: cuentas sin mapear: 6999", "el balance no cuadra"], codigo=1)
+        with open(_fdc / "finanzas" / "plan-de-cuentas.csv", "a", encoding="utf-8", newline="") as fh:
+            fh.write("6999,Gastos varios sin clasificar,gasto,gastos_administracion,,\n")
+        prueba("finanzas --revisar: con la cuenta mapeada queda limpio", [FIN, str(_fdc), "--revisar"], repo, ["0 error(es), 0 aviso(s). OK."])
+        prueba("finanzas --cerrar: cierra con quién y fecha", [FIN, str(_fdc), "--cerrar", "2026-09", "--quien", "Ana Rojas", "--hoy", "2026-10-12"], repo,
+               ["2026-09 cerrado por Ana Rojas el 2026-10-12"])
+        _cierres = (_fdc / "finanzas" / "cierres.csv").read_text(encoding="utf-8")
+        resultados.append(("finanzas --cerrar: el cierre guarda la huella de los movimientos", "2026-09,cerrado,2026-10-12,Ana Rojas,," in _cierres
+                           and len(_cierres.strip().splitlines()[-1].split(",")[5]) == 16, [_cierres[-200:]]))
+        prueba("finanzas --cerrar: un período cerrado no se cierra dos veces", [FIN, str(_fdc), "--cerrar", "2026-09", "--quien", "Ana"], repo, ["ya está cerrado"])
+        _real = _fdc / "finanzas" / "real.csv"
+        _filas_r = _csv_leer(_real)
+        for f in _filas_r[1:]:
+            if f[0] == "2026-09" and f[1] == "6101" and f[2] == "14000000":
+                f[2] = "15000000"
+            if f[0] == "2026-09" and f[1] == "1102" and f[3] == "14000000":
+                f[3] = "15000000"
+        _csv_escribir(_real, _filas_r)
+        prueba("finanzas --revisar: detecta movimientos cambiados después del cierre", [FIN, str(_fdc), "--revisar"], repo,
+               ["2026-09 está cerrado y sus movimientos cambiaron después del cierre"], codigo=1)
+        prueba("finanzas --reabrir: exige quién y motivo", [FIN, str(_fdc), "--reabrir", "2026-09", "--quien", "Ana"], repo, ["--quien y --motivo"], codigo=1)
+        prueba("finanzas --reabrir: reabre con motivo", [FIN, str(_fdc), "--reabrir", "2026-09", "--quien", "Ana Rojas", "--motivo", "factura tardía", "--hoy", "2026-10-14"],
+               repo, ["2026-09 reabierto por Ana Rojas (factura tardía)"])
+        prueba("finanzas --revisar: reabierto, el cambio ya no es un error", [FIN, str(_fdc), "--revisar"], repo, ["0 error(es)"])
+        prueba("finanzas --importar --vista-previa: detecta encabezados y columnas de una exportación con títulos y totales",
+               [FIN, str(_fdc), "--importar", "ejemplos/paquete-finanzas-demo/balance_comprobacion_2026-10.xlsx", "--periodo", "2026-10", "--vista-previa"], repo,
+               ["fila de encabezados: 4", "cuenta=1, nombre=2, debe=3, haber=4", "cuadra", "filas de totales omitidas: 1", "Vista previa: nada cambió"])
+        resultados.append(("finanzas --importar --vista-previa: no escribe", "2026-10" not in _real.read_text(encoding="utf-8"), []))
+        prueba("finanzas --importar: carga el mes", [FIN, str(_fdc), "--importar", "ejemplos/paquete-finanzas-demo/balance_comprobacion_2026-10.xlsx",
+               "--periodo", "2026-10"], repo, ["Importado en finanzas/real.csv (16 movimientos)"])
+        prueba("finanzas: el último período ahora es octubre y cuadra", [FIN, str(_fdc), "--estados", "--periodo", "2026-10"], repo,
+               ["Estados de gestión · 2026-10", "El balance cuadra."])
+        prueba("finanzas --importar: un período cerrado no se reimporta sin reabrir", [FIN, str(_fdc), "--importar",
+               "ejemplos/paquete-finanzas-demo/balance_comprobacion_2026-10.xlsx", "--periodo", "2026-08"], repo, ["está cerrado: reábrelo"], codigo=1)
+        prueba("finanzas --forecast: tendencia con versión y la deja vigente", [FIN, str(_fdc), "--forecast", "--metodo", "tendencia", "--version", "fc-prueba"], repo,
+               ["Forecast fc-prueba (tendencia): real hasta 2026-10 + 2 meses"])
+        resultados.append(("finanzas --forecast: forecast.csv y proyecto.yaml registran la versión",
+                           "fc-prueba" in (_fdc / "finanzas" / "forecast.csv").read_text(encoding="utf-8")
+                           and 'version_forecast: "fc-prueba"' in (_fdc / "proyecto.yaml").read_text(encoding="utf-8"), []))
+        prueba("finanzas --registrar + evaluar_metricas: indicadores con semáforo en el contrato común", [FIN, str(_fdc), "--registrar", "--periodo", "2026-10",
+               "--hoy", "2026-11-10"], repo, ["Registradas"])
+        _med = (_fdc / "metricas" / "mediciones.csv").read_text(encoding="utf-8")
+        _ev = prueba("evaluar_metricas: lee las métricas de finanzas", [H + "evaluar_metricas.py", str(_fdc), "--hoy", "2026-11-10"], repo, [],
+                     ausentes=["sin dato de 'meses_de_caja'"])
+        resultados.append(("finanzas --registrar: mediciones con entidad PROYECTO y fecha", "2026-11-10,PROYECTO,meses_de_caja," in _med, [_med[-300:]]))
+        prueba("finanzas --proyectar: tres años integrados que cuadran, con Excel de fórmulas", [FIN, str(_fdc), "--proyectar", "--excel", str(tmp / "proy.xlsx")], repo,
+               ["| 2027 | 2028 | 2029 |", "| Resultado neto |", "cuadra todos los años", "Excel con fórmulas"], ausentes=["ATENCIÓN: la base no cuadra"])
+        from openpyxl import load_workbook as _lwb
+        _wp = _lwb(str(tmp / "proy.xlsx"))
+        _c2 = _wp["Proyeccion"]["C2"].value
+        resultados.append(("finanzas --proyectar: el Excel referencia los supuestos con fórmulas", _wp.sheetnames == ["Supuestos", "Proyeccion"]
+                           and isinstance(_c2, str) and _c2.startswith("=B2*(1+Supuestos!"), [str(_c2)]))
+        prueba("finanzas --proyectar: avisa cuando la base no cuadra (cuenta sin mapear)", [FIN, fd, "--proyectar"], repo, ["ATENCIÓN: la base no cuadra"])
+        prueba("finanzas --estados --excel: hojas con SUMIFS y cuadre", [FIN, fd, "--estados", "--periodo", "2026-08", "--excel", str(tmp / "est.xlsx")], repo, ["Excel con fórmulas"])
+        _we = _lwb(str(tmp / "est.xlsx"))
+        resultados.append(("finanzas --estados --excel: Datos, Saldos, Resultados, Balance y KPI con fórmulas",
+                           _we.sheetnames == ["Datos", "Saldos", "Resultados", "Balance", "KPI"] and str(_we["Resultados"]["B2"].value).startswith("=SUMIFS(Datos!")
+                           and _we["Resultados"]["B5"].value == "=B2+B3-B4", [str(_we["Resultados"]["B5"].value)]))
+        prueba("crear_proyecto: arquetipo finanzas", [H + "crear_proyecto.py", "fin-nuevo", "--arquetipos", "finanzas"], repo, ["Arquetipos: finanzas"])
+        _fn = repo / "proyectos" / "fin-nuevo"
+        resultados.append(("crear_proyecto: finanzas trae líneas, métricas, reportes, carpeta de contabilidad y bloque en proyecto.yaml",
+                           all((_fn / x).exists() for x in ("finanzas/lineas.yaml", "finanzas/plan-de-cuentas.csv", "metricas/metricas-finanzas.yaml",
+                                                            "reportes/catalogo/informe-financiero-mensual.md", "_entrada/10-contabilidad/LEEME.md", "finanzas/cierre/checklist.md"))
+                           and "finanzas:" in (_fn / "proyecto.yaml").read_text(encoding="utf-8"), []))
+        prueba("finanzas: un proyecto recién creado guía el arranque", [FIN, "proyectos/fin-nuevo"], repo, ["Sin plan de cuentas mapeado"])
+        prueba("adoptar_formatos --tipos: conoce el informe financiero del arquetipo", [AF, "--tipos"], repo, ["informe-financiero-mensual", "reporte-directorio"])
+        prueba("precommit --archivos: las exportaciones de la contabilidad son confidenciales", [H + "hooks/precommit.py", "--archivos",
+               "proyectos/fin-nuevo/_entrada/10-contabilidad/balance.xlsx"], repo, ["material sin procesar de _entrada/"], codigo=1)
+
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)
         (repo / ".harness" / "estado.yaml").write_text("instalado: true\n", encoding="utf-8")

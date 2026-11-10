@@ -54,17 +54,15 @@ independientes o una misma entidad, separadas o juntas, y si quiere un **tablero
    `.githooks/` controles de Git · `plantilla-proyecto/`, `plantilla-subproyecto/`, `plantilla-empresa/` bases.
    `NUCLEO.txt` lista las rutas del núcleo: se reemplazan al actualizarlo (`actualizar_nucleo.py`); todo lo demás
    es de la empresa y nunca se toca al actualizar.
-2. **Arquetipos** — `arquetipos/<nombre>/`: estructura y guía de cada forma de trabajo.
-   `ejecucion` (plan, hitos, contrato, valor ganado, ruta crítica) · `obra` (complemento de ejecución: RFI, no
-   conformidades, inspecciones, estados de pago) · `agil` (backlog, sprints, DORA, ADR, deuda, trazabilidad) ·
-   `cartera` (muchos ítems con etapas y métricas) · `evaluacion` (evaluar propuestas de terceros con pauta) ·
-   `postulacion` (preparar y presentar una propuesta para ganar un fondo, licitación o concurso: matriz de
-   cumplimiento, pauta inversa, red team, presupuesto con controles) · `programa` (contrato padre con varios
-   subproyectos: presupuesto macro y por subproyecto, contingencia, personas compartidas, Gantt macro y por
-   subproyecto, enmiendas que afectan subproyectos) · `estudio` (preguntas, supuestos, modelo económico,
-   recomendación) · `investigacion` (investigación auditable: hechos del mundo verificados con fuente, hipótesis
-   asesinas, refutador, árbitro y puertas que firma quien decide; integrada en otro proyecto, como proyecto propio o
-   aislada en otra carpeta). Un proyecto puede combinar arquetipos.
+2. **Arquetipos** — `arquetipos/<nombre>/`: estructura y guía de cada forma de trabajo. `ejecucion` (plan, hitos,
+   contrato, valor ganado, ruta crítica) · `obra` (RFI, no conformidades, inspecciones, estados de pago) · `agil`
+   (backlog, sprints, DORA, ADR, deuda) · `cartera` (ítems con etapas y métricas) · `evaluacion` (propuestas de
+   terceros con pauta) · `postulacion` (ganar un fondo, licitación o concurso: matriz de cumplimiento, pauta inversa,
+   red team, presupuesto con controles) · `programa` (contrato padre con subproyectos, presupuesto macro, personas
+   compartidas, Gantt macro) · `estudio` (preguntas, supuestos, modelo económico, recomendación) · `investigacion`
+   (hechos del mundo verificados con fuente, hipótesis asesinas, refutador, árbitro, puertas que firma quien decide) ·
+   `finanzas` (plan de cuentas, presupuesto, cierre mensual reabrible, resultados, balance, caja, forecast,
+   proyección, indicadores; consume la contabilidad). Un proyecto puede combinar arquetipos.
 3. **Empresa** — `empresa/`: lo común a todos los proyectos de la empresa dueña de la carpeta: `empresa.yaml`
    (identidad, autoría, marca, formato, política de réplicas), banco de antecedentes (`contenidos/`: descripción,
    experiencia, CVs, certificados con vigencia), `estilo.md`, `marca/`, `plantillas/` y formatos de reportes
@@ -208,7 +206,8 @@ Roles en `.claude/agents/`: `lector-documental` (lee lotes de documentos y devue
 `revisor-independiente` (revisa con ojo crítico antes de entregar) · `evaluador-propuestas` (evalúa una propuesta
 por vez contra la pauta) · `analista-datos` (procesa y revisa datos sin modificarlos) · `revisor-red-team` (una
 perspectiva del red team por vez) · `bibliotecario`, `refutador` y `arbitro` (roles de una investigación auditable:
-recuperar sin interpretar, refutar en contexto estéril, aplicar las reglas de evidencia).
+recuperar sin interpretar, refutar en contexto estéril, aplicar las reglas de evidencia) · `analista-financiero` (calcula
+y explica desvíos e indicadores de finanzas; no decide ni cambia datos).
 
 - **Con subagentes** (Claude Code): invócalos como dice cada SKILL.md.
 - **Sin subagentes:** aplica el rol tú mismo en un paso separado: lee su `.md`, adopta solo esa perspectiva, lee

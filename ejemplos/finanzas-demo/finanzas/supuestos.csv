@@ -1,0 +1,4 @@
+id,supuesto,valor,unidad,fuente,confianza,afecta,nota
+S-01,Crecimiento mensual de ventas,0.025,%,serie 2024-2025 (ficticia),media,ingresos,
+S-02,Costo de ventas sobre ventas,0.62,%,margen histórico (ficticio),alta,costo_ventas,
+S-03,Tasa de interés del préstamo,0.09,%,contrato bancario (ficticio),alta,resultado_financiero,

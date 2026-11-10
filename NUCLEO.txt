@@ -26,6 +26,10 @@ biblioteca/perfiles/licitacion-privada-rfp/
 biblioteca/dominios/LEEME.md
 biblioteca/dominios/_plantilla-dominio.md
 biblioteca/dominios/propiedad-industrial.md
+biblioteca/finanzas/LEEME.md
+biblioteca/finanzas/plan-de-cuentas-base.csv
+biblioteca/finanzas/kpi-definiciones.md
+biblioteca/finanzas/paises/chile.md
 AGENTS.md
 CLAUDE.md
 GEMINI.md

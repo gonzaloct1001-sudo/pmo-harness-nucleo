@@ -1,0 +1,3 @@
+escenario,linea,variacion,nota
+pesimista,ingresos,-0.10,pérdida de un cliente grande
+optimista,ingresos,0.08,nuevo canal de venta

@@ -1,0 +1,33 @@
+# Supuestos de la proyección integrada (resultados, balance y caja) — la usa: python herramientas/finanzas.py <proyecto> --proyectar
+# Reemplazar los valores de ejemplo. Montos en la moneda del proyecto; tasas y porcentajes como fracción (0.10 = 10%).
+nombre: PENDIENTE
+anio_base: 2026               # último año con cifras reales o presupuestadas; el año base sale de los estados si existen
+anios: 3                      # años a proyectar (anio_base+1 en adelante)
+base:                         # cifras del año base; vacío = se toman de finanzas/real.csv (acumulado del año fiscal) si existen
+  ingresos: 0
+  costo_ventas: 0
+  gastos_operacionales: 0     # suma de gastos de personal, administración y ventas
+  depreciacion: 0
+  caja: 0
+  cuentas_por_cobrar: 0
+  inventario: 0
+  activo_fijo_neto: 0
+  otros_activos: 0
+  cuentas_por_pagar: 0
+  otros_pasivos: 0
+  deuda: 0
+  capital: 0
+  resultados_acumulados: 0
+supuestos:
+  crecimiento_ingresos: [0.10, 0.08, 0.06]   # uno por año (o un solo valor para todos)
+  margen_bruto_pct: 0.35                     # (ingresos - costo) / ingresos
+  gastos_operacionales_pct: 0.22             # gastos operacionales / ingresos
+  depreciacion_anual: 0                      # monto por año (o lista)
+  capex_anual: 0                             # inversión en activo fijo por año (o lista)
+  dias_cobro: 45                             # DSO: cuentas por cobrar / ingresos × 365
+  dias_pago: 30                              # DPO: cuentas por pagar / costo de ventas × 365
+  dias_inventario: 20                        # DIO: inventario / costo de ventas × 365
+  tasa_impuesto: 0.27
+  tasa_interes_deuda: 0.08                   # sobre la deuda al inicio del año
+  amortizacion_deuda_anual: 0                # monto por año (o lista)
+  dividendos_pct: 0.0                        # % del resultado neto del año anterior que se reparte

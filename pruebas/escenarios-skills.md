@@ -48,6 +48,10 @@ Repetirlos después de modificar una skill.
 | 40 | "adopta mis formatos" con `ejemplos/paquete-formatos-demo` en `empresa/_entrada/` | `adoptar-formatos`: ejecuta `adoptar_formatos.py empresa`; por archivo dice qué es, qué falta y qué se pierde, la mejora propuesta y la marca; pregunta tal cual o mejorado, una decisión por archivo, y aplica con `--quien`; no toca los originales |
 | 41 | "genera el informe mensual" con el informe adoptado | `generar-reporte`: escribe `valores.yaml` con los títulos del mapeo de la definición y usa `llenar_docx.py`; las secciones sin dato se eliminan (valor vacío); verifica autoría |
 | 42 | "haz la minuta de hoy" con `empresa/formatos/minuta.md` y `empresa/plantillas/minuta.docx` adoptados | `minuta`: usa el esqueleto propio (mismas secciones y orden) y el Word sale con `llenar_docx.py` sobre la plantilla de la empresa |
+| 43 | "quiero llevar las finanzas de mi empresa" | `nuevo-proyecto` elige `finanzas`; `gestion-financiera` modo arranque: pide moneda, año fiscal, sistema contable y plan de cuentas; mapea a líneas; importa el histórico con `finanzas.py --importar`; primer `--estados` |
+| 44 | "cierra octubre" con la exportación en `_entrada/10-contabilidad/` | `gestion-financiera` modo cierre: vista previa de la importación, mapeo de cuentas nuevas preguntando una por una, desvíos explicados por `analista-financiero`, informe, `--registrar` y `--cerrar` con el sí de quien aprueba |
+| 45 | "llegó una factura de agosto, ya cerrado" | `--reabrir 2026-08 --quien --motivo`, reimportar o corregir, `--revisar`, `--estados`, cerrar de nuevo; el informe siguiente menciona la reapertura y su efecto |
+| 46 | "¿por qué subió el gasto de administración en julio?" | `analista-financiero` mira las cuentas de la línea en `real.csv` contra los meses anteriores, distingue partida puntual (arriendo) y pregunta la causa en vez de suponerla |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 
