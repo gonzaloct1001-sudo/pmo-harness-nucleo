@@ -165,6 +165,20 @@ def resumen(remoto=False):
             lineas.append(f"- Skills propias de esta carpeta (no están en el índice del núcleo): {', '.join(propias)}; "
                           "lee su SKILL.md cuando su descripción calce con el pedido.")
 
+    entrada_emp = RAIZ / "empresa" / "_entrada"
+    if entrada_emp.is_dir() and not mantenedor:  # formatos propios entregados y todavía no adoptados
+        registrados = set()
+        reg = RAIZ / "empresa" / "formatos" / "registro.csv"
+        if reg.exists():
+            import csv as _csv
+            with open(reg, encoding="utf-8-sig", newline="") as fh:
+                registrados = {r.get("archivo", "") for r in _csv.DictReader(fh)}
+        sueltos = [x for x in _nucleo.ruta_larga(entrada_emp).rglob("*") if x.is_file() and x.name.upper() != "LEEME.MD"
+                   and not x.name.startswith(("_", "~$", ".")) and "_entrada/" + x.name not in registrados]
+        if sueltos:
+            lineas.append(f"- Formatos propios sin adoptar en empresa/_entrada/: {len(sueltos)} archivo(s) ({', '.join(x.name for x in sueltos[:4])}"
+                          + ("…" if len(sueltos) > 4 else "") + "): ofrece la skill `adoptar-formatos`.")
+
     proyectos = sorted(p for p in (RAIZ / "proyectos").glob("*") if p.is_dir()) if (RAIZ / "proyectos").exists() else []
 
     def etiqueta(p):

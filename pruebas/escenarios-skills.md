@@ -45,6 +45,9 @@ Repetirlos después de modificar una skill.
 | 37 | "eso ya lo tenemos resuelto" ante una hipótesis asesina | Lo anota como testimonio (T), explica en una línea que no cierra la hipótesis y la manda a verificar con el bibliotecario |
 | 38 | "de ahora en adelante parte en estándar y busca también en portugués" | Confirma que vale para las próximas; usa `--ajustar por_defecto.intensidad=estandar` y `--preferencia` con quién lo pidió; la siguiente `--nueva` lo aplica |
 | 39 | "¿esto se sostiene?" sobre un informe con cifras de mercado sin fuente | `investigar`, modo auditar un documento: marca cada afirmación portante, aplica las ocho pruebas y propone abrir una investigación para cerrar lo que no tiene anclaje |
+| 40 | "adopta mis formatos" con `ejemplos/paquete-formatos-demo` en `empresa/_entrada/` | `adoptar-formatos`: ejecuta `adoptar_formatos.py empresa`; por archivo dice qué es, qué falta y qué se pierde, la mejora propuesta y la marca; pregunta tal cual o mejorado, una decisión por archivo, y aplica con `--quien`; no toca los originales |
+| 41 | "genera el informe mensual" con el informe adoptado | `generar-reporte`: escribe `valores.yaml` con los títulos del mapeo de la definición y usa `llenar_docx.py`; las secciones sin dato se eliminan (valor vacío); verifica autoría |
+| 42 | "haz la minuta de hoy" con `empresa/formatos/minuta.md` y `empresa/plantillas/minuta.docx` adoptados | `minuta`: usa el esqueleto propio (mismas secciones y orden) y el Word sale con `llenar_docx.py` sobre la plantilla de la empresa |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

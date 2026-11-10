@@ -1,5 +1,29 @@
 # Cambios
 
+## 2.4.0 — 2026-11-10
+
+### Tus formatos, primero
+- **Skill `adoptar-formatos` y `herramientas/adoptar_formatos.py`:** la empresa deja sus formatos y archivos base en
+  `empresa/_entrada/` (no se sube a Git) y el harness los analiza: qué es cada uno (informe de avance, minuta,
+  presentación, carta, planilla de control, un reporte de un arquetipo, o un archivo base como un plan de cuentas),
+  cuánto cubre del **contrato** de esa salida (`herramientas/formatos/contratos/`), **qué sección le falta y qué se
+  pierde si se adopta tal cual**, qué sección propia el harness no sabe llenar solo, y qué marca trae (logo del
+  encabezado, fuente, color). Propone una **versión mejorada** de cada Word (copia `_v2` con las secciones que faltan
+  y marcadores) que el usuario acepta o no. Con `--aplicar --quien` deja la plantilla en `empresa/plantillas/`, la
+  definición con el mapeo de secciones en `empresa/reportes/catalogo/`, el esqueleto de la minuta en
+  `empresa/formatos/minuta.md`, los archivos base en `empresa/formatos/base/` y, con `--marca`, logo, fuente y color
+  en `empresa.yaml` (solo si tenía los valores por defecto). Los originales nunca se modifican; nada de lo que existe
+  se sobrescribe; todo queda en `empresa/formatos/registro.csv` con quién y cuándo. También sirve para los formatos
+  de un cliente dentro de un proyecto (`adoptar_formatos.py proyectos/<slug>`).
+- **`herramientas/llenar_docx.py`:** llena una plantilla Word propia sin cambiar su estructura: marcadores `{{...}}`
+  (también en tablas, encabezados y pies) y secciones ubicadas por su título, con el estilo de párrafo y de viñeta que
+  la plantilla usaba, tablas con semáforo, secciones vacías eliminadas; un `[PENDIENTE]` impide generar y la autoría
+  queda limpia. `generar-reporte` lo usa para todo Word con plantilla; `minuta` usa el esqueleto y la plantilla de la
+  empresa si existen.
+- Regla 22 de `AGENTS.md` («lo tuyo primero»): proyecto → empresa → harness, para toda salida. El estado de inicio
+  avisa los formatos dejados en `empresa/_entrada/` que aún no se adoptan; `alta-proyecto` y `nuevo-tipo-reporte`
+  usan el análisis para las plantillas de un proyecto. Ejemplo ficticio `ejemplos/paquete-formatos-demo/`.
+
 ## 2.3.0 — 2026-11-09
 
 ### Investigación auditable (arquetipo `investigacion`)

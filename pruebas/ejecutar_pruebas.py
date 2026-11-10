@@ -730,8 +730,12 @@ def main():
         (e2 / "empresa" / "investigacion").mkdir(parents=True, exist_ok=True)
         (e2 / "empresa" / "investigacion" / "ajustes.yaml").write_text("por_defecto:\n  intensidad: \"estandar\"\n", encoding="utf-8")
         (e2 / "empresa" / "investigacion" / "lecciones.csv").write_text("id,fecha,leccion\nL-01,2026-11-01,propia\n", encoding="utf-8")
+        (e2 / "empresa" / "formatos").mkdir(parents=True, exist_ok=True)
+        (e2 / "empresa" / "formatos" / "registro.csv").write_text("id,archivo\nF-01,_entrada/x.docx\n", encoding="utf-8")
+        (e2 / "empresa" / "plantillas" / "informe-avance.docx").write_bytes(b"PK propio")
         _propios_inv = {p: (e2 / p).read_bytes() for p in ("biblioteca/dominios/mi-rubro.md", "empresa/investigacion/ajustes.yaml",
-                                                             "empresa/investigacion/lecciones.csv")}
+                                                             "empresa/investigacion/lecciones.csv", "empresa/formatos/registro.csv",
+                                                             "empresa/plantillas/informe-avance.docx")}
         prueba("actualizar_nucleo: vista previa sin cambios", [str(e2 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(fuente)], e2,
                ["→ 9.9", "1 nuevos", "1 eliminados", "Modificados a mano", "README.md", ".claude/skills/mi-skill/SKILL.md",
                 "Novedad de prueba", "Vista previa: nada cambió"])
@@ -1401,6 +1405,79 @@ def main():
                            "20. **Capacidad según la tarea" in _ag and "herramientas/LEEME.md" in _ag and ".claude/skills/LEEME.md" in _ag
                            and "investigacion.py <ruta-proyecto>" in (repo / "herramientas" / "LEEME.md").read_text(encoding="utf-8")
                            and not _fuera_idx, [f"fuera del índice: {_fuera_idx}"]))
+
+        # --- v2.4 · Formatos propios: adoptar, comparar con el contrato, mejorar y llenar ---
+        AF = H + "adoptar_formatos.py"
+        prueba("nueva_empresa --aqui: empresa para los formatos", [H + "nueva_empresa.py", "Formatos SA", "--aqui"], repo, ["configurada"])
+        shutil.copytree(repo / "ejemplos" / "paquete-formatos-demo", repo / "empresa" / "_entrada", dirs_exist_ok=True)
+        prueba("adoptar_formatos --tipos: las salidas que el harness sabe llenar", [AF, "--tipos"], repo,
+               ["informe-avance", "minuta", "presentacion", "carta", "planilla-control", "informe-investigacion", "archivo-base"])
+        prueba("adoptar_formatos: tipo, cobertura, lo que falta y lo propio de cada formato", [AF, "empresa"], repo,
+               ["Acta_Reunion_Comite.docx", "Minuta o acta de reunión", "Le falta: Decisiones", "Informe_Gestion_Mensual.docx",
+                "Informe de avance", "Cubre 4/8", "Le falta: Riesgos, Problemas", "4. Indicadores de gestión", "Mejora propuesta",
+                "Planilla de control", "Presentación de avance", "Cubre 6/6", "archivo base", "logo"],
+               ausentes=["_LEEME-paquete", "5. Próximas actividades (insumo"])
+        _v2 = repo / "empresa" / "formatos" / "mejorados" / "Informe_Gestion_Mensual_v2.docx"
+        from docx import Document as _DocF
+        _tit_v2 = [p.text for p in _DocF(str(_v2)).paragraphs if p.style.name.startswith("Heading")] if _v2.exists() else []
+        _orig_igual = (repo / "empresa" / "_entrada" / "Informe_Gestion_Mensual.docx").read_bytes() == \
+            (repo / "ejemplos" / "paquete-formatos-demo" / "Informe_Gestion_Mensual.docx").read_bytes()
+        resultados.append(("adoptar_formatos: la versión mejorada agrega lo que falta y el original queda intacto",
+                           _v2.exists() and "Riesgos" in _tit_v2 and "Problemas" in _tit_v2 and _orig_igual, [str(_tit_v2)]))
+        prueba("adoptar_formatos --asignar: el usuario corrige el tipo", [AF, "empresa", "--asignar", "F-06=informe-avance"], repo, ["Informe de avance"])
+        prueba("adoptar_formatos --asignar: y lo vuelve a dejar", [AF, "empresa", "--asignar", "F-06=presentacion"], repo, ["Cubre 6/6"])
+        prueba("adoptar_formatos --aplicar: exige quién aprueba", [AF, "empresa", "--aplicar"], repo, ["--quien"], codigo=1)
+        prueba("adoptar_formatos --aplicar: original o mejorado, esqueleto de minuta, archivo base, logo y marca",
+               [AF, "empresa", "--aplicar", "--quien", "Ana Rojas", "--mejorado", "F-03", "--marca", "--hoy", "2026-11-10"], repo,
+               ["informe-avance adoptado (mejorada)", "minuta adoptado (original)", "esqueleto formatos/minuta.md", "planilla-control adoptado",
+                "archivo base guardado en formatos/base/Plan_de_Cuentas.xlsx", "logo adoptado", "marca tomada de Informe_Gestion_Mensual.docx",
+                "fuente: Arial → Calibri", "color_primario: 1F3864 → 7A1F1F"])
+        _ey_f = (repo / "empresa" / "empresa.yaml").read_text(encoding="utf-8")
+        _reg_t = (repo / "empresa" / "formatos" / "registro.csv").read_text(encoding="utf-8")
+        _def_f = (repo / "empresa" / "reportes" / "catalogo" / "informe-avance.md").read_text(encoding="utf-8")
+        resultados.append(("adoptar_formatos: registro con quién y cuándo, plantilla, definición con mapeo y marca en empresa.yaml",
+                           "adoptado,Ana Rojas,2026-11-10" in _reg_t and "mejorada" in _reg_t
+                           and (repo / "empresa" / "plantillas" / "informe-avance.docx").exists()
+                           and 'plantilla: "empresa/plantillas/informe-avance.docx"' in _def_f and "| Próximos pasos | 5. Próximas actividades |" in _def_f
+                           and 'color_primario: "7A1F1F"' in _ey_f and 'fuente: "Calibri"' in _ey_f and (repo / "empresa" / "marca" / "logo.png").exists(),
+                           [_reg_t[:700], _def_f[:500]]))
+        prueba("adoptar_formatos: una segunda corrida no vuelve a proponer lo ya adoptado", [AF, "empresa"], repo, ["Ya adoptado"],
+               ausentes=["Mejora propuesta"])
+        _val = tmp / "valores-formato.yaml"
+        _val.write_text('marcadores: {riesgos: "ver sección", problemas: "ninguno abierto"}\nsecciones:\n'
+                        '  "Resumen ejecutivo": |\n    El mes cerró en **amarillo**.\n'
+                        '  "Avance del período": |\n    | Iniciativa | Avance | Estado |\n    |---|---|---|\n    | Siembra | 80% | Verde |\n'
+                        '  "Riesgos": |\n    - Precio del combustible (alto).\n  "Presupuesto": ""\n  "Decisiones requeridas": ""\n', encoding="utf-8")
+        prueba("llenar_docx: marcadores y secciones de la plantilla adoptada, con sus estilos", [H + "llenar_docx.py",
+               "empresa/plantillas/informe-avance.docx", "--valores", str(_val), "--salida", str(tmp / "informe-lleno.docx"),
+               "--proyecto", "proyectos/postu-empresa"], repo,
+               ["Marcadores reemplazados: {{problemas}}, {{riesgos}}", "«1. Resumen ejecutivo»", "«Riesgos»", "Secciones eliminadas", "Guardado"],
+               ausentes=["quedaron sin valor"])
+        _dl = _DocF(str(tmp / "informe-lleno.docx"))
+        _tits_l = [p.text for p in _dl.paragraphs if p.style.name.startswith("Heading")]
+        _texto_l = "\n".join(p.text for p in _dl.paragraphs)
+        resultados.append(("llenar_docx: tabla bajo su título, viñetas con el estilo de la plantilla, secciones vacías eliminadas, sin marcadores",
+                           len(_dl.tables) == 1 and [c.text for c in _dl.tables[0].rows[1].cells] == ["Siembra", "80%", "Verde"]
+                           and "Presupuesto" not in _tits_l and "Decisiones requeridas" not in _tits_l and "Riesgos" in _tits_l
+                           and any(p.style.name == "List Bullet" and "combustible" in p.text for p in _dl.paragraphs) and "{{" not in _texto_l,
+                           [str(_tits_l), str(len(_dl.tables))]))
+        _val2 = tmp / "valores-mal.yaml"
+        _val2.write_text('secciones:\n  "Seccion inexistente": "x"\n', encoding="utf-8")
+        prueba("llenar_docx --vista-previa: avisa una sección que la plantilla no tiene", [H + "llenar_docx.py",
+               "empresa/plantillas/informe-avance.docx", "--valores", str(_val2), "--vista-previa"], repo, ["no están en la plantilla"], codigo=1)
+        _val3 = tmp / "valores-pendiente.yaml"
+        _val3.write_text('marcadores: {riesgos: "[PENDIENTE: dato]"}\n', encoding="utf-8")
+        prueba("llenar_docx: un [PENDIENTE] impide generar", [H + "llenar_docx.py", "empresa/plantillas/informe-avance.docx", "--valores",
+               str(_val3), "--salida", str(tmp / "no.docx")], repo, ["[PENDIENTE]"], codigo=1)
+        prueba("precommit --archivos: lo que está en empresa/_entrada/ es confidencial", [H + "hooks/precommit.py", "--archivos",
+               "empresa/_entrada/Informe_Gestion_Mensual.docx"], repo, ["material sin procesar de _entrada/"], codigo=1)
+        prueba("crear_proyecto: un proyecto nuevo recibe los formatos adoptados por la empresa", [H + "crear_proyecto.py", "proy-formatos",
+               "--arquetipos", "ejecucion"], repo, ["formatos comunes copiados: informe-avance"])
+        _DocF().save(str(repo / "empresa" / "_entrada" / "Carta_Nueva.docx"))
+        prueba("estado: avisa los formatos sin adoptar que hay en empresa/_entrada", [H + "estado.py"], repo,
+               ["Formatos propios sin adoptar", "Carta_Nueva.docx"], ausentes=["Informe_Gestion_Mensual.docx"])
+        shutil.rmtree(repo / "empresa", ignore_errors=True)
+        shutil.rmtree(repo / ".harness", ignore_errors=True)
 
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)

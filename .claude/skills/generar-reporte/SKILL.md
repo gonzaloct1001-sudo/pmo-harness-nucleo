@@ -49,7 +49,7 @@ Lee `references/modos-salida.md` para el detalle técnico de cada caso.
 | formato | modo | Qué hacer |
 |---|---|---|
 | docx | generar, sin plantilla | Escribe el contenido en `emitidos/<periodo>/<tipo>.md` siguiendo las secciones de la definición y conviértelo con `herramientas/md_a_docx.py` |
-| docx | generar, con plantilla | Copia la plantilla a `emitidos/<periodo>/` y reemplaza sus marcadores o secciones |
+| docx | generar, con plantilla | Escribe un `valores.yaml` (marcadores y el contenido de cada sección, en Markdown simple, con los títulos de la plantilla según el «Mapeo de secciones» de la definición) y ejecuta `herramientas/llenar_docx.py <plantilla> --valores valores.yaml --salida emitidos/<periodo>/<archivo>.docx --proyecto proyectos/<slug>`; una sección sin contenido se elimina dándole valor vacío. La plantilla (`plantilla:` de la definición) se busca en el proyecto y, si la ruta empieza con `empresa/`, desde la raíz de la carpeta |
 | xlsx | actualizar | Copia el último emitido (o la plantilla si es el primero) a `emitidos/<periodo>/` y actualiza **solo** las celdas del mapeo (típico de planillas de control acumulativas). **Planilla oficial o de terceros** (por ejemplo, el SSM de CORFO): siempre con `llenar_xlsx.py`, nunca con openpyxl |
 | xlsx | generar | Crea la planilla desde la plantilla con openpyxl, usando fórmulas en vez de valores calculados |
 | pptx | generar | Usa la plantilla y sus layouts con python-pptx; una idea por diapositiva |

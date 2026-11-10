@@ -7,7 +7,10 @@ description: Convierte notas de una reunión (apuntes en bruto, transcripción, 
 
 ## Pasos
 1. Identifica el proyecto y lee `contexto/stakeholders.csv` (para normalizar nombres y cargos).
-2. Si el proyecto tiene `minutas/_formato.md`, úsalo. Si no, usa `references/formato-minuta.md`.
+2. Formato, en este orden («lo tuyo primero»): `minutas/_formato.md` del proyecto; si no, `empresa/formatos/minuta.md`
+   (el esqueleto del formato propio de la empresa, adoptado con `adoptar-formatos`); si no, `references/formato-minuta.md`.
+   Si existe `empresa/plantillas/minuta.docx` (o la del proyecto), el Word del paso 8 sale con `llenar_docx.py` sobre
+   esa plantilla, no con `md_a_docx.py`.
 3. Extrae de las notas: datos de la reunión, asistentes, temas tratados, acuerdos, decisiones, riesgos o
    problemas mencionados y próxima reunión.
 4. Para cada acuerdo exige responsable y fecha. Si faltan, marca `[PENDIENTE: responsable]` o

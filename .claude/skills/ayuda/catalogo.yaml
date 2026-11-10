@@ -80,6 +80,8 @@ skills:
      ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité"]}
   - {id: nuevo-tipo-reporte, para: "Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
      ejemplos: ["quiero un informe mensual para el directorio en Excel", "este Word es la plantilla del reporte quincenal"]}
+  - {id: adoptar-formatos, para: "Que todo salga con tus formatos: adoptar tus plantillas y archivos base como el por defecto, sabiendo qué les falta y qué se pierde", arquetipos: [],
+     ejemplos: ["adopta mis formatos", "así hacemos las minutas aquí", "quiero que todo salga con nuestro logo y nuestro informe"]}
   - {id: minuta, para: "Convertir notas de reunión en minuta con acuerdos y decisiones", arquetipos: [todos],
      ejemplos: ["estas son mis notas de la reunión de hoy", "haz el acta del comité"]}
   - {id: preparar-reunion, para: "Agenda, estado, decisiones a pedir y preguntas difíciles", arquetipos: [todos],
@@ -138,7 +140,7 @@ skills:
 capacidad:
   alta: [nuevo-proyecto, alta-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, definir-pauta,
          revisar-estudio, revisar-documento, levantar-riesgos, consistencia, preparar-reunion, control-cambios,
-         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa]
+         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa, adoptar-formatos]
   media: [generar-reporte, minuta, metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra,
           actualizar-gantt, registrar-documento, versiones-documentos, matriz-cumplimiento, formulario-plataforma, status,
           riesgos-issues]

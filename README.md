@@ -280,7 +280,25 @@ planta en reserva por falta de evidencia.
 3. Para una propia: **«investiga a quién le podríamos ofrecer la licencia de X»**. El asistente abre la investigación
    en sondeo, te pide la firma del encuadre (P0) y después de las hipótesis asesinas (P2), y en cada momento puedes
    preguntar **«¿cuál es el siguiente paso de la investigación?»**.
+
+### Prueba 10 — Formatos propios
+`ejemplos/paquete-formatos-demo/` trae los formatos ficticios de una cooperativa: un informe mensual sin sección de
+riesgos, un acta sin decisiones, una planilla con fórmulas, una presentación completa, un plan de cuentas y un logo.
+1. Copia el paquete a `empresa/_entrada/` y di **«adopta mis formatos»**: debería detectar el tipo de cada archivo,
+   avisar lo que falta en el informe y el acta, proponer la versión mejorada y reconocer el plan de cuentas como
+   archivo base.
+2. Adopta el informe mejorado y la marca; luego **«genera el informe mensual de octubre»**: sale con tu plantilla,
+   tus estilos y tu logo, con las secciones vacías eliminadas.
 ---
+
+## Tus formatos, primero
+
+Si tu empresa ya tiene sus informes, minutas, presentaciones, cartas o planillas, no tienes que adaptarte al harness:
+deja los archivos en `empresa/_entrada/` y di **«adopta mis formatos»**. El harness analiza cada uno y te dice, en
+simple, qué es, qué sección le falta respecto de lo que él sabe llenar (y qué se pierde si se adopta tal cual), qué
+parte tuya no sabe llenar solo, y te propone una versión mejorada que puedes aceptar o no. Lo adoptado pasa a ser el
+formato por defecto de todos tus proyectos (proyecto → empresa → harness); tus originales nunca se modifican y
+ninguna actualización del harness los toca. Los formatos de un cliente se adoptan igual, dentro de su proyecto.
 
 ## Robustez: subagentes, hooks y pruebas
 

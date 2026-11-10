@@ -41,6 +41,10 @@ proyectos/*/entrega/final/**
 
 # --- Empresa: archivos del banco de antecedentes (CVs, certificados, estados financieros) ---
 empresa/contenidos/archivos/*
+
+# --- Empresa: formatos y archivos base entregados para adoptarlos (pueden traer datos reales); lo adoptado sí se sube ---
+empresa/_entrada/*
+!empresa/_entrada/LEEME.md
 !empresa/contenidos/archivos/.gitkeep
 
 # --- Respaldos locales que deja actualizar_nucleo.py ---

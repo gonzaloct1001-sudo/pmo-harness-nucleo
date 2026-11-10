@@ -12,7 +12,7 @@ from pathlib import Path
 
 # --- Archivos confidenciales: nunca se suben a Git -------------------------------------------------------------
 SENSIBLES = [
-    (r"(^|/)_entrada/(?!LEEME\.md$)", "material sin procesar de _entrada/"),
+    (r"(^|/)_entrada/(?!LEEME\.md$)", "material sin procesar de _entrada/"),  # también empresa/_entrada/ (formatos propios)
     (r"(^|/)contractual/.*\.pdf$", "original contractual (PDF)"),
     (r"(^|/)original\.[^/]+$", "documento original"),
     (r"(^|/)documentos/.+/v\d+[^/]*\.(pdf|docx?|xlsx?|pptx?)$", "versión original de documento"),

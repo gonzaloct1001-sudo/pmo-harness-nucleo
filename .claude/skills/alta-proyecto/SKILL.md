@@ -108,7 +108,10 @@ confirmación individual (el usuario revisará el registro de alta):
   `registrar-documento` y `control-cambios`). Los originales se mueven a su carpeta como `original.<ext>`.
 - Catálogo de reportes: una definición por cada serie de reportes detectada y por cada plantilla, con el
   nombre propio que tenga en el proyecto (criterios de `nuevo-tipo-reporte`); las plantillas se copian a
-  `reportes/plantillas/`; la última versión de un Excel acumulativo se copia como primer emitido.
+  `reportes/plantillas/`; la última versión de un Excel acumulativo se copia como primer emitido. Para las plantillas
+  de `04-reportes-y-plantillas/`, `python herramientas/adoptar_formatos.py proyectos/<slug>` hace el análisis fino
+  (tipo, qué sección falta y qué se pierde, versión mejorada) y `--aplicar --quien` deja plantilla y definición;
+  muestra al usuario lo que falta en cada formato y registra su decisión (tal cual o mejorado).
 - Métricas: si los documentos muestran indicadores que se siguen periódicamente, defínelos en
   `metricas/metricas.yaml` y registra sus valores históricos en `mediciones.csv` (criterios de la skill `metricas`).
 - Estilo y autoría: completa `contexto/estilo.md` analizando 2 o 3 documentos escritos por el usuario o su

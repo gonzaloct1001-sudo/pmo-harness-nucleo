@@ -39,4 +39,10 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 - `gantt_mermaid.py <ruta-proyecto>` → `cronograma/gantt.md` para visualizar la carta Gantt.
 - `pruebas/ejecutar_pruebas.py` → batería de pruebas del harness (ver también `pruebas/escenarios-skills.md`).
 
+- `adoptar_formatos.py empresa|proyectos/<slug> [--aplicar --quien N] [--mejorado F-nn] [--marca] [--asignar F-nn=tipo] [--descartar F-nn] | --tipos`
+  → adopta los formatos propios: detecta el tipo, compara con el contrato (qué falta, qué se pierde, qué es propio), propone
+  mejoras y registra lo adoptado en `formatos/registro.csv`.
+- `llenar_docx.py <plantilla.docx> --valores valores.yaml --salida x.docx [--proyecto ruta] [--vista-previa]` → llena una plantilla
+  Word propia (marcadores y secciones por título, respetando estilos, viñetas y tablas) con autoría limpia.
+
 Dependencias: `pip install -r requirements.txt` (en Mac, dentro de `.venv`, que crea el instalador).

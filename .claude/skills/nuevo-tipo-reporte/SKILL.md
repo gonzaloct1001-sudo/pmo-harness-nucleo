@@ -11,6 +11,10 @@ Resultado: una definición en `proyectos/<slug>/reportes/catalogo/<tipo>.md` y, 
 Después basta con pedir "genera el <nombre> de <período>".
 
 ## Camino A — desde un archivo modelo
+0. Si el archivo está en `_entrada/04-reportes-y-plantillas/` (o es un formato de la empresa en `empresa/_entrada/`),
+   `python herramientas/adoptar_formatos.py proyectos/<slug>` (o `empresa`) hace el análisis completo —tipo, cobertura
+   del contrato, qué falta y qué se pierde, versión mejorada— y con `--aplicar` deja la plantilla y la definición
+   (skill `adoptar-formatos`). Sigue en el paso 5 para ajustar lo que el usuario quiera. Si no, continúa aquí:
 1. Analiza el archivo sin modificarlo:
    - xlsx/xlsm: `python herramientas/inspeccionar_xlsx.py <archivo>` → hojas, fórmulas, celdas de entrada, vínculos.
    - docx: títulos, tablas y marcadores `{{...}}` con python-docx.

@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-TECHO_FIJO = 5600       # tokens aprox. de la carga fija (AGENTS.md + entrada + estado); en 2.3.0 quedó en ~5.400
+TECHO_FIJO = 5400       # tokens aprox. del texto fijo del núcleo (AGENTS.md + puerta de entrada); la salida del estado varía por carpeta
 TECHO_SKILL = 5000      # aviso si una skill supera esto sin references
 
 
@@ -70,11 +70,13 @@ def main():
 
     fija = carga_fija()
     total = sum(t for _, t in fija)
+    estatica = sum(t for n, t in fija if not n.startswith("salida de estado.py"))
     print("# Contexto del harness (tokens aproximados)\n")
     print("## Carga fija por sesión")
     for nombre, t in fija:
         print(f"- {nombre}: ~{t}")
-    print(f"- **Total: ~{total}** (techo {TECHO_FIJO}: {'bajo el techo' if total <= TECHO_FIJO else 'SUPERADO'})")
+    print(f"- **Total: ~{total}** · texto fijo del núcleo (sin el estado): ~{estatica} (techo {TECHO_FIJO}: "
+          f"{'bajo el techo' if estatica <= TECHO_FIJO else 'SUPERADO'})")
 
     lista = skills()
     if a.skill:
@@ -95,7 +97,7 @@ def main():
     for nombre, t, modelo in agentes():
         print(f"- {nombre}: ~{t} · model {modelo}")
     print("\nRegla 21 de AGENTS.md: no releer lo que ya está en contexto; resúmenes por script; lotes de documentos al lector-documental.")
-    return 1 if a.techo and total > TECHO_FIJO else 0
+    return 1 if a.techo and estatica > TECHO_FIJO else 0
 
 
 if __name__ == "__main__":

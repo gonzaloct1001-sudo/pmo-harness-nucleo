@@ -38,18 +38,16 @@ Responde siempre en español (Chile), con tono profesional, directo y sin tecnic
 
 ## Organización
 
-**El núcleo se publica en un repositorio público** (la URL está en la primera línea de `NUCLEO.txt`): cualquiera lo
-descarga, pero solo su dueño puede modificarlo. Quien lo descarga (zip) o lo clona, lo instala como **su** carpeta de
-empresa con **su** repositorio privado: `instalar` desconecta la copia clonada del núcleo antes de crear el privado.
-**Nunca uses «Fork» en GitHub para esto:** un fork de un repositorio público es público y dejaría los datos a la vista.
-La carpeta donde el dueño mantiene el núcleo está marcada (`git config pmo.mantenedor true`) y no lleva empresas ni proyectos.
+**El núcleo se publica en un repositorio público** (URL en la primera línea de `NUCLEO.txt`): cualquiera lo descarga,
+solo su dueño lo modifica. Quien lo descarga o clona lo instala como **su** carpeta de empresa con **su** repositorio
+privado (`instalar` desconecta la copia del núcleo antes de crear el privado). **Nunca uses «Fork»:** un fork de un
+repositorio público es público. La carpeta del dueño está marcada (`git config pmo.mantenedor true`) y no lleva
+empresas ni proyectos.
 
-Una carpeta del harness es un repositorio privado y pertenece a **una empresa** (o a una persona). Para otra
-empresa se crea otra carpeta con `herramientas/nueva_empresa.py`. **Nunca mezcles datos de dos empresas.** Si el
-usuario lleva varias empresas, **pregúntale** si son independientes o parte de una misma entidad, y si quiere llevarlas
-separadas o juntas y un **tablero único** de status o uno por empresa: la estructura sigue su forma de gestionar. Cada
-empresa tiene su status en su carpeta; un tablero único va en una **carpeta de panel con su propio repositorio
-privado**, independiente de los de las empresas (skill `status`).
+Una carpeta del harness = un repositorio privado = **una empresa** (o persona); para otra empresa, otra carpeta
+(`nueva_empresa.py`). **Nunca mezcles datos de dos empresas.** Si el usuario lleva varias, **pregúntale** si son
+independientes o una misma entidad, separadas o juntas, y si quiere un **tablero único** o uno por empresa; el tablero
+único va en una carpeta de panel con su propio repositorio privado (skill `status`).
 
 1. **Núcleo genérico** — sirve para cualquier proyecto. No se escribe nada específico de un proyecto aquí.
    `.claude/skills/` procedimientos (skills) · `.claude/agents/` roles (subagentes) · `herramientas/` scripts ·
@@ -70,7 +68,8 @@ privado**, independiente de los de las empresas (skill `status`).
 3. **Empresa** — `empresa/`: lo común a todos los proyectos de la empresa dueña de la carpeta: `empresa.yaml`
    (identidad, autoría, marca, formato, política de réplicas), banco de antecedentes (`contenidos/`: descripción,
    experiencia, CVs, certificados con vigencia), `estilo.md`, `marca/`, `plantillas/` y formatos de reportes
-   comunes (`reportes/catalogo/`). Los proyectos heredan de aquí lo que no definen.
+   comunes (`reportes/catalogo/`), más `formatos/` (registro de los formatos propios adoptados) y `_entrada/` (donde
+   se dejan los formatos y archivos base para adoptarlos; no se sube a Git). Los proyectos heredan de aquí lo que no definen.
 4. **Proyecto** — `proyectos/<slug>/`: todo lo particular (datos, métricas, reglas, reportes con nombre propio,
    plantillas, marca, scripts de cálculo del dominio).
 
@@ -181,6 +180,11 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     `status.py --breve`, `evaluar_metricas.py`) en vez de leer CSV o YAML enteros; para lotes de documentos usa el
     subagente `lector-documental`; lee las `references/` de una skill solo en la fase que las usa. Para ver cuánto pesa
     cada pieza: `python herramientas/medir_contexto.py`.
+22. **Lo tuyo primero.** Toda salida (informe, minuta, presentación, carta, planilla) usa el formato del proyecto; si no
+    lo tiene, el de la empresa (`empresa/plantillas/`, `empresa/reportes/catalogo/`, `empresa/formatos/`); si no, el
+    del harness. Los formatos propios se cargan con la skill `adoptar-formatos` (desde `empresa/_entrada/`), que dice
+    qué les falta y qué se pierde, y propone mejoras que el usuario acepta o no; los originales nunca se modifican. Si
+    el usuario menciona «nuestro formato», «nuestra plantilla» o «así lo hacemos aquí» y no está adoptado, ofrécelo.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con

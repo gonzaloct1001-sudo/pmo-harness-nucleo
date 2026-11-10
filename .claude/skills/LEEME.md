@@ -16,6 +16,7 @@ y también valen (el estado de inicio las lista). Este índice es del núcleo y 
 | `metricas` | Agregar métricas y reglas, cargar o importar datos, evaluar semáforos («quiero medir también…») | `.claude/skills/metricas/SKILL.md` |
 | `gestionar-items` | Ítems de una cartera: agregar, mover de etapa, fichas, retirar, pipeline | `.claude/skills/gestionar-items/SKILL.md` |
 | `nuevo-tipo-reporte` | Crear un reporte propio, desde un modelo o por conversación («este Word es la plantilla del informe») | `.claude/skills/nuevo-tipo-reporte/SKILL.md` |
+| `adoptar-formatos` | Adoptar los formatos y archivos base propios de la empresa (o de un cliente, en el proyecto) como formato por defecto, con análisis de qué falta y qué se pierde («adopta mis formatos», «así hacemos las minutas aquí», «usa nuestro logo») | `.claude/skills/adoptar-formatos/SKILL.md` |
 | `generar-reporte` | Generar cualquier reporte del catálogo («prepara el informe de avance», «arma la presentación») | `.claude/skills/generar-reporte/SKILL.md` |
 | `minuta` | Convertir notas de reunión en minuta con acuerdos y decisiones («estas son mis notas del comité») | `.claude/skills/minuta/SKILL.md` |
 | `preparar-reunion` | Agenda, estado, decisiones a pedir y preguntas difíciles («tengo comité el jueves») | `.claude/skills/preparar-reunion/SKILL.md` |
