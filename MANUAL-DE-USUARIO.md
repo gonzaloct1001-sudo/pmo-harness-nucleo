@@ -1,4 +1,4 @@
-# PMO Harness 2.6: manual de usuario
+# PMO Harness 3.0: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.

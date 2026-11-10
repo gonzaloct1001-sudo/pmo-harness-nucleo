@@ -144,6 +144,17 @@ def main():
                 if re.search(r"(?<!references/)" + re.escape(v) + r"(?![\w-])", t):
                     problemas.append(f"nombre viejo «{v}» en {rel}")
 
+    # 6b. la versión que anuncia el README es la del CHANGELOG (el título quedó en v2.2 durante cinco versiones)
+    import _nucleo
+    version = _nucleo.version(RAIZ)
+    titulo = (RAIZ / "README.md").read_text(encoding="utf-8", errors="replace").splitlines()[0]
+    mayor_menor = ".".join(version.split(".")[:2]) if version else ""
+    if mayor_menor and not titulo.startswith(f"# PMO Harness v{mayor_menor}"):
+        problemas.append(f"README.md: el título dice «{titulo}» y el CHANGELOG va en {version}")
+    titulo_manual = (RAIZ / "MANUAL-DE-USUARIO.md").read_text(encoding="utf-8", errors="replace").splitlines()[0]
+    if mayor_menor and not titulo_manual.startswith(f"# PMO Harness {mayor_menor}"):
+        problemas.append(f"MANUAL-DE-USUARIO.md: el título dice «{titulo_manual}» y el CHANGELOG va en {version}")
+
     # 7. compila
     for p in archivos({".py"}):
         try:

@@ -1,4 +1,4 @@
-# PMO Harness v2.2
+# PMO Harness v3.0
 
 Marco de trabajo para diseñar y gestionar proyectos **de cualquier tipo** con un asistente de IA —Claude Code,
 OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u otro que trabaje sobre carpetas— para un programa
