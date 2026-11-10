@@ -72,42 +72,32 @@ arquetipos:
 skills:
   - {id: instalar, para: "Preparar la carpeta, el computador y GitHub; encaminar el primer proyecto", arquetipos: [],
      ejemplos: ["instala el harness", "empecemos", "estoy en un computador nuevo"]}
-  - {id: configurar-asistente, para: "Dejar lista otra IA (Codex, Gemini, Cursor, Copilot u otra) o retomar el trabajo tras cambiar de IA", arquetipos: [],
-     ejemplos: ["voy a usar Gemini en esta carpeta", "cambié de IA, ¿en qué íbamos?", "¿puedo usar esto con Codex?"]}
-  - {id: configurar, para: "Cambiar cualquier configuración después: empresa, marca, formatos, IA, umbrales, confidencialidad, modo nube, status semanal", arquetipos: [],
-     ejemplos: ["quiero cambiar el logo", "de ahora en adelante los informes en A4", "¿dónde se cambia quién firma los documentos?", "ya no quiero el resumen de la mañana"]}
+  - {id: configurar, para: "Cambiar cualquier configuración después (empresa, marca, formatos, umbrales, confidencialidad, modo nube, status semanal, salud y mejoras del harness) y dejar lista otra IA o retomar tras cambiar de IA", arquetipos: [],
+     ejemplos: ["quiero cambiar el logo", "de ahora en adelante los informes en A4", "¿dónde se cambia quién firma los documentos?", "voy a usar Gemini en esta carpeta", "cambié de IA, ¿en qué íbamos?"]}
   - {id: nube, para: "Operar desde el celular con el PC apagado (opcional, solo Claude): explicar, activar y elegir qué tareas programar", arquetipos: [],
      ejemplos: ["¿puedo revisar las cosas desde el celular?", "quiero que me llegue un resumen cada mañana", "pausa las tareas de la nube"]}
   - {id: actualizar-nucleo, para: "Traer la versión nueva del harness sin tocar los proyectos ni los datos de la empresa", arquetipos: [],
      ejemplos: ["actualiza el harness", "llegó una versión nueva del núcleo, instálala"]}
-  - {id: nuevo-proyecto, para: "Diseñar y crear un proyecto desde una descripción", arquetipos: [],
-     ejemplos: ["quiero llevar la construcción de una casa", "quiero postular a un fondo CORFO", "armemos un proyecto para mi equipo de software"]}
-  - {id: alta-proyecto, para: "Cargar documentos existentes y configurar todo el proyecto", arquetipos: [todos],
-     ejemplos: ["listo, ya dejé los documentos", "procesa lo nuevo de la entrada", "retomemos el alta"]}
+  - {id: nuevo-proyecto, para: "Empezar un proyecto: diseñarlo desde una descripción o cargar sus documentos y configurar todo", arquetipos: [todos],
+     ejemplos: ["quiero llevar la construcción de una casa", "quiero postular a un fondo CORFO", "listo, ya dejé los documentos", "retomemos el alta"]}
   - {id: ayuda, para: "Ver qué puedo hacer en este proyecto y cómo pedirlo", arquetipos: [todos],
      ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
   - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
      ejemplos: ["¿cómo vamos?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
-  - {id: generar-reporte, para: "Generar cualquier reporte del catálogo del proyecto", arquetipos: [todos],
-     ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité"]}
-  - {id: nuevo-tipo-reporte, para: "Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
-     ejemplos: ["quiero un informe mensual para el directorio en Excel", "este Word es la plantilla del reporte quincenal"]}
+  - {id: reportes, para: "Generar cualquier reporte del catálogo del proyecto · Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
+     ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité", "quiero un informe mensual para el directorio en Excel", "este Word es la plantilla del reporte quincenal"]}
   - {id: adoptar-formatos, para: "Que todo salga con tus formatos: adoptar tus plantillas y archivos base como el por defecto, sabiendo qué les falta y qué se pierde", arquetipos: [],
      ejemplos: ["adopta mis formatos", "así hacemos las minutas aquí", "quiero que todo salga con nuestro logo y nuestro informe"]}
-  - {id: minuta, para: "Convertir notas de reunión en minuta con acuerdos y decisiones", arquetipos: [todos],
-     ejemplos: ["estas son mis notas de la reunión de hoy", "haz el acta del comité"]}
-  - {id: preparar-reunion, para: "Agenda, estado, decisiones a pedir y preguntas difíciles", arquetipos: [todos],
-     ejemplos: ["tengo comité el jueves", "¿qué llevo a la reunión con el cliente?"]}
-  - {id: riesgos-issues, para: "Registrar y actualizar riesgos y problemas", arquetipos: [todos],
-     ejemplos: ["el proveedor se va a atrasar", "registra este problema", "revisemos la matriz de riesgos"]}
-  - {id: levantar-riesgos, para: "Identificar riesgos nuevos de forma sistemática", arquetipos: [todos],
-     ejemplos: ["hagamos un premortem", "levanta los riesgos de la postulación"]}
+  - {id: reuniones, para: "Antes de una reunión: agenda, estado, decisiones a pedir y preguntas difíciles; después: notas o transcripción → minuta con acuerdos y decisiones", arquetipos: [todos],
+     ejemplos: ["tengo comité el jueves", "¿qué llevo a la reunión con el cliente?", "estas son mis notas de la reunión de hoy", "haz el acta del comité"]}
+  - {id: riesgos, para: "Registrar y actualizar riesgos y problemas · Identificar riesgos nuevos de forma sistemática", arquetipos: [todos],
+     ejemplos: ["el proveedor se va a atrasar", "registra este problema", "revisemos la matriz de riesgos", "hagamos un premortem", "levanta los riesgos de la postulación"]}
   - {id: consistencia, para: "Detectar contradicciones, atrasos e incumplimientos", arquetipos: [todos],
      ejemplos: ["¿cuadra todo?", "¿qué está pendiente o vencido?", "revisa el proyecto antes del comité"]}
   - {id: revisar-documento, para: "Analizar correos, informes o documentos recibidos", arquetipos: [todos],
      ejemplos: ["mira este correo del cliente", "¿qué implica este informe?", "¿qué respondo?"]}
-  - {id: versiones-documentos, para: "Comparar versiones y llevar la bitácora", arquetipos: [todos],
-     ejemplos: ["¿qué cambió en la nueva versión de las bases?", "compara estos dos documentos"]}
+  - {id: documentos, para: "Comparar versiones y llevar la bitácora · Incorporar contratos, anexos, enmiendas y propuestas", arquetipos: [todos],
+     ejemplos: ["¿qué cambió en la nueva versión de las bases?", "compara estos dos documentos", "llegó la enmienda 2", "¿qué dice el contrato sobre multas?"]}
   - {id: metricas, para: "Agregar métricas y reglas, cargar datos y ver semáforos", arquetipos: [todos],
      ejemplos: ["quiero medir también la rotación", "carga estos datos", "¿cómo va el indicador?"]}
   - {id: red-team, para: "Someter una propuesta o informe a revisores con perspectivas distintas", arquetipos: [todos],
@@ -122,8 +112,6 @@ skills:
      ejemplos: ["guarda", "respalda el trabajo del día", "sube los cambios"]}
   - {id: actualizar-gantt, para: "Actualizar avance y fechas del cronograma", arquetipos: [ejecucion, obra],
      ejemplos: ["la configuración va en 70%", "importa el cronograma de MS Project", "muéstrame la carta Gantt"]}
-  - {id: registrar-documento, para: "Incorporar contratos, anexos, enmiendas y propuestas", arquetipos: [ejecucion, obra],
-     ejemplos: ["llegó la enmienda 2", "¿qué dice el contrato sobre multas?"]}
   - {id: control-cambios, para: "Gestionar solicitudes de cambio y su impacto", arquetipos: [ejecucion, obra, agil],
      ejemplos: ["el cliente pidió un módulo nuevo", "necesitamos más plazo"]}
   - {id: registros-obra, para: "RFI, no conformidades, inspecciones, estados de pago, valor ganado", arquetipos: [obra],
@@ -134,31 +122,23 @@ skills:
      ejemplos: ["decidimos usar PostgreSQL", "hubo una caída en producción"]}
   - {id: gestionar-items, para: "Agregar, mover de etapa, fichas y retiro de ítems", arquetipos: [cartera, evaluacion],
      ejemplos: ["agrega la acción X a análisis", "¿qué ítems pueden pasar de etapa?"]}
-  - {id: definir-pauta, para: "Pauta de evaluación desde las bases (también la pauta inversa del oferente)", arquetipos: [evaluacion, postulacion],
-     ejemplos: ["arma la pauta con estas bases", "¿cómo nos va a evaluar el comité?"]}
-  - {id: evaluar-propuestas, para: "Admisibilidad, evaluación con evidencia y ranking", arquetipos: [evaluacion],
-     ejemplos: ["llegaron 12 postulaciones", "prepara el acta de evaluación"]}
+  - {id: evaluar-propuestas, para: "Pauta de evaluación desde las bases (también la pauta inversa del oferente) · Admisibilidad, evaluación con evidencia y ranking", arquetipos: [evaluacion, postulacion],
+     ejemplos: ["arma la pauta con estas bases", "¿cómo nos va a evaluar el comité?", "llegaron 12 postulaciones", "prepara el acta de evaluación"]}
   - {id: evaluacion-economica, para: "Flujo de caja, VAN, TIR y sensibilidad; presupuesto de postulaciones con controles", arquetipos: [estudio, postulacion],
      ejemplos: ["¿es rentable el proyecto?", "arma el presupuesto de la postulación con los controles de las bases"]}
   - {id: revisar-estudio, para: "Revisar calidad y completitud de un estudio", arquetipos: [estudio],
      ejemplos: ["revisa la prefactibilidad del consultor"]}
-  - {id: preparar-postulacion, para: "Llevar la postulación de las bases a la entrega, con compuertas", arquetipos: [postulacion],
-     ejemplos: ["prepara la postulación", "¿cómo vamos con la postulación?", "¿qué falta para entregar?"]}
+  - {id: preparar-postulacion, para: "Llevar la postulación de las bases a la entrega, con compuertas · Todos los requisitos de las bases con dueño, evidencia y checklist de entrega", arquetipos: [postulacion],
+     ejemplos: ["prepara la postulación", "¿cómo vamos con la postulación?", "¿qué falta para entregar?", "¿qué exigen las bases?", "llegó una aclaración"]}
   - {id: formulario-plataforma, para: "Formulario de la plataforma: reconstruirlo, controlar límites de caracteres, Word de trabajo y hoja para copiar y pegar", arquetipos: [postulacion],
      ejemplos: ["la postulación se llena en línea, no hay formulario", "¿cuántos caracteres llevo en el resumen?", "prepárame la hoja para cargar en el portal"]}
-  - {id: matriz-cumplimiento, para: "Todos los requisitos de las bases con dueño, evidencia y checklist de entrega", arquetipos: [postulacion],
-     ejemplos: ["¿qué exigen las bases?", "llegó una aclaración", "¿cumplimos todo?"]}
 
 # Capacidad que necesita cada skill (regla 20 de AGENTS.md): alta = juicio no verificable; media = análisis con datos y
 # borradores; baja = procedimiento, transcripción o validación. Las skills que no aparecen son de nivel medio.
 capacidad:
-  alta: [nuevo-proyecto, alta-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, definir-pauta,
-         revisar-estudio, revisar-documento, levantar-riesgos, consistencia, preparar-reunion, control-cambios,
-         evaluacion-economica, nuevo-tipo-reporte, gestionar-programa, adoptar-formatos, gestion-financiera]
-  media: [generar-reporte, minuta, metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra,
-          actualizar-gantt, registrar-documento, versiones-documentos, matriz-cumplimiento, formulario-plataforma, status,
-          riesgos-issues]
-  baja: [instalar, configurar-asistente, actualizar-nucleo, ayuda, guardar-cambios, configurar, nube]
+  alta: [nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera]
+  media: [metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra, actualizar-gantt, documentos, formulario-plataforma, status]
+  baja: [instalar, configurar, actualizar-nucleo, ayuda, guardar-cambios, nube]
 
 hooks:
   - {nombre: Estado al iniciar la sesión, que_hace: "Resume proyectos, traspasos pendientes, material nuevo en _entrada, altas en curso y cambios sin guardar (en Claude Code llega solo; otras IA lo ejecutan al empezar).",

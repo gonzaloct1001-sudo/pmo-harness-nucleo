@@ -1,9 +1,7 @@
----
-name: matriz-cumplimiento
-description: Construye y mantiene la matriz de cumplimiento de una postulación o licitación — extrae todos los requisitos de las bases, anexos, formularios, aclaraciones y respuestas del foro (con barrido exhaustivo para no omitir ninguno), los clasifica (admisibilidad, técnico, económico, formal, declaración; excluyente o subsanable), asigna responsable y forma de cumplirlos, los verifica contra la propuesta y genera el checklist de entrega. Úsala cuando lleguen bases o una aclaración, cuando el usuario pregunte qué exige la convocatoria, qué falta para postular o si la propuesta cumple todo, y antes de entregar.
----
+# La matriz de cumplimiento
 
-# Matriz de cumplimiento
+Referencia de la skill `preparar-postulacion`. Se aplica al recibir bases, anexos, aclaraciones o respuestas del foro: barrido exhaustivo de requisitos, clasificación, dueños, evidencia y checklist de entrega.
+
 
 Archivos: `postulacion/requisitos.csv` (matriz), `postulacion/barrido-requisitos.csv` (candidatos del barrido),
 `entrega/checklist.md`. Columnas de la matriz: id, fuente (documento y sección/página), tipo

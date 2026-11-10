@@ -25,7 +25,7 @@ El tablero oficial puede seguir en GitHub o Jira: `python herramientas/importar_
 (GitHub con la CLI `gh`; Jira con una exportación CSV) y el harness agrega la capa de gestión.
 
 ## Skills
-`gestionar-sprint`, `registro-ingenieria`, más las generales (`preparar-reunion`, `levantar-riesgos`, `generar-reporte`).
+`gestionar-sprint`, `registro-ingenieria`, más las generales (`reuniones`, `riesgos`, `reportes`).
 
 ## Preguntas de la mini entrevista
 1. ¿Scrum (sprints) o flujo continuo (Kanban)? ¿Duración del sprint?

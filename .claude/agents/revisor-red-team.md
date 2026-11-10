@@ -1,6 +1,6 @@
 ---
 name: revisor-red-team
-description: Revisor de red team que asume UNA perspectiva (evaluador técnico, fiscalizador de admisibilidad, financiero, experto escéptico, competidor, beneficiario, auditor de rendición o abogado del diablo) y revisa una propuesta, postulación o informe en contexto aislado, leyendo solo los archivos indicados. Puntúa con la pauta cuando su perspectiva lo exige, identifica fallas fatales, debilidades con recomendaciones concretas y preguntas probables del comité. Úsalo desde la skill red-team, una invocación por perspectiva (pueden correr en paralelo).
+description: Revisor de red team: adopta una sola perspectiva (jurado exigente, competidor, auditor, usuario final) y ataca la propuesta o informe buscando fallas fatales, puntos débiles y preguntas incómodas, con puntaje estimado. Úsalo desde red-team, una perspectiva por invocación.
 tools: Read, Grep, Glob, Write
 model: opus
 ---

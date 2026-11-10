@@ -1,7 +1,9 @@
 ---
 name: ayuda
-description: Muestra qué puede hacer el harness en el proyecto activo — tipo de proyecto, dónde está cada cosa, rutina recomendada, reportes configurados, las skills disponibles con frases de ejemplo en lenguaje natural y los controles automáticos. Úsala cuando el usuario pregunte "¿qué puedo hacer?", "¿qué comandos tengo?", "ayuda", "¿cómo se usa esto?", "muéstrame la guía", o parezca no saber cómo pedir algo.
+description: Muestra qué puede hacer el harness en el proyecto activo, con frases de ejemplo y los controles automáticos, y genera o actualiza `GUIA.md`. Úsala cuando el usuario pregunte «¿qué puedo hacer?», «¿cómo le pido…?», «¿qué comandos tengo?», o parezca perdido.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/nucleo.md`.
 
 # Ayuda
 
@@ -14,6 +16,6 @@ description: Muestra qué puede hacer el harness en el proyecto activo — tipo 
    - dónde leer la guía completa (`GUIA.md`, enlace clicable).
 4. Aclara que no hace falta usar el nombre exacto de la skill: basta con describir lo que se necesita.
 5. Si el usuario pregunta por algo que el harness no hace, dilo y sugiere la alternativa más cercana
-   (por ejemplo, crear un reporte propio con `nuevo-tipo-reporte` o una métrica con `metricas`).
+   (por ejemplo, crear un reporte propio con `reportes` o una métrica con `metricas`).
 
 Si cambian las skills del harness, actualiza `catalogo.yaml` (junto a este archivo) para que la guía siga completa.

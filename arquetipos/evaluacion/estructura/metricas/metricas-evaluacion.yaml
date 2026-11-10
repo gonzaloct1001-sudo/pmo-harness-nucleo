@@ -1,4 +1,4 @@
-# Métricas del arquetipo evaluación. Las métricas por criterio (crit_<id>) las agrega definir-pauta.
+# Métricas del arquetipo evaluación. Las métricas por criterio (crit_<id>) las agrega evaluar-propuestas.
 metricas:
   - {id: admisible, nombre: Admisible, nivel: item, unidad: "", direccion: mayor_mejor, frecuencia: a_pedido,
      fuente: herramientas/puntaje_pauta.py, definicion: 1 si cumple todos los requisitos excluyentes, umbral_rojo: 1}

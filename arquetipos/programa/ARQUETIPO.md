@@ -55,8 +55,8 @@ alcance en su `contexto/alcance.md`. `programa.py` avisa las afectaciones sin ap
 
 ## Skills
 `gestionar-programa` (subproyectos, personas, presupuesto, contingencia, enmiendas por subproyecto, consolidación) ·
-`nuevo-proyecto` (crea subproyectos dentro del programa o proyectos aparte) · `registrar-documento` (enmiendas con
-afectaciones) · `actualizar-gantt` · `generar-reporte` (reportes generales del programa y por subproyecto).
+`nuevo-proyecto` (crea subproyectos dentro del programa o proyectos aparte) · `documentos` (enmiendas con
+afectaciones) · `actualizar-gantt` · `reportes` (reportes generales del programa y por subproyecto).
 
 ## Preguntas de la mini entrevista
 1. ¿Qué subproyectos tiene el programa y quién lidera cada uno?

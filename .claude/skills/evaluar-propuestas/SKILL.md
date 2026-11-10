@@ -1,11 +1,14 @@
 ---
 name: evaluar-propuestas
-description: Evalúa propuestas o postulaciones contra la pauta del proyecto — registro, revisión de admisibilidad, evaluación fundamentada de cada una en contexto aislado (subagente evaluador-propuestas), consolidación de puntajes de uno o varios evaluadores, ranking, comparación entre propuestas y ajuste al presupuesto. Úsala cuando el usuario reciba postulaciones, ofertas o propuestas para evaluar, pida revisarlas, puntuarlas, compararlas, rankearlas, preparar comentarios para los postulantes o el acta de evaluación.
+description: Construye la pauta de evaluación de un proceso (admisibilidad, criterios ponderados, descriptores, umbrales, desempate) desde las bases o conversando, y evalúa propuestas o postulaciones contra ella: admisibilidad, evaluación fundamentada una por una en contexto aislado, consolidación de evaluadores, ranking y comparación. Úsala cuando el usuario diseñe cómo evaluar o reciba propuestas, ofertas o postulaciones para evaluar.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/nucleo.md`.
 
 # Evaluar propuestas
 
-Requiere `evaluacion/pauta.yaml` completa (si no, usa `definir-pauta` primero).
+**Paso 1 — la pauta:** si `evaluacion/pauta.yaml` no está completa, constrúyela con `references/pauta.md` (también la
+pauta inversa de una postulación). Lo que sigue es la evaluación contra esa pauta.
 Herramienta de consolidación: `python herramientas/puntaje_pauta.py <proyecto> [--fecha AAAA-MM-DD]`.
 
 ## 0. Antes de empezar
@@ -47,5 +50,5 @@ a `revisada` o `final`. Sin esta revisión, no hay acta final.
 - **Comparación**: tabla de propuestas por criterio, fortalezas distintivas de cada una y qué separa a las que
   quedan justo sobre y bajo el corte o el presupuesto.
 - **Selección**: dentro del presupuesto, lista de espera, no seleccionadas con su causa (etapas correspondientes).
-- **Acta**: `generar-reporte` con `acta-evaluacion`. **Comentarios a postulantes**: desde la sección de mejora de
+- **Acta**: `reportes` con `acta-evaluacion`. **Comentarios a postulantes**: desde la sección de mejora de
   cada evaluación, en tono constructivo.

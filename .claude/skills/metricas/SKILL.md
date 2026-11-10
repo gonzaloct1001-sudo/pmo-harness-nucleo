@@ -1,7 +1,9 @@
 ---
 name: metricas
-description: Gestiona las métricas y reglas de un proyecto — agregar o modificar métricas (con definición, fórmula, fuente, frecuencia y umbrales), registrar mediciones a mano o importarlas desde CSV/Excel, ejecutar los cálculos propios del proyecto, evaluar semáforos y reglas, y explicar el resultado. Úsala cuando el usuario quiera agregar una métrica ("quiero medir también…"), cambiar un umbral o una política, cargar datos o resultados, actualizar números, preguntar cómo va un indicador o ver qué incumple las reglas.
+description: Gestiona métricas y reglas de un proyecto: agregar o cambiar métricas (definición, fórmula, fuente, frecuencia, umbrales), registrar mediciones o importarlas desde CSV o Excel, ejecutar los cálculos propios, evaluar semáforos y explicar el resultado. Úsala con «quiero medir también…», «cambia el umbral», «carga estas mediciones», «¿por qué está en rojo?».
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
 
 # Métricas y reglas
 

@@ -1,9 +1,17 @@
 ---
-name: preparar-reunion
-description: Prepara reuniones del proyecto — comité, seguimiento, revisión técnica, kickoff, sprint review o retrospectiva, cierre, reunión con cliente o proveedor — armando agenda con tiempos, estado resumido, pendientes y acuerdos vencidos, decisiones que se deben pedir, material previo y las preguntas difíciles probables con sus respuestas. Úsala cuando el usuario diga que tiene una reunión, comité o presentación, pida preparar una agenda, un briefing, una minuta previa o "qué tengo que llevar".
+name: reuniones
+description: Antes y después de cualquier reunión del proyecto (comité, seguimiento, kickoff, cliente, sprint review, cierre): arma la agenda con estado, pendientes, decisiones a pedir y preguntas difíciles; y convierte notas, transcripción o correo en la minuta formal, llevando acuerdos, decisiones y riesgos a los registros. Úsala cuando el usuario mencione una reunión, comité o acta, o pegue notas desordenadas.
 ---
 
-# Preparar reunión
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
+
+# Reuniones
+
+- **Antes** (agenda, estado, decisiones a pedir, preguntas difíciles): lo que sigue en este archivo.
+- **Después** (notas, transcripción o correo → minuta con acuerdos, decisiones y riesgos a los registros):
+  `references/minuta.md`; el formato de la minuta, en `references/formato-minuta.md`.
+
+## Antes de la reunión
 
 ## 1. Contexto
 Pregunta solo lo que falte: tipo de reunión, fecha y duración, asistentes y objetivo (qué debe salir de ella).
@@ -34,6 +42,6 @@ Según el tipo:
 - **Cierre**: cumplimiento de objetivos, pendientes de traspaso, lecciones aprendidas.
 
 ## 4. Opcionales
-- Presentación: si el usuario la pide, usa el catálogo (`generar-reporte`) o crea el formato con `nuevo-tipo-reporte`.
+- Presentación: si el usuario la pide, usa el catálogo (`reportes`) o crea el formato con `reportes`.
 - Convocatoria: borrador de correo con agenda y material previo.
-- Después de la reunión: la skill `minuta` toma la preparación como base para no repetir trabajo.
+- Después de la reunión: `references/minuta.md` toma la preparación como base para no repetir trabajo.

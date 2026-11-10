@@ -154,7 +154,7 @@ def resumen(remoto=False):
             lineas.append(f"- Empresa: {empresa or '(sin definir)'}" + (f" · núcleo {version}" if version else ""))
         registrados = asistentes_registrados()
         lineas.append(f"- Asistentes configurados: {', '.join(registrados)}" if registrados else
-                      "- Ningún asistente registrado en .harness/asistentes.yaml: identifícate y sigue la skill `configurar-asistente`.")
+                      "- Ningún asistente registrado en .harness/asistentes.yaml: identifícate y sigue la skill `configurar`.")
 
     if repositorio_propio():
         _, ruta_hooks = git("config", "--get", "core.hooksPath")
@@ -232,8 +232,8 @@ def resumen(remoto=False):
     lineas.append(f"- Proyectos: {', '.join(etiqueta(p) for p in proyectos) if proyectos else 'ninguno'}")
     if instalado and not proyectos and not mantenedor:
         lineas.append("- Instalado pero SIN PROYECTOS: sea cual sea el primer mensaje, ofrece en una línea crear uno "
-                      "(«describe tu proyecto con tus palabras», skill nuevo-proyecto) o cargar documentos existentes "
-                      "(skill alta-proyecto), y pregunta si el proyecto parte de cero o ya está en marcha.")
+                      "(«describe tu proyecto con tus palabras») o cargar documentos existentes (los dos caminos de la skill "
+                      "nuevo-proyecto), y pregunta si el proyecto parte de cero o ya está en marcha.")
     cambios = cambios_sin_guardar() if instalado else None
     for p in proyectos:
         carpetas = [p] + sorted(x for x in (p / "subproyectos").glob("*") if x.is_dir())

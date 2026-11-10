@@ -28,7 +28,7 @@ Las métricas se calculan con `scripts/calcular_cartera.py` y se evalúan con `h
 3. Si hay estados financieros nuevos, actualizar `datos/fundamentos.csv`.
 4. `python scripts/calcular_cartera.py proyectos/portafolio-acciones --fecha AAAA-MM-DD` (en este ejemplo: `ejemplos/portafolio-acciones`).
 5. `python herramientas/evaluar_metricas.py <ruta-proyecto> --hoy AAAA-MM-DD`
-6. Generar la revisión mensual con `generar-reporte`.
+6. Generar la revisión mensual con `reportes`.
 
 ## Notas de estilo
 - Reportes breves, con tablas y sin jerga innecesaria.

@@ -1,12 +1,10 @@
----
-name: levantar-riesgos
-description: Identificación sistemática de riesgos de un proyecto (no solo registrar los ya conocidos) — revisa documentos, supuestos, dependencias, métricas, contratos y el dominio del proyecto con técnicas como checklist por categorías, premortem y análisis de supuestos, y propone un conjunto de riesgos candidatos evaluados para confirmar en bloque. Úsala al iniciar un proyecto, antes de un hito o comité importante, ante un cambio relevante, o cuando el usuario pida "levantar", "identificar", "hacer un taller de" o "revisar a fondo" los riesgos.
----
+# Levantar riesgos de forma sistemática
 
-# Levantar riesgos
+Referencia de la skill `riesgos`. Se aplica al iniciar un proyecto, antes de un hito o comité, o cuando el usuario pide «qué riesgos se nos escapan»: no registra los ya conocidos, los busca con método y propone candidatos para confirmar en bloque.
 
-Diferencia con `riesgos-issues`: esa skill registra y gestiona riesgos conocidos; esta **busca** los que
-nadie ha nombrado todavía. Al final, los riesgos aprobados se registran con los criterios de `riesgos-issues`.
+
+Diferencia con `riesgos`: esa skill registra y gestiona riesgos conocidos; esta **busca** los que
+nadie ha nombrado todavía. Al final, los riesgos aprobados se registran con los criterios de `riesgos`.
 
 ## 1. Fuentes a revisar (según existan)
 - Contexto y alcance: `contexto/alcance.md`, `contexto/diseno-del-proyecto.md`.
@@ -32,5 +30,5 @@ existente debería reevaluarse.
 
 ## 4. Registrar
 Tras la confirmación (el usuario puede aprobar todo, algunos o ajustar), registra en `riesgos/riesgos.csv`
-con los criterios de `riesgos-issues`. Si se hizo como taller o antes de un comité, guarda el análisis
+con los criterios de `riesgos`. Si se hizo como taller o antes de un comité, guarda el análisis
 en `riesgos/levantamiento_AAAA-MM-DD.md`.

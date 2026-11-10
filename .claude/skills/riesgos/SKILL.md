@@ -1,9 +1,14 @@
 ---
-name: riesgos-issues
-description: Gestiona el registro de riesgos y el de problemas (issues) de un proyecto — registrar, evaluar, actualizar, revisar, escalar, convertir un riesgo materializado en problema y cerrar. Úsala siempre que el usuario mencione un riesgo, amenaza, preocupación, problema, bloqueo, incidente, contingencia o pida revisar la matriz de riesgos, aunque lo haga de pasada dentro de otro tema.
+name: riesgos
+description: Registro de riesgos y problemas (issues) de un proyecto: registrar, evaluar, actualizar, escalar, convertir un riesgo en problema y cerrar; y levantamiento sistemático de riesgos nuevos (checklist por categorías, premortem, supuestos) antes de un hito o comité. Úsala cuando el usuario mencione un riesgo, amenaza, problema, bloqueo o incidente, aunque sea de pasada, o pida qué se nos escapa.
 ---
 
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
+
 # Riesgos y problemas
+
+Para **levantar riesgos nuevos de forma sistemática** (al iniciar, antes de un hito o comité, «¿qué se nos escapa?»):
+`references/levantar.md` (categorías en `references/categorias-riesgo.md`). Lo que sigue es el registro del día a día.
 
 Archivos: `riesgos/riesgos.csv` y `riesgos/issues.csv`. Un **riesgo** es algo que podría ocurrir; un
 **problema (issue)** es algo que ya ocurrió y requiere acción.

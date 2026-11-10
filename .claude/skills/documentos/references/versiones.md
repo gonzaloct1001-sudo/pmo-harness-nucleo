@@ -1,9 +1,7 @@
----
-name: versiones-documentos
-description: Compara documentos y lleva la bitácora de versiones — compara dos versiones del mismo documento (o dos documentos distintos) separando cambios sustantivos de cambios de forma, registra cada nueva versión con su resumen de cambios, y responde qué cambió entre versiones o cuál es la vigente. Úsala cuando el usuario reciba o emita una nueva versión de un documento (propuesta, bases, especificación, contrato en negociación, informe en revisión), pida comparar documentos o versiones, pregunte "qué cambió", o quiera el historial de un documento.
----
+# Comparar versiones y llevar la bitácora
 
-# Versiones y comparación de documentos
+Referencia de la skill `documentos`. Se aplica cuando llega o se emite una versión nueva de un documento, o el usuario pregunta qué cambió entre versiones o cuál es la vigente.
+
 
 Herramienta: `python herramientas/comparar_documentos.py <anterior> <nuevo> [--salida archivo.md]`
 (PDF, Word, Excel, PowerPoint, correos, texto). Marca como POSIBLE CAMBIO SUSTANTIVO lo que altera cifras,
@@ -22,7 +20,7 @@ de avance.
    el proyecto) y una línea con la cantidad de cambios de forma. Si comparas documentos distintos
    (ej.: propuesta vs contrato), enfoca en diferencias de compromisos.
 4. Cruza los cambios sustantivos con los datos del proyecto: ¿contradicen la línea base, el cronograma,
-   una regla o un acuerdo? Si corresponde, sugiere `control-cambios`, `riesgos-issues` o `registrar-documento`.
+   una regla o un acuerdo? Si corresponde, sugiere `control-cambios`, `riesgos` o `documentos`.
 
 ## Registrar una nueva versión
 1. Identifica el documento (`doc_id` corto y estable, ej.: `propuesta-tecnica`, `bases-licitacion`). Si es nuevo,

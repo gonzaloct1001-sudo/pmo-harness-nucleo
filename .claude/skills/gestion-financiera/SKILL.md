@@ -1,7 +1,9 @@
 ---
 name: gestion-financiera
-description: Lleva el área de finanzas de una empresa con el arquetipo finanzas — arranque (plan de cuentas mapeado a las líneas del reporte e histórico), presupuesto anual con supuestos y versiones, cierre mensual (importar la contabilidad, cuadrar, mapear, explicar desvíos, indicadores, informe, cerrar y reabrir), forecast del año, proyección integrada a varios años y reporte al directorio con los formatos de la empresa. Úsala cuando el usuario pida llevar o revisar las finanzas, el presupuesto, el cierre del mes, el P&L o estado de resultados, el balance, la caja, el forecast, los indicadores financieros, el informe o la presentación financiera al directorio, importar un balance de comprobación, o pregunte «¿cómo vamos financieramente?», «¿por qué subió el gasto?», «¿cuánta caja tenemos?», «¿cómo cierra el año?». No la uses para evaluar una inversión (evaluacion-economica) ni para el presupuesto de una postulación.
+description: Lleva las finanzas de una empresa como un controller: plan de cuentas, presupuesto anual, cierre mensual (importar la contabilidad, cuadrar, desvíos, indicadores, cerrar y reabrir), forecast, proyección integrada de resultados, balance y caja, y reporte al directorio. Úsala con «¿cómo vamos financieramente?», «cierra septiembre», «¿por qué subió el gasto?», «arma el presupuesto», o cuando llegue un balance.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.
 
 # Gestión financiera
 

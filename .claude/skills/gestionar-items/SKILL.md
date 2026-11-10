@@ -1,7 +1,9 @@
 ---
 name: gestionar-items
-description: Gestiona los ítems de un proyecto de tipo cartera — agregar ítems, moverlos entre etapas verificando requisitos, crear y actualizar sus fichas (tesis, riesgos, condiciones de salida, fecha de revisión), retirarlos y listar el pipeline. Úsala cuando el usuario hable de agregar, evaluar, promover, pasar a otra etapa, descartar, retirar, vender o revisar un bot, acción, postulación, proveedor, iniciativa u otro ítem de una cartera, o pida ver el pipeline o una ficha.
+description: Gestiona los ítems de un proyecto de tipo cartera: agregar, mover entre etapas verificando requisitos, fichas (tesis, riesgos, salida, revisión), retirar y listar el pipeline. Úsala cuando el usuario hable de agregar, evaluar, promover, descartar, retirar, vender o revisar un bot, acción, postulación, proveedor, iniciativa o cualquier ítem de su cartera.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
 
 # Gestionar ítems
 

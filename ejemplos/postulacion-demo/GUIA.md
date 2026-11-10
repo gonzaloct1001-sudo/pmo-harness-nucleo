@@ -42,26 +42,26 @@ Pídelo por su nombre o describiéndolo («prepara el reporte de esta semana»).
 
 | Para qué | Puedes decirlo así | Skill |
 |---|---|---|
-| Pauta de evaluación desde las bases (también la pauta inversa del oferente) | «arma la pauta con estas bases» · «¿cómo nos va a evaluar el comité?» | `definir-pauta` |
+| Pauta de evaluación desde las bases (también la pauta inversa del oferente) | «arma la pauta con estas bases» · «¿cómo nos va a evaluar el comité?» | `evaluar-propuestas` |
 | Flujo de caja, VAN, TIR y sensibilidad; presupuesto de postulaciones con controles | «¿es rentable el proyecto?» · «arma el presupuesto de la postulación con los controles de las bases» | `evaluacion-economica` |
 | Llevar la postulación de las bases a la entrega, con compuertas | «prepara la postulación» · «¿cómo vamos con la postulación?» · «¿qué falta para entregar?» | `preparar-postulacion` |
-| Todos los requisitos de las bases con dueño, evidencia y checklist de entrega | «¿qué exigen las bases?» · «llegó una aclaración» · «¿cumplimos todo?» | `matriz-cumplimiento` |
+| Todos los requisitos de las bases con dueño, evidencia y checklist de entrega | «¿qué exigen las bases?» · «llegó una aclaración» · «¿cumplimos todo?» | `preparar-postulacion` |
 
 ## Útil en cualquier proyecto
 
 | Para qué | Puedes decirlo así | Skill |
 |---|---|---|
-| Cargar documentos existentes y configurar todo el proyecto | «listo, ya dejé los documentos» · «procesa lo nuevo de la entrada» · «retomemos el alta» | `alta-proyecto` |
+| Cargar documentos existentes y configurar todo el proyecto | «listo, ya dejé los documentos» · «procesa lo nuevo de la entrada» · «retomemos el alta» | `nuevo-proyecto` |
 | Ver qué puedo hacer en este proyecto y cómo pedirlo | «¿qué puedo hacer?» · «muéstrame la guía del proyecto» · «¿qué comandos tengo?» | `ayuda` |
-| Generar cualquier reporte del catálogo del proyecto | «prepara el reporte de esta semana» · «actualiza la planilla de septiembre» · «arma la presentación para el comité» | `generar-reporte` |
-| Crear un reporte propio, desde un modelo o conversando | «quiero un informe mensual para el directorio en Excel» · «este Word es la plantilla del reporte quincenal» | `nuevo-tipo-reporte` |
+| Generar cualquier reporte del catálogo del proyecto | «prepara el reporte de esta semana» · «actualiza la planilla de septiembre» · «arma la presentación para el comité» | `reportes` |
+| Crear un reporte propio, desde un modelo o conversando | «quiero un informe mensual para el directorio en Excel» · «este Word es la plantilla del reporte quincenal» | `reportes` |
 | Convertir notas de reunión en minuta con acuerdos y decisiones | «estas son mis notas de la reunión de hoy» · «haz el acta del comité» | `minuta` |
-| Agenda, estado, decisiones a pedir y preguntas difíciles | «tengo comité el jueves» · «¿qué llevo a la reunión con el cliente?» | `preparar-reunion` |
-| Registrar y actualizar riesgos y problemas | «el proveedor se va a atrasar» · «registra este problema» · «revisemos la matriz de riesgos» | `riesgos-issues` |
-| Identificar riesgos nuevos de forma sistemática | «hagamos un premortem» · «levanta los riesgos de la postulación» | `levantar-riesgos` |
+| Agenda, estado, decisiones a pedir y preguntas difíciles | «tengo comité el jueves» · «¿qué llevo a la reunión con el cliente?» | `reuniones` |
+| Registrar y actualizar riesgos y problemas | «el proveedor se va a atrasar» · «registra este problema» · «revisemos la matriz de riesgos» | `riesgos` |
+| Identificar riesgos nuevos de forma sistemática | «hagamos un premortem» · «levanta los riesgos de la postulación» | `riesgos` |
 | Detectar contradicciones, atrasos e incumplimientos | «¿cuadra todo?» · «¿qué está pendiente o vencido?» · «revisa el proyecto antes del comité» | `consistencia` |
 | Analizar correos, informes o documentos recibidos | «mira este correo del cliente» · «¿qué implica este informe?» · «¿qué respondo?» | `revisar-documento` |
-| Comparar versiones y llevar la bitácora | «¿qué cambió en la nueva versión de las bases?» · «compara estos dos documentos» | `versiones-documentos` |
+| Comparar versiones y llevar la bitácora | «¿qué cambió en la nueva versión de las bases?» · «compara estos dos documentos» | `documentos` |
 | Agregar métricas y reglas, cargar datos y ver semáforos | «quiero medir también la rotación» · «carga estos datos» · «¿cómo va el indicador?» | `metricas` |
 | Someter una propuesta o informe a revisores con perspectivas distintas | «revísalo como el comité» · «hazle un red team a la propuesta» · «¿qué le falta para ganar?» | `red-team` |
 | Guardar y subir el trabajo a GitHub de forma segura | «guarda» · «respalda el trabajo del día» · «sube los cambios» | `guardar-cambios` |

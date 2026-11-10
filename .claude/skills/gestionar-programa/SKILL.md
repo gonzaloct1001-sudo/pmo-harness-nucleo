@@ -1,7 +1,9 @@
 ---
 name: gestionar-programa
-description: Gestiona un programa con contrato padre y varios subproyectos — agregar o cerrar subproyectos, asignar personas a uno o varios subproyectos con su dedicación, presupuesto macro y por subproyecto (base, modificaciones, compromisos, gastos, pronóstico), contingencia del programa y de cada subproyecto, enmiendas que cambian plazos, alcances o montos de subproyectos específicos, Gantt macro y por subproyecto, y estado consolidado. Úsala cuando el usuario hable del programa completo, de sus subproyectos, del presupuesto o la contingencia, de quién trabaja en qué, de una enmienda que afecta a un subproyecto, o pida la visión general, la carta Gantt macro o el control presupuestario.
+description: Gestiona un programa con subproyectos: personas compartidas y dedicación, presupuesto macro y contingencia, enmiendas con afectación por subproyecto, Gantt macro y estado consolidado; agrega subproyectos. Úsala en proyectos con arquetipo programa cuando el usuario hable del contrato padre, los frentes, el presupuesto global o pida el consolidado.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/organizacion.md`.
 
 # Gestionar programa
 
@@ -32,7 +34,7 @@ Regla: nunca mezcles datos de dos subproyectos en el mismo registro de subproyec
    (`actualizar-gantt`; dependencias con otros subproyectos como `sp1:T04`).
 4. Agrega su presupuesto en `presupuesto/presupuesto.csv` (o como `enmienda` en `modificaciones.csv` si nace de una
    enmienda) y sus personas en `asignaciones.csv`. Si tiene reportes o plantillas propias, van en su `reportes/`
-   (`nuevo-tipo-reporte` sobre la carpeta del subproyecto); si no, usa los del programa.
+   (`reportes` sobre la carpeta del subproyecto); si no, usa los del programa.
 
 ## Personas compartidas
 - `personas.csv`: una fila por persona (capacidad_pct 100 = jornada completa).
@@ -54,7 +56,7 @@ Regla: nunca mezcles datos de dos subproyectos en el mismo registro de subproyec
   (el informe avisa si no cuadran). Confirma con el usuario antes de registrar gastos o movimientos.
 
 ## Enmiendas que afectan subproyectos
-Al llegar una enmienda (`registrar-documento` para la ficha y la línea base del programa):
+Al llegar una enmienda (`documentos` para la ficha y la línea base del programa):
 1. Lee qué cambia **para cada subproyecto**: plazo, alcance, monto, hitos. Registra una fila por efecto en
    `contractual/afectaciones.csv` (documento, fecha de vigencia, subproyecto o PROGRAMA, tipo, antes, después,
    descripción, aplicado = no).
@@ -69,7 +71,7 @@ Al llegar una enmienda (`registrar-documento` para la ficha y la línea base del
   enmiendas pendientes, y genera `cronograma/gantt-programa.md` (macro), `gantt-detalle.md` y el Gantt de cada subproyecto.
 - Ruta crítica del programa completo: la incluye el informe (usa el cronograma consolidado).
 - **Reportes generales** del programa: catálogo del programa (`estado-programa` u otros con nombre propio).
-  **Reportes por subproyecto**: catálogo de cada subproyecto. Ambos con `generar-reporte` sobre la carpeta que
+  **Reportes por subproyecto**: catálogo de cada subproyecto. Ambos con `reportes` sobre la carpeta que
   corresponda; un subproyecto sin plantilla propia usa la del programa.
 
 ## Qué no hacer

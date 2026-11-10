@@ -8,7 +8,7 @@ Las reglas de esta carpeta están en `AGENTS.md`, la fuente única para cualquie
 - **Estado al iniciar:** el hook de inicio entrega el bloque `[Estado del PMO Harness]` (equivale a
   `herramientas/estado.py --remoto`); úsalo y no vuelvas a ejecutar el script.
 - **Identidad:** en `.harness/asistentes.yaml` te corresponde el id `claude-code`. Si no figura, sigue
-  `configurar-asistente`.
+  `configurar`.
 - **Skills:** las de `.claude/skills/` se activan solas según su descripción; la tabla de procedimientos de
   `AGENTS.md` es la misma lista.
 - **Subagentes:** los de `.claude/agents/` están disponibles; invócalos como indica cada skill.

@@ -30,7 +30,7 @@ import _nucleo
 import medir_contexto
 
 RAIZ = Path(__file__).resolve().parent.parent
-PRESUPUESTO_REAL = 12500   # tokens aprox.: AGENTS.md + CLAUDE.md + descripciones de skills y subagentes (2.7: congelar en ~12.200; 3.0: 7000)
+PRESUPUESTO_REAL = 7000    # tokens aprox.: AGENTS.md (mapa) + CLAUDE.md + descripciones de skills y subagentes
 DOCS = ["README.md", "MANUAL-DE-USUARIO.md", "EMPEZAR-AQUI.md", "GUIA.md", "NUBE.md"]
 DIAS_LECCION, DIAS_PENDIENTE, DIAS_MEJORA, DIAS_SKILL, RESPALDOS_MAX = 180, 30, 30, 90, 2
 

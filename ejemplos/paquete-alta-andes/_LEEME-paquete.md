@@ -1,9 +1,9 @@
 # Paquete de prueba para el alta (FICTICIO)
 
-Documentos en bruto del Programa Andes Digital, todos inventados, para probar la skill `alta-proyecto`.
+Documentos en bruto del Programa Andes Digital, todos inventados, para probar la skill `nuevo-proyecto`.
 
 Cómo usarlo:
-1. Ejecuta `instalar` (o `alta-proyecto`) con un proyecto de prueba, por ejemplo "Prueba Andes".
+1. Ejecuta `instalar` (o `nuevo-proyecto`) con un proyecto de prueba, por ejemplo "Prueba Andes".
 2. Copia las subcarpetas 01 a 08 de esta carpeta dentro de `proyectos/prueba-andes/_entrada/` (este archivo no hace falta
    copiarlo; si se copia, el harness lo ignora).
 3. Escribe **listo**.

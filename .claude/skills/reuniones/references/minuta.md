@@ -1,9 +1,7 @@
----
-name: minuta
-description: Convierte notas de una reunión (apuntes en bruto, transcripción, resumen de audio, correo) en una minuta formal con asistentes, temas, acuerdos con responsable y fecha, decisiones y riesgos detectados, y actualiza los registros del proyecto. Úsala siempre que el usuario mencione una reunión, comité, junta, kickoff, sesión de seguimiento o pida un acta o minuta, aunque solo pegue notas desordenadas.
----
+# Después de la reunión: la minuta
 
-# Minuta de reunión
+Referencia de la skill `reuniones`. Se aplica cuando el usuario entrega notas, transcripción, resumen de audio o correo de una reunión ya hecha y quiere la minuta formal, con acuerdos, decisiones y riesgos llevados a los registros del proyecto.
+
 
 ## Pasos
 1. Identifica el proyecto y lee `contexto/stakeholders.csv` (para normalizar nombres y cargos).
@@ -20,7 +18,7 @@ description: Convierte notas de una reunión (apuntes en bruto, transcripción, 
 7. Propón (y aplica tras confirmar):
    - acuerdos → `seguimiento/acuerdos.csv` (id correlativo A-001…, origen = nombre del archivo de la minuta)
    - decisiones → `seguimiento/decisiones.csv` (D-001…)
-   - riesgos o problemas → vía `riesgos-issues`
+   - riesgos o problemas → vía `riesgos`
    - solicitudes de cambio → vía `control-cambios`
 8. Si el usuario lo pide o el catálogo lo define, genera el Word con `herramientas/md_a_docx.py` y/o un
    borrador de correo breve para enviar la minuta a los asistentes.

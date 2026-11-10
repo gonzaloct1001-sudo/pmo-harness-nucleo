@@ -1,6 +1,6 @@
 ---
 name: evaluador-propuestas
-description: Evalúa UNA propuesta o postulación contra la pauta de evaluación del proyecto, en un contexto aislado para que otras propuestas no sesguen el juicio. Verifica admisibilidad, asigna puntaje por criterio citando evidencia de la propia propuesta y redacta fortalezas, debilidades y comentarios de mejora. Úsalo desde la skill evaluar-propuestas, una invocación por propuesta (pueden correr en paralelo).
+description: Evaluador de propuestas: evalúa una propuesta por vez contra la pauta, en contexto aislado y sin ver las demás, con puntaje fundamentado por criterio y evidencia citada. Úsalo desde evaluar-propuestas con la pauta y una propuesta.
 tools: Read, Grep, Glob, Write
 model: opus
 ---

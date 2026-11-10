@@ -1,7 +1,9 @@
 ---
 name: red-team
-description: Somete una propuesta, postulación, oferta, informe o estudio a un red team — un panel de revisores independientes, cada uno en contexto aislado y con una perspectiva distinta (evaluador técnico que puntúa con la pauta, fiscalizador de admisibilidad, evaluador financiero, experto escéptico, competidor, beneficiario, auditor de rendición, abogado del diablo) — y consolida puntaje estimado, fallas fatales, debilidades priorizadas, preguntas probables y un plan de respuesta. Úsala en las revisiones rosa y roja de una postulación, antes de entregar una propuesta o un informe importante, o cuando el usuario pida "revísalo como el comité", "red team", "destrózalo", "qué le falta para ganar".
+description: Panel de revisores con perspectivas distintas (evaluador duro, competidor, auditor, usuario final) que ataca una propuesta, informe o entregable antes de enviarlo: puntaje estimado, fallas fatales, dudas que haría un jurado y plan de respuesta, cada perspectiva en contexto aislado. Úsala con «red team», «revísalo como el jurado», «¿qué le falta?», o antes de una entrega importante.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/nucleo.md`.
 
 # Red team
 

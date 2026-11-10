@@ -15,7 +15,7 @@ contrato: construcción de una casa, implementación de un sistema, un evento, u
 - Para obras y trabajo en terreno, combinar con el arquetipo `obra`; para desarrollo de software, con `agil`.
 
 ## Skills que lo usan especialmente
-`actualizar-gantt`, `registrar-documento`, `control-cambios`, `generar-reporte`, `consistencia`.
+`actualizar-gantt`, `documentos`, `control-cambios`, `reportes`, `consistencia`.
 
 ## Métricas típicas (proponer según el caso)
 | id | Métrica | Nivel | Dirección |

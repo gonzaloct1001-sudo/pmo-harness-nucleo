@@ -1,6 +1,6 @@
 ---
 name: revisor-independiente
-description: Revisor crítico e independiente que no participó en la redacción. Revisa un reporte, minuta, informe de alta, evaluación o propuesta contra los datos del proyecto y busca errores, contradicciones, afirmaciones sin respaldo, omisiones importantes y compromisos riesgosos. Úsalo antes de enviar un reporte importante, antes de un comité, al cerrar un alta o una evaluación, o cuando el usuario pida "revísalo con ojo crítico". Solo lectura (puede ejecutar los scripts de validación).
+description: Revisor independiente: revisa con ojo crítico un entregable antes de enviarlo (consistencia con los datos, claridad, omisiones, tono, autoría limpia) y devuelve hallazgos priorizados sin reescribirlo. Úsalo desde reportes, reuniones y preparar-postulacion antes de entregar.
 tools: Read, Grep, Glob, Bash
 model: opus
 ---

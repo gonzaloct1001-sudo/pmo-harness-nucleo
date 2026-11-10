@@ -1,9 +1,14 @@
 ---
-name: generar-reporte
-description: Motor único para generar cualquier reporte del catálogo de un proyecto (reporte semanal o mensual, planillas de control, presentaciones de avance, informes a comité, revisiones de cartera, informes de estudio, o cualquier reporte con nombre propio definido en el proyecto). Úsala siempre que el usuario pida sacar, generar, preparar, actualizar o emitir un reporte, informe, estado de avance, planilla de seguimiento o presentación de un proyecto, aunque no diga la palabra "reporte" o use el nombre propio que tenga en ese proyecto (por ejemplo "prepara lo de esta semana", "actualiza la planilla de septiembre", "arma la ppt para el comité").
+name: reportes
+description: Genera cualquier reporte del catálogo del proyecto (semanal, mensual, planilla, presentación, informe a comité) desde los datos y con el formato propio, y define tipos de reporte nuevos desde un archivo modelo o conversando. Úsala cuando el usuario pida sacar, preparar, actualizar o emitir un reporte, informe, planilla o presentación, o quiera crear o cambiar uno con nombre propio.
 ---
 
-# Generar reporte
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
+
+# Reportes
+
+Para **definir un tipo de reporte nuevo** (desde un archivo modelo o conversando) o cambiar uno existente:
+`references/nuevo-tipo.md`. Lo que sigue genera cualquier reporte ya definido en el catálogo.
 
 Todos los reportes salen del mismo proceso. Lo que cambia entre uno y otro está en su definición:
 `proyectos/<slug>/reportes/catalogo/<tipo>.md`.
@@ -11,7 +16,7 @@ Todos los reportes salen del mismo proceso. Lo que cambia entre uno y otro está
 ## 1. Identificar reporte y período
 1. Determina el proyecto activo (ver `AGENTS.md`) y lee su `proyecto.yaml`.
 2. Si el usuario no dijo qué reporte, lista los tipos del catálogo (ignora los que empiezan con `_`) y pregunta.
-3. Lee la definición del tipo. Si no existe, ofrece crearla con `nuevo-tipo-reporte`.
+3. Lee la definición del tipo. Si no existe, ofrece crearla con `reportes`.
    **Programas:** los reportes generales (todos los subproyectos) están en el catálogo del programa y usan
    `programa.py` como fuente; los de un subproyecto, en `subproyectos/<id>/reportes/catalogo/`. Si un subproyecto no
    tiene la plantilla que su definición pide, usa la de `reportes/plantillas/` del programa (misma marca y formato).
@@ -28,7 +33,7 @@ Todos los reportes salen del mismo proceso. Lo que cambia entre uno y otro está
    responder en bruto (viñetas, audio transcrito, texto pegado de correos). Ordena la respuesta y guárdala
    como `seguimiento/AAAA-Sxx.md` antes de continuar.
 3. Si la nota trae información que cambia los registros (avance de tareas, riesgos nuevos, issues, decisiones,
-   acuerdos), propón las actualizaciones siguiendo `actualizar-gantt` y `riesgos-issues`, pide confirmación y
+   acuerdos), propón las actualizaciones siguiendo `actualizar-gantt` y `riesgos`, pide confirmación y
    aplícalas **antes** de redactar, para que el reporte y los registros digan lo mismo.
 
 ## 3. Calcular

@@ -18,7 +18,7 @@ Escribe `postulacion/barrido-requisitos.csv`. Es incremental: los candidatos ya 
 texto) conservan su estado; solo se agregan los nuevos (por ejemplo, al llegar una aclaración).
 El barrido NO reemplaza la lectura de las bases: es la red de seguridad para que ningún requisito escrito en un
 anexo, formulario o aclaración quede fuera de la matriz. Cada candidato debe quedar `incorporado` (con
-requisito_id) o `descartado` (con motivo) en la skill matriz-cumplimiento.
+requisito_id) o `descartado` (con motivo) en la skill preparar-postulacion.
 """
 import argparse
 import csv

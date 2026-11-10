@@ -1,9 +1,8 @@
----
-name: configurar-asistente
-description: Deja a un asistente de IA (Claude Code, OpenAI Codex, Gemini, Cursor, GitHub Copilot u otro) listo para operar el harness igual que los demás — identifica la herramienta, revisa qué archivo de instrucciones lee, crea solo la puerta de entrada que falte (siempre remitiendo a AGENTS.md), activa los controles de Git, prueba que todo funcione y lo registra; y, si se cambia de asistente a mitad de un trabajo, retoma desde el traspaso. Úsala cuando el estado de inicio diga que el asistente no está registrado, cuando el usuario empiece a usar otra IA o cambie de una a otra, o pregunte si puede usar el harness con otra IA.
----
+# Configurar un asistente de IA (opción D de `configurar`)
 
-# Configurar asistente
+Referencia de la skill `configurar`. Se aplica cuando el estado de inicio dice que el asistente no está registrado, cuando el usuario
+empieza a usar otra IA o cambia de una a otra, o pregunta si puede usar el harness con otra herramienta.
+
 
 **Meta:** que cualquier asistente opere con las mismas reglas, procedimientos y controles, sin duplicar
 instrucciones. La fuente única de reglas es `AGENTS.md`: las demás puertas de entrada solo la importan o remiten a

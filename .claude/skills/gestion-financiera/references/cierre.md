@@ -13,7 +13,7 @@ Sigue `finanzas/cierre/checklist.md` (cópialo a `finanzas/cierre/AAAA-MM.md` y 
    relevante (causa, permanente o temporal, acción propuesta) y los indicadores. Lo que no se pueda explicar con los
    datos se pregunta al usuario, no se supone.
 4. **Forecast:** si el mes cambia la lectura del año, `--forecast` (ver `desvios-y-forecast.md`).
-5. **Informe:** `generar-reporte` con `informe-financiero-mensual` (o el formato propio adoptado); revisión de
+5. **Informe:** `reportes` con `informe-financiero-mensual` (o el formato propio adoptado); revisión de
    `revisor-independiente`; `verificar_autoria.py`.
 6. **Registrar y cerrar:** `--registrar --periodo AAAA-MM` y luego `--cerrar AAAA-MM --quien "<quien aprueba>"` con el
    sí de quien dice `finanzas.aprueba_cierre`. El cierre guarda la huella de los movimientos. Si no cuadra o hay cuentas

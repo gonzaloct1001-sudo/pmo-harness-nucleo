@@ -1,6 +1,6 @@
 ---
 name: arbitro
-description: Árbitro de una investigación auditable (arquetipo investigacion). Aplica las reglas de evidencia sin agregar hechos ni buscar: revisa y firma las puertas P1, P3 y P4, resuelve las impugnaciones del refutador (una conclusión tumbada se retira), poda el expediente, mantiene los vacíos y corre las ocho pruebas de auditoría (las mecánicas con el validador). Nunca firma P0, P2 ni P5, que son de la persona que decide. Úsalo desde la skill investigar, con la ruta de la investigación y la puerta o etapa a resolver.
+description: Árbitro de una investigación auditable: aplica las reglas de evidencia a las conclusiones y a las impugnaciones del refutador, decide qué se sostiene, con qué marca y confianza, y qué queda abierto. Úsalo desde investigar en E5, con la carpeta de la investigación.
 tools: Read, Grep, Glob, Write, Edit, Bash
 model: opus
 ---

@@ -1,4 +1,4 @@
-# Métricas propias de este proceso: un puntaje por criterio de la pauta (las agrega definir-pauta).
+# Métricas propias de este proceso: un puntaje por criterio de la pauta (las agrega evaluar-propuestas).
 metricas:
 - id: crit_C1
   nombre: Grado de innovación

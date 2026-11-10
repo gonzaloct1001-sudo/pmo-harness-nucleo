@@ -3,6 +3,8 @@ name: control-cambios
 description: Gestiona solicitudes de cambio de un proyecto (alcance, plazo, costo, recursos, calidad) desde su registro hasta su formalización, con análisis de impacto sobre cronograma, línea base contractual, presupuesto y riesgos. Úsala cuando el usuario mencione un cambio, requerimiento adicional, ampliación, extensión de plazo, trabajo extra, "el cliente pidió…", reprogramación mayor o pregunte por el estado de los cambios.
 ---
 
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
+
 # Control de cambios
 
 Registro: `contractual/cambios/registro-cambios.csv`. Detalle: `contractual/cambios/solicitudes/CC-xxx/`.
@@ -28,8 +30,8 @@ registrada → en_analisis → presentada → aprobada | rechazada → formaliza
 
 ## Resolver
 - **Aprobada**: registra quién y cuándo. Propón, y aplica tras confirmar: ajustes al cronograma
-  (`actualizar-gantt`), riesgos (`riesgos-issues`). La línea base contractual **solo** cambia cuando el cambio
-  se formaliza con un documento (`registrar-documento`); hasta entonces, anótalo como "aprobado sin formalizar".
+  (`actualizar-gantt`), riesgos (`riesgos`). La línea base contractual **solo** cambia cuando el cambio
+  se formaliza con un documento (`documentos`); hasta entonces, anótalo como "aprobado sin formalizar".
 - **Rechazada**: registra motivo y fecha. Si el cliente insiste en ejecutar igual, adviértelo como riesgo.
 
 ## Consultas

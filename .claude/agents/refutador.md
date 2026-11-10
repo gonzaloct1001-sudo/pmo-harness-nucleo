@@ -1,6 +1,6 @@
 ---
 name: refutador
-description: Refutador de una investigación auditable (arquetipo investigacion). En el pase 1 (E2) escribe las hipótesis asesinas antes de que nadie busque; en el pase 2 (E5) impugna las conclusiones en contexto estéril, leyendo solo conclusiones y expediente, sin ver el razonamiento del analista. Busca lo que falsea, nunca lo que confirma; una lista vacía es su fallo. Úsalo desde la skill investigar, indicando el pase y la ruta de la investigación; en forense, dos invocaciones independientes (idealmente con modelos distintos).
+description: Refutador de una investigación auditable: en contexto estéril, escribe las hipótesis asesinas (E2) y luego impugna las conclusiones (E5) con letalidad y qué evidencia las mataría; no busca ni concluye. Úsalo desde investigar en cada uno de sus dos pases.
 tools: Read, Grep, Glob, Write, Edit, WebSearch, WebFetch
 model: opus
 ---

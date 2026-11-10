@@ -17,6 +17,6 @@ Resumen en 5 líneas, qué exige y qué cambia respecto de la versión anterior.
 ```
 
 - Los originales se quedan en `_entrada/` (y luego `_entrada/_archivo/`): no se suben a Git.
-- Cada nueva versión o aclaración: `versiones-documentos` para comparar, `extraer_requisitos.py` para barrer lo
-  nuevo y `matriz-cumplimiento` para actualizar la matriz.
+- Cada nueva versión o aclaración: `documentos` para comparar, `extraer_requisitos.py` para barrer lo
+  nuevo y `preparar-postulacion` para actualizar la matriz.
 - **Las aclaraciones y respuestas del foro forman parte de las bases**: pueden agregar, cambiar o eliminar requisitos.

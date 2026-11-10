@@ -1,6 +1,6 @@
 # Checklist de entrega (revisión oro y guante blanco)
 
-> Lo genera y actualiza la skill `matriz-cumplimiento` a partir de `postulacion/requisitos.csv` y de las
+> Lo genera y actualiza la skill `preparar-postulacion` a partir de `postulacion/requisitos.csv` y de las
 > exigencias formales de las bases. Cada línea se marca [x] solo con evidencia verificada por alguien que no
 > la preparó. Mientras quede un PENDIENTE, no se entrega.
 

@@ -24,7 +24,7 @@ métricas, que se evalúan, comparan, promueven o descartan con reglas:
   escribe en `mediciones.csv`.
 
 ## Skills que lo usan especialmente
-`gestionar-items`, `metricas`, `generar-reporte`, `consistencia`, `riesgos-issues`.
+`gestionar-items`, `metricas`, `reportes`, `consistencia`, `riesgos`.
 
 ## Preguntas de la mini entrevista
 1. ¿Qué es un ítem en este proyecto y cuántos esperas manejar?

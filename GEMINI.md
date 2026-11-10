@@ -11,7 +11,7 @@ operar esta carpeta.
 - **Estado al iniciar:** no llega solo. Tu primera acción en cada sesión es ejecutar
   `python herramientas/estado.py --remoto` (paso 0 de `AGENTS.md`).
 - **Identidad:** en `.harness/asistentes.yaml` te corresponde el id `gemini` (o `antigravity` si eres Google Antigravity). Si no figura, sigue
-  `.claude/skills/configurar-asistente/SKILL.md`.
+  `.claude/skills/configurar/references/asistente.md`.
 - **Procedimientos:** cuando el pedido calce con una fila del índice `.claude/skills/LEEME.md`, lee ese `SKILL.md` completo y
   síguelo paso a paso.
 - **Roles (subagentes):** aplícalos tú en pasos separados, como indica `AGENTS.md`.

@@ -15,7 +15,7 @@ industriales o cualquier proyecto con trabajo en terreno, inspecciones y estados
   declarado en los estados de pago sea coherente con el cronograma; `evm_cpm.py` da valor ganado y ruta crítica.
 
 ## Skill
-`registros-obra`, más `actualizar-gantt`, `control-cambios`, `registrar-documento`.
+`registros-obra`, más `actualizar-gantt`, `control-cambios`, `documentos`.
 
 ## Preguntas de la mini entrevista
 1. ¿Tipo de obra y etapas principales (partidas)?

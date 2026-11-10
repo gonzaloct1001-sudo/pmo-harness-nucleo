@@ -1,7 +1,9 @@
 ---
 name: status
-description: Status de gestión de todos los proyectos — semáforo por proyecto con su alerta principal, lo que vence, lo que requiere decisión del usuario, proyectos sin movimiento, cambios desde el status anterior y el resumen de postulaciones (en preparación, presentadas, adjudicadas, montos y tasa de adjudicación); en el chat, como reporte web que se abre en el navegador, en Excel o Markdown, agendado cada semana, y como tablero único de varias empresas. Úsala cuando el usuario pregunte «¿cómo vamos?», «¿dónde estamos?», «status», «estado general», «resumen de mis proyectos», «¿qué vence?», pida un reporte o tablero de status, quiera ver todas sus empresas juntas o agendar el reporte semanal.
+description: Status de todos los proyectos: semáforos, lo que vence, decisiones pendientes y avance; reporte web semanal (agendable en este computador) y tablero único de varias empresas en una carpeta de panel. Úsala con «¿cómo vamos?», «dame el status», «agéndalo los lunes a las 9», «quiero ver todas mis empresas juntas», o al inicio para resumir la situación.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/organizacion.md`.
 
 # Status
 
@@ -21,7 +23,7 @@ semáforo están en su encabezado: explícalas si el usuario pregunta por qué a
 ## 2. Reporte web (cuando pide «reporte», «informe de status», «para el directorio», «para revisarlo»)
 1. `python herramientas/status.py --formato html --abrir` → `status/status-AAAA-MM-DD.html`, que se abre en su
    navegador. Si lo quiere también en Excel o Markdown: `--formato html,xlsx` o `--formato md`. Para Word o PowerPoint
-   con su formato, usa `generar-reporte` con el Markdown del status como fuente.
+   con su formato, usa `reportes` con el Markdown del status como fuente.
 2. Luego pregunta: **«¿Quieres que te lo prepare automáticamente cada semana? ¿Qué día y a qué hora?»**
    - Si dice que sí, explica en una línea que se crea una tarea programada en este computador (se abre sola si el
      computador está encendido) y, con su confirmación:

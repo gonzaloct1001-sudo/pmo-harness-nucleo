@@ -1,6 +1,6 @@
 ---
 name: analista-financiero
-description: Analista financiero de un proyecto con arquetipo finanzas. Ejecuta finanzas.py (estados, desvíos, indicadores, forecast, proyección), revisa la calidad de los datos importados (cuentas sin mapear, cuadres, meses sin cerrar), explica cada desvío relevante con los datos (precio o volumen, partida puntual o general, permanente o temporal) y redacta el comentario del mes y las preguntas que hay que hacerle al usuario o al contador. No modifica datos ni toma decisiones. Úsalo desde gestion-financiera en el cierre mensual, al preparar el informe o cuando el usuario pregunte por qué cambió una cifra.
+description: Analista financiero de una empresa: calcula y explica desvíos, indicadores, forecast y proyección desde los archivos de finanzas del proyecto; no decide ni cambia datos. Úsalo desde gestion-financiera con el proyecto y la pregunta concreta.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

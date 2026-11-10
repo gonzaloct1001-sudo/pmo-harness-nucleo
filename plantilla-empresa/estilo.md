@@ -1,6 +1,6 @@
 # Guía de estilo de los documentos de la empresa
 
-<!-- La construye alta-proyecto (o nuevo-proyecto) a partir de documentos reales escritos por el usuario o su
+<!-- La construye nuevo-proyecto (o nuevo-proyecto) a partir de documentos reales escritos por el usuario o su
 organización: informes, cartas, propuestas anteriores. Todos los proyectos de la empresa la heredan (cada uno puede ajustarla en su contexto/estilo.md), para que los
 documentos se lean como escritos por su autor. Actualízala cuando el usuario corrija un texto. -->
 

@@ -1,7 +1,9 @@
 ---
 name: guardar-cambios
-description: Guarda el trabajo del día en Git y lo sube a GitHub de forma segura, verificando que no se suban archivos confidenciales y dejando el traspaso al día para que otra sesión, otro computador u otra IA retome. Úsala cuando el usuario diga guardar, respaldar, subir, sincronizar, "commitear", cerrar la sesión o terminar el día, y ofrécela al final de cualquier tarea que haya modificado archivos. También para bajar los cambios más recientes al empezar a trabajar en otro computador.
+description: Guarda el trabajo en Git y lo sube a GitHub de forma segura: verifica que no suban archivos confidenciales, deja el traspaso al día y avisa de mejoras sin enviar. Úsala con «guarda», «respalda», «sube», «terminé por hoy», al cerrar la sesión, al final de cualquier tarea que modificó archivos, o para bajar cambios en otro computador.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.
 
 # Guardar cambios
 

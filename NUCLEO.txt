@@ -15,6 +15,7 @@ arquetipos/
 plantilla-proyecto/
 plantilla-subproyecto/
 plantilla-empresa/
+reglas/
 pruebas/
 ejemplos/
 biblioteca/LEEME.md

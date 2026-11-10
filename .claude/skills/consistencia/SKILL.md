@@ -1,7 +1,9 @@
 ---
 name: consistencia
-description: Revisa la consistencia interna de un proyecto — cronograma vs línea base contractual, reportes emitidos vs sus fuentes, riesgos sin plan, acuerdos e issues vencidos, cambios aprobados no reflejados, datos de inducción pendientes. Úsala cuando el usuario pida revisar, auditar, validar o "chequear que todo cuadre", antes de una reunión de comité o de enviar un reporte importante, o cuando pregunte qué está pendiente o atrasado.
+description: Revisa la consistencia interna de un proyecto: cronograma contra línea base, reportes contra sus fuentes, riesgos sin plan, acuerdos e issues vencidos, cambios aprobados no reflejados, datos de alta pendientes. Úsala cuando el usuario pida revisar, auditar o validar el proyecto, pregunte «¿cuadra todo?», o antes de un comité o una entrega.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
 
 # Revisión de consistencia
 

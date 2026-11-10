@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
-TECHO_FIJO = 5400       # tokens aprox. del texto fijo del núcleo (AGENTS.md + puerta de entrada); la salida del estado varía por carpeta
+TECHO_FIJO = 2800       # tokens aprox. del texto fijo del núcleo (AGENTS.md como mapa + puerta de entrada); el detalle vive en reglas/
 TECHO_SKILL = 5000      # aviso si una skill supera esto sin references
 
 

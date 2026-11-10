@@ -1,7 +1,9 @@
 ---
 name: registros-obra
-description: Registros de obra y proyectos de ingeniería en terreno — consultas técnicas (RFI), no conformidades, inspecciones, estados de pago y libro de obra — más el control de avance físico y financiero con valor ganado y ruta crítica. Úsala en proyectos de construcción, montaje u obras cuando el usuario mencione una consulta técnica, una observación de la inspección, una no conformidad, una inspección, un estado de pago, el libro de obra, o pida el avance físico-financiero, la ruta crítica o el pronóstico de término.
+description: Registros de obra y proyectos de ingeniería en terreno: consultas técnicas (RFI), no conformidades, inspecciones, estados de pago y libro de obra, más avance físico y financiero con valor ganado y ruta crítica. Úsala en construcción, montaje u obras cuando el usuario mencione un RFI, una no conformidad, una inspección, un estado de pago o el avance físico.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
 
 # Registros de obra
 

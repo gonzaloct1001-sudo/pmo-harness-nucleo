@@ -3,6 +3,8 @@ name: actualizar-gantt
 description: Actualiza el cronograma o carta Gantt de un proyecto (avance de tareas, fechas reales, nuevas tareas, dependencias, hitos), lo importa desde MS Project (XML) y regenera su visualización. Úsala cuando el usuario informe avances, atrasos, reprogramaciones, término o inicio de tareas, pida ver o actualizar la carta Gantt, o cuando una nota de seguimiento o minuta traiga información de avance.
 ---
 
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
+
 # Actualizar cronograma
 
 Fuente de verdad: `cronograma/cronograma.csv`. Columnas: id, subproyecto, tarea, responsable, inicio_plan,

@@ -1,9 +1,14 @@
 ---
 name: preparar-postulacion
-description: Orquesta la preparación de una postulación o propuesta para ganar un fondo concursable (CORFO, ANID, fondos regionales o privados), una licitación pública (Mercado Público) o privada, un RFP o un concurso — desde la recepción de las bases hasta la entrega y el resultado — con compuertas Go/No-Go, matriz de cumplimiento, pauta inversa, estrategia, redacción por secciones, presupuesto con controles, riesgos, red team, revisión final y transición a ejecución si se adjudica. Úsala cuando el usuario quiera postular, presentar una oferta, "armar la propuesta", preparar un proyecto para un fondo o licitación, o pregunte cómo va una postulación, qué falta o qué vence.
+description: Orquesta una postulación para ganar un fondo (CORFO, ANID u otro), una licitación (Mercado Público o privada), un RFP o un concurso: desde las bases hasta la entrega, con compuertas Go/No-Go, matriz de cumplimiento con barrido exhaustivo de requisitos, pauta inversa, redacción por secciones, red team y presupuesto. Úsala cuando el usuario quiera postular, reciba bases o aclaraciones, o pregunte qué exigen.
 ---
 
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.
+
 # Preparar postulación
+
+La **matriz de cumplimiento** (barrido exhaustivo de requisitos de bases, anexos y aclaraciones; dueños, evidencia y
+checklist de entrega) está en `references/matriz-cumplimiento.md`: se construye al recibir las bases y se mantiene con cada aclaración.
 
 **Meta:** una propuesta que cumple el 100% de las bases, maximiza el puntaje y llega a tiempo, completa y firmada.
 Arquetipo: `postulacion` (guía en `arquetipos/postulacion/ARQUETIPO.md`). Estado en todo momento:
@@ -24,7 +29,7 @@ Arquetipo: `postulacion` (guía en `arquetipos/postulacion/ARQUETIPO.md`). Estad
 - Pide al usuario dejar bases, anexos, formularios, aclaraciones y respuestas del foro en
   `_entrada/00-bases-y-aclaraciones/` y ejecuta `extraer_entrada.py` y `extraer_requisitos.py`.
 - Crea una ficha por documento en `postulacion/bases/` (ver su LEEME). Si llega una nueva versión o aclaración:
-  `versiones-documentos` para comparar y vuelve a correr `extraer_requisitos.py` (es incremental).
+  `documentos` para comparar y vuelve a correr `extraer_requisitos.py` (es incremental).
 - Completa `postulacion/calendario.csv` con **todos** los hitos (consultas, visita, respuestas, cierre con hora,
   apertura, adjudicación, garantías) y alertas en días. Completa el bloque `postulacion` de `proyecto.yaml`.
 - Si las bases mencionan inteligencia artificial, registra `declaracion_ia_exigida` y avísalo de inmediato.
@@ -35,8 +40,8 @@ se resuelve antes), evaluación ponderada y condiciones. La decisión es del pos
 `postulacion.decision_go`. Con No-Go, cierra en `lecciones.md` y termina.
 
 ## 3. Matriz de cumplimiento, pauta inversa y consultas
-- `matriz-cumplimiento`: revisa cada candidato del barrido, arma la matriz, asigna dueños.
-- `definir-pauta` en modo oferente → `postulacion/pauta-inversa.yaml` (criterios, ponderación, niveles,
+- `preparar-postulacion`: revisa cada candidato del barrido, arma la matriz, asigna dueños.
+- `evaluar-propuestas` en modo oferente → `postulacion/pauta-inversa.yaml` (criterios, ponderación, niveles,
   mínimos y un `puntaje_objetivo` que el equipo se fija para tener opción real).
 - Ambigüedades de las bases → `postulacion/consultas.csv` (borrador), redactadas para enviarse dentro del plazo
   del foro. El usuario las envía; marca `enviada` y luego la respuesta, que puede cambiar la matriz.
@@ -67,11 +72,11 @@ fuente) → `python herramientas/presupuesto_postulacion.py proyectos/<slug>/eco
 controles NO CUMPLE deben quedar en cero. Si las bases piden VAN/TIR o flujo de caja, `modelo_economico.py`.
 **Anexos oficiales en Excel o Word** (planilla de presupuesto, carta Gantt, cartas, declaraciones): se entregan en el
 formato de la entidad. Los Excel se llenan con `llenar_xlsx.py` (conserva listas desplegables, formas y fórmulas); los
-Word, con el método de marcadores o secciones de `generar-reporte` sobre una copia. Las firmas y declaraciones juradas
+Word, con el método de marcadores o secciones de `reportes` sobre una copia. Las firmas y declaraciones juradas
 las completa y firma quien corresponde.
 
 ## 7. Riesgos, impacto e indicadores
-`levantar-riesgos` con el checklist de postulación (inadmisibilidad, plazos, plataforma, documentos vencidos,
+`riesgos` con el checklist de postulación (inadmisibilidad, plazos, plataforma, documentos vencidos,
 garantías, firmas de socios, sobrecompromiso) y los riesgos del proyecto propuesto. Impacto con indicadores
 medibles, línea base y meta; plan de ejecución con hitos verificables.
 
@@ -82,7 +87,7 @@ fallas fatales, corrige y haz una segunda ronda (`roja-2`) solo sobre lo cambiad
 ## 9. Revisión oro, guante blanco y entrega
 - **Oro:** el postulante aprueba monto, aportes, riesgos y compromisos. Si las bases exigen **declarar el uso de
   IA**, recuérdalo de forma destacada: la declaración la decide y la hace el postulante.
-- **Guante blanco:** `matriz-cumplimiento` genera `entrega/checklist.md`; verifica nombres de archivo, formatos,
+- **Guante blanco:** la matriz de cumplimiento (`references/matriz-cumplimiento.md`) genera `entrega/checklist.md`; verifica nombres de archivo, formatos,
   límites, firmas, vigencias y coherencia de cifras en todo el paquete.
 - Deja el paquete en `entrega/final/` y ejecuta `verificar_autoria.py entrega/final --proyecto proyectos/<slug>`.
   Los documentos de terceros (cartas de socios, certificados, garantías) y la declaración de uso de IA que exijan las
@@ -98,7 +103,7 @@ Registra el envío (calendario), atiende aclaraciones o subsanaciones dentro de 
 Completa `postulacion/lecciones.md` (puntaje real vs estimado, observaciones del evaluador) y actualiza el banco
 de contenidos (lo que sirva para otras postulaciones, en `empresa/contenidos/`). **Si se adjudicó:** `crear_proyecto.py <slug> --arquetipos ejecucion` (agrega el arquetipo al mismo
 proyecto) y lleva los compromisos de la propuesta (plazos, entregables, indicadores, presupuesto) al cronograma y
-a la línea base; el convenio o contrato se incorpora con `registrar-documento`.
+a la línea base; el convenio o contrato se incorpora con `documentos`.
 
 ## Al avanzar de etapa
 Cuando `postulacion.py` indique que la compuerta de la etapa actual está cumplida, propón avanzar y, con el visto

@@ -1,7 +1,9 @@
 ---
 name: formulario-plataforma
-description: Formulario de una plataforma de postulación (CORFO, fondos.gob.cl u otra) cuando no hay un documento descargable que llenar — reconstruye los campos (pregunta, obligatoriedad, límite de caracteres, ayuda, opciones) desde los formularios vacíos o impresos del portal o desde un Word con las instrucciones en color, redacta y controla las respuestas (límites, obligatorios, caracteres raros pegados desde la web), genera el Word de trabajo con la pregunta, la instrucción en azul y el conteo, y la hoja de carga para copiar y pegar campo por campo en la plataforma. Úsala cuando el usuario diga que la postulación se llena en línea, que no hay formulario, que tiene que transcribir o copiar y pegar en el portal, pregunte cuántos caracteres lleva, o pida el formulario de trabajo o la hoja para cargar.
+description: Reconstruye el formulario de una plataforma de postulación sin documento descargable (campos, límites de caracteres, adjuntos), lo controla, produce el Word de trabajo y la hoja para copiar y pegar en la plataforma. Úsala cuando la postulación se llene en línea, el usuario hable de campos con límite, o pida «el formulario de la plataforma».
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
 
 # Formulario de plataforma
 
@@ -21,7 +23,7 @@ pregunta); las respuestas cortas van en el campo `respuesta` y las largas en `pr
 3. **Revísalo con el usuario contra la plataforma**: que estén todas las preguntas, cuáles son obligatorias, los límites
    de caracteres (incluidos los espacios), las opciones de las selecciones y el orden. Completa `plataforma:` y guárdalo
    como `postulacion/formulario.yaml`. El borrador es una ayuda: lo que manda es la plataforma.
-4. Los campos obligatorios son requisitos: súmalos a la matriz (`matriz-cumplimiento`) si no están.
+4. Los campos obligatorios son requisitos: súmalos a la matriz (`preparar-postulacion`) si no están.
 
 ## 2. Redactar y controlar
 1. Respuestas largas en `propuesta/campos/<id>.md` (encabezado con `campo:` y `responde_a:` para ligarlas a requisitos

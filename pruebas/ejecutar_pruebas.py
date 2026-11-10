@@ -350,7 +350,7 @@ def main():
 
         # --- v1.6 · Fase 4: guía del usuario ---
         prueba("guia_proyecto: guía de una postulación", [H + "guia_proyecto.py", "ejemplos/postulacion-demo"], repo,
-               ["Postulación (oferente)", "«prepara la postulación»", "`matriz-cumplimiento`", "Controles automáticos",
+               ["Postulación (oferente)", "«prepara la postulación»", "`preparar-postulacion`", "Controles automáticos",
                 "Estado de la postulación", "No hace falta usar el nombre exacto"], ausentes=["`gestionar-sprint`"])
         resultados.append(("guia_proyecto: escribe GUIA.md", (repo / "ejemplos" / "postulacion-demo" / "GUIA.md").exists(), ["no se escribió GUIA.md"]))
         prueba("guia_proyecto: guía de un proyecto de ejecución", [H + "guia_proyecto.py", "ejemplos/demo-andes", "--no-escribir"], repo,
@@ -580,8 +580,8 @@ def main():
         subprocess.run(["git", "config", "core.hooksPath", ".githooks"], cwd=repo)
         (repo / ".harness").mkdir(exist_ok=True)
         (repo / ".harness" / "estado.yaml").write_text('instalado: true\nversion_harness: "2.1"\n', encoding="utf-8")
-        prueba("estado: instalado sin asistentes registrados pide configurar-asistente", [H + "estado.py"], repo,
-               ["Ningún asistente registrado", "configurar-asistente"], ausentes=["Controles de Git INACTIVOS"])
+        prueba("estado: instalado sin asistentes registrados pide configurar", [H + "estado.py"], repo,
+               ["Ningún asistente registrado", "configurar"], ausentes=["Controles de Git INACTIVOS"])
         (repo / ".harness" / "asistentes.yaml").write_text("asistentes:\n  - id: claude-code\n  - id: codex\n", encoding="utf-8")
         prueba("estado: asistentes registrados y archivos sin guardar por proyecto", [H + "estado.py"], repo,
                ["Asistentes configurados: claude-code, codex", "prueba-postulacion:", "modificados sin guardar"])
@@ -922,7 +922,7 @@ def main():
         prueba("entropia: informe con contexto real, repetidos, lecciones viejas, pendientes, respaldos, mejoras sin enviar y skills sin uso",
                [str(e2 / "herramientas" / "entropia.py"), "--hoy", "2027-01-15", "--informe"], e2,
                ["Contexto fijo real", "descripciones de", "skills", "L-01 (2025-01-10)", "contexto/viejo.md: 1 marcador(es)", "respaldo-nucleo",
-                "Mejoras al núcleo sin enviar", "Olvidada hace meses", "Skills sin uso", "alta-proyecto", "propuesta(s)", "Nada se borró", "Informe guardado"],
+                "Mejoras al núcleo sin enviar", "Olvidada hace meses", "Skills sin uso", "nuevo-proyecto", "propuesta(s)", "Nada se borró", "Informe guardado"],
                ausentes=["L-02"])
         resultados.append(("entropia: deja la fecha de la última revisión y el informe",
                            (e2 / ".harness" / "entropia-ultima.txt").read_text(encoding="utf-8").strip() == "2027-01-15"
@@ -1571,12 +1571,12 @@ def main():
         _reales = {d.name for d in (repo / ".claude" / "skills").iterdir() if (d / "SKILL.md").exists()}
         resultados.append(("catalogo: cada skill con nivel de capacidad existe y ninguna está en dos niveles",
                            _clasificadas <= _reales and sum(len(v or []) for v in _niveles.values()) == len(_clasificadas)
-                           and {"alta", "media", "baja"} <= set(_niveles), [sorted(_clasificadas - _reales)]))
+                           and {"alta", "media", "baja"} <= set(_niveles), [str(sorted(_clasificadas - _reales)) + " · total " + str(sum(len(v or []) for v in _niveles.values())) + " vs " + str(len(_clasificadas))]))
         _ag = (repo / "AGENTS.md").read_text(encoding="utf-8")
         _idx = (repo / ".claude" / "skills" / "LEEME.md").read_text(encoding="utf-8")
         _fuera_idx = sorted(s for s in _reales if f".claude/skills/{s}/SKILL.md" not in _idx)
         resultados.append(("AGENTS.md: reglas 20 y 21; herramientas en herramientas/LEEME.md; índice de skills completo en .claude/skills/LEEME.md",
-                           "20. **Capacidad según la tarea" in _ag and "herramientas/LEEME.md" in _ag and ".claude/skills/LEEME.md" in _ag
+                           "20. Capacidad según la tarea" in _ag and "herramientas/LEEME.md" in _ag and ".claude/skills/LEEME.md" in _ag
                            and "investigacion.py <ruta-proyecto>" in (repo / "herramientas" / "LEEME.md").read_text(encoding="utf-8")
                            and not _fuera_idx, [f"fuera del índice: {_fuera_idx}"]))
 
@@ -1795,7 +1795,7 @@ def main():
             if d.is_dir():
                 shutil.rmtree(d)
         prueba("hook: instalado sin proyectos ofrece crear o cargar uno", [H + "hooks/inicio_sesion.py"], repo,
-               ["Instalado pero SIN PROYECTOS", "nuevo-proyecto", "alta-proyecto", "en marcha"])
+               ["Instalado pero SIN PROYECTOS", "nuevo-proyecto", "nuevo-proyecto", "en marcha"])
 
 
         # Ficha de inicio: sin instalar, el hook la ofrece o avisa que ya tiene respuestas

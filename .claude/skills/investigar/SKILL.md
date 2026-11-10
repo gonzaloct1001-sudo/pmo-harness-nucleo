@@ -1,7 +1,9 @@
 ---
 name: investigar
-description: Lleva una investigación auditable de punta a punta con el protocolo del arquetipo investigacion (encuadre, mapa de fuentes, hipótesis asesinas, expediente con marcas H/D/T/P, refutador, árbitro, ocho pruebas y entregable), con puertas que firma la persona que decide, validador que corrige lo mecánico y ajustes que aprende de cada empresa. Úsala cuando el resultado dependa de hechos del mundo que hay que verificar con fuentes — «investiga…», «averigua quiénes…», «¿a quién le ofrecemos…?», «mapea los candidatos/socios/competidores/proveedores», «estado del arte», «vigilancia tecnológica», «due diligence», «revisa las patentes», «¿es cierto que…?», «levanta antecedentes de…» —, cuando una postulación, estudio o informe necesite afirmaciones sobre terceros, mercado o normativa con respaldo, cuando pidan auditar un informe que afirma hechos, o para seguir una investigación abierta («¿en qué va la investigación?», «firmo P2»). No la uses para cálculos sobre supuestos propios (eso es estudio) ni para cargar documentos del proyecto (alta-proyecto).
+description: Investigación auditable (arquetipo investigacion): encuadre, mapa de fuentes, hipótesis asesinas, expediente con marcas H/D/T/P, refutador, árbitro, ocho pruebas y entregable, con puertas que firma quien decide; también auditar un informe que afirma hechos. Úsala cuando el resultado dependa de hechos del mundo con fuente: «investiga…», «¿a quién le ofrecemos…?», «estado del arte», «due diligence», «¿es cierto que…?», «firmo P2».
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`, `reglas/nucleo.md`.
 
 # Investigar (protocolo de investigación auditable)
 
@@ -36,7 +38,7 @@ cada investigación, qué falta, qué leer y qué pedirle a la persona. Ejecúta
 - Si hay un cartucho en `biblioteca/dominios/` que calce con el dominio, úsalo. Si no hay y el dominio se repetirá,
   ofrece crear uno al cerrar.
 - **Material que la persona ya tiene** (artículos, informes, fichas de proveedores, correos): dile que lo copie a
-  `proyectos/<slug>/_entrada/` sin ordenar, e inventaríalo con `extraer_entrada.py` (o con `alta-proyecto` si además
+  `proyectos/<slug>/_entrada/` sin ordenar, e inventaríalo con `extraer_entrada.py` (o con `nuevo-proyecto` si además
   define el proyecto). Cada documento entra a `E1_mapa_fuentes.csv` con su nivel N1-N6 (`protocolo/marcas-y-fuentes.md`)
   y lo que afirma entra al expediente como T (testimonio) o P (pista), nunca como H, hasta que una fuente lo sostenga.
 
@@ -94,7 +96,7 @@ Para cada paso:
 
 ## 5. Cerrar
 1. El editor arma `E6_entregable.md`; `--revisar` sin errores; se anota `cierre` en el manifiesto.
-2. Si se pide el documento: `generar-reporte` con `informe-investigacion` y `verificar_autoria.py` en OK.
+2. Si se pide el documento: `reportes` con `informe-investigacion` y `verificar_autoria.py` en OK.
 3. Si es integrada: la sección que alimenta cita las conclusiones (C-xx) o hechos (E-xx) de la investigación; nada
    que no esté arbitrado pasa a la postulación o al estudio.
 4. Paso 4 (aprender) y `guardar-cambios`.

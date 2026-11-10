@@ -2,7 +2,7 @@
 
 1. **Antes:** el período cerrado (`--cerrar`) o declarado preliminar; `--revisar` sin errores; `--registrar` hecho.
 2. **Formato:** el de la empresa si está adoptado (`empresa/reportes/catalogo/informe-financiero-mensual.md` o
-   `reporte-directorio.md` con su plantilla); si no, el del arquetipo. `generar-reporte` arma el documento: Word con
+   `reporte-directorio.md` con su plantilla); si no, el del arquetipo. `reportes` arma el documento: Word con
    `llenar_docx.py` o `md_a_docx.py`, PowerPoint con la plantilla y sus layouts.
 3. **Contenido, en este orden:** la respuesta primero (cómo le fue a la empresa y cuánta caja hay), luego los desvíos
    explicados con acción, el forecast del año con su versión, los indicadores con semáforo y las decisiones que se

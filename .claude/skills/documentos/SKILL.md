@@ -1,9 +1,14 @@
 ---
-name: registrar-documento
-description: Incorpora documentos contractuales y comerciales al proyecto — contrato, anexos, enmiendas, adendas, órdenes de compra, propuestas comerciales, reevaluaciones, actas de aceptación — generando su ficha resumen, archivándolos con la nomenclatura correcta y actualizando la línea base vigente. Úsala siempre que el usuario entregue o mencione uno de estos documentos, o pregunte qué dice el contrato vigente sobre plazo, monto, hitos o multas.
+name: documentos
+description: Incorpora al proyecto contratos, anexos, enmiendas, órdenes de compra, propuestas y actas de aceptación con ficha, nomenclatura y línea base vigente; compara versiones de un documento separando lo sustantivo de la forma y lleva su bitácora. Úsala cuando el usuario entregue o mencione uno de estos documentos, reciba una versión nueva, o pregunte qué dice el contrato o qué cambió.
 ---
 
-# Registrar documento contractual o comercial
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.
+
+# Documentos
+
+Para **comparar versiones** de un documento o responder qué cambió y cuál es la vigente: `references/versiones.md`.
+Lo que sigue registra documentos contractuales y comerciales.
 
 ## Nomenclatura
 | Tipo | Id | Carpeta |

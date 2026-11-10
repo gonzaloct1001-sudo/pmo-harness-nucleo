@@ -12,7 +12,7 @@
    neto y la caja de cada uno.
 5. **Revisión:** `--revisar` sin errores; margen bruto, EBITDA y resultado del año comparados con el real del año anterior.
    Pide una mirada a `revisor-independiente` si va al directorio.
-6. **Aprobación:** entrega el Excel (`generar-reporte`, reporte `presupuesto-anual`, con fórmulas y la hoja de
+6. **Aprobación:** entrega el Excel (`reportes`, reporte `presupuesto-anual`, con fórmulas y la hoja de
    supuestos) y pide la aprobación a quien dice `finanzas.aprueba_presupuesto`, en dos líneas. Con el sí:
    `finanzas.version_presupuesto` en `proyecto.yaml` y la decisión en `seguimiento/decisiones.csv`.
 7. **Nueva versión** (reforecast de presupuesto, no confundir con el forecast mensual): nueva `version`, nunca se

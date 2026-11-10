@@ -17,7 +17,7 @@ admisibilidad son requisitos de etapa. **Úsalo solo** (no combinarlo con `carte
   presupuesto, discrepancias entre evaluadores).
 
 ## Skills
-`definir-pauta` (bases → pauta) y `evaluar-propuestas` (admisibilidad, evaluación con el subagente
+`evaluar-propuestas` (bases → pauta) y `evaluar-propuestas` (admisibilidad, evaluación con el subagente
 `evaluador-propuestas`, ranking y comparación).
 
 ## Principios

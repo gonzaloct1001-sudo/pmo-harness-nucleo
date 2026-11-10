@@ -1,9 +1,8 @@
----
-name: alta-proyecto
-description: Alta rápida de un proyecto o programa a partir de sus documentos. Lee todo lo que haya en la carpeta _entrada (contratos, cronogramas, reportes, plantillas, actas, correos, chats de otras IA), configura el harness completo tomando decisiones con reglas explícitas, deja registro de cada decisión y pregunta solo lo que no puede resolver. Úsala cuando el usuario diga "listo" después de cargar documentos, pida dar de alta, iniciar, crear o configurar un proyecto, procesar la entrada, incorporar material nuevo, continuar o retomar el alta, o completar lo que quedó pendiente.
----
+# Camino A: alta de un proyecto a partir de sus documentos
 
-# Alta de proyecto (documentos primero)
+Referencia de la skill `nuevo-proyecto` (camino con documentos). Se aplica cuando el usuario ya tiene material del proyecto
+(contratos, cronogramas, reportes, plantillas, actas, correos, chats de otras IA): lo deja en `_entrada/` y dice «listo».
+
 
 **Principio:** el usuario no debería pasar semanas configurando. Lee todo, decide rápido con las reglas de
 `references/reglas-de-decision.md`, registra cada decisión con su fuente y confianza, y concentra las
@@ -109,9 +108,9 @@ confirmación individual (el usuario revisará el registro de alta):
 - `cronograma/cronograma.csv` y copia en `cronograma/linea-base/AAAA-MM-DD.csv`; genera el Gantt.
 - `riesgos/riesgos.csv`, `riesgos/issues.csv`, `seguimiento/acuerdos.csv`, `seguimiento/decisiones.csv`.
 - Capa contractual: fichas, registro de documentos, línea base vigente, registro de cambios (criterios de
-  `registrar-documento` y `control-cambios`). Los originales se mueven a su carpeta como `original.<ext>`.
+  `documentos` y `control-cambios`). Los originales se mueven a su carpeta como `original.<ext>`.
 - Catálogo de reportes: una definición por cada serie de reportes detectada y por cada plantilla, con el
-  nombre propio que tenga en el proyecto (criterios de `nuevo-tipo-reporte`); las plantillas se copian a
+  nombre propio que tenga en el proyecto (criterios de `reportes`); las plantillas se copian a
   `reportes/plantillas/`; la última versión de un Excel acumulativo se copia como primer emitido. Para las plantillas
   de `04-reportes-y-plantillas/`, `python herramientas/adoptar_formatos.py proyectos/<slug>` hace el análisis fino
   (tipo, qué sección falta y qué se pierde, versión mejorada) y `--aplicar --quien` deja plantilla y definición;
@@ -139,7 +138,7 @@ quedará con la propuesta y marcada para revisión." Aplica las respuestas.
 
 ## Fase G — Verificar y entregar
 1. `python herramientas/validar_proyecto.py proyectos/<slug>` y corrige lo que sea error de carga (no del proyecto).
-2. Genera un reporte semanal de prueba de la semana actual con `generar-reporte` (usa la información más
+2. Genera un reporte semanal de prueba de la semana actual con `reportes` (usa la información más
    reciente; márcalo "PRUEBA" en el título).
 3. Escribe `contexto/informe-de-alta.md`:
    - El programa en 10 líneas (lo que entendiste).
@@ -161,7 +160,7 @@ quedará con la propuesta y marcada para revisión." Aplica las respuestas.
 ## Material nuevo después del alta
 Cuando el usuario deje más archivos en `_entrada/` y pida procesarlos: fase B (incremental), C solo con lo
 nuevo, D comparando contra lo ya configurado (lo nuevo y formal prevalece según las reglas), E aplicando
-diferencias, y un resumen de cambios. Para un solo documento contractual basta `registrar-documento`.
+diferencias, y un resumen de cambios. Para un solo documento contractual basta `documentos`.
 
 ## Plantilla de `contexto/registro-de-alta.md`
 ```markdown

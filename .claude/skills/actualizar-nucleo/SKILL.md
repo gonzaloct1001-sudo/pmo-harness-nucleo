@@ -1,7 +1,9 @@
 ---
 name: actualizar-nucleo
-description: Trae la versión nueva del núcleo del harness (skills, herramientas, arquetipos, plantillas, instaladores) a esta carpeta de empresa sin tocar sus proyectos ni sus datos — muestra antes qué cambia y qué hay de nuevo, respalda lo que reemplaza, ejecuta las pruebas y revierte si fallan. Úsala cuando el usuario diga "actualiza el harness", "hay una versión nueva", "trae las mejoras", o cuando reciba un zip o un enlace con una versión nueva del núcleo; también para mantener al día varias carpetas de empresa.
+description: Trae la versión nueva del núcleo (skills, herramientas, arquetipos, plantillas, reglas) a esta carpeta sin tocar proyectos ni datos: muestra antes qué cambia y qué hay de nuevo, respalda, prueba y revierte si falla. Úsala con «actualiza el harness», «hay una versión nueva», «trae las mejoras», o al recibir un zip o enlace del núcleo.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/nucleo.md`, `reglas/organizacion.md`.
 
 # Actualizar el núcleo
 

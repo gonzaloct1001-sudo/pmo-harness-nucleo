@@ -2,7 +2,7 @@
 # Empresa dueña de esta carpeta (una carpeta = un repositorio privado = una empresa).
 # Todos sus proyectos heredan de aquí lo que no definen: responsable, marca y formato, autoría y la política de
 # réplicas. Para otra empresa se crea otra carpeta con herramientas/nueva_empresa.py.
-# Valores "PENDIENTE" se completan en instalar o alta-proyecto.
+# Valores "PENDIENTE" se completan en instalar o nuevo-proyecto.
 # ============================================================
 
 empresa:

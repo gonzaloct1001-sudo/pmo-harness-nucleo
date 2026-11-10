@@ -1,7 +1,9 @@
 ---
 name: nube
-description: Modo nube del harness (opcional, solo con Claude Code): explica cómo funciona operar desde el celular con el PC apagado, activa el modo con el sí explícito del usuario, le deja elegir qué tareas programar (resumen de la mañana, trabajar la bandeja, status semanal, recordatorio de cierre) y cuáles no, crea cada tarea programada en la nube con su aprobación, la registra, y permite pausar, reanudar o quitar tareas; también explica cómo encargar y responder desde el teléfono y qué hacer si una corrida falla. Úsala cuando el usuario pregunte si puede revisar o encargar cosas desde el celular, «con el PC apagado», «programar tareas», «modo nube», «tareas automáticas», «pausa el resumen de la mañana», o cuando la skill instalar o configurar llegue a esta opción.
+description: Modo nube opcional, solo con Claude Code: operar desde el celular con el PC apagado. Explica cómo funciona, activa con el sí explícito del usuario, deja elegir qué tareas programar (resumen de la mañana, bandeja, status semanal, recordatorio de cierre), las pausa o quita. Úsala con «desde el celular», «con el PC apagado», «programa», «modo nube», «pausa el resumen».
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/confidencialidad.md`, `reglas/nucleo.md`, `reglas/organizacion.md`.
 
 # Modo nube (opcional)
 

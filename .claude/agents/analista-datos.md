@@ -1,6 +1,6 @@
 ---
 name: analista-datos
-description: Analista de datos del proyecto. Ejecuta los scripts de cálculo y evaluación, revisa la calidad de los datos (vacíos, duplicados, valores fuera de rango, fechas inconsistentes) e interpreta resultados de métricas, tendencias y anomalías. Úsalo cuando haya que procesar o revisar un volumen grande de datos, explicar un resultado numérico sorprendente o preparar el análisis cuantitativo de un reporte. No modifica datos de origen.
+description: Analista de datos: procesa y revisa series, CSV y Excel de un proyecto sin modificarlos; calcula, detecta anomalías e inconsistencias y devuelve resultados con fuente. Úsalo desde las skills de métricas, reportes y finanzas con los archivos y la pregunta concreta.
 tools: Read, Grep, Glob, Bash
 model: sonnet
 ---

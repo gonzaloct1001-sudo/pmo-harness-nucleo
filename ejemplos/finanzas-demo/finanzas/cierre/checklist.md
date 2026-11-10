@@ -22,7 +22,7 @@ Período: AAAA-MM · Responsable: · Fecha de inicio:
 - [ ] Forecast actualizado (`finanzas.py --forecast`) si el desvío cambia el año.
 
 ## Cerrar
-- [ ] Informe financiero mensual emitido (`generar-reporte`) y revisado por `revisor-independiente`.
+- [ ] Informe financiero mensual emitido (`reportes`) y revisado por `revisor-independiente`.
 - [ ] Indicadores registrados (`finanzas.py --registrar`).
 - [ ] `finanzas.py --cerrar AAAA-MM --quien "<nombre>"`.
 

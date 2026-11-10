@@ -20,4 +20,4 @@ Armas el entregable. No agregas nada.
 7. En un sondeo, dilo arriba: «sondeo: sin contrastación».
 
 Al terminar, `investigacion.py --revisar`; si está limpio, anota la fecha de `cierre` en el manifiesto. El Word, si se
-pide, sale con `generar-reporte` (reporte `informe-investigacion`) y pasa por `verificar_autoria.py`.
+pide, sale con `reportes` (reporte `informe-investigacion`) y pasa por `verificar_autoria.py`.

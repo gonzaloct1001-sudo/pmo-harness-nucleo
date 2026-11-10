@@ -1,7 +1,9 @@
 ---
 name: evaluacion-economica
-description: Evaluación económica de una inversión o proyecto — construye el flujo de caja en un Excel con fórmulas (VAN, TIR, período de recuperación, VAN/inversión), análisis de sensibilidad y escenarios, a partir de supuestos explícitos con fuente; privada o social. Úsala cuando el usuario pida evaluar si un proyecto o inversión es rentable, calcular VAN o TIR, armar un flujo de caja, comparar alternativas de inversión, hacer una sensibilidad, o preparar la evaluación económica de un perfil, prefactibilidad o factibilidad.
+description: Evaluación económica de una inversión o proyecto: flujo de caja en Excel con fórmulas (VAN, TIR, recuperación), sensibilidad y escenarios, desde supuestos explícitos con fuente; privada o social; también el presupuesto de una postulación. Úsala cuando el usuario pida evaluar rentabilidad, calcular VAN o TIR, armar un flujo de caja o comparar alternativas.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
 
 # Evaluación económica
 
@@ -24,7 +26,7 @@ Cuando el trabajo es el presupuesto de una postulación a un fondo o licitación
    y verifica que el presupuesto del proyecto y el flujo usen las mismas cifras.
 5b. **Planilla oficial de la entidad** (Anexo de presupuesto, plan de trabajo, carta Gantt): el Excel con controles es
    la herramienta de trabajo; lo que se entrega es **la planilla oficial llenada**. Vuelca las cifras con
-   `llenar_xlsx.py` (ver `generar-reporte/references/modos-salida.md`), nunca reconstruyendo la planilla. Después, si
+   `llenar_xlsx.py` (ver `reportes/references/modos-salida.md`), nunca reconstruyendo la planilla. Después, si
    hay LibreOffice, recalcula y compara los totales de la planilla oficial con los del presupuesto: deben coincidir.
 6. Ambos Excel salen con autoría limpia (autor del proyecto); confírmalo con `verificar_autoria.py`.
 

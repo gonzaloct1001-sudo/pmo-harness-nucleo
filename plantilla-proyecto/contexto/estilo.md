@@ -1,6 +1,6 @@
 # Guía de estilo de los documentos del proyecto
 
-<!-- La construye alta-proyecto (o nuevo-proyecto) a partir de documentos reales escritos por el usuario o su
+<!-- La construye nuevo-proyecto (o nuevo-proyecto) a partir de documentos reales escritos por el usuario o su
 organización: informes, cartas, propuestas anteriores. Todas las salidas del proyecto la siguen, para que los
 documentos se lean como escritos por su autor. Actualízala cuando el usuario corrija un texto. -->
 

@@ -1,6 +1,6 @@
 # Contexto particular del proyecto
 
-<!-- Lo genera nuevo-proyecto o alta-proyecto. Mantenerlo breve (menos de 60 líneas). -->
+<!-- Lo genera nuevo-proyecto. Mantenerlo breve (menos de 60 líneas). -->
 
 ## En una frase
 PENDIENTE

@@ -145,7 +145,7 @@ Pendiente: arquetipo *operación continua* (servicios recurrentes con indicadore
 ## Con qué IA funciona, y cómo cambiar de una a otra
 - **Reglas únicas:** `AGENTS.md` tiene todas las reglas y la tabla de procedimientos. `CLAUDE.md` y `GEMINI.md` solo la
   importan; Codex, Cursor y Copilot la leen directamente. Así todas operan igual desde el primer mensaje.
-- **Primera vez con una IA:** se configura sola (skill `configurar-asistente`): revisa qué archivo lee, activa los
+- **Primera vez con una IA:** se configura sola (skill `configurar`): revisa qué archivo lee, activa los
   controles, hace una prueba rápida y queda registrada en `.harness/asistentes.yaml`. Si es una IA que el harness no
   conoce, averigua y te pregunta lo necesario.
 - **Cambiar de IA a mitad de camino:** cada proyecto lleva un traspaso (`seguimiento/traspaso.md`) que se actualiza al
@@ -215,7 +215,7 @@ Todo es ficticio y sirve para probar la herramienta: no es información ni recom
 1. **"Evalúa las postulaciones del fondo de ejemplo."** Debería: recordarte la confidencialidad, declarar
    inadmisible a P-003 (menos de 2 años de actividad), evaluar cada postulación con un subagente citando
    evidencia, dejar los puntajes como *propuesta* y pedirte la revisión antes del acta.
-2. **"Construye de nuevo la pauta desde las bases"** para probar `definir-pauta`.
+2. **"Construye de nuevo la pauta desde las bases"** para probar `evaluar-propuestas`.
 
 ### Prueba 3 — Estudio económico (arquetipo estudio)
 `ejemplos/estudio-solar/` tiene los supuestos de una planta solar ficticia y su modelo en Excel.
@@ -412,8 +412,8 @@ guion para probar el harness con cada IA.
 | Plantillas Word/Excel/PPT | `proyectos/<slug>/reportes/plantillas/` |
 | Logo | `proyectos/<slug>/marca/logo.png` |
 | Formato de minuta de un proyecto | crear `proyectos/<slug>/minutas/_formato.md` |
-| Cómo decide el asistente en el alta | `.claude/skills/alta-proyecto/references/reglas-de-decision.md` |
-| Qué datos debe cubrir el alta | `.claude/skills/alta-proyecto/references/cobertura.md` |
+| Cómo decide el asistente en el alta | `.claude/skills/nuevo-proyecto/references/reglas-de-decision.md` |
+| Qué datos debe cubrir el alta | `.claude/skills/nuevo-proyecto/references/cobertura.md` |
 | Valores por defecto para todos los proyectos futuros | `plantilla-proyecto/` y `arquetipos/` |
 | Diseños reutilizables | `biblioteca/perfiles/` |
 | Cómo trabaja una skill | `.claude/skills/<skill>/SKILL.md` |
@@ -467,7 +467,7 @@ la carpeta o borren archivos.
   empresas en su propio repositorio privado; formulario de la plataforma (límites, caracteres raros, hoja de carga);
   llenado de planillas oficiales sin pérdidas; barrido de requisitos selectivo (charlas y normativa aparte) y manejo de
   escaneos (ver CHANGELOG.md).
-- **2.1** — Funciona con cualquier asistente de IA (`AGENTS.md` como fuente única, `configurar-asistente`, traspaso entre
+- **2.1** — Funciona con cualquier asistente de IA (`AGENTS.md` como fuente única, `configurar`, traspaso entre
   sesiones e IA, controles en Git); instalación automática con permiso en Windows y Mac; una empresa por carpeta y
   repositorio, con herencia de marca y banco común, y actualización del núcleo sin tocar los datos; réplicas fieles en
   Markdown de bases y documentos de definición (ver CHANGELOG.md).

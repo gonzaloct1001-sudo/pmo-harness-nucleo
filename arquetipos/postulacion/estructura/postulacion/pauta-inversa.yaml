@@ -1,5 +1,5 @@
 # ============================================================
-# Pauta inversa: cómo evaluará la entidad, reconstruida desde las bases (skill definir-pauta, modo oferente).
+# Pauta inversa: cómo evaluará la entidad, reconstruida desde las bases (skill evaluar-propuestas, modo oferente).
 # Mismo formato que la pauta del arquetipo evaluacion. Cada dato cita su fuente en las bases.
 # La usan el red team (para puntuar) y postulacion.py (puntaje estimado frente a umbral y objetivo).
 # ============================================================

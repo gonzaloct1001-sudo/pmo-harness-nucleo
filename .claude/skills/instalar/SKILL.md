@@ -1,7 +1,9 @@
 ---
 name: instalar
-description: Punto de partida del harness. Prepara la carpeta y el computador (instala con permiso Python, Git, GitHub CLI y librerías; activa los controles), define la empresa dueña de la carpeta, crea el repositorio privado en GitHub, registra el asistente de IA, crea el proyecto o programa y deja lista la carpeta de carga documental para iniciar el alta. Úsala cuando el usuario escriba instalar, inicializar, configurar, empezar, comenzar, /instalar, o cuando salude o pida cualquier cosa en una carpeta donde el harness aún no está instalado (no existe .harness/estado.yaml). También cuando abra el harness en un computador nuevo.
+description: Primer paso en una carpeta nueva o un computador nuevo: prepara la carpeta, Python, Git y GitHub con preguntas de opción (para quién es, qué llevará primero, formatos propios, status semanal, modo nube), crea el repositorio privado y encamina el primer proyecto. Úsala con «instala», «empecemos», «computador nuevo», «descarga mis empresas», o cuando el estado diga no instalado.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/confidencialidad.md`, `reglas/nucleo.md`, `reglas/organizacion.md`.
 
 # Instalar
 
@@ -138,11 +140,11 @@ cada una con una opción recomendada; el usuario puede responder con la letra o 
 Luego, siempre, diseña y crea el proyecto con la skill `nuevo-proyecto` (elige arquetipo y propone métricas,
 etapas y reportes). Después, según la respuesta 3:
 - **a)** Omite el paso 5: el proyecto queda listo para usar.
-- **b)** Paso 5 (carga) y después `alta-proyecto` desde la fase B, que completa y ajusta el diseño con lo que digan
+- **b)** Paso 5 (carga) y después `nuevo-proyecto` desde la fase B, que completa y ajusta el diseño con lo que digan
   los documentos. Si los documentos no cubren el estado actual (avance, riesgos, acuerdos), el alta hace la
   entrevista de estado para lo que falte.
 - **c)** Haz la **entrevista de estado** de `nuevo-proyecto` (sección "Proyecto en marcha") para cargar dónde va el
-  proyecto hoy. Si después aparecen documentos, se cargan en `_entrada/` y se procesan con `alta-proyecto`.
+  proyecto hoy. Si después aparecen documentos, se cargan en `_entrada/` y se procesan con `nuevo-proyecto`.
 
 ## Paso 4 — Registrar la instalación
 Completa `.harness/estado.yaml` (lo crea `nueva_empresa.py`; si no existe, créalo):
@@ -159,7 +161,7 @@ proyectos: [<slug>]
 Haz commit: `git commit -am "Alta inicial de <slug>"` (y push si hay remoto).
 
 ## Paso 4b — Asistente de IA
-Sigue `configurar-asistente`: registra el asistente con el que se está trabajando en `.harness/asistentes.yaml` y hace
+Sigue `configurar`: registra el asistente con el que se está trabajando en `.harness/asistentes.yaml` y hace
 su prueba de humo. Si el usuario dice que usará otra IA además (Codex, Gemini, Cursor, Copilot), explícale que la
 carpeta ya sirve para todas: al abrirla con la otra IA, esta se configura sola la primera vez.
 
@@ -183,7 +185,7 @@ Muestra al usuario, de forma breve y clara:
 3. Que no necesita ordenar ni renombrar nada; que los originales no se suben a GitHub; y que de las bases y los
    documentos de definición se guarda una copia fiel en texto en `fuentes/` (repositorio privado), para poder
    trabajar desde otro computador sin los originales. De CVs, estados financieros y datos personales solo queda una ficha.
-4. Que cuando termine escriba **listo**. En ese momento sigues con `alta-proyecto` desde la fase B.
+4. Que cuando termine escriba **listo**. En ese momento sigues con `nuevo-proyecto` desde la fase B.
 
 Si el usuario dice que ya dejó los documentos antes de instalar, verifica `_entrada/` y continúa directo con la fase B.
 

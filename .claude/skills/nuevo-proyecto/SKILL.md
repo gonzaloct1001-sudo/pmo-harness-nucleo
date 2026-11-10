@@ -1,13 +1,24 @@
 ---
 name: nuevo-proyecto
-description: Diseña y crea un proyecto de cualquier tipo a partir de una descripción libre y una mini entrevista — elige el arquetipo (ejecución por plan, cartera de ítems con métricas, estudio/análisis, o una combinación), propone entidades, etapas, métricas, reglas, reportes, riesgos y glosario según el dominio, y genera la estructura. Úsala cuando el usuario quiera empezar, crear, armar o llevar un proyecto nuevo y lo describa ("quiero llevar el seguimiento de una granja de bots", "quiero construir una casa", "quiero armar un portafolio de acciones", "quiero liderar un equipo de software", "quiero evaluar postulaciones a un fondo", "necesito una prefactibilidad"), o pida adaptar un proyecto existente a otro tipo o agregarle un arquetipo.
+description: Empieza un proyecto de cualquier tipo, de cero o en marcha, por dos caminos: desde una descripción (elige arquetipo, propone métricas, reglas y reportes, genera la estructura) o desde sus documentos en `_entrada/` (lee todo, configura y registra cada decisión). Úsala con «crear», «armar», «dar de alta» o «cargar» un proyecto, «listo» tras dejar documentos, o para retomar un alta.
 ---
 
-# Nuevo proyecto (diseño por conversación)
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`, `reglas/organizacion.md`.
 
-**Objetivo:** en una conversación corta, pasar de "quiero llevar X" a un proyecto funcionando con estructura,
-métricas, reglas y reportes adecuados al dominio. El asistente propone desde su conocimiento del dominio y el
-usuario ajusta: nunca empezar con un formulario en blanco.
+# Nuevo proyecto (de cero o con documentos)
+
+Dos caminos, un mismo resultado: un proyecto funcionando con estructura, métricas, reglas y reportes adecuados al
+dominio.
+- **Camino A — con documentos.** El usuario ya tiene material (contrato, cronograma, reportes, plantillas, actas,
+  correos, chats de otras IA). Pídele que lo copie a `proyectos/<slug>/_entrada/` sin ordenar ni renombrar y, cuando
+  diga «listo», sigue `references/alta.md` (fases A a G: inventario, lectura, decisiones con reglas explícitas,
+  configuración, un solo mensaje de preguntas). También para incorporar material nuevo o retomar un alta a medias.
+- **Camino B — desde la descripción.** Lo que sigue en este archivo (pasos 0 a 5): el asistente propone desde su
+  conocimiento del dominio y el usuario ajusta; nunca un formulario en blanco.
+Si hay documentos y además hace falta diseñar (proyecto en marcha con material incompleto), haz primero el camino B
+para el diseño y luego el A para cargar lo que haya.
+
+**Objetivo del camino B:** en una conversación corta, pasar de "quiero llevar X" a un proyecto funcionando.
 
 ## 0. ¿Dónde va? (siempre primero)
 Si el usuario completó una ficha (`FICHA-DE-INICIO.md` o la que indique), úsala: resume lo que entendiste, pide
@@ -98,8 +109,8 @@ Tras la confirmación (o con los valores por defecto si el usuario dice "dale"):
 4. Si hay cálculos del dominio que el núcleo no hace, escribe un script en `scripts/` que lea de `datos/` y
    registre en `metricas/mediciones.csv`. Documenta el formato de cada archivo de datos en `datos/LEEME.md`.
    Prueba el script con 2 o 3 filas de ejemplo y luego déjalo sin datos ficticios (salvo que el usuario quiera un ejemplo).
-5. Ajusta el reporte por defecto del arquetipo o crea los reportes acordados con `nuevo-tipo-reporte`.
-6. Registra los riesgos iniciales del dominio con `riesgos-issues` (sin pedir confirmación uno a uno; el usuario los revisa en bloque).
+5. Ajusta el reporte por defecto del arquetipo o crea los reportes acordados con `reportes`.
+6. Registra los riesgos iniciales del dominio con `riesgos` (sin pedir confirmación uno a uno; el usuario los revisa en bloque).
 7. Guarda el diseño en `contexto/diseno-del-proyecto.md`: descripción del usuario, arquetipo y por qué,
    tabla de decisiones, preguntas y respuestas (ver ejemplo en `ejemplos/portafolio-acciones/contexto/`).
 8. Ejecuta `evaluar_metricas.py` (y `validar_proyecto.py` si es ejecución) para verificar que todo carga sin errores.
@@ -122,20 +133,20 @@ la velocidad y el backlog (ofrece importarlo); en `postulacion`, por la etapa de
 bases tiene (y pide dejarlas en `_entrada/00-bases-y-aclaraciones/`).
 
 Con las respuestas:
-- Carga cronograma (`actualizar-gantt`), riesgos y problemas (`riesgos-issues`), acuerdos y decisiones, ítems o
+- Carga cronograma (`actualizar-gantt`), riesgos y problemas (`riesgos`), acuerdos y decisiones, ítems o
   etapa, sin pedir confirmación punto por punto: muestra un resumen de lo cargado para revisión en bloque.
 - En cada registro, la fuente es "entrevista con <responsable>, AAAA-MM-DD". Lo que el usuario estima va marcado
   como **estimado**. Nunca completes lo que no dijo: queda `[PENDIENTE: …]` y va al resumen final.
 - Actualiza `induccion` en `proyecto.yaml` (bloque 7 "Estado actual": parcial o completo) y, en ejecución,
   `cronograma_actualizado` con la fecha de la entrevista.
 - Si falta información crítica que existe en algún documento (contrato, bases, último reporte), pide solo ese
-  documento y ofrece procesarlo con `alta-proyecto`.
+  documento y ofrece procesarlo con `nuevo-proyecto`.
 
 ## 5. Cerrar
 - Genera la guía del proyecto: `python herramientas/guia_proyecto.py proyectos/<slug>` (`GUIA.md`).
 - Resume en pocas líneas qué quedó y cuál es la **rutina** del usuario (qué datos cargar, cada cuánto, qué pedir),
   con las skills más útiles para su tipo de proyecto y una frase de ejemplo para cada una (de `GUIA.md`).
-- Si el usuario tiene documentos existentes, ofrece cargarlos en `_entrada/` y ejecutar `alta-proyecto` (fase B en adelante).
+- Si el usuario tiene documentos existentes, ofrece cargarlos en `_entrada/` y ejecutar `nuevo-proyecto` (fase B en adelante).
 - Ofrece guardar el diseño como **perfil reutilizable** en `biblioteca/perfiles/<nombre>/` si es probable que
   haga más proyectos de este tipo (ver `biblioteca/LEEME.md`).
 - Sugiere `guardar-cambios`.

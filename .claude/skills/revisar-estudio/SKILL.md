@@ -1,7 +1,9 @@
 ---
 name: revisar-estudio
-description: Revisa la calidad y completitud de un estudio de preinversión o análisis (perfil, prefactibilidad, factibilidad, estudio de mercado, due diligence, evaluación de alternativas), propio o de terceros — verifica que tenga lo esperable según su etapa, que los supuestos tengan fuente, que la evaluación sea consistente y que la recomendación se sostenga. Úsala cuando el usuario pida revisar un estudio o informe técnico-económico, decidir si un estudio puede pasar a la siguiente etapa, o preparar observaciones a un consultor.
+description: Revisa la calidad y completitud de un estudio o análisis (perfil, prefactibilidad, factibilidad, estudio de mercado, due diligence, evaluación de alternativas), propio o de terceros: lo esperable según su etapa, supuestos con fuente, evaluación consistente y recomendación que se sostiene. Úsala cuando pidan revisar, criticar o validar un estudio antes de decidir o entregar.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`.
 
 # Revisar estudio
 
@@ -20,7 +22,7 @@ Aplica `references/checklist-etapas.md` según la etapa. Marca cada punto como C
   Si hay planilla, recalcula los indicadores principales (puedes reconstruir el caso con `modelo_economico.py`).
 - **Sensibilidad**: ¿se analizan las variables críticas? ¿la conclusión resiste escenarios razonables?
 - **Alternativas**: ¿se compararon alternativas reales, incluida la situación base optimizada?
-- **Riesgos**: identificados y con mitigación; usa `levantar-riesgos` si el estudio los omite.
+- **Riesgos**: identificados y con mitigación; usa `riesgos` si el estudio los omite.
 - **Coherencia de la recomendación** con los resultados.
 - **Hechos del mundo** (mercado, competidores, precios de terceros, normativa, tecnología): marca cada afirmación
   portante según su fuente real (H, D, T, P, I, S o V; ver `arquetipos/investigacion/protocolo/marcas-y-fuentes.md`) y

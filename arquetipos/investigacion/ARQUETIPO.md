@@ -60,7 +60,7 @@ El detalle está en `protocolo/` (`PROTOCOLO.md`, `marcas-y-fuentes.md`, `puerta
 ## Skills y roles
 Skill `investigar` (orquesta todo). Subagentes `bibliotecario`, `refutador` y `arbitro`; los demás roles
 (encuadrador, cartógrafo, analista, editor) los aplica el asistente principal con sus fichas en
-`.claude/skills/investigar/references/roles/`. También sirven `revisar-documento`, `generar-reporte` y, en una
+`.claude/skills/investigar/references/roles/`. También sirven `revisar-documento`, `reportes` y, en una
 postulación, `red-team` (que verifica que lo afirmado tenga respaldo).
 
 ## Principios

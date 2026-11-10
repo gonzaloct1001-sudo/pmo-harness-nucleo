@@ -1,7 +1,9 @@
 ---
 name: registro-ingenieria
-description: Registros de ingeniería de software — decisiones de arquitectura (ADR), deuda técnica priorizada, matriz de trazabilidad requisito→diseño→historia→prueba, registro de despliegues y métricas DORA, postmortems de incidentes y checklist de despliegue. Úsala cuando el usuario tome o discuta una decisión técnica, mencione deuda técnica, requisitos o su cobertura de pruebas, un despliegue, un incidente o caída en producción, o pida preparar o revisar un pase a producción.
+description: Registros de ingeniería de software: decisiones de arquitectura (ADR), deuda técnica priorizada, trazabilidad requisito→diseño→historia→prueba, despliegues y métricas DORA, postmortems y checklist de despliegue. Úsala cuando el usuario tome o discuta una decisión técnica, hable de deuda, despliegues, incidentes o trazabilidad.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
 
 # Registros de ingeniería
 
@@ -35,4 +37,4 @@ lo importante es si mejoran.
 Tras un incidente: `postmortems/PM-NNN.md` desde la plantilla, **sin culpables** (qué condiciones lo
 permitieron). Acciones con responsable y fecha, que pasan al backlog y, si corresponde, a deuda técnica,
 requisitos (nuevos requisitos no funcionales) o al checklist de despliegue. Si el incidente afectó al
-cliente, registra también un issue con `riesgos-issues`.
+cliente, registra también un issue con `riesgos`.

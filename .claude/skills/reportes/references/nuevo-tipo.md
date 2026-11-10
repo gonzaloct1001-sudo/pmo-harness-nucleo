@@ -1,9 +1,7 @@
----
-name: nuevo-tipo-reporte
-description: Incorpora un tipo de reporte nuevo al catálogo de UN proyecto, ya sea a partir de un archivo modelo (Word, Excel, PowerPoint) o diseñándolo por conversación desde cero ("quiero un reporte mensual que se llame X, en Excel, con estas hojas y estos datos"). Úsala cuando el usuario quiera crear, agregar, definir, configurar o modificar un reporte, informe, planilla, presentación o plantilla, con nombre propio o sin él, o deje un archivo modelo en _entrada diciendo que es un reporte periódico.
----
+# Definir un tipo de reporte nuevo
 
-# Nuevo tipo de reporte
+Referencia de la skill `reportes`. Se aplica cuando el usuario quiere crear, agregar, definir o modificar un tipo de reporte, informe, planilla, presentación o plantilla del proyecto, desde un archivo modelo o conversando.
+
 
 Resultado: una definición en `proyectos/<slug>/reportes/catalogo/<tipo>.md` y, si aplica, su plantilla en
 `reportes/plantillas/`. **Todo queda en el proyecto, nunca en el núcleo del harness**: el nombre del reporte
@@ -48,7 +46,7 @@ Después basta con pedir "genera el <nombre> de <período>".
    sus proyectos (por ejemplo, el informe de avance al directorio), pregúntalo en una línea. Si es común: guarda
    también la definición en `empresa/reportes/catalogo/` y la plantilla en `empresa/plantillas/`; los proyectos
    nuevos la reciben solos y a los existentes ofrécele copiarla.
-5. **Prueba**: genera el reporte con `generar-reporte` para el período actual (o con datos de ejemplo
+5. **Prueba**: genera el reporte con el procedimiento principal de `reportes` para el período actual (o con datos de ejemplo
    marcados "PRUEBA" si aún no hay datos) y pide revisión. Ajusta según el feedback.
 6. Si el reporte depende de métricas que el proyecto aún no tiene, ofrece crearlas con la skill `metricas`.
 7. Sugiere `guardar-cambios`.

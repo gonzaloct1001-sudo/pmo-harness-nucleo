@@ -73,7 +73,7 @@ etapas:
   - id: riesgos_impacto
     nombre: Riesgos, impacto e indicadores
     que_hacer: >
-      Riesgos del proyecto y de la postulación con mitigación (levantar-riesgos); impacto esperado con
+      Riesgos del proyecto y de la postulación con mitigación (riesgos); impacto esperado con
       indicadores medibles y línea base; plan de ejecución (Gantt de la propuesta).
     compuerta:
       - {tipo: metrica, metrica: riesgos_registrados, operador: ">=", valor: 3}

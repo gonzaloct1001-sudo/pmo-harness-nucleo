@@ -58,7 +58,7 @@
 ## Bases de concursos, fondos y licitaciones (arquetipo postulacion)
 - Si el material son bases para **postular** (no un contrato vigente), el proyecto es del arquetipo `postulacion`:
   sigue `preparar-postulacion` desde la etapa 1 en vez de la línea base contractual.
-- Ejecuta `extraer_requisitos.py` y revisa cada candidato con `matriz-cumplimiento`: bases administrativas,
+- Ejecuta `extraer_requisitos.py` y revisa cada candidato con `preparar-postulacion`: bases administrativas,
   técnicas y económicas, anexos, formularios, aclaraciones y foro (una aclaración prevalece sobre lo que modifica).
 - Extrae: entidad, instrumento, plataforma, calendario completo (con hora de cierre), reglas de financiamiento
   (tope, aporte propio, parte pecuniaria, topes por ítem, gastos no financiables), criterios y ponderaciones,

@@ -1,7 +1,9 @@
 ---
 name: gestionar-sprint
-description: Gestión ágil del equipo — planificación de sprint (capacidad, velocidad, compromiso), seguimiento diario o standup, burndown, revisión de sprint, retrospectiva y cierre, manejo del backlog e importación desde GitHub o Jira, con métricas de velocidad, cumplimiento, trabajo en curso y tiempo de ciclo. Úsala en proyectos con arquetipo ágil cuando el usuario hable de sprints, backlog, historias, puntos, daily, standup, planning, review, retro, velocidad, tablero, o pida actualizar o importar el backlog.
+description: Gestión ágil del equipo: planificación de sprint (capacidad, velocidad, compromiso), standup, burndown, revisión, retrospectiva y cierre; backlog e importación desde GitHub o Jira; métricas de velocidad, cumplimiento, trabajo en curso y tiempo de ciclo. Úsala en proyectos ágiles cuando el usuario hable de sprints, backlog, historias o velocidad.
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`.
 
 # Gestionar sprint
 
@@ -27,7 +29,7 @@ estancados (más de 3 días en el mismo estado), trabajo en curso vs límite.
 1. Métricas del sprint; qué se terminó según la definición de hecho y qué no.
 2. Lo no terminado vuelve al backlog o pasa al siguiente sprint (decisión del dueño de producto).
 3. Registra `completado_pts` y estado `cerrado` en `sprints.csv`.
-4. Genera el resumen con `generar-reporte` (`sprint-review`).
+4. Genera el resumen con `reportes` (`sprint-review`).
 
 ## Retrospectiva
 Estructura: qué funcionó, qué no, qué probaremos. Aporta datos (métricas, incidentes, bugs del sprint)

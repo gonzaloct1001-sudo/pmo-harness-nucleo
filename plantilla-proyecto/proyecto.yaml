@@ -1,6 +1,6 @@
 # ============================================================
 # Configuración del proyecto — la leen todas las skills.
-# Valores "PENDIENTE" se completan en nuevo-proyecto o alta-proyecto.
+# Valores "PENDIENTE" se completan en nuevo-proyecto.
 # Mientras estén pendientes, las skills usan los valores por defecto.
 # Los arquetipos pueden agregar bloques propios (ej.: ejecucion agrega linea_base).
 # ============================================================

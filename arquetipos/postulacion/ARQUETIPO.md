@@ -74,9 +74,9 @@ dos fases) se agregan o renombran allí, registrando la decisión.
 - `python herramientas/puntaje_pauta.py`: no aplica (es del evaluador); el puntaje del red team lo calcula `postulacion.py`.
 
 ## Skills
-`preparar-postulacion` (orquesta el flujo) · `matriz-cumplimiento` · `red-team` · `definir-pauta` (modo
-oferente: pauta inversa) · `evaluacion-economica` (modo postulación) · `levantar-riesgos` (checklist de
-postulación) · `versiones-documentos` (bases y aclaraciones) · `revisar-documento` · `generar-reporte`.
+`preparar-postulacion` (orquesta el flujo) · `preparar-postulacion` · `red-team` · `evaluar-propuestas` (modo
+oferente: pauta inversa) · `evaluacion-economica` (modo postulación) · `riesgos` (checklist de
+postulación) · `documentos` (bases y aclaraciones) · `revisar-documento` · `reportes`.
 
 ## Principios
 - **Las bases mandan.** Porcentajes de cofinanciamiento, topes, garantías, plazos, formatos y límites de páginas

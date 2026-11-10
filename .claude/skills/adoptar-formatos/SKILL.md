@@ -1,7 +1,9 @@
 ---
 name: adoptar-formatos
-description: Convierte los formatos y archivos base propios de la empresa (o de un proyecto) en el formato por defecto del harness — informes, minutas, presentaciones, cartas, planillas de control, plan de cuentas, logo, guía de estilo — analizándolos, diciendo qué sección les falta respecto de lo que el harness sabe llenar (y qué se pierde si se omite), qué parte propia el harness no sabe llenar, y proponiendo mejoras que el usuario acepta o no, sin tocar nunca los originales. Úsala cuando el usuario diga «adopta mis formatos», «usa mi plantilla de informe», «así hacemos las minutas aquí», «estos son nuestros formatos», «quiero que todo salga con nuestro logo», deje archivos en empresa/_entrada/, o pregunte cómo hacer que el harness use sus documentos; también cuando el estado de inicio avise que hay formatos sin adoptar.
+description: Adopta como formato por defecto las plantillas y archivos base propios de la empresa o de un cliente (informes, minutas, presentaciones, planillas, logo y marca) dejados en `_entrada/`: los analiza, dice qué les falta y qué se pierde, propone mejoras en copia y nunca modifica el original. Úsala con «adopta mis formatos», «así hacemos las minutas aquí», «usa nuestro logo», «nuestro formato».
 ---
+
+> Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/confidencialidad.md`.
 
 # Adoptar formatos propios («lo tuyo primero»)
 
@@ -14,7 +16,7 @@ nunca se modifican; las mejoras son copias aparte; nada de lo adoptado lo toca u
   no están ahí, pídele que los copie (o cópialos tú si te da la ruta). Vale cualquier cosa que use hoy: informes,
   minutas, presentaciones, cartas, planillas de control, plan de cuentas, listas, guía de estilo, logo.
 - **Proyecto** (formatos de un cliente o mandante): `proyectos/<slug>/_entrada/04-reportes-y-plantillas/` (y el logo
-  en `08-marca/`). Es lo que `alta-proyecto` ya procesa; esta skill hace el análisis fino.
+  en `08-marca/`). Es lo que `nuevo-proyecto` ya procesa; esta skill hace el análisis fino.
 
 ## 2. Analizar
 `python herramientas/adoptar_formatos.py empresa` (o `proyectos/<slug>`). Por cada archivo dice, en simple:
@@ -46,15 +48,15 @@ otra, se informa y no se cambia.
 `python herramientas/adoptar_formatos.py empresa --aplicar --quien "<nombre>" [--mejorado F-01,F-03] [--marca]`
 - Copia cada formato a `plantillas/<tipo>.<ext>` (original o mejorado, según lo decidido) y escribe su definición en
   `reportes/catalogo/<tipo>.md` con el mapeo «sección del harness → título en la plantilla». Si ya existía una
-  definición, no la toca: dilo y ofrece revisarla con `nuevo-tipo-reporte`.
-- Una minuta deja además el esqueleto `formatos/minuta.md` (mismas secciones y orden): la skill `minuta` lo usa.
+  definición, no la toca: dilo y ofrece revisarla con `reportes`.
+- Una minuta deja además el esqueleto `formatos/minuta.md` (mismas secciones y orden): la skill `reuniones` lo usa.
 - Un archivo base queda en `formatos/base/` hasta que un proyecto lo necesite (por ejemplo, el plan de cuentas en un
   proyecto de finanzas).
 - Lo adoptado en la empresa llega solo a los proyectos nuevos (`crear_proyecto.py`); para los existentes, ofrece
   copiar la definición y la plantilla al proyecto que lo pida.
 
 ## 5. Usar
-- Word: `generar-reporte` llena la plantilla con `herramientas/llenar_docx.py` (marcadores y secciones por título,
+- Word: `reportes` llena la plantilla con `herramientas/llenar_docx.py` (marcadores y secciones por título,
   respetando estilos, viñetas y tablas de la plantilla). Excel: `llenar_xlsx.py`. PowerPoint: sus layouts.
 - Si el usuario corrige algo del resultado («el título va en mayúsculas», «la tabla lleva una columna más»), ajusta
   la definición o la plantilla adoptada (no la original) y anota la regla en `estilo.md` si es de redacción.

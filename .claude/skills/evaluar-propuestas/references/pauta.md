@@ -1,9 +1,7 @@
----
-name: definir-pauta
-description: Construye la pauta de evaluación de un proceso (fondo concursable, licitación, concurso, selección de proveedores) a partir de sus bases o de una conversación — requisitos de admisibilidad excluyentes y subsanables, criterios con ponderación, descriptores por nivel de puntaje, umbrales y desempate — y detecta ambigüedades de las bases. Úsala cuando el usuario entregue bases de un concurso o licitación, quiera armar o ajustar una pauta o rúbrica de evaluación, o vaya a iniciar la evaluación de propuestas.
----
+# Paso 1: la pauta de evaluación
 
-# Definir pauta de evaluación
+Referencia de la skill `evaluar-propuestas`. Se aplica antes de evaluar: construye la pauta desde las bases o conversando (admisibilidad, criterios ponderados, descriptores, umbrales, desempate); también la pauta inversa de una postulación.
+
 
 Resultado: `evaluacion/pauta.yaml` completa y coherente, más las métricas `crit_<id>` en `metricas/metricas.yaml`.
 El proyecto debe tener el arquetipo `evaluacion` (si no, créalo con `nuevo-proyecto` o `crear_proyecto.py`).
