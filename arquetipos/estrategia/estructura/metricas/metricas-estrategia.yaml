@@ -1,0 +1,14 @@
+# Métricas del arquetipo estrategia. Las calcula: python herramientas/estrategia.py <proyecto> --registrar [--hoy AAAA-MM-DD]
+metricas:
+  - {id: cascada_completa_pct, nombre: Objetivos con indicador y meta en todos los años, nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: Objetivos activos que tienen al menos un indicador con meta para cada año del horizonte / objetivos activos, umbral_amarillo: 0.99, umbral_rojo: 0.8}
+  - {id: objetivos_sin_iniciativa, nombre: Objetivos sin iniciativa, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: Objetivos activos sin ninguna iniciativa aprobada o en curso, umbral_amarillo: 1, umbral_rojo: 2}
+  - {id: iniciativas_en_curso, nombre: Iniciativas en curso, nivel: proyecto, unidad: "", direccion: informativa, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: Iniciativas con estado en_curso}
+  - {id: iniciativas_atrasadas, nombre: Iniciativas atrasadas, nivel: proyecto, unidad: "", direccion: menor_mejor, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: Iniciativas aprobadas o en curso cuya fecha de fin ya pasó y no están terminadas, umbral_amarillo: 1, umbral_rojo: 3}
+  - {id: cumplimiento_metas_pct, nombre: Cumplimiento de metas (última revisión), nivel: proyecto, unidad: "%", direccion: mayor_mejor, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: Indicadores en verde o amarillo / indicadores con real en la última revisión, umbral_amarillo: 0.7, umbral_rojo: 0.5}
+  - {id: revision_al_dia, nombre: Revisión del plan al día, nivel: proyecto, unidad: "", direccion: mayor_mejor, frecuencia: trimestral,
+     fuente: herramientas/estrategia.py, definicion: 1 si la última revisión registrada es del trimestre actual o del anterior, umbral_amarillo: 1, umbral_rojo: 0}

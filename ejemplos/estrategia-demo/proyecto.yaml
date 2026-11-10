@@ -1,0 +1,71 @@
+# ============================================================
+# Configuración del proyecto — la leen todas las skills.
+# Valores "PENDIENTE" se completan en nuevo-proyecto.
+# Mientras estén pendientes, las skills usan los valores por defecto.
+# Los arquetipos pueden agregar bloques propios (ej.: ejecucion agrega linea_base).
+# ============================================================
+
+proyecto:
+  nombre: Plan estratégico 2027-2029 · Servicios Cordillera (ficticio)
+  slug: estrategia-demo              # nombre de la carpeta, sin espacios ni tildes
+  codigo: ""
+  cliente: ""                  # cliente, mandante o "uso personal"
+  descripcion: PENDIENTE       # una o dos frases
+  fecha_inicio: PENDIENTE      # AAAA-MM-DD
+  confidencialidad: alta       # alta | media | baja
+
+arquetipos: [estrategia]                 # ejecucion | cartera | estudio (uno o más). Ver arquetipos/
+perfil: ""                     # perfil de biblioteca usado como base, si aplica
+
+responsable:
+  nombre: PENDIENTE
+  cargo: ""
+  correo: ""
+
+gobierno:
+  sponsor: ""                  # quién patrocina o responde (puede ser el mismo responsable)
+  aprueba_decisiones: ""       # quién aprueba decisiones relevantes
+  comite:
+    nombre: ""
+    frecuencia: ""
+
+reportes:
+  semana_inicia: lunes
+  catalogo: reportes/catalogo/
+
+formato:
+  idioma: es-CL
+  formato_fecha: ""  # vacío = el de la empresa
+  tamano_pagina: ""  # vacío = el de la empresa
+  logo: marca/logo.png         # si no existe, los documentos salen sin logo
+  color_primario: ""  # vacío = el de la empresa
+  color_secundario: ""  # vacío = el de la empresa
+  fuente: ""  # vacío = el de la empresa
+  pie_de_pagina: ""  # vacío = el de la empresa
+
+autoria:                       # los documentos entregables salen a nombre del usuario, sin rastros del proceso
+  nombre: ""                   # autor en las propiedades de Word/Excel/PowerPoint (vacío = responsable.nombre)
+  organizacion: ""             # empresa en las propiedades (opcional)
+  patron_nombre_archivo: "{tipo}_{periodo}"   # nombre de los emitidos; {tipo} {periodo} {slug} {codigo}
+  terminos_prohibidos: []      # términos adicionales que nunca deben aparecer en un entregable
+  terminos_permitidos: []      # términos que en este proyecto son legítimos (ej.: "inteligencia artificial", "gemini")
+  excluir: []                  # archivos que no se verifican ni modifican: de terceros o declaraciones exigidas (ej.: "carta-*.pdf", "declaracion-uso-ia.docx")
+
+umbrales:
+  desvio_amarillo_pct: 5
+  desvio_rojo_pct: 10
+  dias_revision_riesgos: 30
+
+induccion:
+  estado: pendiente            # pendiente | parcial | completa
+  bloques_completos: []
+  pendientes: []
+  ultima_actualizacion: ""
+
+estrategia:                    # [estrategia] plan estratégico; detalle en estrategia/
+  horizonte_anios: 3           # 3 o 5 (3YP / 5YP)
+  anio_inicio: 2027              # primer año del plan (AAAA)
+  marco: okr                   # okr | bsc | propio: cómo se ordenan objetivos e indicadores
+  revision: trimestral         # cadencia de la revisión del plan (trimestral | semestral | anual)
+  aprueba: "Directorio"                  # quién aprueba el plan (directorio, gerencia general)
+  proyecto_finanzas: ""        # slug del proyecto finanzas que lleva la proyección; vacío = este mismo si tiene el arquetipo

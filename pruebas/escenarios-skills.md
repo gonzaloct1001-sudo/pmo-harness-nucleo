@@ -62,6 +62,7 @@ Repetirlos después de modificar una skill.
 | 54 | la IA tuvo que adivinar cómo llenar un campo que la skill no cubre / "¿qué mejoras al harness hay anotadas?" / "exporta las mejoras" | Regla 17: `mejoras.py --anotar` con evidencia y sin datos del cliente, nunca edita el núcleo; `--listar`; `--exportar` solo cuando el usuario lo pide, y le dice que revise el archivo antes de enviarlo |
 | 55 | "revisa la salud del harness" / el estado dice «revisión de entropía hace 45 días» | `configurar` (N): `entropia.py --informe`; muestra las propuestas (repetidos, memoria vieja, pendientes, respaldos, skills sin uso) y retira solo lo que el usuario aprueba |
 | 56 | investigación estándar con tres familias de fuentes | `investigar`: el líder escribe tres encargos (objetivo, salida, fuentes, límites, presupuesto 10-15 búsquedas), lanza tres bibliotecarios en paralelo con archivos parciales y rangos E-101/E-201/E-301, consolida con `--consolidar` y recién entonces `--revisar` |
+| 57 | \"armemos el plan estratégico 2027-2029\" / \"hagamos la revisión del trimestre\" | `plan-estrategico`: proyecto `estrategia` (o sumado al de finanzas); diagnóstico con fuentes (investigar), lineamientos, cascada hasta `estrategia.py --revisar` sin errores, proyección con finanzas, documento con red team; en la revisión, `--revision AAAA-Tn` y una decisión por rojo con quién |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

@@ -195,6 +195,8 @@ def revisar_proyectos():
                 comandos.append(["investigacion.py"])  # sin --revisar: comprueba que el script lee las investigaciones
             if "finanzas" in arqs and (RAIZ / "herramientas" / "finanzas.py").exists():
                 comandos.append(["finanzas.py"])
+            if "estrategia" in arqs and (RAIZ / "herramientas" / "estrategia.py").exists():
+                comandos.append(["estrategia.py"])
             rel = c.relative_to(RAIZ).as_posix()
             for script, *extra in comandos:
                 try:

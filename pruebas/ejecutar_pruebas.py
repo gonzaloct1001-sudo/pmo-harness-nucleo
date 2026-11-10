@@ -1754,6 +1754,55 @@ def main():
         prueba("precommit --archivos: las exportaciones de la contabilidad son confidenciales", [H + "hooks/precommit.py", "--archivos",
                "proyectos/fin-nuevo/_entrada/10-contabilidad/balance.xlsx"], repo, ["material sin procesar de _entrada/"], codigo=1)
 
+        # --- v3.1 · Estrategia: plan a 3 o 5 años, cascada que cuadra, revisión del período, roadmap y mediciones ---
+        EST = H + "estrategia.py"
+        prueba("crear_proyecto: arquetipo estrategia", [H + "crear_proyecto.py", "plan-nuevo", "--arquetipos", "estrategia"], repo, ["Arquetipos: estrategia"])
+        _pn = repo / "proyectos" / "plan-nuevo"
+        resultados.append(("crear_proyecto: estrategia trae diagnóstico, lineamientos, cascada, métricas, reportes y bloque en proyecto.yaml",
+                           all((_pn / x).exists() for x in ("estrategia/diagnostico.md", "estrategia/lineamientos.md", "estrategia/objetivos.csv",
+                                                            "estrategia/metas.csv", "estrategia/iniciativas.csv", "estrategia/revisiones.csv",
+                                                            "metricas/metricas-estrategia.yaml", "reportes/catalogo/plan-estrategico.md",
+                                                            "reportes/catalogo/revision-trimestral.md"))
+                           and "estrategia:" in (_pn / "proyecto.yaml").read_text(encoding="utf-8"), []))
+        prueba("estrategia: un plan recién creado pide el año de inicio y guía", [EST, "proyectos/plan-nuevo", "--hoy", "2026-11-10"], repo,
+               ["completar `estrategia` en proyecto.yaml"])
+        prueba("estrategia --revisar: sin año de inicio es error", [EST, "proyectos/plan-nuevo", "--revisar"], repo, ["anio_inicio vacío"], codigo=1)
+        ed = repo / "ejemplos" / "estrategia-demo"
+        prueba("estrategia: el ejemplo dice dónde va el plan y el siguiente paso", [EST, str(ed), "--hoy", "2027-04-10"], repo,
+               ["Horizonte: 3 años desde 2027", "Objetivos: 4 (3 activos)", "Cascada: sin errores", "revisión del período en curso (`--revision 2027-T2`)"])
+        prueba("estrategia --revisar: la cascada del ejemplo cuadra", [EST, str(ed), "--revisar", "--hoy", "2027-04-10"], repo, ["Sin errores"])
+        prueba("estrategia --roadmap: Gantt de las iniciativas por objetivo", [EST, str(ed), "--roadmap"], repo, ["gantt", "section O-01", "I-01, 2027-03-01, 2027-09-30"])
+        prueba("validar_proyecto: el ejemplo de estrategia no tiene críticos", [H + "validar_proyecto.py", str(ed), "--json"], repo, ['"criticos": []'])
+        prueba("guia_proyecto: la guía de un plan estratégico", [H + "guia_proyecto.py", str(ed)], repo, ["Estrategia", "plan-estrategico"])
+        _ec = tmp / "estrategia-copia"
+        shutil.copytree(ed, _ec)
+        with open(_ec / "estrategia" / "iniciativas.csv", "a", encoding="utf-8") as f:
+            f.write("I-09,O-99,Iniciativa huérfana,,2027-01-01,2026-12-01,0,,en_curso,,\n")
+        with open(_ec / "estrategia" / "metas.csv", "a", encoding="utf-8") as f:
+            f.write("O-03,meses_de_caja,meses,mayor_mejor,2.1,2026,2031,5,finanzas,\n")
+        with open(_ec / "estrategia" / "revisiones.csv", "a", encoding="utf-8") as f:
+            f.write("2027-T1,2027-04-05,O-01,clientes_corporativos,26,19,-0.2692,rojo,,,\n")
+        prueba("estrategia --revisar: detecta objetivo inexistente, fin antes del inicio, meta fuera del horizonte y rojo sin decisión",
+               [EST, str(_ec), "--revisar", "--hoy", "2027-04-10"], repo,
+               ["objetivo O-99 no existe", "fin anterior al inicio", "fuera del horizonte 2027-2029", "rojo sin decisión"], codigo=1)
+        shutil.rmtree(_ec)
+        shutil.copytree(ed, _ec)
+        prueba("estrategia --revision: arma el período con los reales que ya están medidos", [EST, str(_ec), "--revision", "2027-T2", "--hoy", "2027-07-05", "--quien", "Directorio"], repo,
+               ["Revisión 2027-T2 · 5 indicador(es)", "Filas nuevas: 5", "reales tomados de metricas/mediciones.csv: 1", "rojo: 1", "Sin real todavía",
+                "O-01/ingresos_norte", "Rojos sin decisión"])
+        _rev = (_ec / "estrategia" / "revisiones.csv").read_text(encoding="utf-8")
+        resultados.append(("estrategia --revision: el real de clientes sale de mediciones (23 vs 26 → rojo) y los demás quedan por completar",
+                           "2027-T2,2027-07-05,O-01,clientes_corporativos,26,23,-0.1154,rojo,,Directorio," in _rev and _rev.count("2027-T2,") == 5
+                           and _rev.count("2027-T1,") == 5, [_rev[-600:]]))
+        prueba("estrategia --revision: segunda pasada no duplica filas", [EST, str(_ec), "--revision", "2027-T2", "--hoy", "2027-07-06"], repo, ["Filas nuevas: 0"])
+        prueba("estrategia --registrar: mediciones del plan", [EST, str(_ec), "--registrar", "--hoy", "2027-07-06"], repo, ["Registradas 6 mediciones"])
+        _med = (_ec / "metricas" / "mediciones.csv").read_text(encoding="utf-8")
+        resultados.append(("estrategia --registrar: cascada completa, sin objetivos huérfanos, 2 en curso, 3 atrasadas al 6 de julio, revisión al día",
+                           "cascada_completa_pct,1," in _med and "objetivos_sin_iniciativa,0," in _med and "iniciativas_en_curso,2," in _med
+                           and "iniciativas_atrasadas,3," in _med and "revision_al_dia,1," in _med, [_med[-500:]]))
+        prueba("evaluar_metricas: las métricas del plan se evalúan con semáforo", [H + "evaluar_metricas.py", str(_ec), "--hoy", "2027-07-06"], repo,
+               ["Objetivos con indicador y meta en todos los años | 100.0% | — | 2027-07-06 | Verde", "Iniciativas atrasadas | 3"])
+
         # --- v2.6 · Modo nube: registro de tareas con aprobación, bandeja por REST (gh falso) y estado ---
         NU, BA = H + "nube.py", H + "bandeja.py"
         _gh = {"HARNESS_GH": f"{PY} pruebas/gh_falso.py", "HARNESS_GH_LOG": str(tmp / "gh.log")}

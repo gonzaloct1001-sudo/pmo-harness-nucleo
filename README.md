@@ -1,4 +1,4 @@
-# PMO Harness v3.0
+# PMO Harness v3.1
 
 Un arnés para que un asistente de IA —Claude Code, OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u
 otro que trabaje sobre carpetas— lleve con método y evidencia **tus proyectos, las finanzas de tu empresa y tus
@@ -23,7 +23,8 @@ diario, reportes con tus formatos, reuniones (agenda y minuta), riesgos, cambios
 versiones, cierre mensual que importa la contabilidad, cuadra, explica desvíos y se puede reabrir con huella;
 resultados, balance y caja; forecast; proyección integrada a tres años en Excel con fórmulas; indicadores con
 semáforo e informe y presentación al directorio. «¿Cómo vamos financieramente?», «cierra septiembre», «¿por qué subió
-el gasto?».
+el gasto?». Y sobre esa base, el **plan estratégico a 3 o 5 años**: diagnóstico con fuentes, objetivos con metas por
+año, iniciativas que se vuelven supuestos de la proyección y una revisión trimestral que decide.
 
 **Investigación auditable, de cualquier ámbito.** Cuando una decisión o un entregable dependen de hechos del mundo
 (a quién ofrecer una licencia, qué socios o proveedores califican, estado del arte, patentes, normativa, una due
@@ -134,6 +135,7 @@ propio del dominio.
 | Portafolio de acciones, granja de bots, cartera de iniciativas | cartera | Etapas con requisitos para avanzar, tesis por ítem, política como reglas, revisión periódica contra un índice |
 | Prefactibilidad, factibilidad o evaluación económica | estudio | Preguntas, supuestos con fuente, modelo en Excel con VAN, TIR y sensibilidad, recomendación |
 | Llevar el área de finanzas de una empresa | finanzas | Plan de cuentas, presupuesto, cierre mensual reabrible, resultados, balance y caja, forecast, proyección integrada, indicadores, directorio |
+| Plan estratégico o de negocio a 3 o 5 años de una empresa o gerencia | estrategia (+ finanzas) | Diagnóstico con fuentes, lineamientos, objetivos con metas por año, iniciativas con impacto, plan financiero proyectado, documento al directorio, revisión trimestral con decisiones |
 | Investigar a quién ofrecer una licencia, qué socios califican, el estado del arte, patentes o si algo es cierto | investigación (sola o junto a otro arquetipo) | Protocolo auditable: encuadre, hipótesis asesinas, expediente con marcas y niveles de fuente, refutador, árbitro, ocho pruebas, puertas que firma quien decide |
 | Evaluar postulaciones o propuestas de terceros | evaluación | Pauta, admisibilidad, evaluación fundamentada por propuesta, ranking, acta |
 | Postular a un fondo o presentar una oferta a una licitación | postulación | Go/No-Go, matriz de cumplimiento, pauta inversa, secciones trazables, presupuesto con controles, red team, checklist de entrega; perfiles de convocatorias en `biblioteca/perfiles/` |
@@ -147,6 +149,7 @@ paso y en orden de relevancia, están en `ejemplos/LEEME.md`:
 |---|---|
 | `ejemplos/paquete-alta-andes/` | Alta de un proyecto desde una carpeta de documentos: «listo» y el proyecto configurado |
 | `ejemplos/finanzas-demo/` | Finanzas de una distribuidora: estados, cierre, importación de un balance, proyección |
+| `ejemplos/estrategia-demo/` | Plan estratégico 2027-2029 con cascada validada, roadmap y una revisión trimestral decidida |
 | `ejemplos/investigacion-demo/` | Investigación cerrada con 0 errores; el validador detecta 24 de 24 mutaciones sembradas |
 | `ejemplos/paquete-formatos-demo/` | Adopción de formatos propios: qué falta, qué se pierde, versión mejorada |
 | `ejemplos/programa-demo/` | Programa con subproyectos, presupuesto macro y enmiendas |

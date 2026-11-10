@@ -59,6 +59,13 @@ arquetipos:
     rutina: ["Cada mes: exportar el balance de comprobación, importarlo, mapear cuentas nuevas, revisar desvíos e indicadores, emitir el informe y cerrar.",
              "Cada año: presupuesto con supuestos y versión aprobada; proyección a 3 años cuando cambien las decisiones grandes.",
              "Si llega algo tarde: reabrir el mes con motivo, corregir y cerrar de nuevo."]
+  estrategia:
+    nombre: Estrategia (plan estratégico y plan de negocio a 3 o 5 años)
+    que_es: "Definir hacia dónde va una empresa o un área y llevar el plan: diagnóstico con fuentes, lineamientos, objetivos con indicadores y metas por año, iniciativas, plan financiero a 3 o 5 años sobre finanzas, documento al directorio y revisión periódica con decisiones."
+    carpetas: ["estrategia/ (diagnóstico, lineamientos, objetivos, metas, iniciativas, revisiones)"]
+    rutina: ["Al armar el plan: diagnóstico → lineamientos → cascada (estrategia.py --revisar sin errores) → plan financiero → documento con red team.",
+             "Cada trimestre: estrategia.py --revision AAAA-Tn, decisión por cada rojo, reporte revision-trimestral y --registrar.",
+             "Cada año: metas del año siguiente confirmadas y proyección financiera actualizada."]
   programa:
     nombre: Programa con subproyectos
     que_es: Un contrato general ejecutado en varios subproyectos, cada uno con su Gantt, presupuesto, equipo, riesgos, minutas y reportes; visión consolidada del programa.
@@ -80,6 +87,8 @@ skills:
      ejemplos: ["actualiza el harness", "llegó una versión nueva del núcleo, instálala"]}
   - {id: nuevo-proyecto, para: "Empezar un proyecto: diseñarlo desde una descripción o cargar sus documentos y configurar todo", arquetipos: [todos],
      ejemplos: ["quiero llevar la construcción de una casa", "quiero postular a un fondo CORFO", "listo, ya dejé los documentos", "retomemos el alta"]}
+  - {id: plan-estrategico, para: "Plan estratégico o de negocio a 3 o 5 años: diagnóstico, objetivos con metas por año, iniciativas, plan financiero y revisión trimestral", arquetipos: [estrategia],
+     ejemplos: ["armemos el plan estratégico 2027-2029", "¿dónde queremos estar en cinco años?", "hagamos la revisión del trimestre del plan"]}
   - {id: ayuda, para: "Ver qué puedo hacer en este proyecto y cómo pedirlo", arquetipos: [todos],
      ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
   - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
@@ -136,7 +145,7 @@ skills:
 # Capacidad que necesita cada skill (regla 20 de AGENTS.md): alta = juicio no verificable; media = análisis con datos y
 # borradores; baja = procedimiento, transcripción o validación. Las skills que no aparecen son de nivel medio.
 capacidad:
-  alta: [nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera]
+  alta: [nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera, plan-estrategico]
   media: [metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra, actualizar-gantt, documentos, formulario-plataforma, status]
   baja: [instalar, configurar, actualizar-nucleo, ayuda, guardar-cambios, nube]
 

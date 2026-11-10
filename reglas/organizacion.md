@@ -30,7 +30,9 @@ independientes o una misma entidad, separadas o juntas, y si quiere un **tablero
    compartidas, Gantt macro) · `estudio` (preguntas, supuestos, modelo económico, recomendación) · `investigacion`
    (hechos del mundo verificados con fuente, hipótesis asesinas, refutador, árbitro, puertas que firma quien decide) ·
    `finanzas` (plan de cuentas, presupuesto, cierre mensual reabrible, resultados, balance, caja, forecast,
-   proyección, indicadores; consume la contabilidad). Un proyecto puede combinar arquetipos.
+   proyección, indicadores; consume la contabilidad) · `estrategia` (plan estratégico o de negocio a 3 o 5 años:
+   diagnóstico con fuentes, lineamientos, objetivos con metas por año, iniciativas, plan financiero sobre finanzas,
+   revisión periódica con decisiones). Un proyecto puede combinar arquetipos.
 3. **Empresa** — `empresa/`: lo común a todos los proyectos de la empresa dueña de la carpeta: `empresa.yaml`
    (identidad, autoría, marca, formato, capacidad, política de réplicas), banco de antecedentes (`contenidos/`:
    descripción, experiencia, CVs, certificados con vigencia), `estilo.md`, `marca/`, `plantillas/` y formatos de

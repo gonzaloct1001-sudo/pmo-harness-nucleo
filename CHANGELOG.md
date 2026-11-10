@@ -1,5 +1,22 @@
 # Cambios
 
+## 3.1.0 — en curso
+
+### Plan estratégico (3YP / 5YP)
+- **Arquetipo `estrategia`**: diagnóstico con fuentes (`estrategia/diagnostico.md`), lineamientos, cascada de
+  objetivos → indicadores con línea base y meta por cada año del horizonte → iniciativas con responsable, fechas,
+  inversión e impacto (`objetivos.csv`, `metas.csv`, `iniciativas.csv`), revisiones por período con decisión
+  (`revisiones.csv`); bloque `estrategia` en `proyecto.yaml` (horizonte 3 o 5, año de inicio, marco OKR/BSC/propio,
+  cadencia, quién aprueba, proyecto de finanzas asociado); métricas del plan; reportes `plan-estrategico` y
+  `revision-trimestral`.
+- **`herramientas/estrategia.py`**: estado y siguiente paso, `--revisar` (la cascada cuadra: cada objetivo activo
+  con meta en todos los años, iniciativas y revisiones que apuntan a objetivos existentes, rojo sin decisión = error),
+  `--revision AAAA-Tn` (arma la revisión del período y toma los reales de `metricas/mediciones.csv` cuando el
+  indicador es una métrica), `--roadmap` (Gantt Mermaid), `--registrar`.
+- **Skill `plan-estrategico`** con referencias de diagnóstico, cascada, plan financiero (las iniciativas se vuelven
+  supuestos de `finanzas/proyeccion.yaml` a 3 o 5 años) y revisión (mantener, ajustar meta, reasignar, descartar).
+- Ejemplo `ejemplos/estrategia-demo/` (plan 2027-2029 ficticio con una revisión decidida) y prueba 12.
+
 ## 3.0.0 — 2026-11-10
 
 ### Mapa, no enciclopedia

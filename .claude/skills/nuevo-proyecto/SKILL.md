@@ -75,6 +75,9 @@ Lee `arquetipos/*/ARQUETIPO.md` (solo las secciones "Cuándo usarlo" al principi
   sostener con fuentes su mercado, competencia o propiedad intelectual = `postulacion,investigacion`; prefactibilidad
   que depende de hechos de terceros = `estudio,investigacion`.
   Si existe un perfil en `biblioteca/perfiles/` que calce, ofrécelo como base.
+- **estrategia** — definir hacia dónde va una empresa o un área y llevar el plan: diagnóstico, lineamientos, objetivos
+  con metas por año, iniciativas, plan financiero a 3 o 5 años y revisión trimestral. Señales: «plan estratégico», «3YP»,
+  «5YP», «plan de negocio», «OKR», «dónde queremos estar en…». Se combina con `finanzas` (misma gerencia) e `investigacion`.
 - Aún no hay arquetipo de *operación continua* (actividades recurrentes con indicadores de servicio): adapta
   `cartera` (ítems = servicios o activos) o `ejecucion`, y dilo.
 

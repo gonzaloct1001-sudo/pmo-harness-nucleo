@@ -118,3 +118,14 @@ de IA, un certificado con vigencia máxima y un presupuesto del cliente que no c
    definitivos se edita el YAML y se vuelve a generar).
 3. Crea `prueba-postulacion` con el arquetipo `postulacion`, copia las subcarpetas del paquete a `_entrada/` y di
    "prepara la postulación".
+
+### Prueba 12 — Plan estratégico (arquetipo estrategia)
+`ejemplos/estrategia-demo/` es el plan 2027-2029 ficticio de una empresa de mantención: diagnóstico con fuentes,
+lineamientos aprobados, cuatro objetivos con metas por año, cinco iniciativas y la revisión del primer trimestre con
+sus decisiones.
+1. `python herramientas/estrategia.py ejemplos/estrategia-demo --hoy 2027-04-10`: dónde va el plan y el siguiente paso.
+2. `python herramientas/estrategia.py ejemplos/estrategia-demo --revisar`: la cascada cuadra (sin errores; avisos sobre
+   el objetivo propuesto que aún no tiene iniciativa).
+3. `python herramientas/estrategia.py ejemplos/estrategia-demo --roadmap`: Gantt de las iniciativas por objetivo.
+4. Para uno propio: **«armemos el plan estratégico 2027-2029»** y, cada trimestre, **«hagamos la revisión del plan»**.
+

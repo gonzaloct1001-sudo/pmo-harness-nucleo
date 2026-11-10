@@ -34,7 +34,7 @@ Responde siempre en español (Chile), con tono profesional, directo y sin tecnic
 - Tres capas: **núcleo** (`.claude/skills/`, `.claude/agents/`, `herramientas/`, `reglas/`, `arquetipos/`, plantillas)
   → **empresa** (`empresa/`: identidad, marca, formatos, banco de antecedentes, capacidad) → **proyecto**
   (`proyectos/<slug>/`: todo lo particular). Un proyecto combina arquetipos: `ejecucion`, `obra`, `agil`, `cartera`,
-  `evaluacion`, `postulacion`, `programa`, `estudio`, `investigacion`, `finanzas`.
+  `evaluacion`, `postulacion`, `programa`, `estudio`, `investigacion`, `finanzas`, `estrategia`.
 - Contrato común de todo proyecto: `proyecto.yaml`, `metricas/`, `reportes/catalogo/`, `riesgos/`, `seguimiento/`
   (decisiones, acuerdos, traspaso), `contexto/`, `fuentes/` (réplicas fieles).
 

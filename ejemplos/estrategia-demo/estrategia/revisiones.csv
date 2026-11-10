@@ -1,0 +1,6 @@
+periodo,fecha,objetivo_id,indicador,meta_anio,real,desvio_pct,semaforo,decision,quien,nota
+2027-T1,2027-04-05,O-01,clientes_corporativos,26,20,-0.2308,rojo,mantener: la oficina de Antofagasta parte en marzo; se revisa en T2,Directorio,real a la fecha (CRM)
+2027-T1,2027-04-05,O-01,ingresos_norte,600000000,560000000,-0.0667,amarillo,mantener: el forecast incluye Antofagasta desde octubre,Directorio,forecast a fin de año (finanzas)
+2027-T1,2027-04-05,O-02,entregas_a_tiempo_pct,0.88,0.86,-0.0227,amarillo,mantener,Gerente de operaciones,acumulado del año (registro de servicios)
+2027-T1,2027-04-05,O-02,retrabajo_pct,0.05,0.06,-0.2000,rojo,reasignar: dos técnicos senior al control de calidad hasta T3,Directorio,acumulado del año (registro de servicios)
+2027-T1,2027-04-05,O-03,meses_de_caja,3,2.6,-0.1333,rojo,ajustar meta: 2.8 en 2027 y 3.5 en 2028; la cobranza partió en abril,Directorio,al cierre de marzo (finanzas)

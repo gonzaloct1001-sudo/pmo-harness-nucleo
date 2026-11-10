@@ -1,0 +1,6 @@
+id,objetivo_id,iniciativa,responsable,inicio,fin,inversion,impacto,estado,cartera_item,nota
+I-01,O-01,Abrir oficina comercial en Antofagasta,Gerente comercial,2027-03-01,2027-09-30,45000000,ingresos +60M/año desde 2028; gastos +30M/año,aprobada,,
+I-02,O-01,Programa de referidos con clientes actuales,Gerente comercial,2027-02-01,2027-06-30,4000000,ingresos +25M en 2027,en_curso,,
+I-03,O-02,Planificación semanal de cuadrillas con tablero,Gerente de operaciones,2027-01-15,2027-05-31,6000000,retrabajo −2 puntos; gastos −10M/año,en_curso,,
+I-04,O-03,Política de cobranza y descuento por pronto pago,Gerente de finanzas,2027-01-10,2027-04-30,0,DSO −15 días; caja +40M,aprobada,,
+I-05,O-02,Certificación ISO 9001,Gerente de operaciones,2028-01-15,2028-12-15,18000000,gastos +18M en 2028,propuesta,,se decide en la revisión 2027-T3

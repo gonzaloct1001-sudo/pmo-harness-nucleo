@@ -1,4 +1,4 @@
-# PMO Harness 3.0: manual de usuario
+# PMO Harness 3.1: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
@@ -123,6 +123,13 @@ Di «quiero llevar las finanzas de la empresa» y el harness arma el ciclo compl
 Lo que no hace: no lleva la contabilidad formal, no declara impuestos ni paga. Eso sigue en tu sistema contable, en el
 contador y en tesorería; el harness consume lo que ellos producen y nunca inventa una cifra. La referencia por país
 (impuestos, calendario) siempre se confirma con el contador.
+
+### Plan estratégico (3 o 5 años)
+Sobre las finanzas se arma el plan: «armemos el plan estratégico 2027-2029». El asistente te lleva por el diagnóstico
+(con fuentes; lo que sostiene una apuesta se investiga), los lineamientos, los objetivos con una meta por año y las
+iniciativas que los mueven, y convierte las iniciativas en la proyección financiera a 3 o 5 años. Sale el documento
+para el directorio, revisado por un red team. Cada trimestre: «hagamos la revisión del plan»: metas contra reales y
+una decisión por cada desvío (mantener, ajustar la meta, reasignar, descartar), que queda registrada con quién la tomó.
 
 ## 9. Investigaciones con rigor
 Cuando lo que necesitas saber depende de hechos de afuera (a quién ofrecer una licencia, qué socios o proveedores

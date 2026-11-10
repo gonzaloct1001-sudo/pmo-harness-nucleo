@@ -1,0 +1,8 @@
+
+estrategia:                    # [estrategia] plan estratégico; detalle en estrategia/
+  horizonte_anios: 3           # 3 o 5 (3YP / 5YP)
+  anio_inicio: ""              # primer año del plan (AAAA)
+  marco: okr                   # okr | bsc | propio: cómo se ordenan objetivos e indicadores
+  revision: trimestral         # cadencia de la revisión del plan (trimestral | semestral | anual)
+  aprueba: ""                  # quién aprueba el plan (directorio, gerencia general)
+  proyecto_finanzas: ""        # slug del proyecto finanzas que lleva la proyección; vacío = este mismo si tiene el arquetipo
