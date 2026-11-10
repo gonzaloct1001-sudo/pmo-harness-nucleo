@@ -185,6 +185,34 @@
             "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/validar_edicion.py\""
           }
         ]
+      },
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/registrar_uso.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/sesion_larga.py\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/cierre_sesion.py\""
+          }
+        ]
       }
     ]
   }

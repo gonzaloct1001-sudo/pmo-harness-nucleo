@@ -1,6 +1,6 @@
 # Cambios
 
-## 2.7.0 — en curso
+## 2.7.0 — 2026-11-10
 
 ### El harness se observa
 - **Mejoras al núcleo** (`herramientas/mejoras.py`, registro `.harness/mejoras-nucleo.csv`): en una carpeta de empresa
