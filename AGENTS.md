@@ -78,9 +78,7 @@ Además:
   el núcleo trae `propiedad-industrial`; los demás son de la empresa.
 - `empresa/investigacion/` → ajustes, preferencias y lecciones de investigación de la empresa (los escribe
   `investigacion.py`; una actualización del núcleo nunca los toca).
-- `ejemplos/` → material ficticio de prueba (`demo-andes`, `paquete-alta-andes`, `portafolio-acciones`,
-  `fondo-innovacion`, `estudio-solar`, `equipo-software`, `paquete-postulacion-demo`, `postulacion-demo`, `programa-demo`,
-  `investigacion-demo`). No son proyectos reales.
+- `ejemplos/` → material ficticio de prueba (uno por arquetipo, listados en `README.md`). No son proyectos reales.
 - `.harness/estado.yaml` → registro de la instalación (empresa, origen del núcleo) · `.harness/asistentes.yaml` →
   asistentes de IA configurados · `pruebas/` → batería de pruebas.
 
@@ -161,11 +159,10 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     trae la ruta completa de la carpeta abierta en el editor. Si algo queda esperando, detenlo y ofrece el instalador
     de doble clic (`INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`), que abre una ventana donde el usuario sí puede
     responder; tú no lo ejecutes.
-19. **Hechos del mundo, con protocolo.** En cualquier proyecto, si una tarea exige afirmar hechos de afuera (terceros,
-    registros, mercado, normativa, tecnología) que sostendrán una decisión o un entregable, no los escribas de
-    memoria: ofrece en una línea abrir una investigación (skill `investigar`; parte en sondeo, que toma horas) y, si
-    el usuario prefiere seguir sin ella, marca esas afirmaciones como estimadas o sin verificar. Las firmas de las
-    puertas P0, P2 y P5 son siempre del usuario; nunca las pongas tú.
+19. **Hechos del mundo, con protocolo.** Si una tarea exige afirmar hechos de afuera (terceros, registros, mercado,
+    normativa) que sostienen una decisión o un entregable, no los escribas de memoria: ofrece abrir una investigación
+    (skill `investigar`, parte en sondeo); si el usuario sigue sin ella, marca esas afirmaciones como sin verificar.
+    Las firmas de P0, P2 y P5 son siempre del usuario.
 20. **Capacidad según la tarea, no según el costo.** Nivel **alto** (juicio que nadie puede comprobar: diseñar un
     proyecto, evaluar, refutar, red team, encuadrar una investigación, revisar antes de entregar): el modelo más capaz
     disponible, con contexto limpio. Nivel **medio** (análisis con datos, borradores, lectura con extracción): un
@@ -178,15 +175,21 @@ Gracias a esto, reportes, consistencia, riesgos y reuniones funcionan igual en c
     `status.py --breve`, `evaluar_metricas.py`) en vez de leer CSV o YAML enteros; para lotes de documentos usa el
     subagente `lector-documental`; lee las `references/` de una skill solo en la fase que las usa. Para ver cuánto pesa
     cada pieza: `python herramientas/medir_contexto.py`.
-22. **Lo tuyo primero.** Toda salida (informe, minuta, presentación, carta, planilla) usa el formato del proyecto; si no
-    lo tiene, el de la empresa (`empresa/plantillas/`, `empresa/reportes/catalogo/`, `empresa/formatos/`); si no, el
-    del harness. Los formatos propios se cargan con la skill `adoptar-formatos` (desde `empresa/_entrada/`), que dice
-    qué les falta y qué se pierde, y propone mejoras que el usuario acepta o no; los originales nunca se modifican. Si
-    el usuario menciona «nuestro formato», «nuestra plantilla» o «así lo hacemos aquí» y no está adoptado, ofrécelo.
+22. **Lo tuyo primero.** Toda salida usa el formato del proyecto; si no, el de la empresa (`empresa/plantillas/`,
+    `empresa/reportes/catalogo/`, `empresa/formatos/`); si no, el del harness. Los formatos propios se cargan con la
+    skill `adoptar-formatos` (desde `empresa/_entrada/`), que dice qué falta y qué se pierde; los originales nunca se
+    modifican. Si el usuario dice «nuestro formato» y no está adoptado, ofrécelo.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con
 los valores por defecto. Menciona una sola vez, al final, qué pendientes críticos afectan el resultado.
+
+## Trabajo en la nube (opcional, solo Claude Code)
+
+Si `.harness/nube.yaml` dice `habilitada: true`, hay tareas programadas en la nube y una bandeja en GitHub (`bandeja.py`).
+Reglas en `NUBE.md`: rama propia y PR (nunca `main`), una tarea a la vez, solo REST. En el PC, antes de editar un proyecto
+con un PR de la nube abierto, revísalo o intégralo. Nada se programa sin el sí del usuario (skill `nube`); se cambia con
+`configurar`.
 
 ## Procedimientos (skills)
 

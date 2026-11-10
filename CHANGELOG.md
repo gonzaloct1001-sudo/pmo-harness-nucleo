@@ -1,5 +1,26 @@
 # Cambios
 
+## 2.6.0 — 2026-11-10
+
+### Modo nube opcional, instalación por opciones y «configurar»
+- **Modo nube (solo Claude Code, opcional):** tareas programadas que corren en la nube de Claude sobre el repositorio
+  privado de la empresa, con el PC apagado, y una **bandeja** en GitHub para encargar, responder y aprobar desde el
+  celular. Nada se programa sin el sí del usuario, tarea por tarea; se pausa o se quita cuando quiera. `NUBE.md` trae
+  las reglas de una corrida (rama propia y PR, nunca `main`; una tarea a la vez; solo REST; sin tocar `settings`,
+  `NUCLEO.txt` ni el registro) y el catálogo: resumen de la mañana, trabajar la bandeja, status semanal, recordatorio
+  de cierre. `herramientas/nube.py` lleva el registro (`.harness/nube.yaml`: quién aprobó qué y cuándo) y el texto
+  de cada tarea; `herramientas/bandeja.py` opera la bandeja por REST (`gh api`, probado con `pruebas/gh_falso.py`).
+  Skill `nube` (explica, requisitos, una decisión por tarea, crea la tarea con la herramienta de la cuenta, corrida de
+  prueba, uso desde el celular, pausar). El estado de inicio avisa el modo nube y la bandeja; `guardar-cambios` mira
+  los PRs de la nube antes de empujar.
+- **Instalación por opciones:** `instalar` pregunta con letras (para quién es la carpeta, qué va a llevar primero, en
+  qué punto está, formatos propios, status semanal, modo nube) con una opción recomendada en cada una; todo se cambia
+  después.
+- **Skill `configurar`:** menú para cambiar cualquier configuración conversando y con confirmación (empresa, marca,
+  formatos, IA y modelos, umbrales, confidencialidad, modo nube, status semanal, investigación, proyecto, idioma,
+  reglas), con dónde vive cada cosa y cómo deshacer.
+- Manual de usuario y guía rápida reescritos para usuarios no técnicos (`MANUAL-DE-USUARIO.md`, `EMPEZAR-AQUI.md`).
+
 ## 2.5.0 — 2026-11-10
 
 ### Finanzas: llevar el área como un controller (arquetipo `finanzas`)

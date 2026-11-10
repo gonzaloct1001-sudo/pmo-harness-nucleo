@@ -74,6 +74,10 @@ skills:
      ejemplos: ["instala el harness", "empecemos", "estoy en un computador nuevo"]}
   - {id: configurar-asistente, para: "Dejar lista otra IA (Codex, Gemini, Cursor, Copilot u otra) o retomar el trabajo tras cambiar de IA", arquetipos: [],
      ejemplos: ["voy a usar Gemini en esta carpeta", "cambié de IA, ¿en qué íbamos?", "¿puedo usar esto con Codex?"]}
+  - {id: configurar, para: "Cambiar cualquier configuración después: empresa, marca, formatos, IA, umbrales, confidencialidad, modo nube, status semanal", arquetipos: [],
+     ejemplos: ["quiero cambiar el logo", "de ahora en adelante los informes en A4", "¿dónde se cambia quién firma los documentos?", "ya no quiero el resumen de la mañana"]}
+  - {id: nube, para: "Operar desde el celular con el PC apagado (opcional, solo Claude): explicar, activar y elegir qué tareas programar", arquetipos: [],
+     ejemplos: ["¿puedo revisar las cosas desde el celular?", "quiero que me llegue un resumen cada mañana", "pausa las tareas de la nube"]}
   - {id: actualizar-nucleo, para: "Traer la versión nueva del harness sin tocar los proyectos ni los datos de la empresa", arquetipos: [],
      ejemplos: ["actualiza el harness", "llegó una versión nueva del núcleo, instálala"]}
   - {id: nuevo-proyecto, para: "Diseñar y crear un proyecto desde una descripción", arquetipos: [],
@@ -154,7 +158,7 @@ capacidad:
   media: [generar-reporte, minuta, metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra,
           actualizar-gantt, registrar-documento, versiones-documentos, matriz-cumplimiento, formulario-plataforma, status,
           riesgos-issues]
-  baja: [instalar, configurar-asistente, actualizar-nucleo, ayuda, guardar-cambios]
+  baja: [instalar, configurar-asistente, actualizar-nucleo, ayuda, guardar-cambios, configurar, nube]
 
 hooks:
   - {nombre: Estado al iniciar la sesión, que_hace: "Resume proyectos, traspasos pendientes, material nuevo en _entrada, altas en curso y cambios sin guardar (en Claude Code llega solo; otras IA lo ejecutan al empezar).",

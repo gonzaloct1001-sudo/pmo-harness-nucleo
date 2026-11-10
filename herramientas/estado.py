@@ -12,6 +12,7 @@ En Claude Code lo entrega el hook de inicio (herramientas/hooks/inicio_sesion.py
 ejecutan como paso 0 (ver AGENTS.md).
 """
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -178,6 +179,22 @@ def resumen(remoto=False):
         if sueltos:
             lineas.append(f"- Formatos propios sin adoptar en empresa/_entrada/: {len(sueltos)} archivo(s) ({', '.join(x.name for x in sueltos[:4])}"
                           + ("…" if len(sueltos) > 4 else "") + "): ofrece la skill `adoptar-formatos`.")
+
+    nube_yaml = RAIZ / ".harness" / "nube.yaml"
+    if nube_yaml.exists() and not mantenedor:
+        texto_nube = nube_yaml.read_text(encoding="utf-8", errors="replace")
+        if re.search(r"^habilitada:\s*true", texto_nube, re.M):
+            activas = re.findall(r"^\s*-\s*id:\s*([\w-]+)", texto_nube, re.M)
+            lineas.append(f"- Modo nube activo: {len(activas)} tarea(s) programada(s) ({', '.join(activas) or 'ninguna'}); "
+                          "la nube trabaja en ramas `nube/` y PRs: antes de editar un proyecto, mira la bandeja (`python herramientas/bandeja.py --listar`).")
+            if remoto and shutil.which("gh"):
+                try:
+                    r = subprocess.run([sys.executable, "herramientas/bandeja.py", "--listar", "--breve"], cwd=RAIZ, capture_output=True,
+                                       text=True, encoding="utf-8", errors="replace", timeout=25)
+                    if r.returncode == 0 and r.stdout.strip():
+                        lineas.append("- " + r.stdout.strip().splitlines()[0])
+                except (OSError, subprocess.TimeoutExpired):
+                    pass
 
     proyectos = sorted(p for p in (RAIZ / "proyectos").glob("*") if p.is_dir()) if (RAIZ / "proyectos").exists() else []
 

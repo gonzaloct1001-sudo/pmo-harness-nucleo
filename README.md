@@ -312,6 +312,18 @@ parte tuya no sabe llenar solo, y te propone una versión mejorada que puedes ac
 formato por defecto de todos tus proyectos (proyecto → empresa → harness); tus originales nunca se modifican y
 ninguna actualización del harness los toca. Los formatos de un cliente se adoptan igual, dentro de su proyecto.
 
+## Modo nube (opcional) y cambiar cosas después
+
+Con Claude Code puedes activar el **modo nube**: tareas programadas que corren en la nube sobre tu repositorio privado
+con el PC apagado (resumen de la mañana, trabajar la bandeja, status semanal, recordatorio de cierre) y una bandeja
+en GitHub para encargar, responder y aprobar desde el celular. Es opcional: nada se programa sin tu sí, tarea por
+tarea, y se pausa o se quita cuando quieras («¿puedo revisar las cosas desde el celular?»). Las reglas están en
+`NUBE.md`: la nube trabaja en ramas propias y PRs, nunca en `main`. Las otras IA operan solo en el PC.
+
+Todo lo que decidiste al instalar se cambia conversando («quiero cambiar…», «configura…»): empresa, marca, formatos,
+IA y modelos, umbrales, confidencialidad, modo nube, status semanal. Tus ajustes viven fuera del núcleo y ninguna
+actualización los toca; todo queda en el historial y se puede deshacer.
+
 ## Robustez: subagentes, hooks y pruebas
 
 **Subagentes** (`.claude/agents/`): asistentes con un rol acotado que Claude Code invoca solo cuando conviene (las
@@ -441,6 +453,15 @@ permisos se configuran en la propia herramienta: conviene un modo que pida confi
 la carpeta o borren archivos.
 
 ## Historial de versiones
+- **2.6** — Modo nube opcional (tareas programadas con el PC apagado y bandeja en GitHub, solo Claude, con el sí del
+  usuario tarea por tarea), instalación por opciones, skill `configurar` para cambiar cualquier cosa después, manual y
+  guía rápida para usuarios no técnicos.
+- **2.5** — Arquetipo finanzas: plan de cuentas mapeado, importación de la contabilidad, presupuesto, cierre mensual
+  reabrible con huella, resultados, balance, caja, forecast, proyección integrada e indicadores con semáforo.
+- **2.4** — Tus formatos primero: adopción de formatos y archivos base propios con análisis de qué falta y qué se
+  pierde, versión mejorada opcional y llenado de plantillas Word respetando su estructura.
+- **2.3** — Arquetipo investigación (protocolo auditable con validador que guía, corrige y aprende), capacidad según
+  la tarea (modelo por subagente) y menos contexto por sesión.
 - **2.2** — Status diario en el chat y al iniciar, reporte web con historial y agenda semanal, tablero único de varias
   empresas en su propio repositorio privado; formulario de la plataforma (límites, caracteres raros, hoja de carga);
   llenado de planillas oficiales sin pérdidas; barrido de requisitos selectivo (charlas y normativa aparte) y manejo de
@@ -462,4 +483,5 @@ la carpeta o borren archivos.
   reuniones, levantamiento de riesgos; arquetipo evaluación (pauta y propuestas); evaluación económica en Excel.
 - **1.2** — Núcleo genérico con arquetipos ejecución, cartera y estudio; métricas y reglas; reportes propios por proyecto.
 - **1.1** — Instalación guiada y alta documental.
-- **Próximo** — Arquetipo *operación continua*.
+- **Próximo** — Cartuchos de dominio para investigaciones (mercado, proveedores, normativa, tecnología), perfil del
+  consultor para varias carpetas, arquetipo *operación continua*.

@@ -19,7 +19,9 @@ description: Guarda el trabajo del día en Git y lo sube a GitHub de forma segur
 6. `git commit`. El control de Git (`.githooks/pre-commit`) revisa confidenciales y planillas: si detiene el commit,
    corrige lo que indica y vuelve a intentar. **Nunca uses `--no-verify`.** Si el estado avisó que el control está
    inactivo, actívalo antes con `git config core.hooksPath .githooks`.
-7. `git pull --rebase` y luego `git push`.
+7. `git pull --rebase` y luego `git push`. Si el modo nube está activo (`.harness/nube.yaml`), antes revisa
+   `python herramientas/bandeja.py --listar`: un PR de la nube sobre el mismo proyecto se integra o se revisa primero,
+   para no pisar su trabajo ni que él pise el tuyo.
 8. Si hay conflicto: no lo resuelvas a ciegas. Explica en simple qué archivo chocó y por qué (normalmente,
    cambios hechos en otro computador sin sincronizar). Para CSV y Markdown, propón la versión combinada y
    pide confirmación.

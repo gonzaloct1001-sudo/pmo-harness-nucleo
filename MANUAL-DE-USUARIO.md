@@ -1,255 +1,243 @@
-# PMO Harness 2.5: manual de usuario
+# PMO Harness 2.6: manual de usuario
 
-> Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa.
+> Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
+> en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
 
-## 1. Qué es
-Un asistente de gestión de proyectos que trabaja **conversando**, con la IA que prefieras (Google Antigravity, Claude
-Code, OpenAI Codex, Gemini, Cursor o GitHub Copilot). Tú le cuentas lo que pasa y él mantiene ordenado el proyecto
-(cronograma, riesgos, acuerdos, presupuesto, contratos, requisitos de unas bases), detecta problemas y prepara informes
-y presentaciones con la marca y los formatos de tu empresa.
+## 1. Qué es el harness
+El harness es una carpeta en tu computador donde una IA lleva tus proyectos como lo haría un buen PMO: ordena los
+documentos, mide el avance, avisa lo que vence, prepara reportes y minutas, y respalda todo en un repositorio privado
+tuyo. Tú conversas; él organiza.
 
-- Todo queda en archivos en tu computador y en un repositorio **privado** de GitHub, **uno por empresa**.
-- Los documentos que entrega (Word, Excel, PowerPoint) salen **a tu nombre**.
-- **Nunca inventa datos.** Lo que falta queda marcado como pendiente y te lo dice.
-- **Las decisiones son tuyas.** Él organiza, mide, alerta y propone.
+Sirve para proyectos de ejecución y obras, equipos de software, carteras de ítems, postulaciones a fondos y
+licitaciones, evaluación de propuestas, estudios, investigaciones con rigor y las finanzas de una empresa. Funciona con
+Claude Code y con otros asistentes de IA, en Windows y Mac. No necesitas saber programar.
 
-## 2. Lo que necesitas (una sola vez)
-1. **Una herramienta de IA que trabaje con carpetas:** Google Antigravity, VS Code con una extensión de IA (Claude Code,
-   Codex, Gemini Code Assist o GitHub Copilot), Claude Code o Cursor. Un chat en el navegador no sirve.
-2. **Una cuenta de GitHub** gratuita (personal; no hace falta plan de pago ni organización). Si no la tienes, la
-   creas al conectarla durante la instalación.
-3. **El harness**, descargado desde su página pública: botón **Code → Download ZIP**. **No uses «Fork»**: crearía
-   una copia pública.
-4. **Python y Git no tienes que instalarlos a mano:** los instala el instalador de doble clic (o el asistente).
+Lo que no hace: no decide por ti (te presenta los números y las opciones), no reemplaza al contador ni al abogado, y
+nunca inventa un dato. Si algo falta, te lo pregunta.
 
-## 3. Instalación
-Paso a paso en la guía de inicio. En resumen:
-1. Descomprime el zip, cambia el nombre de la carpeta por el de tu empresa y déjala en `Documentos`.
-2. **Opcional:** completa `FICHA-DE-INICIO.md`. Así la instalación casi no te hace preguntas.
-3. **Doble clic en el instalador** (`INSTALAR-WINDOWS.bat` o `INSTALAR-MAC.command`, en la carpeta). Instala Python,
-   Git y GitHub CLI (en Windows, solo para tu usuario: sin permisos de administrador), te ayuda a crear tu cuenta de
-   GitHub si no la tienes, y conecta
-   tu cuenta de GitHub: se abre el navegador con el código ya copiado; lo pegas, **Continue** y **Authorize**. No hace
-   preguntas técnicas y nunca se queda detenido: si no respondes, sigue solo.
-4. En tu herramienta de IA: **Archivo → Abrir carpeta** → tu carpeta. Abre el chat y escribe **«hola»**.
-5. El asistente revisa que todo esté listo (si te saltaste el paso 3, lo instala desde el chat con tu permiso) y crea
-   tu **repositorio privado** en GitHub.
-6. Te pregunta lo de la sección 4 y crea tu primer proyecto. Al final te muestra la **guía de tu proyecto** (`GUIA.md`).
+## 2. Cómo se trabaja
+Abres la carpeta en tu herramienta de IA y escribes «hola»: el asistente te dice en pocas líneas cómo van tus
+proyectos, qué vence y qué decisiones te esperan. Desde ahí, pides las cosas con tus palabras: «prepara el informe de
+esta semana», «estas son mis notas de la reunión». No hay comandos que memorizar.
 
-## 4. Lo que te va a preguntar (y conviene tener a mano)
-| Tema | Pregunta |
+| El asistente hace solo | El asistente te pregunta |
 |---|---|
-| Tú | Nombre, cargo y correo (los documentos salen a tu nombre) |
-| La empresa | De qué empresa es esta carpeta (cada empresa tiene su carpeta y su repositorio) |
-| El proyecto | De qué se trata, nombre, cliente o mandante, fechas y monto |
-| Tipo | ¿Una **postulación** a un fondo o licitación, la **ejecución** de un proyecto, un **programa** con varios subproyectos, evaluar propuestas de otros, un **estudio** o evaluación económica? Si no sabes, descríbelo y él propone |
-| Punto de partida | (a) parte de cero · (b) en marcha **con** documentos · (c) en marcha, pero **casi todo lo sabes tú** |
-| Si está en marcha | Hitos cumplidos y próximos, avance, problemas, riesgos, compromisos vigentes (máximo 8 preguntas, en un solo mensaje) |
-| Gobierno | Quién es el sponsor o el directorio, quién aprueba cambios, si hay comité |
-| Reportes | Qué informes entregas hoy (por ejemplo, el de avance), a quién, cada cuánto y con qué plantilla |
-| Postulación | Convocatoria, cierre, quién postula y firma, monto y aporte propio |
+| Leer y ordenar tus documentos | Decisiones: quién aprueba, qué formato, si se cierra el mes |
+| Calcular avance, métricas e indicadores | Datos que no están en ningún documento |
+| Redactar borradores de informes, minutas y cartas | Confirmación antes de cambiar un registro (riesgos, cronograma, presupuesto) |
+| Validar archivos y respaldar en GitHub | Qué hacer cuando dos fuentes se contradicen |
 
-Puedes contestar como quieras: viñetas, texto pegado de un correo o «no sé» (queda pendiente).
+Si un dato falta, queda marcado como pendiente y te lo pide al final; nunca lo completa por su cuenta. Puedes cambiar
+de asistente de IA cuando quieras: el nuevo retoma desde el traspaso que deja cada proyecto.
 
-## 5. Si ya tienes documentos (el «alta»)
-1. Déjalos en `proyectos/<tu-proyecto>/_entrada/`, **sin ordenar ni renombrar**:
-   - bases, anexos, formularios y aclaraciones de una postulación → `00-bases-y-aclaraciones`;
-   - contratos y enmiendas → `01-contratos-y-anexos`; cronograma → `03-cronogramas` (MS Project: Guardar como **XML**);
-   - informes anteriores y plantillas → `04-reportes-y-plantillas`; actas → `05-actas-y-minutas`; lo demás → `09-otros`.
-2. Escribe **listo**.
-3. El asistente lee todo, configura el proyecto, deja un **registro de cada decisión con su fuente** y te hace **un solo
-   mensaje de preguntas** (máximo 12, cada una con una propuesta).
-4. Revisa `contexto/informe-de-alta.md`: qué entendió, qué quedó pendiente y qué conviene hacer.
+## 3. Lo que necesitas y cuánto cuesta usarlo
+Instalarlo toma unos 15 minutos; el primer proyecto, 10 más; después, minutos al día.
 
-**Qué se guarda en GitHub:** los archivos originales que dejas en `_entrada/` no se suben. Del texto de bases,
-aclaraciones, lineamientos, contratos, actas e informes queda una **copia fiel** en `fuentes/`, dentro de tu repositorio
-privado, para trabajar desde otro computador sin los originales. De CVs, estados financieros y datos personales solo
-queda una ficha.
+| Qué | Para qué | Costo |
+|---|---|---|
+| Una herramienta de IA que trabaje con carpetas (Claude Code en VS Code, o Codex, Gemini, Cursor, Copilot, Antigravity) | Es quien conversa contigo y hace el trabajo | La cuenta de cada proveedor; un plan básico alcanza para el uso diario |
+| Una cuenta de GitHub | Respaldo privado de tu trabajo y acceso desde otro computador | Gratuita |
+| Python, Git y GitHub CLI | Los usa el asistente por dentro | Gratuitos; los instala el instalador de doble clic |
+| LibreOffice (opcional) | Convertir a PDF y revisar documentos | Gratuito |
 
-- **Documentos escaneados** (un PDF que es solo imagen): el asistente te avisa cuáles son. Pásalos por OCR (por
-  ejemplo, abrirlos con Word o Google Drive y guardarlos como Word) y deja esa versión en una subcarpeta `ocr/` junto al
-  original: se usa la que tenga texto.
-- **Charlas, leyes y reglamentos** también se guardan, pero no se mezclan con los requisitos: lo que se dijo en una charla
-  no obliga hasta que una aclaración oficial lo confirme, y te lo marca así.
+El harness está hecho para gastar poco: lee solo lo que la tarea necesita, usa modelos rápidos para lo mecánico y los
+más capaces solo para juzgar, y resume con sus propias herramientas en vez de leer planillas enteras. Lo que más
+consume es cargar muchos documentos de una vez (el alta): se hace una sola vez por proyecto.
 
-Si después llegan más documentos, déjalos en `_entrada/`: en la siguiente sesión te ofrece procesarlos.
+## 4. Tu empresa y tus proyectos
+Una carpeta es una empresa, con su propio repositorio privado; dentro caben todos sus proyectos. Si llevas varias
+empresas (por ejemplo, como consultor), cada una tiene su carpeta y nada se cruza entre ellas; un tablero único te
+muestra todas juntas.
 
-## 6. Uso diario: pídelo con tus palabras
-| Quieres… | Dile, por ejemplo |
+El asistente elige el tipo de proyecto según lo que le cuentes, y puede combinar varios.
+
+| Tipo | Para qué sirve | Cómo pedirlo |
+|---|---|---|
+| Ejecución | Un plan con tareas, hitos y contrato: avance, plazo, costo | «llevo la implementación del sistema para el cliente X» |
+| Obra | Trabajo en terreno: consultas técnicas, inspecciones, estados de pago | «estoy construyendo una bodega» |
+| Ágil | Un equipo que entrega por sprints | «lidero un equipo de desarrollo» |
+| Cartera | Muchos ítems parecidos con etapas y métricas | «quiero llevar mi portafolio de acciones» |
+| Evaluación | Evaluar propuestas de terceros con una pauta | «evalúo postulaciones a un fondo» |
+| Postulación | Ganar un fondo, licitación o concurso | «quiero postular al fondo X» |
+| Programa | Un contrato con varios subproyectos | «un programa con tres frentes» |
+| Estudio | Una recomendación con modelo económico | «necesito una prefactibilidad» |
+| Investigación | Hechos del mundo verificados con fuente | «investiga a quién ofrecer la licencia» |
+| Finanzas | Llevar el área de finanzas de una empresa | «quiero llevar las finanzas de la empresa» |
+
+## 5. Tus formatos primero
+No te adaptas al harness: él se adapta a ti. Deja tus informes, minutas, presentaciones, cartas, planillas, plan de
+cuentas y logo en la carpeta `empresa/_entrada/` y di «adopta mis formatos».
+
+Por cada archivo te dirá qué es, qué sección le falta respecto de lo que el harness sabe llenar y qué se pierde si lo
+adoptas tal cual (por ejemplo, «sin sección de riesgos, los riesgos no se reportan en este documento»), qué parte tuya
+no sabe llenar solo, y te propondrá una versión mejorada que puedes aceptar o no. Decides archivo por archivo.
+
+Lo adoptado pasa a ser el formato por defecto: si un proyecto tiene el suyo, manda el del proyecto; si no, el de la
+empresa; si no, el del harness. Tus originales nunca se modifican y ninguna actualización los toca. Los formatos de un
+cliente se adoptan igual, dentro de su proyecto.
+
+## 6. Día a día: lo que más vas a pedir
+Basta con describir lo que quieres; estas frases son ejemplos.
+
+| Quieres | Dilo así |
 |---|---|
-| Saber cómo van tus proyectos | «¿cómo vamos?», «¿qué vence esta semana?» (también te lo muestra al abrir cada día) |
-| El reporte de status | «dame el reporte de status» (página web; si quieres, te la deja lista cada semana el día y la hora que elijas) |
-| Preparar una reunión de avance | «tengo reunión de avance el jueves, ¿qué llevo?» |
-| Una minuta | pega tus notas: «estas son las notas de la reunión de hoy» |
-| El informe de avance | «genera el informe de avance de octubre» |
-| Un informe con tu formato | deja tu Word, Excel o PowerPoint y dile «esta es la plantilla del informe de avance» |
-| Revisar lineamientos del directorio | «llegaron los nuevos lineamientos del directorio, ¿qué cambia para el proyecto?» |
-| Una evaluación financiera | «arma el flujo de caja con estos supuestos», «¿qué pasa si las ventas caen 20%?» |
-| Actualizar el avance | «la configuración va en 70%», «terminamos el levantamiento el lunes» |
-| Registrar un riesgo o problema | «el proveedor se va a atrasar dos semanas» |
-| Revisar todo | «¿cuadra todo?», «¿qué está atrasado o vencido?» |
-| Recordar un compromiso | «el reporte semestral SSM vence el 30 de julio» (aparece en el status hasta que lo cierres) |
-| Llenar una planilla oficial | «llena el Excel de indicadores con estos datos» (no rompe listas desplegables, fórmulas ni formas) |
-| Un contrato o enmienda | «llegó la enmienda 2» |
-| Ver qué puedes hacer | «¿qué puedo hacer?» |
-| Guardar | «guarda» (sube los cambios a GitHub de forma segura) |
+| Saber cómo van las cosas | «¿cómo vamos?» · «dame el reporte de status» |
+| Convertir notas en una minuta con acuerdos | «estas son mis notas de la reunión de hoy» |
+| Sacar el informe del período | «prepara el informe de esta semana» · «arma la presentación para el comité» |
+| Registrar un riesgo o un problema | «el proveedor se va a atrasar» · «registra este problema» |
+| Prepararte para una reunión | «tengo comité el jueves, ¿qué llevo?» |
+| Entender un correo o documento recibido | «mira este correo del cliente, ¿qué implica?» |
+| Comparar versiones | «¿qué cambió en la nueva versión de las bases?» |
+| Incorporar un contrato o enmienda | «llegó la enmienda 2» |
+| Ver todo lo disponible | «¿qué puedo hacer?» |
+| Respaldar el trabajo | «guarda» · «terminé por hoy» |
 
-## 7. Tus formatos, primero
-Si ya tienes tus propios informes, minutas, presentaciones, cartas o planillas, no te adaptas al harness: él se adapta a
-ti. Deja los archivos en `empresa/_entrada/` (esa carpeta no se sube a Git) y di **«adopta mis formatos»**. El
-asistente te dice, por cada archivo:
-- qué es (informe de avance, minuta, presentación, carta, planilla de control o un archivo base como el plan de cuentas);
-- **qué sección le falta** respecto de lo que el harness sabe llenar y **qué se pierde** si lo adoptas tal cual (por
-  ejemplo, «sin sección de riesgos, los riesgos no se reportan en este documento»);
-- qué parte tuya el harness no sabe llenar solo (te la pedirá cada vez, o se conecta a un dato);
-- una **versión mejorada** (copia aparte, con las secciones que faltan) que puedes abrir en Word y aceptar o no;
-- la marca que trae (logo, fuente, color), por si quieres que todo salga así.
+Al terminar cada tarea, el asistente deja un traspaso en el proyecto: así tú, otro computador u otra IA retoman sin
+repetir nada.
 
-Tú decides archivo por archivo: tal cual o mejorado. Lo adoptado es desde entonces el formato por defecto de todos tus
-proyectos (si un proyecto tiene el suyo, manda el del proyecto; si la empresa no tiene uno, se usa el del harness). Tus
-originales nunca se modifican y ninguna actualización del harness los toca. Los formatos de un cliente se adoptan
-igual, dentro de su proyecto.
+## 7. Postulaciones a fondos y licitaciones
+Deja las bases, anexos y aclaraciones en la carpeta de entrada del proyecto y di «prepara la postulación». El harness
+barre todas las bases y arma la lista completa de requisitos (incluidos los escondidos en anexos), te ayuda a decidir
+si conviene postular, reconstruye cómo evaluará el comité, redacta la propuesta por secciones, arma el presupuesto con
+controles contra las bases y somete todo a un red team de revisores antes de entregar.
+
+Si se postula en una plataforma web, reconstruye el formulario, controla el límite de caracteres de cada campo y te
+entrega una hoja para copiar y pegar. Los CV, certificados y la descripción de la empresa se guardan una vez y sirven
+para todas las postulaciones; te avisa si un certificado estará vencido al cierre. Si las bases exigen declarar el uso
+de IA, te lo dice: esa declaración la decides y la firmas tú.
 
 ## 8. Finanzas: llevar el área como un controller
-Si eres gerente de finanzas, controller o el consultor a cargo de las finanzas de una empresa, di **«quiero llevar las
-finanzas de la empresa»**. El harness arma el proyecto y te acompaña en el ciclo completo:
+Di «quiero llevar las finanzas de la empresa» y el harness arma el ciclo completo:
 1. **Arranque:** tu plan de cuentas se mapea a las líneas del reporte (ingresos, costo, margen, gastos, EBITDA, caja,
    cuentas por cobrar…) y se carga el histórico desde la contabilidad.
-2. **Presupuesto anual:** supuestos con fuente, montos por línea y mes, escenarios, y una versión aprobada por quien
+2. **Presupuesto anual:** supuestos con fuente, montos por línea y mes, escenarios y una versión aprobada por quien
    corresponda.
-3. **Cierre mensual:** exportas el balance de comprobación del sistema contable a `_entrada/10-contabilidad/` y dices
-   **«cierra octubre»**: se importa, se cuadra, te pregunta a qué línea van las cuentas nuevas, te explica los desvíos
-   contra el presupuesto, calcula los indicadores, emite el informe y cierra el mes. Si llega algo tarde, **«reabre
-   octubre»** con el motivo, se corrige y se vuelve a cerrar; todo queda anotado.
+3. **Cierre mensual:** exportas el balance de comprobación del sistema contable y dices «cierra octubre». Se importa,
+   se cuadra, te pregunta a qué línea van las cuentas nuevas, te explica los desvíos contra el presupuesto, calcula los
+   indicadores, emite el informe y cierra el mes. Si llega algo tarde, «reabre octubre» con el motivo, se corrige y se
+   vuelve a cerrar; todo queda anotado.
 4. **Forecast y proyección:** cómo cierra el año con lo que va, y una proyección a tres años (resultados, balance y
    caja) desde supuestos que puedes cambiar en un Excel con fórmulas.
-5. **Directorio:** informe mensual y presentación con tus formatos (sección 7).
+5. **Directorio:** informe mensual y presentación con tus formatos.
 
-Lo que no hace: no lleva la contabilidad formal, no declara impuestos ni paga; eso sigue en tu sistema contable, en el
-contador y en tesorería. El harness consume lo que ellos producen y nunca inventa una cifra: si falta un dato, lo pide.
-La referencia por país (impuestos, calendario) está en `biblioteca/finanzas/paises/` y siempre se confirma con el
-contador.
+Lo que no hace: no lleva la contabilidad formal, no declara impuestos ni paga. Eso sigue en tu sistema contable, en el
+contador y en tesorería; el harness consume lo que ellos producen y nunca inventa una cifra. La referencia por país
+(impuestos, calendario) siempre se confirma con el contador.
 
-## 9. Postulaciones a fondos y licitaciones
-Deja las bases, anexos y aclaraciones en `_entrada/00-bases-y-aclaraciones/` y di «prepara la postulación». El harness:
-1. revisa todas las bases y arma la lista de requisitos, incluidos los escondidos en anexos y aclaraciones;
-2. te ayuda a decidir si conviene postular;
-3. reconstruye cómo evaluará el comité y arma la propuesta por secciones;
-4. hace el presupuesto con controles contra las bases (topes, cofinanciamiento, aportes);
-5. somete la propuesta a un **red team** (revisores con miradas distintas) y revisa todo antes de entregar;
-6. si se postula en una plataforma web (por ejemplo, Fondos.gob.cl o la de CORFO), reconstruye el **formulario** desde
-   su versión impresa o el Word de preguntas, controla el **límite de caracteres** de cada campo y los caracteres que la
-   plataforma podría rechazar, y te entrega una **hoja de carga**: una página con cada respuesta y un botón «Copiar»
-   para pegarla en la plataforma, campo por campo.
-
-Los CVs, certificados y la descripción de la empresa se guardan una vez en el **banco de antecedentes** de la empresa
-y sirven para todas sus postulaciones; te avisa si un certificado estará vencido al cierre.
-Si las bases exigen declarar el uso de IA, te lo avisa: esa declaración la decides y la haces tú.
-
-## 10. Investigaciones: hechos verificados con fuente
+## 9. Investigaciones con rigor
 Cuando lo que necesitas saber depende de hechos de afuera (a quién ofrecer una licencia, qué socios o proveedores
-califican, el estado del arte, patentes, normativa, si algo que te dijeron es cierto), di con tus palabras
-**«investiga…»**. El harness abre una **investigación auditable**: cualquier persona, solo con el informe y su
-expediente, puede ver de dónde salió cada afirmación y dónde se rompería.
-
-Cómo se trabaja:
-1. **Tú confirmas la pregunta** antes de que se busque nada (firma P0): qué decidirás con el resultado.
-2. **Primero se intenta matar la idea** con las «hipótesis asesinas»: lo que tendría que ser cierto para que valga
-   la pena seguir. Si alguna se cumple, se reencuadra o se cierra; es el momento más barato para detenerse. Tú
-   confirmas que ninguna disparó (firma P2).
-3. Se arma el **expediente**: cada hecho con su fuente, su fecha y una marca (H hecho verificado, D derivado, T lo que
-   alguien afirma, P pista, V vacío). Lo que dice la propia parte interesada nunca pasa como hecho.
-4. Un **refutador** que no vio el razonamiento intenta tumbar cada conclusión, y un **árbitro** aplica las reglas y
-   ocho pruebas. Lo tumbado se retira. Tú firmas antes del informe final (P5).
+califican, el estado del arte, patentes, normativa, si algo que te dijeron es cierto), di «investiga…». El harness abre
+una investigación auditable: cualquiera, con solo el informe y su expediente, puede ver de dónde salió cada afirmación
+y dónde se rompería.
+1. **Tú confirmas la pregunta** antes de que se busque nada: qué decidirás con el resultado.
+2. **Primero se intenta matar la idea** con las hipótesis asesinas: lo que tendría que ser cierto para que valga la
+   pena seguir. Si alguna dispara, se reencuadra o se cierra; es el momento más barato para detenerse.
+3. Se arma el **expediente**: cada hecho con su fuente, su fecha y una marca (hecho verificado, derivado, testimonio,
+   pista, vacío). Lo que dice la propia parte interesada nunca pasa como hecho.
+4. Un **refutador** que no vio el razonamiento intenta tumbar cada conclusión y un **árbitro** aplica las reglas y ocho
+   pruebas. Lo tumbado se retira.
 5. El **informe** empieza por la respuesta, dice qué no se sabe y qué la haría cambiar.
 
-No necesitas saber el protocolo: pregunta **«¿cuál es el siguiente paso de la investigación?»** y responde con la
-frase que te propone el asistente (por ejemplo, «firmo P2»). Puede ir **dentro de otro proyecto** (por ejemplo, para
-sostener la sección de mercado de una postulación), como **proyecto propio** o en **otra carpeta** si es de otro
-cliente. Lo que corriges y prefieres («busca también en portugués», «parte en estándar») queda guardado para las
-próximas investigaciones de tu empresa, y una actualización del harness no lo borra.
+No necesitas saber el protocolo: pregunta «¿cuál es el siguiente paso de la investigación?» y responde con la frase que
+te propone el asistente (por ejemplo, «firmo P2»). Las firmas son siempre tuyas. Sirve para investigación documental en
+cualquier área; la investigación experimental (encuestas, mediciones, estadística) no está cubierta.
 
-## 11. Varios proyectos y programas
-Cada vez que digas **«nuevo proyecto»**, el asistente pregunta dónde va:
-- **Independiente:** su propio contrato, presupuesto, Gantt, minutas, formatos y objetivos.
-- **Programa:** un contrato general con varios **subproyectos**, cada uno con su Gantt, objetivos, riesgos, minutas y
-  reportes; el programa lleva el presupuesto macro y por subproyecto, la contingencia, las personas compartidas, el
-  Gantt macro y los reportes generales.
-- **Subproyecto de un programa existente:** hereda la marca, los formatos y las plantillas del programa.
+## 10. Modo nube (opcional): operar desde el celular
+El modo nube permite que el asistente trabaje con tu computador apagado: tareas programadas que corren en la nube de
+Claude sobre tu repositorio privado, y una bandeja en GitHub donde dejas pedidos y respondes preguntas desde el
+teléfono. Es opcional y solo funciona con Claude Code; si prefieres operar desde el PC, no activas nada y todo sigue
+igual.
 
-## 12. Varias empresas, otro computador y otra IA
-- **Una carpeta por empresa.** Cada empresa tiene su carpeta y su repositorio privado, con su marca, sus formatos y su
-  banco de antecedentes. Para otra empresa: «crea la carpeta para la empresa X». Los datos de dos empresas nunca se mezclan.
-- **Otro computador:** descarga el zip y haz doble clic en el instalador. Después de conectar GitHub te ofrece
-  descargar tus empresas a `Documentos/PMO-Empresas/` (también puedes pedirle al asistente «es otro computador, trae
-  mis empresas»). Abre la de la empresa, no la del zip, y escribe «hola». Al cambiar de computador: «guarda» al
-  terminar en uno y «hola» al empezar en el otro, que te ofrece traer lo último.
-- **No pongas la carpeta del harness en Dropbox, OneDrive ni Google Drive:** sincronizan por su cuenta y pueden dañar
-  el historial al usar dos computadores. Tus documentos originales sí pueden seguir ahí.
-- **Otra IA, o cambiar a mitad de camino:** abre la carpeta con la otra IA y escribe «hola» o «¿en qué íbamos?». La
-  primera vez se configura sola. Cada proyecto guarda un **traspaso** (qué se hizo, en qué quedó, el próximo paso), así
-  que la nueva IA retoma sin que repitas nada. Antes de cambiar, di «guarda».
-- **Ver todas tus empresas juntas (tablero único):** cada empresa tiene su propio status en su carpeta. Si además quieres
-  una sola vista de todas, pide «quiero un tablero único». Antes te pregunta si son empresas independientes o de una misma
-  entidad, y si prefieres un tablero por empresa o uno general. El tablero general queda en **una carpeta y un
-  repositorio privado aparte, solo tuyo**: lee el status de cada empresa sin copiar sus datos ni mezclarlos.
+Nada se programa sin tu sí, tarea por tarea. Eliges cuáles quieres y puedes pausarlas o quitarlas cuando quieras:
 
-## 13. Privacidad: tu repositorio y el del harness
-- El **harness** se publica en un repositorio público de **solo lectura**: cualquiera lo descarga, pero nadie puede
-  modificarlo, salvo su autor.
-- **Tus datos van solo a tus repositorios privados**, uno por empresa. Nunca llegan al repositorio del harness, y su
-  autor no los ve.
-- **Versiones nuevas del harness:** nada cambia en tu carpeta hasta que tú digas «actualiza el harness». Antes te
-  muestra qué cambia; respalda, prueba y, si algo falla, deja todo como estaba. Tus proyectos, documentos e informes no
-  se tocan.
-- **No uses «Fork»** para obtener el harness: crearía una copia pública.
-- **Tablero único:** si llevas varias empresas y quieres verlas juntas, el tablero va en su propio repositorio
-  privado, independiente de los de cada empresa. Así nadie con acceso a una empresa ve las demás.
-- La IA que usas procesa el contenido de tus documentos según las condiciones de su proveedor. Confirma que tus
-  clientes lo permiten (la ficha de inicio lo pregunta).
+| Tarea | Qué hace | Cuándo (lo decides tú) |
+|---|---|---|
+| Resumen de la mañana | Cómo van tus proyectos, lo que vence, decisiones pendientes y la bandeja; te avisa al teléfono | Lunes a viernes, 08:00 |
+| Trabajar la bandeja | Toma el siguiente pedido que dejaste y lo trabaja; el resultado llega como propuesta para que apruebes | Cada 4 horas en días hábiles |
+| Status semanal | El reporte de status de todos los proyectos | Lunes, 09:00 |
+| Recordatorio de cierre | En finanzas, qué meses siguen sin cerrar | Día 10 de cada mes |
 
-## 14. Controles automáticos
-- **No sube a GitHub** documentos confidenciales: la carpeta `_entrada`, originales de contratos, CVs, paquetes firmados.
-  El control está en Git y funciona con cualquier IA.
-- **Revisa cada planilla** antes de guardarla (columnas y fechas).
-- **Al abrir** te dice qué hay pendiente: el status de tus proyectos (semáforo, lo que vence pronto, decisiones que
-  esperan), traspasos, documentos nuevos, altas a medio camino y cambios sin guardar.
-- **Planillas oficiales** (por ejemplo, el Excel de indicadores de CORFO): se llenan sin tocar sus listas desplegables,
-  fórmulas, formas ni hojas protegidas, y se verifica que todo lo demás quede idéntico.
-- **Antes de entregar un documento** revisa que salga a tu nombre y sin rastros del proceso.
+Desde el celular: encargas algo creando un pedido en la app de GitHub, respondes una pregunta comentando en ella,
+apruebas un resultado con «sí, intégralo» y ves cómo va todo en el resumen de la mañana. La nube nunca escribe directo
+sobre tu trabajo: todo llega como propuesta que tú integras. Lo que dejas en las carpetas de entrada no sale de tu PC:
+la carga de documentos sigue siendo trabajo del computador.
 
-Si un control bloquea algo, el asistente te explica por qué y cómo seguir.
+Para empezar, di «¿puedo revisar las cosas desde el celular?»: el asistente te explica, revisa lo que hace falta (la
+app de Claude en tu repositorio) y te pregunta tarea por tarea. Usa las sesiones en la nube de tu plan de Claude. Las
+reglas que cumple la nube están en `NUBE.md`.
 
-## 15. Preguntas frecuentes
-- **¿Tengo que saber los nombres de los comandos?** No. Describe lo que necesitas.
-- **¿Cuánto cuesta?** El harness es gratuito (licencia MIT) y GitHub también. La herramienta de IA tiene sus propios planes.
-- **¿Puedo usar Gemini, Codex, Antigravity u otra IA?** Sí, siempre que trabaje sobre la carpeta. Puedes cambiar cuando
-  quieras: la nueva retoma desde el traspaso.
-- **¿Puedo usar MS Project?** Sí: guarda el cronograma como XML y di «importa el cronograma de MS Project». Primero ves
-  una vista previa; nada se reemplaza sin tu confirmación.
-- **¿Qué pasa si no sé un dato?** Queda como pendiente y aparece en el informe; no se inventa.
-- **¿Dónde quedan mis informes?** En `reportes/emitidos/` de cada proyecto. El reporte de status, en `status/` de la
-  carpeta de la empresa (o en la carpeta del tablero único).
-- **¿El reporte semanal se envía solo?** Se prepara solo, en tu computador, el día y la hora que elijas, y se abre en tu
-  navegador. No se envía a nadie. Para cambiarlo o quitarlo: «cambia el día del reporte semanal», «quita el reporte semanal».
-- **¿Puedo ver todas mis empresas en una sola vista?** Sí, con el tablero único (sección 12).
-- **¿Necesito los documentos originales en otro computador?** Casi nunca: las bases y los documentos de definición
-  están replicados en `fuentes/`. Los originales hacen falta para firmar o presentar, o ante una duda legal.
-- **¿Cómo pruebo sin datos reales?** Pídele «prueba con el paquete de postulación de ejemplo».
+## 11. Cambiar algo después
+Todo lo que decidiste al instalar se cambia conversando: di «quiero cambiar…», «configura…» o «de ahora en
+adelante…». El asistente te dice qué va a cambiar y qué efecto tiene, pide tu sí y lo aplica.
 
-## 16. Si algo falla
-- **La IA no reconoce el harness:** escríbele «lee el archivo AGENTS.md y sigue sus instrucciones».
-- **«python no se reconoce»:** pide «instala lo que falte». Si recién se instaló, cierra y vuelve a abrir tu herramienta.
-- **En el chat, algo se queda detenido** (por ejemplo, pregunta «[Y] Sí [N] No» en un panel donde no puedes
-  escribir): dile «cancela esa tarea» y haz doble clic en `INSTALAR-WINDOWS.bat` (o `INSTALAR-MAC.command`) desde la
-  carpeta. Después vuelve al chat y escribe «ya corrí el instalador».
-- **«Windows protegió su PC» al abrir el instalador:** **Más información** → **Ejecutar de todas formas**.
-- **Windows pide permiso pero no ves la ventana** (solo en instalaciones opcionales, como LibreOffice): busca en la
-  barra de tareas un ícono con escudo que parpadea.
-- **La conexión con GitHub no se completó:** pide «conecta mi cuenta de GitHub»; se abre de nuevo el navegador con el
-  código copiado.
-- **Un control bloqueó un envío a GitHub:** el asistente te dirá qué archivo era confidencial; déjalo fuera.
-- **«El nombre del archivo es demasiado largo» (Windows):** usa una carpeta más corta (por ejemplo,
-  `Documentos/Consultora-Sur`) o deja que el asistente active las rutas largas.
-- **Algo no cuadra en un informe:** «revisa este informe con ojo crítico» (hace una revisión independiente).
-- **¿Funciona todo bien?** Pide «verifica que el harness funcione» (ejecuta su batería de pruebas).
+| Qué puedes cambiar | Ejemplo |
+|---|---|
+| La empresa: nombre, responsable, a nombre de quién salen los documentos | «los informes salen a nombre de María Pérez» |
+| Marca y formato: logo, colores, fuente, tamaño de hoja, formato de fecha | «usa este logo nuevo en todo» |
+| Tus formatos propios | «adopta mi nueva plantilla de informe» |
+| El asistente de IA y qué modelo usa para cada tipo de tarea | «voy a usar Gemini en esta carpeta» |
+| Los umbrales de los semáforos | «el rojo de caja es con menos de un mes» |
+| Qué se replica y qué nunca se sube | «los contratos también quedan solo en el PC» |
+| El modo nube y sus tareas | «pausa el resumen de la mañana» · «ya no quiero la nube» |
+| El status semanal del computador | «el reporte los viernes a las 5» |
+| Un proyecto: nombre, cliente, comité, reportes | «el comité ahora es mensual» |
+| Una regla de cómo trabajar | «siempre pregunta antes de registrar un riesgo» |
+
+Nada de esto se pierde al actualizar el harness: tus ajustes viven en tu carpeta, fuera del núcleo. Y todo queda en el
+historial, así que se puede deshacer: «vuelve a dejar el logo anterior».
+
+## 12. Privacidad y seguridad
+Tu trabajo vive en tu computador y en un repositorio **privado** de tu cuenta de GitHub, que solo tú ves. El harness
+que descargas es público, pero al instalarlo se desconecta de él: nada tuyo va a parar allá.
+
+| Nunca se sube a GitHub | Sí se sube (a tu repositorio privado) |
+|---|---|
+| Lo que dejas en las carpetas de entrada (originales, PDF, exportaciones de la contabilidad) | Los datos del proyecto: registros, métricas, minutas, informes |
+| CV, certificados, estados financieros y datos personales (solo queda una ficha) | Copias fieles en texto de bases, contratos y actas, para trabajar desde otro computador |
+| El paquete firmado de una postulación | Tus formatos adoptados y tu configuración |
+| Claves y contraseñas | |
+
+Dos controles automáticos lo garantizan: uno impide guardar en Git un archivo confidencial, y otro revisa que las
+planillas estén bien formadas. Si uno bloquea algo, es a propósito: el asistente te explica qué hacer. Nunca mezcla
+datos de dos empresas. Si una norma o un contrato exige declarar el uso de IA, te lo avisa y la decisión es tuya.
+
+## 13. Varias empresas, otro computador, otra IA
+- **Otra empresa:** «crea la carpeta para la empresa X». Te preguntará si son empresas independientes o de una misma
+  entidad, y si quieres un tablero único para ver todas juntas (va en una carpeta y un repositorio privado aparte, solo
+  tuyo). Cada empresa queda en su carpeta y su repositorio; nada se cruza.
+- **Otro computador:** antes de dejar el primero, di «guarda». En el otro, instala tu herramienta de IA y haz doble
+  clic en el instalador: después de conectar GitHub te ofrece descargar tus empresas. Desde ahí, «guarda» al terminar
+  en uno y «hola» al empezar en el otro.
+- **Otra IA:** abre la carpeta con la nueva y escribe «hola». Se configura sola y retoma desde el traspaso de cada
+  proyecto.
+- **Versión nueva del harness:** «actualiza el harness». Se reemplaza solo el núcleo; tus proyectos, formatos, ajustes
+  y datos no se tocan, y si algo fallara, la actualización se deshace sola.
+
+## 14. Si algo falla
+| Pasa esto | Haz esto |
+|---|---|
+| La IA no reconoce el harness al decir «hola» | Escríbele: «lee el archivo AGENTS.md y sigue sus instrucciones» |
+| Algo se queda detenido en el chat o pregunta «[Y] Sí [N] No» | Di «cancela esa tarea» y haz doble clic en el instalador; al terminar, escribe «ya corrí el instalador» |
+| Un control no deja guardar un archivo | Es a propósito: ese archivo es confidencial. El asistente te dice qué hacer |
+| Dice que falta Python aunque se instaló | Cierra y vuelve a abrir tu herramienta de IA |
+| La conexión con GitHub no se completó | Di «conecta mi cuenta de GitHub» |
+| Un número del informe no te cuadra | Pregunta «¿de dónde sale esta cifra?»: todo tiene fuente en los datos del proyecto |
+| No sabes qué pedir | «¿qué puedo hacer?» |
+
+Si nada de esto resuelve el problema, pídele al asistente que ejecute el diagnóstico («revisa el entorno») y envía ese
+resultado a quien te entregó el harness.
+
+## 15. Glosario mínimo
+| Término | Qué es |
+|---|---|
+| Harness | La carpeta con las reglas, herramientas y procedimientos que guían a la IA |
+| Núcleo | La parte del harness que se actualiza desde el repositorio público; nunca lleva tus datos |
+| Empresa | La dueña de la carpeta; una carpeta = una empresa = un repositorio privado |
+| Proyecto | Cada cosa que llevas dentro de la empresa, con su tipo (arquetipo) |
+| Arquetipo | El tipo de proyecto: ejecución, obra, ágil, cartera, evaluación, postulación, programa, estudio, investigación, finanzas |
+| Skill | Un procedimiento que la IA sigue (preparar la postulación, cerrar el mes); se activa solo al pedirlo con tus palabras |
+| Entrada (`_entrada/`) | La carpeta donde dejas documentos tal cual; no se sube a GitHub |
+| Traspaso | La nota que deja la IA al terminar, para retomar después sin repetir |
+| Status | El resumen de cómo van todos los proyectos: semáforos, vencimientos, decisiones |
+| Repositorio privado | Tu copia de respaldo en GitHub, que solo tú ves |
+| Modo nube | Opción para que la IA trabaje tareas programadas con el computador apagado (solo con Claude) |

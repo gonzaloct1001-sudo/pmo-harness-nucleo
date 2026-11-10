@@ -119,14 +119,21 @@ resume en un mensaje lo que entendiste (quién eres, la empresa, el proyecto, su
 montos, gobierno, reportes), pide confirmación y pregunta **solo lo que falte**. Usa sus respuestas en todo lo que
 sigue: responsable y `autoria` en `empresa/empresa.yaml` y `proyecto.yaml`, diseño del proyecto, programa o
 postulación, y la entrevista de estado si está en marcha.
-Si la ficha está vacía o no existe, pregunta:
-1. **De qué se trata**, en sus palabras (ej.: "seguimiento de un programa de implementación para un cliente",
-   "un portafolio de acciones", "evaluar postulaciones a un fondo", "postular a un fondo CORFO").
-2. Nombre del proyecto y quién lo gestiona.
+Si la ficha está vacía o no existe, pregunta **con opciones** (letras o números), una o dos preguntas por mensaje,
+cada una con una opción recomendada; el usuario puede responder con la letra o con sus palabras:
+1. **Para quién es esta carpeta:** A) mi empresa · B) una empresa cliente (soy consultor o presto servicios) ·
+   C) uso personal. Y el nombre.
+2. **Qué va a llevar primero:** A) un proyecto o programa en ejecución · B) una postulación a un fondo o licitación ·
+   C) las finanzas de la empresa · D) una investigación · E) evaluar propuestas de terceros · F) un estudio ·
+   G) un equipo de software · H) una cartera de ítems · I) todavía no sé (se decide con `nuevo-proyecto`).
+   Pide además el nombre del proyecto y quién lo gestiona.
 3. **¿En qué punto está?** Ofrece las tres opciones tal cual:
    - **a) Parte de cero** (aún no empieza).
    - **b) Está en marcha y tengo documentos** (contratos, bases, cronogramas, reportes, actas, correos).
    - **c) Está en marcha, pero casi todo lo sé yo** (pocos o ningún documento).
+4. **Formatos propios:** A) sí, tengo informes, minutas, plantillas o logo (los dejo en `empresa/_entrada/` y después
+   digo «adopta mis formatos») · B) no, usa los del harness · C) después. Con A, al terminar la instalación ofrece
+   la skill `adoptar-formatos`.
 
 Luego, siempre, diseña y crea el proyecto con la skill `nuevo-proyecto` (elige arquetipo y propone métricas,
 etapas y reportes). Después, según la respuesta 3:
@@ -155,6 +162,16 @@ Haz commit: `git commit -am "Alta inicial de <slug>"` (y push si hay remoto).
 Sigue `configurar-asistente`: registra el asistente con el que se está trabajando en `.harness/asistentes.yaml` y hace
 su prueba de humo. Si el usuario dice que usará otra IA además (Codex, Gemini, Cursor, Copilot), explícale que la
 carpeta ya sirve para todas: al abrirla con la otra IA, esta se configura sola la primera vez.
+
+## Paso 4c — Opciones (una decisión por mensaje, con la respuesta exacta; todo se puede cambiar después)
+1. **Status semanal en este computador:** «¿Quieres que cada semana se genere solo el reporte de status? A) no ·
+   B) sí, los lunes a las 9:00 · C) otro día y hora.» Con B o C: `agendar_status.py --dia --hora`.
+2. **Modo nube (solo si el asistente es Claude Code):** «¿Quieres poder revisar y encargar cosas desde el celular con
+   el PC apagado? A) no por ahora (recomendado para empezar) · B) sí, explícame y elijo qué programar.» Con B, sigue
+   la skill `nube` (explica, requisitos y una decisión por tarea). Con A, no se activa nada y se le dice que puede
+   pedirlo después con «quiero operar desde el celular».
+3. Di en una línea que **todo esto se cambia conversando** («configura…», «quiero cambiar…»: skill `configurar`) y
+   que ninguna actualización del harness borra sus ajustes.
 
 ## Paso 5 — Instrucciones de carga
 Muestra al usuario, de forma breve y clara:

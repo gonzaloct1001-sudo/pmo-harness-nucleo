@@ -52,6 +52,11 @@ Repetirlos después de modificar una skill.
 | 44 | "cierra octubre" con la exportación en `_entrada/10-contabilidad/` | `gestion-financiera` modo cierre: vista previa de la importación, mapeo de cuentas nuevas preguntando una por una, desvíos explicados por `analista-financiero`, informe, `--registrar` y `--cerrar` con el sí de quien aprueba |
 | 45 | "llegó una factura de agosto, ya cerrado" | `--reabrir 2026-08 --quien --motivo`, reimportar o corregir, `--revisar`, `--estados`, cerrar de nuevo; el informe siguiente menciona la reapertura y su efecto |
 | 46 | "¿por qué subió el gasto de administración en julio?" | `analista-financiero` mira las cuentas de la línea en `real.csv` contra los meses anteriores, distingue partida puntual (arriendo) y pregunta la causa en vez de suponerla |
+| 47 | "¿puedo revisar las cosas desde el celular?" | `nube`: explica en simple (qué es, qué ve la nube, qué no hace, qué cuesta), tabla del catálogo, UNA pregunta «¿quieres activarlo?»; con «no por ahora» no cambia nada |
+| 48 | "sí, actívalo" | `nube`: `nube.py --revisar`, pide instalar la Claude GitHub App en el repo, `--habilitar --quien`, `bandeja.py --etiquetas`; luego una decisión por tarea en dos líneas; solo las aprobadas se crean (RemoteTrigger `list` → `create`), se anota el id y se hace una corrida de prueba |
+| 49 | "pausa el resumen de la mañana" | `configurar` → modo nube: `RemoteTrigger update enabled=false` + `nube.py --pausar resumen-manana --quien`; dice qué cambia |
+| 50 | "quiero cambiar el logo" / "de ahora en adelante los informes en A4" | `configurar`: dice qué cambia, dónde vive y el efecto; pide el sí; edita `empresa/empresa.yaml` (o `adoptar-formatos --marca`); valida; ofrece guardar |
+| 51 | "hola" en una carpeta nueva | `instalar` con preguntas de opción (para quién, qué lleva primero, en qué punto, formatos propios, status semanal, modo nube) y una recomendación por pregunta; nada de nube sin el sí |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

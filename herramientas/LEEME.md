@@ -50,4 +50,11 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
   → finanzas de gestión: importar la contabilidad, resultados/balance/caja con desvíos e indicadores, cierres con huella,
   forecast, proyección integrada; sin opciones dice dónde va y el siguiente paso.
 
+- `nube.py [--estado | --catalogo | --habilitar --quien N | --agregar <tarea> --quien N [--cron] [--zona] | --pausar|--reanudar|--quitar <tarea> --quien N |
+  --id-remoto-de <tarea> <id> | --instruccion <tarea> | --deshabilitar --quien N --motivo M | --revisar]` → registro del modo nube (`.harness/nube.yaml`):
+  qué aprobó el usuario, quién y cuándo; el texto de cada tarea programada. No crea nada en la nube.
+- `bandeja.py [--listar [--breve] | --nueva "texto" [--proyecto s] | --responder n "texto" | --pregunta n "texto" | --tomar n | --terminar n [--pr url] |
+  --integrar n | --resumen [--publicar] | --etiquetas] [--repositorio owner/repo]` → bandeja en GitHub por REST (`gh api`): pedidos,
+  preguntas, PRs de la nube y el resumen diario. `HARNESS_GH` permite usar un `gh` falso en pruebas.
+
 Dependencias: `pip install -r requirements.txt` (en Mac, dentro de `.venv`, que crea el instalador).

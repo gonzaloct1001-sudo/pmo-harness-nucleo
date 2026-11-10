@@ -1565,6 +1565,55 @@ def main():
         prueba("precommit --archivos: las exportaciones de la contabilidad son confidenciales", [H + "hooks/precommit.py", "--archivos",
                "proyectos/fin-nuevo/_entrada/10-contabilidad/balance.xlsx"], repo, ["material sin procesar de _entrada/"], codigo=1)
 
+        # --- v2.6 · Modo nube: registro de tareas con aprobación, bandeja por REST (gh falso) y estado ---
+        NU, BA = H + "nube.py", H + "bandeja.py"
+        _gh = {"HARNESS_GH": f"{PY} pruebas/gh_falso.py", "HARNESS_GH_LOG": str(tmp / "gh.log")}
+        _r = ["--repositorio", "ana/empresa"]
+        prueba("nube --estado: desactivado por defecto (opcional)", [NU, "--estado"], repo, ["Desactivado (opcional)"])
+        prueba("nube --agregar: no programa nada sin habilitar el modo", [NU, "--agregar", "resumen-manana", "--quien", "Ana"], repo, ["Primero habilita"], codigo=1)
+        prueba("nube --habilitar: exige quién", [NU, "--habilitar"], repo, ["--quien"], codigo=1)
+        prueba("nube --habilitar: con el sí y el repositorio", [NU, "--habilitar", "--quien", "Ana Rojas", "--repositorio", "ana/empresa"], repo,
+               ["Modo nube habilitado para ana/empresa por Ana Rojas"])
+        prueba("nube --agregar: registra la tarea con quién, cron por defecto y zona", [NU, "--agregar", "resumen-manana", "--quien", "Ana Rojas",
+               "--zona", "America/Santiago", "--hoy", "2026-11-10"], repo, ["cron «0 8 * * 1-5» (America/Santiago), aprobada por Ana Rojas", "Falta crearla en la nube"])
+        prueba("nube --agregar: un cron inválido no se registra", [NU, "--agregar", "bandeja", "--quien", "Ana", "--cron", "cada 4 horas"], repo, ["5 campos"], codigo=1)
+        prueba("nube --agregar: una tarea fuera del catálogo no se registra", [NU, "--agregar", "borrar-todo", "--quien", "Ana"], repo, ["Tarea desconocida"], codigo=1)
+        prueba("nube --instruccion: el texto para la tarea programada", [NU, "--instruccion", "resumen-manana"], repo,
+               ["ejecuta la tarea «resumen-manana»", "nunca main", "una tarea a la vez"])
+        prueba("nube --id-remoto-de: anota el id de la tarea creada en la nube", [NU, "--id-remoto-de", "resumen-manana", "trig_123", "--quien", "Ana"], repo,
+               ["resumen-manana ↔ trig_123"])
+        prueba("nube --revisar: registro consistente", [NU, "--revisar"], repo, ["0 error(es)"])
+        _ny = (repo / ".harness" / "nube.yaml").read_text(encoding="utf-8")
+        resultados.append(("nube: el registro guarda quién aprobó cada tarea y el historial",
+                           "habilitada: true" in _ny and "creada_por: Ana Rojas" in _ny and "aprueba la tarea resumen-manana" in _ny and "trig_123" in _ny, [_ny]))
+        prueba("estado: avisa que el modo nube está activo y sus tareas", [H + "estado.py"], repo, ["Modo nube activo: 1 tarea(s)", "resumen-manana", "bandeja.py --listar"])
+        prueba("nube --pausar: queda registrado y recuerda la nube", [NU, "--pausar", "resumen-manana", "--quien", "Ana"], repo, ["pausar registrado", "trig_123"])
+        prueba("bandeja --listar (gh falso): pedidos, en curso, preguntas y PRs de la nube; ignora PRs del PC", [BA, "--listar"] + _r, repo,
+               ["#3 Minuta del comité", "#4 Revisar riesgos", "#5 ¿Qué logo", "#9 Minuta del comité (nube)"], ausentes=["#8 ", "#11 ", "#10 "], env=_gh)
+        prueba("bandeja --listar --breve: una línea para el estado de inicio", [BA, "--listar", "--breve"] + _r, repo,
+               ["1 pedido(s) por tomar; 1 en curso; 1 pregunta(s) para ti (#5); 1 PR de la nube esperando tu revisión (#9)"], env=_gh)
+        prueba("bandeja --nueva: crea el pedido con la etiqueta", [BA, "--nueva", "Prepara la minuta del comité de hoy", "--proyecto", "demo"] + _r, repo,
+               ["Pedido #12 creado: Prepara la minuta"], env=_gh)
+        prueba("bandeja --responder: publica y quita la espera", [BA, "--responder", "5", "El logo nuevo, el azul"] + _r, repo, ["Respuesta publicada en #5"], env=_gh)
+        prueba("bandeja --tomar: no toma un pedido en curso hace menos de 3 h", [BA, "--tomar", "4"] + _r, repo, ["ya está en curso hace menos de 3 h"], codigo=2, env=_gh)
+        prueba("bandeja --tomar: toma un pedido libre", [BA, "--tomar", "3"] + _r, repo, ["#3 tomado"], env=_gh)
+        prueba("bandeja --pregunta: deja la decisión al usuario", [BA, "--pregunta", "3", "¿Con el logo nuevo o el antiguo?"] + _r, repo, ["Pregunta dejada en #3"], env=_gh)
+        prueba("bandeja --terminar", [BA, "--terminar", "3", "--pr", "https://github.com/ana/empresa/pull/9"] + _r, repo, ["#3 terminado"], env=_gh)
+        prueba("bandeja --integrar: squash y borra la rama", [BA, "--integrar", "9"] + _r, repo, ["PR #9 integrado (squash) y rama nube/3-minuta borrada"], env=_gh)
+        prueba("bandeja --integrar: un PR ya integrado no se repite", [BA, "--integrar", "10"] + _r, repo, ["ya está integrado"], env=_gh)
+        prueba("bandeja --etiquetas: crea las que faltan", [BA, "--etiquetas"] + _r, repo, ["harness:tarea: ya existía", "estado:hecho: creada"], env=_gh)
+        prueba("bandeja --resumen --publicar: resumen diario con la bandeja, publicado en su issue", [BA, "--resumen", "--publicar", "--hoy", "2026-11-10"] + _r, repo,
+               ["# Resumen diario · 2026-11-10", "## Bandeja", "preguntas para ti: 1 (#5)", "Publicado en el issue #7"], env=_gh)
+        _ghlog = (tmp / "gh.log").read_text(encoding="utf-8")
+        resultados.append(("bandeja: todo por REST con gh api (merge squash, comentarios, etiquetas)",
+                           "repos/ana/empresa/pulls/9/merge -X PUT" in _ghlog and '"merge_method": "squash"' in _ghlog
+                           and "issues/5/comments -X POST" in _ghlog and "labels/estado:espera-usuario -X DELETE" in _ghlog
+                           and "gh issue" not in _ghlog and "gh pr" not in _ghlog, [_ghlog[-600:]]))
+        prueba("nube --deshabilitar: con quién y motivo", [NU, "--deshabilitar", "--quien", "Ana Rojas", "--motivo", "prueba"], repo, ["Modo nube deshabilitado"])
+        resultados.append(("NUCLEO.txt incluye NUBE.md (reglas de la nube, se actualiza con el núcleo)",
+                           "NUBE.md" in (repo / "NUCLEO.txt").read_text(encoding="utf-8") and (repo / "NUBE.md").exists(), []))
+        (repo / ".harness" / "nube.yaml").unlink(missing_ok=True)
+
         # Instalado y sin proyectos: el hook de inicio debe guiar a crear o cargar uno (va al final: borra proyectos)
         (repo / ".harness").mkdir(exist_ok=True)
         (repo / ".harness" / "estado.yaml").write_text("instalado: true\n", encoding="utf-8")

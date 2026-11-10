@@ -10,6 +10,8 @@ y también valen (el estado de inicio las lista). Este índice es del núcleo y 
 |---|---|---|
 | `instalar` | Primer paso: prepara carpeta, computador y GitHub, y encamina el primer proyecto («instala», «empecemos», «computador nuevo») | `.claude/skills/instalar/SKILL.md` |
 | `configurar-asistente` | Deja lista una IA nueva o distinta para operar igual que las demás («voy a usar Gemini», «cambié de IA») | `.claude/skills/configurar-asistente/SKILL.md` |
+| `configurar` | Cambiar cualquier configuración después de instalado, conversando y con confirmación: empresa, marca, formatos, IA y modelos, umbrales, confidencialidad, modo nube, status semanal, un proyecto («quiero cambiar…», «de ahora en adelante…», «¿dónde se cambia…?») | `.claude/skills/configurar/SKILL.md` |
+| `nube` | Modo nube opcional (solo Claude): explicar, activar con el sí del usuario, elegir qué programar tarea por tarea, crear y pausar tareas, operar desde el celular («¿puedo revisar desde el celular?», «con el PC apagado», «programa el resumen de la mañana», «pausa la nube») | `.claude/skills/nube/SKILL.md` |
 | `actualizar-nucleo` | Trae la última versión del núcleo sin tocar los datos de la empresa («actualiza el harness») | `.claude/skills/actualizar-nucleo/SKILL.md` |
 | `nuevo-proyecto` | Diseña y crea un proyecto de cualquier tipo desde una descripción y una mini entrevista («quiero postular a…») | `.claude/skills/nuevo-proyecto/SKILL.md` |
 | `alta-proyecto` | Carga documentos existentes: lee todo, configura, registra decisiones y pregunta lo mínimo («listo», «procesa la entrada») | `.claude/skills/alta-proyecto/SKILL.md` |
