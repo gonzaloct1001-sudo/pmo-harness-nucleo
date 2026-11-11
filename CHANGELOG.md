@@ -29,7 +29,8 @@
   dentro de la plantilla Word oficial. Bloque inicial con título, código, versión, fecha y revisiones; marcadores
   `{{…}}` en portada, tablas, encabezados y pies; la fila de la historia de revisiones se repite; `{{indice}}` pasa a
   ser una tabla de contenido de Word; el cuerpo usa los estilos y la numeración de la plantilla; `![pie](ruta.png)`
-  inserta la figura con «Figura N»; «Anexos» parte en página nueva. Sin plantilla, todo sigue igual. Ejemplo en
+  inserta la figura con «Figura N»; «Anexos» parte en página nueva. Sin plantilla, todo sigue igual. Al abrir un
+  documento con índice, Word pregunta si actualiza los campos: se responde «Sí» (la herramienta lo avisa al generar). Ejemplo en
   `ejemplos/documento-largo-demo/`.
 - **`llenar_docx.py`**: reemplazar un marcador ya no borra una imagen que comparte su párrafo (el logo de un
   encabezado), y cada fragmento conserva su formato.

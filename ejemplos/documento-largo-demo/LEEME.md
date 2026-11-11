@@ -24,6 +24,7 @@ python herramientas/md_a_docx.py ejemplos/documento-largo-demo/informe.md inform
 
 - Portada con el título, el subtítulo, el código INF-2026-014, la versión 2.0, la fecha del 10-11-2026 (con el formato de fecha del proyecto) y el cliente.
 - Historia de revisiones con dos filas (1.0 y 2.0), con el mismo formato que la fila de la plantilla.
+- Al abrir, Word muestra el aviso «Este documento contiene campos que pueden hacer referencia a otros archivos. ¿Desea actualizar los campos de este documento?»: es esperado, se responde «Sí» y Word escribe el índice.
 - Un índice: Word lo muestra vacío con un aviso hasta que se actualice el campo. Al abrir el documento pide actualizar campos; se acepta, o se hace clic derecho sobre el índice y «Actualizar campo».
 - Títulos con los estilos de la plantilla y numerados por ella (1, 1.1, 1.1.1), sin números escritos a mano.
 - Tres tablas del cuerpo con el estilo de tabla de la plantilla (cabecera azul); las celdas Verde, Amarillo y Rojo de la tabla de hitos van coloreadas.

@@ -731,6 +731,9 @@ def generar_con_plantilla(args, front, cuerpo, cfg, raiz, plantilla):
     titulo = str(front.get("titulo") or "") or next((m.group(1).strip() for m in re.finditer(r"^#\s+(.+)$", cuerpo, re.M)), "")
     autoria.limpiar_ooxml(salida, aut.get("nombre", ""), titulo, aut.get("organizacion", ""))
     print(f"Documento generado: {salida} (plantilla {plantilla.name})")
+    if indices:
+        print("- Trae un índice de Word. Al abrirlo, Word preguntará si actualiza los campos del documento: responde «Sí» "
+              "(es la forma en que Word escribe el índice con sus números de página; el documento no consulta otros archivos).")
     if ancla is None:
         print("- La plantilla no trae {{contenido}}: el cuerpo se agregó al final.")
     if restantes:
