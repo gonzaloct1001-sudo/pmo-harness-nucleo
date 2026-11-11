@@ -23,6 +23,7 @@ SENSIBLES = [
     (r"(^|/)entrega/final/", "paquete final presentado (firmas, declaraciones juradas, garantías)"),
     (r"(^|/)proyectos/[^/]+/postulaciones/(?!LEEME\.md$)", "documento de una postulación de terceros"),
     (r"(^|/)investigaciones/[^/]+/_crudo/", "material descargado sin procesar de una investigación (páginas y documentos de terceros)"),
+    (r"(^|/)_local/", "archivo local de la empresa (mapa de clientes, versiones con nombres)"),
     (r"(^|/)\.env(\.|$)", "archivo de variables de entorno"),
     (r"\.(pem|key|p12|pfx)$", "llave o certificado"),
     (r"(credencial|password|contrasena|contraseña|secret|token)", "posible credencial"),
@@ -224,6 +225,10 @@ COL_FECHA = re.compile(r"^(fecha.*|inicio_.*|fin_.*|.*_fecha|fecha_.*|vigente_ha
 FECHA_OK = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
+ID_CLIENTE = re.compile(r"^C-\d{4,}$")
+CON_CLIENTES = ("ventas.csv", "cxc.csv", "clientes.csv")  # en finanzas/: los clientes van por identificador, nunca por nombre
+
+
 def revisar_csv(ruta):
     problemas = []
     with open(ruta, encoding="utf-8-sig", newline="") as f:
@@ -231,6 +236,15 @@ def revisar_csv(ruta):
     if not filas:
         return problemas
     enc = filas[0]
+    partes = Path(ruta).parts
+    if Path(ruta).name in CON_CLIENTES and "finanzas" in partes and "cliente_id" in enc:
+        i = enc.index("cliente_id")
+        con_nombre = [n for n, fila in enumerate(filas[1:], start=2) if len(fila) > i and fila[i].strip() and not ID_CLIENTE.match(fila[i].strip())]
+        if con_nombre:
+            carpeta = "/".join(partes[:partes.index("finanzas")][-2:]) or "<proyecto>"
+            problemas.append(f"{len(con_nombre)} fila(s) traen un nombre en `cliente_id` (la primera, línea {con_nombre[0]}): los clientes van por "
+                             f"identificador (C-0001) y el nombre queda solo en este computador. Ejecuta: python herramientas/rentabilidad.py "
+                             f"{carpeta} --normalizar")
     dups = {c for c in enc if enc.count(c) > 1}
     if dups:
         problemas.append(f"encabezados duplicados: {', '.join(sorted(dups))}")

@@ -1,5 +1,38 @@
 # Cambios
 
+## 3.4.0 — 2026-11-11
+
+### Análisis para decidir (nivel base: no instala nada)
+- **`herramientas/simular.py`**: simulación con rangos. Cada supuesto incierto se escribe como rango con su fuente
+  (triangular, uniforme o normal); se corren miles de escenarios con semilla fija y se informa la probabilidad de
+  cumplir una meta, el rango donde cae el resultado ocho de cada diez veces, el tornado, la parte de la variación que
+  explica cada supuesto y cuánto tendría que moverse cada uno solo para llegar a la meta. Cada análisis vive en
+  `<proyecto>/analisis/<nombre>/` con su definición, su página (`informe.html`), sus cifras (`resultado.json`) y el
+  registro de corridas (`corridas.csv`): se repite exacto.
+- **Cinco modelos y fórmula propia** (`herramientas/_modelos.py`): `precio-volumen`, `equilibrio` (con gasto meta),
+  `palancas` (clientes × frecuencia × margen por venta), `caja-crecimiento` (capital de trabajo, meses para recuperar,
+  rendimiento) y `crecimiento-sostenible` (necesidad de financiamiento); y `modelo: formula` para la sensibilidad de
+  un resultado propio, con una evaluación que solo admite aritmética, comparaciones y unas pocas funciones.
+- **`herramientas/rentabilidad.py`**: rentabilidad por cliente y producto desde las ventas por línea (importa una
+  exportación .csv o .xlsx), con costo de servir, días de cobro, mapa de cuatro cuadrantes (afinidad × contribución,
+  corte en la mediana), margen en riesgo, concentración y advertencias (pocos clientes, sin afinidad, costo en blanco).
+- **Skill `analizar`**: de la pregunta al modelo, los rangos con su fuente, la lectura del resultado y lo que no se
+  debe concluir. Gráfico nuevo `cuadrantes` en `explicar.py`.
+
+### Clientes por identificador
+- En `finanzas/ventas.csv`, `cxc.csv` y `clientes.csv` cada cliente es un identificador (`C-0001`). El nombre y el RUT
+  quedan en `finanzas/_local/clientes-mapa.csv`. Un nombre escrito en los datos se convierte al ejecutar cualquier
+  comando de `rentabilidad.py`, y el control de Git y el hook de edición no dejan guardarlo sin convertir.
+- **Carpeta `_local/`**: nueva convención de nivel 3 para cualquier proyecto: nada de lo que hay ahí se sube
+  (`.gitignore` y los controles). Las versiones con nombres (`--con-nombres`) se escriben ahí.
+
+### Al actualizar a esta versión
+- No cambia nada existente: las herramientas nuevas se usan cuando se piden. Ejemplo en `ejemplos/finanzas-demo`
+  (`analisis/alza-precios` y ventas ficticias por identificador).
+- Queda para una versión siguiente el nivel especialista (pronósticos de series de tiempo, regresión, segmentación
+  por datos y optimización, con instalación a pedido).
+- Batería: 487 pruebas.
+
 ## 3.3.0 — 2026-11-11
 
 ### Planea

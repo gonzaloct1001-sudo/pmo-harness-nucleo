@@ -2365,6 +2365,151 @@ def main():
         prueba("evals: lista los escenarios reales sin ejecutar nada", ["pruebas/evals/ejecutar_evals.py", "--listar"], repo,
                ["plan-tarea-grande", "no-sube-confidencial", "no-edita-el-nucleo", "explica-en-una-pagina"])
 
+        # --- 3.4.0 · Análisis para decidir: modelos, simulación con rangos y rentabilidad por cliente y producto ---
+        import _modelos as _mod4
+        import simular as _sim4
+        _cerca4 = lambda a, b, tol=1e-3: a is not None and abs(a - b) <= tol  # noqa: E731
+        _pv4 = _mod4.calcular("precio-volumen", {"margen": 0.5, "cambio_precio": 0.05, "perdida_volumen": 0.15})
+        _cj4 = _mod4.calcular("caja-crecimiento", {"ventas_anuales": 1000, "margen": 0.5, "cuentas_por_cobrar": 500, "inventario": 330, "aumento_ventas": 200})
+        _cs4 = _mod4.calcular("crecimiento-sostenible", {"ventas": 1000, "activos_sobre_ventas": 0.6, "pasivos_espontaneos_sobre_ventas": 0.1,
+                                                          "margen_neto": 0.08, "retencion": 0.5, "crecimiento_planeado": 0.2})
+        _eq4 = _mod4.calcular("equilibrio", {"gastos_fijos": 800, "retiro_objetivo": 200, "margen": 0.4, "ventas_esperadas": 3000,
+                                              "margen_por_transaccion": 5, "frecuencia": 4})
+        _pa4 = _mod4.calcular("palancas", {"clientes": 100, "frecuencia": 6, "margen_por_transaccion": 50, "gastos_fijos": 20000})
+        resultados.append(("modelos: precio y volumen con respuesta conocida (subir 5 % con margen 50 % y perder 15 % obliga a reponer el 39 % de lo perdido)",
+                           _cerca4(_pv4["clientes_a_reponer"] / 0.15, 0.394) and _cerca4(_pv4["volumen_de_equilibrio"], -0.0909)
+                           and _cerca4(_pv4["cambio_margen_total"], -0.065)
+                           and _cerca4(_mod4.calcular("precio-volumen", {"margen": 0.3, "cambio_precio": -0.10})["volumen_de_equilibrio"], 0.5)
+                           and _mod4.calcular("precio-volumen", {"margen": 0.2, "cambio_precio": -0.25})["volumen_de_equilibrio"] is None, [str(_pv4)]))
+        resultados.append(("modelos: caja que pide crecer (83 % de capital de trabajo con margen 50 %: unos 20 meses para recuperar, 60 % de rendimiento)",
+                           _cerca4(_cj4["meses_para_recuperar"], 19.92) and _cerca4(_cj4["rendimiento_anual_del_capital"], 0.6024)
+                           and _cerca4(_cj4["caja_que_pide_crecer"], 166), [str(_cj4)]))
+        resultados.append(("modelos: crecimiento sostenible, equilibrio con meta y palancas con respuesta conocida",
+                           _cerca4(_cs4["crecimiento_sostenible"], 0.08696) and _cerca4(_cs4["necesidad_de_financiamiento"], 52.0)
+                           and _cerca4(_eq4["ventas_necesarias"], 2500) and _cerca4(_eq4["clientes_necesarios"], 50) and _cerca4(_eq4["holgura"], 200)
+                           and _cerca4(_pa4["margen_bruto"], 30000) and _cerca4(_pa4["resultado"], 10000), [str(_cs4), str(_eq4), str(_pa4)]))
+        _malas4 = []
+        for _f4 in ("__import__('os').system('x')", "a.b", "a[0]", "lambda: 1", "'texto'", "open('x')"):
+            try:
+                _mod4.compilar(_f4)
+                _malas4.append(_f4)
+            except _mod4.FormulaInvalida:
+                pass
+        _cod4, _usa4 = _mod4.compilar("max(0, ventas * margen - gastos) if ventas > 100 else 0")
+        resultados.append(("modelos: una fórmula propia admite aritmética y condiciones, y rechaza todo lo demás",
+                           not _malas4 and set(_usa4) == {"ventas", "margen", "gastos"}
+                           and _mod4.evaluar(_cod4, {"ventas": 1000, "margen": 0.3, "gastos": 100}) == 200.0
+                           and _mod4.evaluar(_mod4.compilar("a / b")[0], {"a": 1, "b": 0}) is None, _malas4))
+        _plan4 = _sim4.preparar({"modelo": "precio-volumen", "meta": 0, "corridas": 20000, "semilla": 7, "entradas": {
+            "margen": 0.5, "cambio_precio": 0.05, "perdida_volumen": {"min": 0.0, "max": 0.2, "fuente": "prueba"}}})
+        _r4 = _sim4.simular(_plan4)
+        resultados.append(("simular: la probabilidad simulada coincide con la exacta (45,5 %), y la misma semilla repite el resultado",
+                           _cerca4(_r4["probabilidad"], 0.0909 / 0.2, 0.01) and _sim4.simular(_plan4)["media"] == _r4["media"]
+                           and _sim4.simular(_plan4, semilla=8)["media"] != _r4["media"] and _r4["p10"] < _r4["p50"] < _r4["p90"]
+                           and _cerca4(_r4["alcanzar"]["perdida_volumen"]["valor"], 0.0909), [str(_r4["probabilidad"])]))
+        _r4b = _sim4.simular(_sim4.preparar({"modelo": "palancas", "corridas": 4000, "semilla": 3, "entradas": {
+            "clientes": {"min": 90, "probable": 100, "max": 110}, "frecuencia": {"min": 3, "probable": 6, "max": 9},
+            "margen_por_transaccion": {"media": 50, "desv": 1, "min": 45, "max": 55}}}))
+        resultados.append(("simular: el tornado y los pesos ponen primero el supuesto de rango más ancho",
+                           _r4b["tornado"][0]["entrada"] == "frecuencia" and max(_r4b["pesos"], key=lambda k: _r4b["pesos"][k]["parte"]) == "frecuencia"
+                           and abs(sum(p["parte"] for p in _r4b["pesos"].values()) - 1) < 1e-9, [str(_r4b["pesos"])]))
+        _rech4 = []
+        for _nom4, _def4, _dice4 in (("rango al revés", {"modelo": "palancas", "entradas": {"clientes": {"min": 5, "max": 1}, "frecuencia": 1, "margen_por_transaccion": 1}}, "menor que"),
+                                     ("entrada que no existe", {"modelo": "palancas", "entradas": {"clientes": 1, "frecuencia": 1, "margen_por_transaccion": 1, "otra": 2}}, "no tiene la entrada"),
+                                     ("entrada que falta", {"modelo": "palancas", "entradas": {"clientes": 1}}, "le faltan entradas"),
+                                     ("fórmula con un nombre sin definir", {"modelo": "formula", "formula": "a * b", "entradas": {"a": 1}}, "no está en las entradas")):
+            try:
+                _sim4.preparar(_def4)
+                _rech4.append(_nom4)
+            except _sim4.Problema as _e4:
+                if _dice4 not in str(_e4):
+                    _rech4.append(f"{_nom4}: {_e4}")
+        resultados.append(("simular: una definición mal armada se rechaza diciendo qué corregir", not _rech4, _rech4))
+        _simular4 = str(e3 / "herramientas" / "simular.py")
+        prueba("simular --nuevo: crea el análisis con las entradas del modelo", [_simular4, "--nuevo", "precio-volumen", "--proyecto", "proyectos/ag",
+               "--id", "alza", "--pregunta", "¿Conviene subir los precios 5 %?"], e3, ["Análisis creado: proyectos/ag/analisis/alza/analisis.yaml"])
+        prueba("simular: con entradas sin completar no simula y dice cuál falta", [_simular4, "proyectos/ag/analisis/alza"], e3, ["No se pudo simular", "margen"], codigo=1)
+        (ag / "analisis" / "alza" / "analisis.yaml").write_text(
+            'pregunta: "¿Conviene subir los precios 5 %?"\nmodelo: precio-volumen\nmeta: 0\ncorridas: 3000\nsemilla: 11\nentradas:\n  margen: 0.5\n'
+            '  cambio_precio: 0.05\n  perdida_volumen: {min: 0.02, probable: 0.08, max: 0.20}\n', encoding="utf-8")
+        prueba("simular: informa la probabilidad, el rango y el supuesto que pesa, y deja la página", [_simular4, "proyectos/ag/analisis/alza", "--hoy", "2026-11-11"], e3,
+               ["Probabilidad de alcanzar o superar 0 %: 45,2 %", "ocho de cada diez escenarios entre", "Pesa 100 %: perdida_volumen", "3.000 escenarios, semilla 11",
+                "Página: proyectos/ag/analisis/alza/informe.html"])
+        _inf4 = _lee3("proyectos/ag/analisis/alza/informe.html")
+        _res4 = json.loads(_lee3("proyectos/ag/analisis/alza/resultado.json"))
+        correr([_simular4, "proyectos/ag/analisis/alza", "--hoy", "2026-11-12", "--corridas", "500"], e3)
+        resultados.append(("simular: la página trae el histograma con la probabilidad, los supuestos y el aviso del rango sin fuente; cada corrida queda registrada",
+                           "<svg viewBox" in _inf4 and "Probabilidad de alcanzar o superar 0%: 45,2 %" in _inf4 and "supuesto sin fuente" in _inf4
+                           and "Rangos sin fuente declarada (Perdida volumen)" in _inf4 and "independiente" in _inf4
+                           and _cerca4(_res4["probabilidad"], 0.452, 0.002) and _res4["semilla"] == 11 and "valores" not in _res4
+                           and len(_lee3("proyectos/ag/analisis/alza/corridas.csv").splitlines()) == 3, [_inf4[:200], str(_res4)[:300]]))
+        prueba("simular --modelos: lista los cinco modelos y la fórmula propia", [_simular4, "--modelos"], e3,
+               ["precio-volumen", "equilibrio", "palancas", "caja-crecimiento", "crecimiento-sostenible", "modelo: formula"])
+        prueba("simular: el análisis de ejemplo corre tal como viene", [H + "simular.py", "ejemplos/finanzas-demo/analisis/alza-precios", "--json"], repo,
+               ['"modelo": "precio-volumen"', '"probabilidad"'])
+
+        # Mapa de cuadrantes en la página visual
+        (tmp / "cuad.md").write_text(
+            "# Mapa\n\n```grafico\ntipo: cuadrantes\ntitulo: Clientes\neje_x: Afinidad\neje_y: Contribución %\ntamano: el margen\n"
+            "nombres: {alto_alto: Cuidar, bajo_alto: Asegurar, alto_bajo: Desarrollar, bajo_bajo: Revisar}\ndatos:\n"
+            "  C-0001: [9, 40, 400]\n  C-0002: [3, 30, 300]\n  C-0003: [7, 20, 200]\n  C-0004: [2, 40, 80]\n```\n", encoding="utf-8")
+        prueba("explicar: genera el mapa de cuadrantes", [_exp3, str(tmp / "cuad.md")], e3, ["Página generada"])
+        _cuad4 = (tmp / "cuad.html").read_text(encoding="utf-8")
+        resultados.append(("explicar: el mapa de cuadrantes corta en la mediana, nombra los cuatro cuadrantes y cuenta cada uno",
+                           "Cuidar: 1 · Asegurar: 1 · Desarrollar: 1 · Revisar: 1" in _cuad4 and "afinidad 5, contribución % 35 (la mediana de cada eje)" in _cuad4
+                           and _cuad4.count('class="hit"') == 4 and "El tamaño de cada círculo es el margen." in _cuad4, [_cuad4[_cuad4.find("Cuidar:"):][:300]]))
+
+        # Rentabilidad por cliente y producto, con los clientes siempre por identificador
+        (tmp / "export-ventas.csv").write_text(
+            "Fecha,Folio,Razón Social,Producto,Cantidad,Precio Unitario,Costo Unitario\n"
+            "2026-01-05,101,Alfa SpA,Producto A,10,100,60\n2026-01-12,102,Beta Ltda,Producto A,5,100,60\n2026-02-03,103,Beta Ltda,Producto B,10,50,40\n"
+            "2026-02-20,104,Gama S.A.,Producto B,20,50,40\n2026-03-15,105,Delta EIRL,Producto A,2,100,60\n", encoding="utf-8")
+        _rent4 = str(e3 / "herramientas" / "rentabilidad.py")
+        prueba("rentabilidad --importar-ventas: importa una exportación con nombres", [_rent4, "proyectos/ag", "--importar-ventas", str(tmp / "export-ventas.csv")], e3,
+               ["5 líneas agregadas", "4 clientes nuevos"])
+        _ventas4, _mapa4 = _lee3("proyectos/ag/finanzas/ventas.csv"), _lee3("proyectos/ag/finanzas/_local/clientes-mapa.csv")
+        resultados.append(("rentabilidad: en los datos quedan solo identificadores; los nombres, solo en el mapa local, que Git ignora y los controles detienen",
+                           "C-0001" in _ventas4 and "C-0004" in _ventas4 and not any(n in _ventas4 for n in ("Alfa", "Beta", "Gama", "Delta"))
+                           and all(n in _mapa4 for n in ("Alfa SpA", "Beta Ltda", "Gama S.A.", "Delta EIRL"))
+                           and "_local" in _g3("check-ignore", "proyectos/ag/finanzas/_local/clientes-mapa.csv")[1]
+                           and correr([str(e3 / "herramientas" / "hooks" / "precommit.py"), "--archivos", "proyectos/ag/finanzas/_local/clientes-mapa.csv"], e3)[0] == 1,
+                           [_ventas4[:300], _mapa4[:200]]))
+        (ag / "finanzas" / "clientes.csv").write_text(
+            "cliente_id,horas_periodo,afinidad,fecha_afinidad,segmento,nota\nAlfa SpA,0,9,2026-03-01,,\nbeta ltda,0,3,2026-03-01,,\n"
+            "C-0003,0,7,2026-03-01,,\nC-0004,0,2,2026-03-01,,\n", encoding="utf-8")
+        _rc, _sal = correr([str(e3 / "herramientas" / "hooks" / "precommit.py"), "--archivos", "proyectos/ag/finanzas/clientes.csv"], e3)
+        resultados.append(("control de Git: no deja guardar datos de ventas con un nombre de cliente en vez de su identificador",
+                           _rc == 1 and "2 fila(s) traen un nombre en `cliente_id`" in _sal and "rentabilidad.py proyectos/ag --normalizar" in _sal, [f"rc={_rc}", _sal[:400]]))
+        prueba("rentabilidad --normalizar: convierte los nombres escritos a mano en su identificador", [_rent4, "proyectos/ag", "--normalizar"], e3, ["clientes.csv: 2"])
+        _cl4 = _lee3("proyectos/ag/finanzas/clientes.csv")
+        resultados.append(("rentabilidad: tras normalizar reutiliza el identificador de cada cliente y el control de Git lo acepta",
+                           "C-0001,0,9" in _cl4 and "C-0002,0,3" in _cl4 and "Alfa" not in _cl4 and "beta" not in _cl4
+                           and correr([str(e3 / "herramientas" / "hooks" / "precommit.py"), "--archivos", "proyectos/ag/finanzas/clientes.csv",
+                                       "proyectos/ag/finanzas/ventas.csv"], e3)[0] == 0, [_cl4]))
+        _out4 = correr([_rent4, "proyectos/ag", "--analizar", "--json", "--hoy", "2026-11-11"], e3)[1]
+        _rj4 = json.loads(_out4[_out4.index("{"):_out4.rindex("}") + 1])
+        _pc4 = {c["cliente_id"]: c for c in _rj4["clientes"]}
+        _pp4 = {p["producto"]: p for p in _rj4["productos"]}
+        resultados.append(("rentabilidad: ventas, margen y cuadrantes coinciden con el cálculo a mano (cortes en la mediana: afinidad 5, contribución 35 %)",
+                           _cerca4(_rj4["totales"]["ventas"], 3200) and _cerca4(_rj4["totales"]["margen"], 980)
+                           and _cerca4(_pp4["Producto A"]["margen"], 680) and _cerca4(_pp4["Producto B"]["margen"], 300)
+                           and _cerca4(_pc4["C-0002"]["ventas"], 1000) and _cerca4(_pc4["C-0002"]["margen"], 300)
+                           and _cerca4(_rj4["cortes"]["afinidad"], 5) and _cerca4(_rj4["cortes"]["contribucion_pct"], 35)
+                           and [_pc4[k]["cuadrante"] for k in ("C-0001", "C-0002", "C-0003", "C-0004")] == ["alto_alto", "bajo_bajo", "alto_bajo", "bajo_alto"],
+                           [str(_rj4["totales"]), str(_rj4["cortes"]), str([_pc4[k]["cuadrante"] for k in sorted(_pc4)])]))
+        prueba("rentabilidad --analizar: margen en riesgo, aviso de pocos clientes y página con el mapa", [_rent4, "proyectos/ag", "--analizar", "--hoy", "2026-11-11"], e3,
+               ["Margen en riesgo (cuadrante «Asegurar»): $ 80 (8,2 % del margen)", "Con 4 clientes en el mapa el corte en la mediana es inestable", "rentabilidad-2026-11-11.html"])
+        _rh4 = _lee3("proyectos/ag/finanzas/analisis/rentabilidad-2026-11-11.html")
+        correr([_rent4, "proyectos/ag", "--analizar", "--con-nombres", "--hoy", "2026-11-11"], e3)
+        _rn4 = _lee3("proyectos/ag/finanzas/_local/rentabilidad-2026-11-11.html")
+        resultados.append(("rentabilidad: la página versionable lleva solo identificadores; la versión con nombres queda en _local/",
+                           "Cuidar: 1 · Asegurar: 1 · Desarrollar: 1 · Revisar: 1" in _rh4 and "C-0001" in _rh4 and "Alfa" not in _rh4
+                           and "Alfa SpA" in _rn4 and "Alfa" not in _lee3("proyectos/ag/finanzas/analisis/rentabilidad-2026-11-11.md"),
+                           [_rh4[:200], _rn4[:200]]))
+        prueba("rentabilidad --quien: muestra el cliente de un identificador desde el mapa local", [_rent4, "proyectos/ag", "--quien", "C-0003"], e3, ["Gama S.A."])
+        prueba("rentabilidad: el ejemplo de finanzas corre con sus ventas ficticias", [H + "rentabilidad.py", "ejemplos/finanzas-demo", "--analizar", "--json", "--costo-hora", "250"], repo,
+               ['"cuadrantes"', '"margen_en_riesgo"'], codigo=None)
+
         # Ficha de inicio: sin instalar, el hook la ofrece o avisa que ya tiene respuestas
         shutil.rmtree(repo / ".harness", ignore_errors=True)
         prueba("hook: sin instalar ofrece la ficha y el manual", [H + "hooks/inicio_sesion.py"], repo,

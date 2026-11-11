@@ -1,0 +1,11 @@
+pregunta: "¿Conviene subir los precios 5 %?"
+modelo: precio-volumen
+resultado: cambio_margen_total     # puede ser: cambio_margen_total, volumen_de_equilibrio, clientes_a_reponer, margen_bruto_nuevo
+meta: 0                            # se informa la probabilidad de que el margen bruto total no baje
+sentido: mayor
+corridas: 5000
+semilla: 20261111                  # misma semilla, mismos resultados
+entradas:
+  margen: 0.38                     # margen bruto del año, de los estados de resultados
+  cambio_precio: 0.05
+  perdida_volumen: {min: 0.01, probable: 0.06, max: 0.18, fuente: "juicio de la gerencia comercial (demo): en el alza anterior se perdió cerca de 6 %"}

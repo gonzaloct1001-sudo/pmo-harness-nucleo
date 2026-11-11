@@ -30,6 +30,13 @@ bases hablen de inteligencia artificial.
    su texto no sale del computador. La política (qué se replica completo y qué solo con ficha) está en `replicas` de
    `empresa/empresa.yaml` y un proyecto puede redefinirla. Una réplica marcada `confidencialidad: sensible` no pasa el
    control de Git.
+   **Clientes de la empresa, por identificador.** En los datos de ventas (`finanzas/ventas.csv`, `cxc.csv`,
+   `clientes.csv`) cada cliente es un identificador (`C-0001`); su nombre y su RUT viven solo en
+   `finanzas/_local/clientes-mapa.csv`. Toda carpeta `_local/` es de nivel 3: no se sube, no se copia a un registro ni a
+   un traspaso, y no viaja a una tarea de la nube. Si aparece un nombre en esos datos, `rentabilidad.py --normalizar` lo
+   convierte y el control de Git no deja guardarlo antes. Los agregados (por cuadrante, por producto, totales) sí se
+   usan y se comparten; una versión con nombres para revisar en el computador se pide con `--con-nombres` y queda en
+   `_local/`.
    **Datos del cliente fuera del harness:** lo que se exporta para el mantenedor del núcleo (`mejoras.py --exportar`)
    sale anonimizado (nombres, siglas, nombre de la carpeta, correos, RUT y montos) y el usuario lo revisa antes de
    enviarlo. Se envía solo ese archivo: el registro `.harness/mejoras-nucleo.csv` guarda los textos sin anonimizar.

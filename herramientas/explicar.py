@@ -16,7 +16,7 @@ Bloques especiales, entre ``` con su nombre:
     ```                               ```                               ```
 
     ```grafico
-    tipo: barras            # barras | columnas | lineas | tornado | histograma
+    tipo: barras            # barras | columnas | lineas | tornado | histograma | cuadrantes
     titulo: Avance por frente
     unidad: "%"
     datos: {Obras civiles: 80, Montaje: 55, Puesta en marcha: 10}
@@ -27,6 +27,8 @@ Bloques especiales, entre ``` con su nombre:
   bajo y en su valor alto); se ordena solo, de la variable que más mueve el resultado a la que menos.
 - histograma: `valores: [...]`; opcional `meta: 100` con `sentido: mayor | menor` (calcula y muestra la probabilidad
   de cumplirla) y `marcas: {P10: 80, P90: 130}`.
+- cuadrantes: `datos: {etiqueta: [x, y, tamaño]}` con `eje_x`, `eje_y` y, opcionales, `tamano` (qué mide el círculo),
+  `corte_x` y `corte_y` (por defecto, la mediana) y `nombres: {alto_alto, bajo_alto, alto_bajo, bajo_bajo}` (x_y).
 Cada gráfico trae su tabla de datos plegada («Ver los datos») y muestra el valor al pasar el cursor. Hasta 4 series
 por gráfico: con más, se agrupa en «Otros» o se divide en dos gráficos.
 
@@ -68,7 +70,7 @@ pre{background:var(--sup);border:1px solid var(--borde);border-radius:8px;paddin
 .tabla{overflow-x:auto;background:var(--sup);border:1px solid var(--borde);border-radius:10px;margin:12px 0}
 table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;padding:8px 12px;border-bottom:1px solid var(--grid)}
 th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--tinta2);font-weight:600}tr:last-child td{border-bottom:0}
-td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}td.c{white-space:nowrap}
 .est{white-space:nowrap}.est i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
 .est-verde i{background:var(--bien)}.est-amarillo i{background:var(--alerta)}.est-rojo i{background:var(--critico)}
 aside{background:var(--sup);border:1px solid var(--borde);border-left:4px solid var(--marca);border-radius:8px;padding:10px 14px;margin:14px 0}
@@ -435,14 +437,19 @@ def g_histograma(spec, donde):
     u, n = spec.get("unidad", ""), len(valores)
     bordes = marcas_eje(valores[0], valores[-1], int(spec.get("clases") or max(6, min(26, n // 5))))
     paso = bordes[1] - bordes[0]
+    meta = numero(spec["meta"], donde) if spec.get("meta") is not None else None
+    if meta is not None and valores[0] < meta < valores[-1]:
+        inicio = meta - math.ceil((meta - valores[0]) / paso) * paso
+        bordes = [round(inicio + i * paso, 10) for i in range(int(math.ceil((valores[-1] - inicio) / paso - 1e-9)) + 1)]
+        if bordes[-1] <= valores[-1]:
+            bordes.append(round(bordes[-1] + paso, 10))
     cuentas = [0] * (len(bordes) - 1)
     for v in valores:
         cuentas[min(len(cuentas) - 1, int((v - bordes[0]) / paso))] += 1
-    meta = numero(spec["meta"], donde) if spec.get("meta") is not None else None
     mayor = not str(spec.get("sentido") or "mayor").strip().lower().startswith("men")
     clases = None
     if meta is not None:
-        cumple = lambda i: (bordes[i] + paso / 2 >= meta) if mayor else (bordes[i] + paso / 2 <= meta)  # noqa: E731
+        cumple = lambda i: (bordes[i] >= meta - 1e-9) if mayor else (bordes[i + 1] <= meta + 1e-9)  # noqa: E731
         clases = ["s1" if cumple(i) else "sv" for i in range(len(cuentas))]
     etiquetas = [f"{num(bordes[i])} a {num(bordes[i + 1])}" for i in range(len(cuentas))]
     falso = {"titulo": spec.get("titulo"), "datos": dict(zip(etiquetas, cuentas)), "serie": "casos"}
@@ -476,7 +483,77 @@ def g_histograma(spec, donde):
     return figura(spec, svg, ley, tabla, nota)
 
 
-GRAFICOS = {"barras": g_barras, "columnas": fig_columnas, "lineas": g_lineas, "líneas": g_lineas, "tornado": g_tornado, "histograma": g_histograma}
+def g_cuadrantes(spec, donde):
+    datos = spec.get("datos")
+    if not isinstance(datos, dict) or len(datos) < 2:
+        raise Problema(f"{donde}: un gráfico de cuadrantes necesita `datos: {{etiqueta: [x, y, tamaño]}}` con al menos dos puntos")
+    puntos = []
+    for etiqueta, v in datos.items():
+        if not isinstance(v, (list, tuple)) or len(v) < 2:
+            raise Problema(f"{donde}: «{etiqueta}» debe traer [x, y] o [x, y, tamaño]")
+        puntos.append((str(etiqueta), numero(v[0], donde), numero(v[1], donde), numero(v[2], donde) if len(v) > 2 and v[2] is not None else None))
+    mediana = lambda s: s[len(s) // 2] if len(s) % 2 else (s[len(s) // 2 - 1] + s[len(s) // 2]) / 2  # noqa: E731
+    xs, ys = sorted(p[1] for p in puntos), sorted(p[2] for p in puntos)
+    cx = numero(spec["corte_x"], donde) if spec.get("corte_x") is not None else mediana(xs)
+    cy = numero(spec["corte_y"], donde) if spec.get("corte_y") is not None else mediana(ys)
+    ex, ey, et = str(spec.get("eje_x") or "x"), str(spec.get("eje_y") or "y"), str(spec.get("tamano") or "")
+    nombres = {"alto_alto": "Alto en ambos", "bajo_alto": f"Bajo en {ex.lower()}", "alto_bajo": f"Bajo en {ey.lower()}", "bajo_bajo": "Bajo en ambos",
+               **{str(k): str(v) for k, v in (spec.get("nombres") or {}).items()}}
+    izq, der, sup, ph = 60, 20, 30, 340
+    pw, alto = ANCHO - izq - der, sup + ph + 44
+    def con_aire(valores, corte):
+        lo, hi = min(valores + [corte]), max(valores + [corte])
+        aire = (hi - lo) * 0.08 or 1.0
+        return marcas_eje(lo - aire, hi + aire)
+    mx, my = con_aire(xs, cx), con_aire(ys, cy)
+    x = lambda v: izq + (v - mx[0]) / (mx[-1] - mx[0]) * pw  # noqa: E731
+    y = lambda v: sup + ph - (v - my[0]) / (my[-1] - my[0]) * ph  # noqa: E731
+    o = [f'<line class="grid" x1="{x(m):.1f}" y1="{sup}" x2="{x(m):.1f}" y2="{sup + ph}"/>'
+         f'<text class="tick" x="{x(m):.1f}" y="{sup + ph + 16}" text-anchor="middle">{esc(compacto(m))}</text>' for m in mx]
+    o += [f'<line class="grid" x1="{izq}" y1="{y(m):.1f}" x2="{izq + pw}" y2="{y(m):.1f}"/>'
+          f'<text class="tick" x="{izq - 8}" y="{y(m) + 4:.1f}" text-anchor="end">{esc(compacto(m))}</text>' for m in my]
+    o += [f'<line class="marca-l" x1="{x(cx):.1f}" y1="{sup}" x2="{x(cx):.1f}" y2="{sup + ph}"/>',
+          f'<line class="marca-l" x1="{izq}" y1="{y(cy):.1f}" x2="{izq + pw}" y2="{y(cy):.1f}"/>',
+          f'<text class="et" style="font-size:12px" x="{izq}" y="{sup - 12}">{esc(ey)} ↑</text>',
+          f'<text class="et" style="font-size:12px" x="{izq + pw}" y="{alto - 6}" text-anchor="end">{esc(ex)} →</text>']
+    for clave, px, py, ancla in (("alto_alto", izq + pw - 8, sup + 16, "end"), ("bajo_alto", izq + 8, sup + 16, "start"),
+                                 ("alto_bajo", izq + pw - 8, sup + ph - 8, "end"), ("bajo_bajo", izq + 8, sup + ph - 8, "start")):
+        o.append(f'<text class="tick" style="font-size:13px;font-weight:600" x="{px}" y="{py}" text-anchor="{ancla}">{esc(nombres[clave])}</text>')
+    mayor = max((p[3] for p in puntos if p[3] is not None and p[3] > 0), default=0)
+    radio = lambda t: 6 if not mayor or t is None else 5 + 13 * math.sqrt(max(0.0, t) / mayor)  # noqa: E731
+    cuadrante = lambda p: f"{'alto' if p[1] >= cx else 'bajo'}_{'alto' if p[2] >= cy else 'bajo'}"  # noqa: E731
+    orden = sorted(puntos, key=lambda p: -(p[3] or 0))
+    # Se rotulan los más grandes, a la derecha o a la izquierda del círculo, y solo donde el texto no pisa otro círculo
+    # ni otro rótulo: el resto se lee en el globo y en la tabla.
+    ocupado = [(x(q[1]) - radio(q[3]), x(q[1]) + radio(q[3]), y(q[2]) - radio(q[3]), y(q[2]) + radio(q[3]), q[0]) for q in puntos]
+    for p in (orden if len(orden) <= 8 else orden[:6]):
+        r, ancho = radio(p[3]), ancho_texto(p[0], 12)
+        for x0 in (x(p[1]) + r + 6, x(p[1]) - r - 6 - ancho):
+            caja = (x0, x0 + ancho, y(p[2]) - 8, y(p[2]) + 6)
+            libre = izq <= caja[0] and caja[1] <= izq + pw and not any(
+                dueno != p[0] and caja[0] < b1 + 2 and caja[1] > b0 - 2 and caja[2] < b3 and caja[3] > b2 for b0, b1, b2, b3, dueno in ocupado)
+            if libre:
+                ocupado.append(caja + (p[0],))
+                o.append(f'<text class="et" style="font-size:12px" x="{x0:.1f}" y="{y(p[2]) + 4:.1f}">{esc(p[0])}</text>')
+                break
+    for p in orden:
+        r = radio(p[3])
+        filas = [(ex, num(p[1]), 1), (ey, num(p[2]), "")] + ([(et or "Tamaño", num(p[3]), "")] if p[3] is not None else []) + [(nombres[cuadrante(p)], "", "")]
+        o.append(f'<g class="banda"><circle class="m pt s1" fill-opacity=".8" cx="{x(p[1]):.1f}" cy="{y(p[2]):.1f}" r="{r:.1f}"/>'
+                 f'<circle class="hit" tabindex="0" cx="{x(p[1]):.1f}" cy="{y(p[2]):.1f}" r="{max(12, r + 4):.1f}" data-tip="{pista(p[0], filas)}"/></g>')
+    svg = f'<svg viewBox="0 0 {ANCHO} {alto}" role="img" aria-label="{esc(spec.get("titulo") or "Gráfico de cuadrantes")}">{"".join(o)}</svg>'
+    cuenta = {k: sum(1 for p in puntos if cuadrante(p) == k) for k in nombres}
+    nota = (" · ".join(f"{esc(nombres[k])}: {cuenta[k]}" for k in ("alto_alto", "bajo_alto", "alto_bajo", "bajo_bajo"))
+            + f". Cortes: {esc(ex.lower())} {esc(num(cx))}, {esc(ey.lower())} {esc(num(cy))}"
+            + ("" if spec.get("corte_x") is not None or spec.get("corte_y") is not None else " (la mediana de cada eje)")
+            + (f". El tamaño de cada círculo es {esc(et[0].lower() + et[1:])}." if mayor and et else "."))
+    tabla = tabla_datos(["", ex, ey] + ([et or "Tamaño"] if mayor else []) + ["Cuadrante"],
+                        [[p[0], num(p[1]), num(p[2])] + ([num(p[3])] if mayor else []) + [nombres[cuadrante(p)]] for p in orden])
+    return figura(spec, svg, "", tabla, nota)
+
+
+GRAFICOS = {"barras": g_barras, "columnas": fig_columnas, "lineas": g_lineas, "líneas": g_lineas, "tornado": g_tornado,
+            "histograma": g_histograma, "cuadrantes": g_cuadrantes}
 
 
 def bloque_grafico(texto, donde):
@@ -489,7 +566,7 @@ def bloque_grafico(texto, donde):
         raise Problema(f"{donde}: el bloque debe ser una lista de claves (`tipo:`, `datos:`…)")
     tipo = str(spec.get("tipo") or "").strip().lower()
     if tipo not in GRAFICOS:
-        raise Problema(f"{donde}: `tipo` debe ser uno de: barras, columnas, lineas, tornado, histograma")
+        raise Problema(f"{donde}: `tipo` debe ser uno de: barras, columnas, lineas, tornado, histograma, cuadrantes")
     return GRAFICOS[tipo](spec, donde)
 
 
@@ -623,7 +700,8 @@ def convertir(md, base, con_titulo=False):
             cuerpo = [f for f in filas if not all(re.fullmatch(r"\s*:?-{2,}:?\s*", c) for c in f)]
             if cuerpo:
                 cab = "".join(f"<th>{inline(c.strip())}</th>" for c in cuerpo[0])
-                resto = "".join("<tr>" + "".join(f"<td>{celda(c)}</td>" for c in f) + "</tr>" for f in cuerpo[1:])
+                resto = "".join("<tr>" + "".join(f"<td{' class=c' if len(c.strip()) <= 18 else ''}>{celda(c)}</td>" for c in f) + "</tr>"
+                                for f in cuerpo[1:])
                 o.append(f'<div class="tabla"><table><thead><tr>{cab}</tr></thead><tbody>{resto}</tbody></table></div>')
         elif re.match(r"^([-*]|\d+[.)])\s+", s):
             cerrar()

@@ -39,6 +39,9 @@ proyectos/**/investigaciones/*/_crudo/
 proyectos/*/contenidos/archivos/**
 proyectos/*/entrega/final/**
 
+# --- Lo que nunca sale de este computador: mapa de clientes y versiones con nombres (cualquier carpeta _local/) ---
+_local/
+
 # --- Empresa: archivos del banco de antecedentes (CVs, certificados, estados financieros) ---
 empresa/contenidos/archivos/*
 

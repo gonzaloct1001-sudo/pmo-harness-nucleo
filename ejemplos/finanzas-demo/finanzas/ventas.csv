@@ -1,0 +1,14 @@
+fecha,documento,cliente_id,producto,cantidad,precio_unitario,costo_unitario,canal
+2026-01-01,101,C-0001,Producto A,10,1000,600,directo
+2026-01-10,102,C-0002,Producto A,20,1000,600,directo
+2026-01-20,103,C-0003,Producto B,5,4000,2500,web
+2026-02-01,104,C-0004,Producto B,5,4000,2500,web
+2026-02-05,105,C-0005,Producto C,60,200,150,web
+2026-02-05,106,C-0004,Producto B,5,4000,2500,web
+2026-02-10,107,C-0005,Producto C,40,200,150,web
+2026-02-12,108,C-0006,Producto C,50,200,150,directo
+2026-03-15,109,C-0007,Producto A,30,1000,600,directo
+2026-03-31,110,C-0008,Producto B,2,4000,2500,web
+2026-02-20,111,C-0009,Producto A,10,1000,600,directo
+2026-02-20,111,C-0009,Producto C,10,200,,directo
+2026-02-10,112,C-0010,Producto A,5,1000,600,directo

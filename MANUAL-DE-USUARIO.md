@@ -1,4 +1,4 @@
-# PMO Harness 3.3: manual de usuario
+# PMO Harness 3.4: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
@@ -141,6 +141,25 @@ Di «quiero llevar las finanzas de la empresa» y el harness arma el ciclo compl
 Lo que no hace: no lleva la contabilidad formal, no declara impuestos ni paga. Eso sigue en tu sistema contable, en el
 contador y en tesorería; el harness consume lo que ellos producen y nunca inventa una cifra. La referencia por país
 (impuestos, calendario) siempre se confirma con el contador.
+
+### Análisis para decidir
+Cuando una decisión depende de números inciertos, pide el análisis en vez de una sola cifra:
+- **«¿Qué tan probable es…?»** En lugar de suponer que las ventas subirán exactamente 5 %, le das un rango (entre 2 y
+  8 %, lo más probable 5) y dices de dónde sale. El harness prueba miles de combinaciones y te responde con una
+  probabilidad («hay 62 % de cerrar sobre la meta»), el rango donde cae el resultado ocho de cada diez veces, y **qué
+  supuesto pesa más**. Sirve sobre un estado de resultados, un flujo o un presupuesto: «quiero un análisis de
+  sensibilidad de este estado de resultados».
+- **Cinco preguntas frecuentes ya armadas:** «¿conviene subir los precios?», «¿cuánto tengo que vender para cubrir
+  los gastos y mi retiro?», «¿qué mueve más mi margen: clientes, frecuencia o precio?», «¿cuánta caja me pide crecer
+  y en cuánto vuelve?», «¿cuánto puedo crecer sin pedir financiamiento?».
+- **«¿Qué clientes y productos me dejan margen?»** Con tus ventas por línea arma la rentabilidad por producto y por
+  cliente, y un mapa de cuatro cuadrantes según cuánto contribuye cada cliente y qué tan bien calza con tu empresa.
+  **Los nombres de tus clientes no salen de tu computador**: en los datos cada cliente es un código (C-0001) y el
+  nombre queda en un archivo local; para revisar con nombres, pídelo «con nombres» y esa versión tampoco se sube.
+
+Cada análisis queda guardado con su pregunta, sus supuestos y sus resultados, y se puede repetir exacto. El resultado
+vale lo que valgan los rangos que le diste: por eso la página muestra los supuestos y marca los que no tienen fuente.
+Lo que este nivel no hace todavía: pronósticos con estacionalidad, segmentación automática y optimización.
 
 ### Plan estratégico (3 o 5 años)
 Sobre las finanzas se arma el plan: «armemos el plan estratégico 2027-2029». El asistente te lleva por el diagnóstico

@@ -93,6 +93,8 @@ skills:
      ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
   - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
      ejemplos: ["¿cómo vamos?", "¿qué tengo pendiente hoy?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
+  - {id: analizar, para: "Análisis para decidir: probabilidad de una meta, qué supuesto pesa más, modelos de precio, equilibrio, palancas, caja y crecimiento, y rentabilidad por cliente y producto", arquetipos: [todos],
+     ejemplos: ["quiero un análisis de sensibilidad de este estado de resultados", "¿qué tan probable es cerrar el año sobre la meta?", "¿conviene subir los precios 5 %?", "¿qué clientes me dejan margen y cuáles no?"]}
   - {id: explicar, para: "Explicar algo complejo en una página visual: cifras clave, gráficos, pasos y línea de tiempo, en un solo archivo que se abre con doble clic", arquetipos: [todos],
      ejemplos: ["explícame el cierre de octubre en una página", "hazme un gráfico del avance por frente", "muéstrame qué variable pesa más en el resultado", "quiero el plan detallado antes de partir"]}
   - {id: reportes, para: "Generar cualquier reporte del catálogo del proyecto · Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
@@ -147,7 +149,7 @@ skills:
 # Capacidad que necesita cada skill (regla 20 de AGENTS.md): alta = juicio no verificable; media = análisis con datos y
 # borradores; baja = procedimiento, transcripción o validación. Las skills que no aparecen son de nivel medio.
 capacidad:
-  alta: [nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera, plan-estrategico]
+  alta: [analizar, nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera, plan-estrategico]
   media: [metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra, actualizar-gantt, documentos, formulario-plataforma, status, explicar]
   baja: [instalar, configurar, actualizar-nucleo, ayuda, guardar-cambios, nube]
 

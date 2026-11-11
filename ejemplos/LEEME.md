@@ -119,6 +119,14 @@ de IA, un certificado con vigencia máxima y un presupuesto del cliente que no c
 3. Crea `prueba-postulacion` con el arquetipo `postulacion`, copia las subcarpetas del paquete a `_entrada/` y di
    "prepara la postulación".
 
+### Prueba 14 — Análisis para decidir
+1. `python herramientas/simular.py ejemplos/finanzas-demo/analisis/alza-precios --abrir`: la probabilidad de que una
+   subida de precios de 5 % no baje el margen bruto, el rango de resultados, y cuánta pérdida de volumen se tolera.
+   Cambia el rango de `perdida_volumen` en su `analisis.yaml` y vuelve a correr.
+2. `python herramientas/rentabilidad.py ejemplos/finanzas-demo --analizar --costo-hora 250 --abrir`: margen por
+   producto y por cliente (los clientes son identificadores ficticios) y el mapa de cuatro cuadrantes.
+3. `python herramientas/simular.py --modelos` lista los modelos disponibles con sus entradas.
+
 ### Prueba 13 — Documento largo con la plantilla de la empresa y página para explicar
 1. `python herramientas/md_a_docx.py ejemplos/documento-largo-demo/informe.md informe-avance.docx --plantilla
    ejemplos/documento-largo-demo/plantilla-informe.docx --proyecto ejemplos/demo-andes` y abre el Word: portada,
