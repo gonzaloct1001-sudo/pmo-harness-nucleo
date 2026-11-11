@@ -218,6 +218,16 @@
         ]
       }
     ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"${CLAUDE_PROJECT_DIR:-.}/herramientas/py.sh\" \"${CLAUDE_PROJECT_DIR:-.}/herramientas/hooks/agenda_diaria.py\""
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [

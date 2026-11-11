@@ -119,6 +119,14 @@ de IA, un certificado con vigencia máxima y un presupuesto del cliente que no c
 3. Crea `prueba-postulacion` con el arquetipo `postulacion`, copia las subcarpetas del paquete a `_entrada/` y di
    "prepara la postulación".
 
+### Prueba 13 — Documento largo con la plantilla de la empresa y página para explicar
+1. `python herramientas/md_a_docx.py ejemplos/documento-largo-demo/informe.md informe-avance.docx --plantilla
+   ejemplos/documento-largo-demo/plantilla-informe.docx --proyecto ejemplos/demo-andes` y abre el Word: portada,
+   historia de revisiones, índice (acepta «actualizar campos»), títulos numerados por la plantilla, figura con
+   leyenda y anexos. El detalle de qué debería verse está en `ejemplos/documento-largo-demo/LEEME.md`.
+2. Pide «explícame en una página cómo va demo-andes»: la skill `explicar` arma la página con cifras, gráficos y lo
+   que viene, y te dice dónde quedó.
+
 ### Prueba 12 — Plan estratégico (arquetipo estrategia)
 `ejemplos/estrategia-demo/` es el plan 2027-2029 ficticio de una empresa de mantención: diagnóstico con fuentes,
 lineamientos aprobados, cuatro objetivos con metas por año, cinco iniciativas y la revisión del primer trimestre con

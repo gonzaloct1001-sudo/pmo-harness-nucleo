@@ -180,6 +180,12 @@ def resumen(remoto=False):
             lineas.append(f"- Skills propias de esta carpeta (no están en el índice del núcleo): {', '.join(propias)}; "
                           "lee su SKILL.md cuando su descripción calce con el pedido.")
 
+    _ey = RAIZ / "empresa" / "empresa.yaml"
+    _mt = re.search(r"^trabajo:.*\n(?:[ \t]+.*\n)*?[ \t]+modo:[ \t]*[\"']?([A-Za-z]+)",
+                    _ey.read_text(encoding="utf-8", errors="replace"), re.M) if _ey.exists() else None
+    if _mt and _mt.group(1).lower() in ("siempre", "directo"):
+        lineas.append("- Modo de trabajo de esta empresa: " + ("«siempre»: toda tarea parte con un plan breve y espera el sí."
+                      if _mt.group(1).lower() == "siempre" else "«directo»: no ofrezcas plan previo; ejecuta (el principio 4 sigue vigente)."))
     if not mantenedor:  # extensiones propias: herramientas y hooks de la empresa, que ninguna actualización toca
         ext, pruebas_ext = _nucleo.extensiones_propias(RAIZ), _nucleo.pruebas_propias(RAIZ)
         if ext or pruebas_ext:

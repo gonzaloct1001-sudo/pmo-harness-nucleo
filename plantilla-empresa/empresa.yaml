@@ -26,12 +26,16 @@ formato:                       # marca común: los proyectos la heredan si no de
   pie_de_pagina: "Documento confidencial"
   formato_fecha: DD-MM-AAAA
   tamano_pagina: carta         # carta | a4
+  plantilla_word: ""           # plantilla Word oficial para documentos largos (ruta en empresa/, p. ej. plantillas/informe.docx); vacío = formato por defecto
 
 autoria:                       # los entregables salen a nombre de esta persona u organización
   nombre: ""                   # vacío = responsable.nombre
   organizacion: ""             # vacío = empresa.nombre
   terminos_prohibidos: []
   terminos_permitidos: []
+
+trabajo:                       # cómo parte cada tarea (principio 23 de AGENTS.md)
+  modo: proporcional           # proporcional (plan breve solo si la tarea es grande, ambigua o difícil de deshacer) | siempre | directo
 
 capacidad:                     # modelo por nivel de capacidad (regla 20 de AGENTS.md); vacío = el que trae cada subagente
   alta: ""                     # juicio no verificable: evaluar, refutar, red team, encuadrar, revisar (por defecto opus)

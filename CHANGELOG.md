@@ -1,5 +1,55 @@
 # Cambios
 
+## 3.3.0 — 2026-11-11
+
+### Planea
+- **Plan antes de ejecutar, en proporción (principio 23).** Una tarea chica y reversible se ejecuta; una grande,
+  ambigua o difícil de deshacer parte con un plan de hasta cinco líneas (qué entendí, qué voy a hacer, qué voy a
+  tocar, qué necesito) y tres salidas: «ejecuta», «ajusta» o «plan detallado». Vale como la confirmación del
+  principio 4. Configurable por empresa en `trabajo.modo` de `empresa.yaml` (`proporcional`, `siempre`, `directo`); el
+  estado de inicio avisa cuando no es el de fábrica. Detalle en `reglas/trabajo.md`.
+
+### Explica
+- **Skill `explicar` y `herramientas/explicar.py`**: una página web de un solo archivo desde un Markdown con bloques
+  `cifras`, `grafico` (barras, columnas, líneas, tornado, histograma con probabilidad de cumplir una meta), `pasos` y
+  `tiempo`. Sin internet ni recursos externos, en claro y oscuro, imprimible. Cada gráfico trae su tabla de datos,
+  responde al cursor y al teclado, y usa una paleta comprobada para daltonismo; la herramienta rechaza lo que se lee
+  mal (más de cuatro series, una sola barra) y dice qué corregir. Sirve también para el «plan detallado».
+
+### Recuerda
+- **Agenda del día (07a9bc-M-002)**: `herramientas/agenda.py` lista lo vencido, lo de hoy, lo que viene en 14 días
+  (hitos, acuerdos, problemas, vencimientos, riesgos por revisar, cierres de postulación) y los reportes que tocan
+  hoy y aún no se emiten, de todos los proyectos y subproyectos. En Claude Code llega sola en la primera interacción
+  del día (hook `agenda_diaria.py`, una vez por día y por computador); en otras herramientas, `agenda.py --una-vez`.
+  Nuevos campos opcionales: `proyecto.estado` (un proyecto `pausado` no aparece) y `dia` en la definición de un
+  reporte (día de la semana, números del mes o `ultimo`; también se lee `programacion`).
+
+### Documentos largos con la plantilla de la empresa (07a9bc-M-001)
+- **`md_a_docx.py --plantilla`** (o `formato.plantilla_word` en `proyecto.yaml` o `empresa.yaml`): el Markdown se arma
+  dentro de la plantilla Word oficial. Bloque inicial con título, código, versión, fecha y revisiones; marcadores
+  `{{…}}` en portada, tablas, encabezados y pies; la fila de la historia de revisiones se repite; `{{indice}}` pasa a
+  ser una tabla de contenido de Word; el cuerpo usa los estilos y la numeración de la plantilla; `![pie](ruta.png)`
+  inserta la figura con «Figura N»; «Anexos» parte en página nueva. Sin plantilla, todo sigue igual. Ejemplo en
+  `ejemplos/documento-largo-demo/`.
+- **`llenar_docx.py`**: reemplazar un marcador ya no borra una imagen que comparte su párrafo (el logo de un
+  encabezado), y cada fragmento conserva su formato.
+
+### Para quien mantiene el núcleo
+- **Evals de comportamiento** (`pruebas/evals/`): diez escenarios que le entregan un pedido real al asistente en una
+  empresa de prueba y revisan qué respondió y qué tocó (plan ante una tarea grande, confirmación antes de registrar,
+  no inventar, no subir confidenciales, no editar el núcleo, agenda, página visual, extensiones). Cada escenario
+  consume cuota del asistente, así que no corren con la batería: `python pruebas/evals/ejecutar_evals.py`. La batería
+  prueba el evaluador con un asistente de mentira.
+
+### Al actualizar a esta versión
+- Se agrega a `empresa/empresa.yaml` el bloque `trabajo` (modo `proporcional`). `formato.plantilla_word`,
+  `proyecto.estado` y `dia` son opcionales: se escriben cuando se usan.
+- Probado por el camino real desde una carpeta en 3.2.0 con skill propia, extensión con pruebas, líneas propias en
+  `.gitignore` y archivos del núcleo modificados. Ese recorrido mostró que la batería, dentro de una empresa, llevaba a
+  su copia de trabajo la sección propia de `.gitignore`: ahora la deja fuera, y la fusión por líneas nunca produce dos
+  secciones propias.
+- Batería: 462 pruebas.
+
 ## 3.2.0 — 2026-11-11
 
 ### Lo tuyo no se pisa

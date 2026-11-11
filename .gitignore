@@ -50,6 +50,10 @@ empresa/_entrada/*
 # --- Respaldos locales que deja actualizar_nucleo.py ---
 .harness/respaldo-nucleo/
 .harness/sesiones/
+.harness/agenda-vista.txt
+
+# --- Resultados de los evals de comportamiento (locales de quien los corre) ---
+pruebas/evals/resultados/
 .harness/uso-skills.csv
 
 # --- Lanzador del status semanal (rutas propias de cada computador) ---

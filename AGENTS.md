@@ -64,6 +64,7 @@ empezar, lee su `proyecto.yaml`, su `CLAUDE.md` y `seguimiento/traspaso.md`; el 
 18. Tu consola no es interactiva: nada que espere una respuesta; instala solo con `preparar_pc`; scripts por ruta relativa.
 21. Cuida el contexto: no releas; resúmenes por script; lotes de documentos al `lector-documental`; `references/` y
     `reglas/` solo en su fase; tareas largas en hitos, y sesión nueva tras muchas acciones.
+23. Tarea grande, ambigua o difícil de deshacer: primero un plan breve y el sí del usuario (`trabajo.modo`).
 
 **Confidencialidad y entregables** (`reglas/confidencialidad.md`, `reglas/entregables.md`)
 6. `_entrada/`, originales, banco de archivos y paquetes firmados no se suben a Git; de bases y contratos, réplica
@@ -95,12 +96,12 @@ en `NUBE.md`: rama propia y PR (nunca `main`), una tarea a la vez, solo REST. En
 un PR de la nube abierto, revísalo o intégralo. Nada se programa sin el sí del usuario (skill `nube`).
 
 ## Procedimientos (skills)
-Cada procedimiento está en `.claude/skills/<nombre>/SKILL.md` (la carpeta se llama `.claude` por compatibilidad; sirve
-para cualquier asistente). En Claude Code se activan solos. **En otras herramientas, lee el índice
+Cada procedimiento está en `.claude/skills/<nombre>/SKILL.md` (sirve para cualquier asistente). En Claude Code se
+activan solos. **En otras herramientas, lee el índice
 `.claude/skills/LEEME.md` al recibir el primer pedido de la sesión** y, cuando el pedido calce con una fila, lee ese
 SKILL.md completo y síguelo paso a paso, aunque el usuario no lo nombre. Si menciona un subagente o un hook, usa las
 equivalencias de `reglas/organizacion.md`. Los de uso diario: `instalar` · `nuevo-proyecto` (de cero o con documentos)
-· `status` · `reportes` · `reuniones` · `riesgos` · `investigar` · `ayuda` · `guardar-cambios`. Las carpetas de
+· `status` · `reportes` · `reuniones` · `riesgos` · `investigar` · `explicar` · `ayuda` · `guardar-cambios`. Las carpetas de
 `.claude/skills/` que no están en el índice son skills propias de la empresa y también valen.
 
 ## Roles (subagentes)
@@ -111,7 +112,7 @@ paso separado (solo su perspectiva, solo sus archivos, una propuesta por vez). C
 en Claude Code; el control de Git (`.githooks/pre-commit`) en todas las herramientas; si la tuya no tiene hooks, el paso
 0 y el principio 16 los haces tú. Detalle por herramienta: `.claude/skills/configurar/references/asistentes.md`.
 
-## Herramientas (`python`, o `py` en Windows; `.venv/bin/python` en Mac)
+## Herramientas
 De uso diario: `estado.py` · `status.py` · `crear_proyecto.py` · `evaluar_metricas.py` · `validar_proyecto.py` ·
 `extraer_entrada.py` · `md_a_docx.py` · `verificar_autoria.py` · `guia_proyecto.py` · `investigacion.py` · `mejoras.py`.
 La lista completa, con las opciones de cada una, está en `herramientas/LEEME.md`: léela solo cuando necesites una que no

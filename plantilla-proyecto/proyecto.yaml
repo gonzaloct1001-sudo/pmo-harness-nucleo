@@ -13,6 +13,7 @@ proyecto:
   descripcion: PENDIENTE       # una o dos frases
   fecha_inicio: PENDIENTE      # AAAA-MM-DD
   confidencialidad: alta       # alta | media | baja
+  estado: activo               # activo | pausado | cerrado (un proyecto pausado no aparece en la agenda del día)
 
 arquetipos: []                 # ejecucion | cartera | estudio (uno o más). Ver arquetipos/
 perfil: ""                     # perfil de biblioteca usado como base, si aplica

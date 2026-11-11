@@ -11,6 +11,8 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 - `estrategia.py <proyecto> [--revisar | --revision AAAA-Tn [--quien] | --roadmap | --registrar] [--hoy]` → plan estratégico: estado y siguiente paso, cascada que cuadra, revisión del período con reales desde mediciones, Gantt de iniciativas, mediciones.
 - `mejoras.py [--listar [--todas]] | --anotar --tipo agregar|quitar|cambiar|aprendizaje|fallo --donde ... --que ... --evidencia ... [--por-que ...] [--quien ...] | --exportar [--salida ruta] | --cerrar-resueltas` → ideas, aprendizajes y fallos del harness mismo, para el mantenedor (nunca se edita el núcleo en una empresa). Mantenedor: `--procesar <archivo exportado>`, `--decidir <id> aceptada|rechazada|diferida [--version] [--nota]`.
 - `status.py [--breve] [--formato html,md,xlsx,json] [--abrir] [--panel carpeta] [--crear-panel carpeta --empresas ...]` → status de gestión.
+- `agenda.py [--dias 14] [--hoy AAAA-MM-DD] [--una-vez]` → agenda del día de todos los proyectos: lo vencido, lo de hoy, lo que viene y los reportes que tocan hoy (definición con `dia:`); respeta los proyectos pausados. `hooks/agenda_diaria.py` la entrega en Claude Code en la primera interacción del día.
+- `explicar.py <entrada.md> [--proyecto ruta] [--salida ruta.html] [--abrir] [--borrador]` → página web de un solo archivo desde un Markdown con bloques `cifras`, `grafico` (barras, columnas, lineas, tornado, histograma), `pasos` y `tiempo`; sin internet, claro y oscuro, imprimible, con la tabla de datos de cada gráfico.
 - `agendar_status.py --dia lunes --hora 09:00 [--panel carpeta] | --ver | --quitar` → reporte web semanal agendado en este computador.
 - `formulario.py <proyecto> [--reconstruir archivos] [--limpiar] [--word] [--hoja-carga]` → formulario de una plataforma de postulación.
 - `llenar_xlsx.py <planilla> --valores valores.yaml [--vista-previa]` → llena planillas oficiales sin borrar listas, formas ni fórmulas.
@@ -42,7 +44,7 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 - `modelo_economico.py <supuestos.yaml>` → Excel con flujo de caja, VAN, TIR y sensibilidad (con fórmulas).
 - `comparar_documentos.py <anterior> <nuevo>` → diferencias entre documentos, destacando las sustantivas.
 - `extraer_entrada.py <ruta-proyecto> [--origen carpeta]` → inventario, texto y réplicas en `fuentes/` (incremental).
-- `md_a_docx.py <entrada.md> <salida.docx> --proyecto <ruta> [--borrador]` → Word con la marca y autoría del proyecto.
+- `md_a_docx.py <entrada.md> <salida.docx> --proyecto <ruta> [--plantilla plantilla.docx | --sin-plantilla] [--borrador]` → Word con la marca y autoría del proyecto; con una plantilla Word de la empresa (`--plantilla` o `formato.plantilla_word`), documento largo sobre ella: portada y encabezados con marcadores, historia de revisiones, índice, estilos y numeración de la plantilla, figuras con leyenda y anexos (07a9bc-M-001).
 - `verificar_autoria.py <archivo|carpeta> --proyecto <ruta> [--corregir]` → revisa que un entregable no tenga rastros del proceso.
 - `inspeccionar_xlsx.py <archivo.xlsx>` → estructura de un Excel (hojas, fórmulas, celdas de entrada) y si se puede guardar con openpyxl.
 - `gantt_mermaid.py <ruta-proyecto>` → `cronograma/gantt.md` para visualizar la carta Gantt.

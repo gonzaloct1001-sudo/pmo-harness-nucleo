@@ -1,4 +1,4 @@
-# PMO Harness 3.2: manual de usuario
+# PMO Harness 3.3: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
@@ -82,6 +82,9 @@ Basta con describir lo que quieres; estas frases son ejemplos.
 | Quieres | Dilo así |
 |---|---|
 | Saber cómo van las cosas | «¿cómo vamos?» · «dame el reporte de status» |
+| Ver tus pendientes del día | «¿qué tengo pendiente hoy?» (con Claude Code llega sola en tu primer mensaje del día) |
+| Entender algo de un vistazo | «explícame el cierre de octubre en una página» · «hazme un gráfico del avance» |
+| Un documento largo con el formato oficial | «pasa este informe a la plantilla de la empresa» |
 | Convertir notas en una minuta con acuerdos | «estas son mis notas de la reunión de hoy» |
 | Sacar el informe del período | «prepara el informe de esta semana» · «arma la presentación para el comité» |
 | Registrar un riesgo o un problema | «el proveedor se va a atrasar» · «registra este problema» |
@@ -94,6 +97,21 @@ Basta con describir lo que quieres; estas frases son ejemplos.
 
 Al terminar cada tarea, el asistente deja un traspaso en el proyecto: así tú, otro computador u otra IA retoman sin
 repetir nada.
+
+**Antes de partir, un plan cuando hace falta.** Si lo que pides es chico, lo hace. Si es grande, se puede entender de
+más de una forma o cuesta deshacerlo, primero te muestra en cinco líneas qué entendió, qué va a hacer y qué va a
+tocar, y espera tu respuesta: «ejecuta», «ajusta…» o «plan detallado» (te lo arma como una página). Si quieres que
+vaya directo, dilo: «hazlo ya». Y si prefieres que siempre parta con un plan, o que nunca lo ofrezca: «de ahora en
+adelante, siempre con plan» o «sin planes previos».
+
+**La agenda del día.** Una vez al día, en tu primer mensaje, te muestra lo vencido, lo de hoy y lo que viene en dos
+semanas, de todos tus proyectos, más los informes que tocan ese día (si le dijiste «el informe semanal sale los
+lunes»). Un proyecto en pausa no aparece: «pon el proyecto X en pausa».
+
+**Páginas para explicar.** Cuando algo se entiende mejor viéndolo, pide una página: cifras clave, gráficos, pasos y
+fechas en un archivo que se abre con doble clic, sin internet, y se puede imprimir o adjuntar a un correo. Cada
+gráfico trae su tabla de datos, y los números salen de tus registros. No se publica en ningún sitio: queda en la
+carpeta del proyecto.
 
 ## 7. Postulaciones a fondos y licitaciones
 Deja las bases, anexos y aclaraciones en la carpeta de entrada del proyecto y di «prepara la postulación». El harness

@@ -5,6 +5,7 @@ formato: docx                   # docx | xlsx | pptx | md
 modo: generar                   # generar (desde plantilla o formato por defecto) | actualizar (edita el vigente)
 plantilla: ""                   # ruta en reportes/plantillas/, vacío = formato por defecto
 cadencia: semanal               # semanal | mensual | quincenal | a pedido
+dia: ""                         # día en que toca: lunes…domingo, números del mes (1,15) o ultimo; vacío = la agenda no lo recuerda
 periodo_archivo: semana         # semana (AAAA-Sxx) | mes (AAAA-MM)
 destinatarios: []
 fuentes: []                     # carpetas o archivos que alimentan el reporte

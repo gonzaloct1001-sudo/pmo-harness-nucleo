@@ -93,7 +93,9 @@ def fusionar_lineas(viejo, nuevo, por_paquete=False):
     propias = list(dict.fromkeys(l.rstrip() for l in candidatas if l.strip() and clave(l) not in presentes))
     if not propias:
         return nuevo
-    return nuevo.rstrip("\n") + "\n\n" + MARCA_PROPIO + "\n" + "\n".join(propias) + "\n"
+    base_nueva, _, bloque_nuevo = nuevo.partition(MARCA_PROPIO)  # si el nuevo ya trae la sección, se suma a esa (una sola marca)
+    todas = list(dict.fromkeys([l.rstrip() for l in bloque_nuevo.splitlines() if l.strip()] + propias))
+    return base_nueva.rstrip("\n") + "\n\n" + MARCA_PROPIO + "\n" + "\n".join(todas) + "\n"
 
 
 def renombres_por_choque(choques, manifiesto):

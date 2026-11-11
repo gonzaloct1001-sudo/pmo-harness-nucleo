@@ -1,6 +1,6 @@
 ---
 name: status
-description: Status de todos los proyectos: semáforos, lo que vence, decisiones pendientes y avance; reporte web semanal (agendable en este computador) y tablero único de varias empresas en una carpeta de panel. Úsala con «¿cómo vamos?», «dame el status», «agéndalo los lunes a las 9», «quiero ver todas mis empresas juntas», o al inicio para resumir la situación.
+description: Status de todos los proyectos: semáforos, lo que vence, decisiones y avance; agenda del día (lo vencido, lo de hoy, lo que viene); reporte web semanal agendable y tablero único de varias empresas. Úsala con «¿cómo vamos?», «dame el status», «¿qué tengo pendiente hoy?», «agéndalo los lunes a las 9», «quiero ver todas mis empresas juntas».
 ---
 
 > Reglas que aplican (léelas si no están en tu contexto): `reglas/trabajo.md`, `reglas/datos.md`, `reglas/entregables.md`, `reglas/organizacion.md`.
@@ -19,6 +19,13 @@ semáforo están en su encabezado: explícalas si el usuario pregunta por qué a
    - lo que cambió desde el status anterior, si hay.
    Los verdes van en una sola línea. No pegues la tabla completa salvo que la pida.
 3. **Al iniciar la sesión** el estado ya trae el status breve: muéstralo en 2 a 4 líneas junto al saludo.
+4. **Agenda del día** («¿qué tengo pendiente?», «la minuta de pendientes», «¿qué vence esta semana?»):
+   `python herramientas/agenda.py [--dias 14]`. Lista lo vencido, lo de hoy, lo que viene y los reportes que tocan
+   hoy, de todos los proyectos; no muestra lo de un proyecto con `proyecto.estado: pausado`. Muéstrala tal cual, lo
+   vencido primero, y no actúes sobre ella sin que lo pida. En Claude Code llega sola en la primera interacción del
+   día (hook `agenda_diaria.py`); en otra herramienta, ejecútala con `--una-vez` al recibir el primer pedido del día.
+   Para que un reporte aparezca el día que toca, su definición (`reportes/catalogo/<tipo>.md`) lleva `dia:` (un día
+   de la semana, números del mes o `ultimo`): ofrécelo cuando el usuario diga «el informe sale los lunes».
 
 ## 2. Reporte web (cuando pide «reporte», «informe de status», «para el directorio», «para revisarlo»)
 1. `python herramientas/status.py --formato html --abrir` → `status/status-AAAA-MM-DD.html`, que se abre en su

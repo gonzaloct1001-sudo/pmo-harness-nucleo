@@ -41,6 +41,8 @@ con cambios sin guardar y traspaso viejo; en las demás herramientas, es el asis
 ## Notas por herramienta
 
 ### Claude Code
+- La agenda del día llega sola en la primera interacción (hook `agenda_diaria.py`); en las demás herramientas,
+  ejecuta `python herramientas/agenda.py --una-vez` al recibir el primer pedido del día y muéstrala si trae algo.
 - Todo viene configurado: el hook de inicio entrega el estado, las skills se activan solas y los subagentes están
   disponibles. Solo falta registrarlo en `.harness/asistentes.yaml`.
 - Los hooks usan `sh herramientas/py.sh`, que encuentra Python aunque en Windows solo responda `py`.

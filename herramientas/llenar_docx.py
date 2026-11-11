@@ -60,19 +60,12 @@ def es_titulo(p):
 
 
 def reemplazar_en(parrafos, valores):
+    """Reemplaza los marcadores en los párrafos tocando solo sus fragmentos de texto: una imagen o un campo que
+    comparte el párrafo (el logo de un encabezado) queda intacto, y cada fragmento conserva su formato."""
+    nombres = {k.strip("{} "): v for k, v in valores.items()}
     hechos = set()
     for p in parrafos:
-        texto = "".join(r.text for r in p.runs)
-        if not any(k in texto for k in valores):
-            continue
-        for k, v in valores.items():
-            if k in texto:
-                texto = texto.replace(k, str(v))
-                hechos.add(k)
-        if p.runs:
-            for r in p.runs[1:]:
-                r.text = ""
-            p.runs[0].text = texto
+        hechos |= {"{{" + n + "}}" for n in md_a_docx.reemplazar_marcadores_en(p._p, nombres)}
     return hechos
 
 

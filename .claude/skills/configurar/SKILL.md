@@ -31,6 +31,8 @@ Si no está claro, muestra el menú en un mensaje y pide la letra:
 | M | Mejoras al harness mismo: ver lo anotado, entregarlo al mantenedor | `.harness/mejoras-nucleo.csv` | `mejoras.py --listar`; `--exportar` produce el archivo anonimizado que el usuario revisa y envía (nunca se edita el núcleo) |
 | N | Salud del harness: qué sobra, qué está viejo, cuánto contexto carga | informe de `entropia.py` | `python herramientas/entropia.py --informe`; muestras las propuestas y solo con su sí se retira algo |
 | O | Algo que el harness no trae: una herramienta, un aviso automático (hook) o una variante de algo del núcleo | `empresa/extensiones/` (herramientas, hooks y pruebas propias), `.claude/skills/<nombre-propio>/` (skills propias) | Lees `empresa/extensiones/LEEME.md`; escribes la extensión y su prueba propia; nunca editas el núcleo; si le sirve a cualquiera, además `mejoras.py --anotar` |
+| P | Cómo parte cada tarea: con un plan breve siempre, solo cuando la tarea lo amerita, o directo a ejecutar | `empresa/empresa.yaml` (`trabajo.modo`) | Editas `modo` (`proporcional`, `siempre` o `directo`) y explicas el efecto (principio 23) |
+| Q | La plantilla Word oficial para documentos largos (portada, revisiones, índice) | `empresa/empresa.yaml` o `proyecto.yaml` (`formato.plantilla_word`), archivo en `empresa/plantillas/` | Guardas la plantilla, anotas su ruta y pruebas con `md_a_docx.py` (el contrato de marcadores está en su encabezado) |
 
 ## 2. Aplicar
 1. Di en dos líneas qué vas a cambiar, dónde y qué efecto tiene («el logo nuevo saldrá en todos los documentos de la

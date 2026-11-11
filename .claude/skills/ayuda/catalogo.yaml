@@ -92,7 +92,9 @@ skills:
   - {id: ayuda, para: "Ver qué puedo hacer en este proyecto y cómo pedirlo", arquetipos: [todos],
      ejemplos: ["¿qué puedo hacer?", "muéstrame la guía del proyecto", "¿qué comandos tengo?"]}
   - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
-     ejemplos: ["¿cómo vamos?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
+     ejemplos: ["¿cómo vamos?", "¿qué tengo pendiente hoy?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
+  - {id: explicar, para: "Explicar algo complejo en una página visual: cifras clave, gráficos, pasos y línea de tiempo, en un solo archivo que se abre con doble clic", arquetipos: [todos],
+     ejemplos: ["explícame el cierre de octubre en una página", "hazme un gráfico del avance por frente", "muéstrame qué variable pesa más en el resultado", "quiero el plan detallado antes de partir"]}
   - {id: reportes, para: "Generar cualquier reporte del catálogo del proyecto · Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
      ejemplos: ["prepara el reporte de esta semana", "actualiza la planilla de septiembre", "arma la presentación para el comité", "quiero un informe mensual para el directorio en Excel", "este Word es la plantilla del reporte quincenal"]}
   - {id: adoptar-formatos, para: "Que todo salga con tus formatos: adoptar tus plantillas y archivos base como el por defecto, sabiendo qué les falta y qué se pierde", arquetipos: [],
@@ -146,7 +148,7 @@ skills:
 # borradores; baja = procedimiento, transcripción o validación. Las skills que no aparecen son de nivel medio.
 capacidad:
   alta: [nuevo-proyecto, investigar, preparar-postulacion, red-team, evaluar-propuestas, revisar-estudio, revisar-documento, riesgos, consistencia, reuniones, control-cambios, evaluacion-economica, reportes, gestionar-programa, adoptar-formatos, gestion-financiera, plan-estrategico]
-  media: [metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra, actualizar-gantt, documentos, formulario-plataforma, status]
+  media: [metricas, gestionar-items, gestionar-sprint, registro-ingenieria, registros-obra, actualizar-gantt, documentos, formulario-plataforma, status, explicar]
   baja: [instalar, configurar, actualizar-nucleo, ayuda, guardar-cambios, nube]
 
 hooks:

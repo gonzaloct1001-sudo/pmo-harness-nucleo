@@ -1,6 +1,6 @@
 # Reglas: cómo se trabaja
 
-Detalle de los principios 4, 9, 10, 11, 17, 18 y 21 del mapa (`AGENTS.md`). Léelo al empezar una tarea que
+Detalle de los principios 4, 9, 10, 11, 17, 18, 21 y 23 del mapa (`AGENTS.md`). Léelo al empezar una tarea que
 modifique registros o que vaya a durar más de un rato.
 
 4. **Pide confirmación antes de modificar registros** (riesgos, cronograma, línea base, cambios, ítems), salvo en
@@ -33,6 +33,16 @@ modifique registros o que vaya a durar más de un rato.
     fase que las usa. La calidad del contexto baja antes de que la ventana se llene: una tarea larga se parte en
     hitos con traspaso, y después de unas 120 acciones conviene guardar y seguir en una sesión nueva (en Claude Code
     lo recuerda un hook). Para ver cuánto pesa cada pieza: `python herramientas/medir_contexto.py`.
+23. **Plan antes de ejecutar, en proporción.** Por defecto (`trabajo.modo: proporcional` en `empresa/empresa.yaml`):
+    una tarea chica y reversible se ejecuta de inmediato. Una tarea **grande** (toca varios registros o archivos, o
+    toma más de un rato), **ambigua** (hay más de una forma razonable de entenderla) o **difícil de deshacer**
+    (reemplaza una línea base, cierra un período, envía o publica algo) parte con un plan de hasta cinco líneas: qué
+    entendí, qué voy a hacer, qué voy a tocar, qué necesito de ti. Cierra con tres salidas: «ejecuta», «ajusta» (y
+    qué) o «plan detallado» (un documento, o una página con la skill `explicar`). Ese plan vale como la confirmación
+    del principio 4: no se pregunta dos veces. Si el usuario pide ir directo («hazlo ya», «sin plan», «ejecuta»), se
+    ejecuta. `siempre`: toda tarea parte con el plan. `directo`: nunca se ofrece (el principio 4 sigue vigente para
+    modificar registros). En una tarea de la nube no hay a quién preguntar: el plan se escribe en el pedido y se
+    ejecuta lo que la tarea autoriza. El estado de inicio avisa cuando el modo no es `proporcional`.
 
 ## Modo por defecto
 Si el alta del proyecto está incompleta (`induccion.estado` distinto de `completa`), trabaja igual con los valores
