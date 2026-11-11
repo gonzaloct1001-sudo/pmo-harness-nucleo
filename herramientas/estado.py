@@ -180,6 +180,13 @@ def resumen(remoto=False):
             lineas.append(f"- Skills propias de esta carpeta (no están en el índice del núcleo): {', '.join(propias)}; "
                           "lee su SKILL.md cuando su descripción calce con el pedido.")
 
+    if not mantenedor:  # extensiones propias: herramientas y hooks de la empresa, que ninguna actualización toca
+        ext, pruebas_ext = _nucleo.extensiones_propias(RAIZ), _nucleo.pruebas_propias(RAIZ)
+        if ext or pruebas_ext:
+            lineas.append(f"- Extensiones propias (empresa/extensiones/): {len(ext)} archivo(s)"
+                          + (f", {len(pruebas_ext)} prueba(s) propia(s)" if pruebas_ext else "; sin pruebas propias (conviene tener una)")
+                          + ". Úsalas cuando el pedido calce; lo propio nunca se edita en el núcleo.")
+
     entrada_emp = RAIZ / "empresa" / "_entrada"
     if entrada_emp.is_dir() and not mantenedor:  # formatos propios entregados y todavía no adoptados
         registrados = set()

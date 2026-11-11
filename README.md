@@ -1,4 +1,4 @@
-# PMO Harness v3.1
+# PMO Harness v3.2
 
 Un arnés para que un asistente de IA —Claude Code, OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u
 otro que trabaje sobre carpetas— lleve con método y evidencia **tus proyectos, las finanzas de tu empresa y tus
@@ -270,6 +270,10 @@ actualización los toca; todo queda en el historial y se puede deshacer.
   herramienta.
 
 ## Historial de versiones (completo en `CHANGELOG.md`)
+- **3.2** — Lo tuyo no se pisa y lo confidencial no sale: extensiones propias en `empresa/extensiones/` con pruebas
+  que la actualización compara antes y después; la actualización conserva, renombra o fusiona lo propio en vez de
+  reemplazarlo; controles de confidencialidad que miran el estado real (hook antes y después, control antes de subir),
+  definición propia en `empresa/confidencialidad.yaml` y auditoría; primeras mejoras recibidas de una carpeta de empresa.
 - **3.1** — Plan estratégico a 3 o 5 años (arquetipo `estrategia`, skill `plan-estrategico`, `estrategia.py`):
   diagnóstico con fuentes, cascada de objetivos, metas e iniciativas que cuadra, plan financiero sobre finanzas,
   revisión trimestral con decisiones.

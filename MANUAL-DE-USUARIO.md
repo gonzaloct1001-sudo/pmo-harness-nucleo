@@ -1,4 +1,4 @@
-# PMO Harness 3.1: manual de usuario
+# PMO Harness 3.2: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
@@ -184,7 +184,8 @@ adelante…». El asistente te dice qué va a cambiar y qué efecto tiene, pide 
 | Tus formatos propios | «adopta mi nueva plantilla de informe» |
 | El asistente de IA y qué modelo usa para cada tipo de tarea | «voy a usar Gemini en esta carpeta» |
 | Los umbrales de los semáforos | «el rojo de caja es con menos de un mes» |
-| Qué se replica y qué nunca se sube | «los contratos también quedan solo en el PC» |
+| Qué se replica y qué nunca se sube | «los contratos también quedan solo en el PC» · «la carpeta de sueldos nunca se sube» |
+| Algo que el harness no trae | «quiero un aviso cada mañana con lo que vence» (queda como extensión tuya) |
 | El modo nube y sus tareas | «pausa el resumen de la mañana» · «ya no quiero la nube» |
 | El status semanal del computador | «el reporte los viernes a las 5» |
 | Un proyecto: nombre, cliente, comité, reportes | «el comité ahora es mensual» |
@@ -193,12 +194,26 @@ adelante…». El asistente te dice qué va a cambiar y qué efecto tiene, pide 
 Nada de esto se pierde al actualizar el harness: tus ajustes viven en tu carpeta, fuera del núcleo. Y todo queda en el
 historial, así que se puede deshacer: «vuelve a dejar el logo anterior».
 
+### Lo tuyo y las actualizaciones
+El harness tiene dos partes que nunca se mezclan: el **núcleo** (lo común, que llega con cada versión) y **lo tuyo**
+(tus proyectos, tu empresa, tus skills propias y tus extensiones en `empresa/extensiones/`). Una actualización solo
+reemplaza el núcleo, y antes de aplicar te muestra una sección «Lo tuyo en esta actualización»:
+- lo que agregaste a la configuración, a la lista de lo que nunca se sube o a las dependencias **se fusiona** con lo nuevo;
+- si creaste algo con el mismo nombre que algo nuevo del núcleo, lo tuyo **queda entero con otro nombre** (`-propia`);
+- si cambiaste un archivo del núcleo y la versión nueva no lo toca, **queda como lo dejaste**; si también lo toca, tu
+  versión queda en un respaldo y te dice exactamente cuál;
+- si tienes extensiones con pruebas propias, se ejecutan antes y después: **si algo tuyo dejara de funcionar, la
+  actualización se deshace sola** y te dice qué ajustar.
+Por eso el asistente no edita el núcleo en tu carpeta: cuando pides algo que el harness no trae, lo construye como
+extensión tuya y, si le serviría a cualquiera, lo anota como idea para el núcleo.
+
 ### Ideas para mejorar el harness
 Tú no editas el núcleo (las skills, herramientas y plantillas comunes): lo mantiene una persona para todas las
 empresas. Lo que sí pasa es que el harness **anota solo** lo que detecta sobre sí mismo (una actualización que se
 revirtió, una prueba que falla, algo que el asistente tuvo que adivinar o que una skill no cubrió) en un registro de tu
-carpeta. Cuando quieras, pides «exporta las mejoras al harness»: se produce un archivo **sin nombres, correos, RUT ni
-montos**, lo revisas y se lo envías al mantenedor. Él decide, y cuando actualizas, tu carpeta marca cuáles entraron.
+carpeta. Cuando quieras, pides «exporta las mejoras al harness»: se produce un archivo **sin nombres, siglas, correos,
+RUT ni montos**, lo revisas y se lo envías al mantenedor (**solo ese archivo**: el registro interno guarda los textos
+tal como se escribieron). Él decide, y cuando actualizas, tu carpeta marca cuáles entraron.
 Para verlas: «¿qué mejoras al harness hay anotadas?».
 
 ### Salud del harness (entropía)
@@ -219,9 +234,22 @@ que descargas es público, pero al instalarlo se desconecta de él: nada tuyo va
 | El paquete firmado de una postulación | Tus formatos adoptados y tu configuración |
 | Claves y contraseñas | |
 
-Dos controles automáticos lo garantizan: uno impide guardar en Git un archivo confidencial, y otro revisa que las
-planillas estén bien formadas. Si uno bloquea algo, es a propósito: el asistente te explica qué hacer. Nunca mezcla
-datos de dos empresas. Si una norma o un contrato exige declarar el uso de IA, te lo avisa y la decisión es tuya.
+Hay tres niveles: lo que **se versiona** (datos y salidas), lo que deja una **copia fiel en texto** (bases, contratos,
+actas) y lo que deja **solo una ficha** (el archivo y su contenido no salen de tu computador). Tú puedes sumar al
+tercer nivel lo que quieras: «la carpeta de sueldos nunca se sube». Queda anotado en un archivo tuyo
+(`empresa/confidencialidad.yaml`) que ninguna actualización toca.
+
+Los controles miran lo que realmente está por guardarse, no cómo se escribió la instrucción: uno revisa cada guardado,
+otro revisa **antes de subir** a GitHub (por si algo se guardó desde otro computador o con otra herramienta), y con
+Claude Code un tercero saca de inmediato cualquier archivo confidencial que se haya preparado por error. Ninguno se
+puede saltar desde el asistente. Si pones un Word, un PDF o una imagen fuera de las carpetas donde el harness los
+espera, te **avisa** al guardar para que digas si es material del cliente (puedes pedir que lo bloquee). Para revisar
+lo que ya está en tu repositorio: «audita la confidencialidad». Lo que queda solo en tu computador no tiene copia en
+GitHub: si es importante, respáldalo tú en un lugar seguro.
+
+Otro control revisa que las planillas estén bien formadas. Si uno bloquea algo, es a propósito: el asistente te
+explica qué hacer. Nunca mezcla datos de dos empresas. Si una norma o un contrato exige declarar el uso de IA, te lo
+avisa y la decisión es tuya.
 
 ## 13. Varias empresas, otro computador, otra IA
 - **Otra empresa:** «crea la carpeta para la empresa X». Te preguntará si son empresas independientes o de una misma

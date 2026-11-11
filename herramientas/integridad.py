@@ -32,9 +32,26 @@ RUTA_RE = re.compile(r"`((?:" + "|".join(PREFIJOS) + r")[\w./<>\-\[\]*]+)`")
 MAX_SKILL, MAX_AGENTE = 60, 45
 
 
+def _del_nucleo():
+    """Rutas instaladas del núcleo en una carpeta de empresa (None donde se mantiene el núcleo)."""
+    sys.path.insert(0, str(RAIZ / "herramientas"))
+    import _nucleo
+    registro = _nucleo.leer_manifiesto(RAIZ)
+    return set(registro) if registro is not None else None
+
+
+INSTALADOS = _del_nucleo()
+
+
+def propio(ruta):
+    """True si `ruta` es de la empresa y no del núcleo: en una carpeta de empresa, todo lo que no vino con el núcleo
+    (sus proyectos, su empresa/, sus skills y hooks propios). La integridad revisa el núcleo."""
+    return INSTALADOS is not None and Path(ruta).resolve().relative_to(RAIZ.resolve()).as_posix() not in INSTALADOS
+
+
 def archivos(ext):
     for x in RAIZ.rglob("*"):
-        if x.is_file() and x.suffix.lower() in ext and not (set(x.relative_to(RAIZ).parts) & EXCLUIR_PARTES):
+        if x.is_file() and x.suffix.lower() in ext and not (set(x.relative_to(RAIZ).parts) & EXCLUIR_PARTES) and not propio(x):
             yield x
 
 
@@ -69,6 +86,8 @@ def main():
     # 2. skills y subagentes
     reales = set()
     for s in sorted((RAIZ / ".claude" / "skills").glob("*/SKILL.md")):
+        if propio(s):
+            continue  # una skill propia de la empresa no entra al índice ni al catálogo del núcleo
         reales.add(s.parent.name)
         t = s.read_text(encoding="utf-8", errors="replace")
         fm = frontmatter(t)
@@ -84,7 +103,7 @@ def main():
             for r in re.findall(r"`(reglas/[\w-]+\.md)`", m.group(0)):
                 if not (RAIZ / r).exists():
                     problemas.append(f"skill {s.parent.name}: regla citada que no existe {r}")
-    for ag in sorted((RAIZ / ".claude" / "agents").glob("*.md")):
+    for ag in sorted(x for x in (RAIZ / ".claude" / "agents").glob("*.md") if not propio(x)):
         fm = frontmatter(ag.read_text(encoding="utf-8", errors="replace"))
         n = len(campo(fm, "description").split())
         if n > MAX_AGENTE:
@@ -127,7 +146,7 @@ def main():
     # 5. herramientas/LEEME.md
     leeme = (RAIZ / "herramientas" / "LEEME.md").read_text(encoding="utf-8", errors="replace")
     for p in sorted((RAIZ / "herramientas").glob("*.py")):
-        if not p.name.startswith("_") and p.name not in leeme:
+        if not p.name.startswith("_") and p.name not in leeme and not propio(p):
             problemas.append(f"herramientas/LEEME.md: no nombra {p.name}")
 
     # 6. nombres viejos

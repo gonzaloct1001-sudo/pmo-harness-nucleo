@@ -1,0 +1,5 @@
+#!/bin/sh
+# Control del PMO Harness antes de subir: lo confidencial no sale de este computador, aunque un commit se haya hecho
+# sin control (otro computador, otra herramienta). Se activa junto con el de commit: git config core.hooksPath .githooks
+raiz="$(git rev-parse --show-toplevel)" || exit 1
+exec sh "$raiz/herramientas/py.sh" "$raiz/herramientas/hooks/precommit.py" --push "$@"

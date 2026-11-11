@@ -20,8 +20,9 @@ independientes o una misma entidad, separadas o juntas, y si quiere un **tablero
    `.claude/skills/` procedimientos (skills) · `.claude/agents/` roles (subagentes) · `herramientas/` scripts ·
    `reglas/` detalle de los principios · `.githooks/` controles de Git · `plantilla-proyecto/`,
    `plantilla-subproyecto/`, `plantilla-empresa/` bases. `NUCLEO.txt` lista las rutas del núcleo: se reemplazan al
-   actualizarlo (`actualizar_nucleo.py`, que fusiona `settings.json` y completa `empresa/` sin pisar lo propio); todo
-   lo demás es de la empresa y nunca se toca al actualizar.
+   actualizarlo (`actualizar_nucleo.py`, que fusiona `settings.json`, `.gitignore` y `requirements.txt`, completa
+   `empresa/` y nunca pisa lo propio en silencio); todo lo demás es de la empresa y nunca se toca al actualizar. Lo
+   que la empresa le agrega al harness vive en `empresa/extensiones/`.
 2. **Arquetipos** — `arquetipos/<nombre>/`: estructura y guía de cada forma de trabajo. `ejecucion` (plan, hitos,
    contrato, valor ganado, ruta crítica) · `obra` (RFI, no conformidades, inspecciones, estados de pago) · `agil`
    (backlog, sprints, DORA, ADR, deuda) · `cartera` (ítems con etapas y métricas) · `evaluacion` (propuestas de

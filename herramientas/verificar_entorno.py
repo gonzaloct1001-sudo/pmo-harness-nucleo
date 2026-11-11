@@ -117,7 +117,7 @@ def main():
     asis = RAIZ / ".harness" / "asistentes.yaml"
     if estado.exists():
         import re
-        ids = re.findall(r"^\s*-?\s*id:\s*([\w.-]+)", asis.read_text(encoding="utf-8")) if asis.exists() else []
+        ids = re.findall(r"^\s*-?\s*id:\s*([\w.-]+)", asis.read_text(encoding="utf-8", errors="replace"), re.M) if asis.exists() else []
         print(f"- Asistentes de IA configurados: {', '.join(ids) if ids else 'ninguno → skill configurar'}")
     proyectos = [p.name for p in (RAIZ / "proyectos").iterdir() if p.is_dir()] if (RAIZ / "proyectos").exists() else []
     print(f"- Proyectos dados de alta: {', '.join(proyectos) if proyectos else 'ninguno'}")

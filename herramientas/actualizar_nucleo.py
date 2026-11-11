@@ -9,8 +9,13 @@ Uso:
   copia temporal) o una carpeta (por ejemplo, un zip descomprimido de la versión nueva).
 - Solo cambia las rutas de NUCLEO.txt. Nunca toca proyectos/, empresa/, .harness/ (salvo su registro), la ficha de
   inicio ni lo propio de la empresa: una skill o un perfil propio dentro de una carpeta del núcleo se conserva.
-- Los archivos del núcleo que se modificaron a mano se respaldan antes de reemplazarlos; los que el núcleo nuevo ya
-  no trae se borran solo si no se modificaron.
+- Lo tuyo nunca se pierde ni se pisa en silencio: un archivo del núcleo que modificaste se conserva si el núcleo nuevo
+  no lo cambia (si también lo cambia, se respalda y se reemplaza, y queda avisado); algo propio que choca de nombre con
+  algo nuevo del núcleo se conserva con otro nombre (`<nombre>-propia`); `.gitignore`, `requirements.txt` y
+  `.claude/settings.json` se fusionan (entra lo nuevo y queda lo que agregaste). Los archivos que el núcleo nuevo ya no
+  trae se borran solo si no se modificaron.
+- Las pruebas propias de la empresa (`empresa/extensiones/pruebas*.py`, `empresa/pruebas/*.py`) se ejecutan antes y
+  después: si una que pasaba deja de pasar, se revierte.
 - Con --aplicar: respalda en .harness/respaldo-nucleo/<fecha>/, aplica, revisa los proyectos reales de la carpeta (los
   scripts que no modifican datos, antes y después: si algo que funcionaba deja de funcionar, revierte), ejecuta la batería
   de pruebas y, si falla, revierte todo. Si pasa y la carpeta es un repositorio, hace el commit "Actualización del núcleo a <versión>".
@@ -23,18 +28,21 @@ import subprocess
 import sys
 import tempfile
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import _nucleo
 
 RAIZ = Path(__file__).resolve().parent.parent
 NUNCA = ("proyectos/", "empresa/", ".harness/", "FICHA-DE-INICIO.md")
 SETTINGS = ".claude/settings.json"   # se fusiona, no se reemplaza: lo que el usuario agregó se conserva
+POR_LINEAS = (".gitignore", "requirements.txt")   # también se fusionan: entra el del núcleo nuevo y quedan las líneas propias
+MARCA_PROPIO = _nucleo.MARCA_PROPIO
 
 
-def fusionar_settings(viejo, nuevo):
+def fusionar_settings(viejo, nuevo, archivo_propio=None):
     """El settings.json del núcleo nuevo más lo propio del usuario en el viejo: permisos, hooks y claves que el núcleo
-    no trae. Lo del núcleo viejo (menciona `herramientas/`) no se arrastra: lo trae el nuevo en su forma vigente.
+    no trae. Lo del núcleo viejo (menciona `herramientas/`) no se arrastra: lo trae el nuevo en su forma vigente; salvo
+    que apunte a un archivo propio de la empresa dentro de `herramientas/` (`archivo_propio(ruta)` lo dice).
     None si alguno no es JSON válido (entonces se reemplaza y el viejo queda en el respaldo)."""
     try:
         v, n = json.loads(viejo), json.loads(nuevo)
@@ -42,7 +50,12 @@ def fusionar_settings(viejo, nuevo):
         return None
     if not isinstance(v, dict) or not isinstance(n, dict):
         return None
-    propio = lambda x: "herramientas/" not in json.dumps(x)  # noqa: E731
+    def propio(x):
+        texto = json.dumps(x)
+        if "herramientas/" not in texto:
+            return True
+        return bool(archivo_propio) and any(archivo_propio(r) for r in re.findall(r"herramientas/[\w./-]+", texto))
+
     if isinstance(v.get("permissions"), dict):
         destino = n.setdefault("permissions", {})
         for clave, valor in v["permissions"].items():
@@ -60,6 +73,75 @@ def fusionar_settings(viejo, nuevo):
         if clave not in n:
             n[clave] = valor
     return json.dumps(n, indent=2, ensure_ascii=False) + "\n"
+
+
+def fusionar_lineas(viejo, nuevo, por_paquete=False):
+    """El archivo del núcleo nuevo más las líneas que esta carpeta había agregado al suyo, bajo una marca. Sirve para
+    `.gitignore` (lo que la empresa decidió no subir nunca) y `requirements.txt` (con `por_paquete`, una dependencia
+    que el núcleo ya trae no se repite). Ante la duda, una línea se conserva: nunca se pierde una protección."""
+    clave = (lambda l: re.split(r"[<>=!~\[; ]", l.strip(), maxsplit=1)[0].lower()) if por_paquete else (lambda l: l.strip())
+    presentes = {clave(l) for l in nuevo.splitlines() if l.strip()}
+    antes, _, bloque = viejo.partition(MARCA_PROPIO)
+    candidatas = [l for l in antes.splitlines() if not l.lstrip().startswith("#")] + bloque.splitlines()
+    propias = list(dict.fromkeys(l.rstrip() for l in candidatas if l.strip() and clave(l) not in presentes))
+    if not propias:
+        return nuevo
+    return nuevo.rstrip("\n") + "\n\n" + MARCA_PROPIO + "\n" + "\n".join(propias) + "\n"
+
+
+def renombres_por_choque(choques, manifiesto):
+    """[(origen, destino)] para lo propio de la empresa que tiene el mismo nombre que algo que trae el núcleo nuevo.
+    Lo propio no se pisa: una skill enteramente propia cambia de nombre completa (`<nombre>-propia`) y un archivo
+    suelto pasa a `<nombre>-propio.<ext>`; después entra lo del núcleo con el nombre original."""
+    def libre(rel):
+        candidato, n = rel, 1
+        while (RAIZ / candidato).exists():
+            n += 1
+            x = PurePosixPath(rel)
+            candidato = str(x.with_name(f"{x.stem}-{n}{x.suffix}"))
+        return candidato
+
+    hechos, vistas = [], set()
+    for rel in choques:
+        partes = rel.split("/")
+        carpeta = "/".join(partes[:3]) if rel.startswith(".claude/skills/") and len(partes) > 3 else ""
+        if carpeta and not any(m.startswith(carpeta + "/") for m in (manifiesto or {})):
+            if carpeta not in vistas:
+                vistas.add(carpeta)
+                hechos.append((carpeta, libre(carpeta + "-propia")))
+            continue
+        x = PurePosixPath(rel)
+        hechos.append((rel, libre(str(x.with_name(f"{x.stem}-propio{x.suffix}")))))
+    return hechos
+
+
+def revisar_extensiones():
+    """{"<archivo de pruebas propio>": pasa} con las pruebas propias de la empresa, ejecutadas tal como están. Sirve para
+    comparar antes y después de actualizar: si una extensión que funcionaba deja de funcionar, se revierte."""
+    resultado = {}
+    for rel in _nucleo.pruebas_propias(RAIZ):
+        try:
+            r = subprocess.run([sys.executable, rel], cwd=RAIZ, capture_output=True, text=True, encoding="utf-8",
+                               errors="replace", timeout=600)
+            resultado[rel] = r.returncode == 0
+        except subprocess.TimeoutExpired:
+            resultado[rel] = False
+    return resultado
+
+
+def anotar_reemplazados(archivos, respaldo):
+    """Deja anotado para el mantenedor que esta carpeta tenía archivos del núcleo cambiados a mano: suelen ser arreglos
+    que el núcleo debería traer."""
+    try:
+        import mejoras
+        return mejoras.anotar(RAIZ, "aprendizaje", "actualizar_nucleo.py",
+                              "Esta carpeta tenía archivos del núcleo modificados a mano y la actualización los reemplazó: "
+                              + ", ".join(archivos)[:300],
+                              f"Sus versiones anteriores quedaron en {respaldo}/",
+                              por_que="Si eran arreglos o ajustes que el núcleo debería traer, conviene describirlos como mejora",
+                              quien="sistema")
+    except Exception:
+        return None
 
 
 def bloques_yaml(texto):
@@ -148,16 +230,20 @@ def plan(fuente):
     locales = _nucleo.archivos(RAIZ, union)
     manifiesto = _nucleo.leer_manifiesto(RAIZ)
     p = {"agregar": [], "reemplazar": [], "iguales": 0, "eliminar": [], "modificados": [], "propios": [], "revisar": [],
-         "nuevos": nuevos, "union": union, "manifiesto": manifiesto is not None}
+         "conservados": [], "choques": [], "nuevos": nuevos, "union": union, "manifiesto": manifiesto is not None}
     for rel, h in nuevos.items():
         if rel not in locales:
             p["agregar"].append(rel)
-        elif locales[rel] != h:
-            p["reemplazar"].append(rel)
-            if manifiesto and rel in manifiesto and manifiesto[rel] != locales[rel]:
-                p["modificados"].append(rel)
-        else:
+        elif locales[rel] == h:
             p["iguales"] += 1
+        elif manifiesto is not None and rel not in manifiesto:
+            p["choques"].append(rel)       # propio de la empresa con el nombre de algo nuevo del núcleo: no se pisa
+        elif manifiesto and manifiesto[rel] == h:
+            p["conservados"].append(rel)   # lo modificó la empresa y el núcleo nuevo no lo cambia: queda como está
+        else:
+            p["reemplazar"].append(rel)
+            if manifiesto and manifiesto[rel] != locales[rel]:
+                p["modificados"].append(rel)
     for rel, h in locales.items():
         if rel in nuevos:
             continue
@@ -170,9 +256,13 @@ def plan(fuente):
         else:
             p["modificados"].append(rel)
             p["propios"].append(rel)
-    # settings.json con cambios del usuario (o sin registro de lo instalado): se fusiona en vez de reemplazar
-    p["fusionar"] = [SETTINGS] if SETTINGS in p["reemplazar"] and (SETTINGS in p["modificados"] or manifiesto is None) else []
+    # Con cambios del usuario (o sin registro de lo instalado), estos archivos se fusionan en vez de reemplazarse
+    p["fusionar"] = [x for x in (SETTINGS,) + POR_LINEAS if x in p["reemplazar"] and (x in p["modificados"] or manifiesto is None)]
     p["modificados"] = [x for x in p["modificados"] if x not in p["fusionar"]]
+    p["renombres"] = renombres_por_choque(p["choques"], manifiesto)
+    movidas = tuple(o + "/" for o, _ in p["renombres"] if o not in p["choques"])
+    p["propios"] = [x for x in p["propios"] if not x.startswith(movidas)] if movidas else p["propios"]
+    p["archivo_propio"] = lambda r: (RAIZ / r).is_file() and r not in nuevos and (manifiesto is None or r not in manifiesto)
     return p
 
 
@@ -256,21 +346,28 @@ def main():
         p = plan(fuente)
         faltantes = completar_empresa(fuente)
         v_local, v_nueva = _nucleo.version(RAIZ), _nucleo.version(fuente)
+        propias = _nucleo.pruebas_propias(RAIZ)
         out = ["# Actualización del núcleo", "", f"- Origen: {origen}", f"- Versión: {v_local or '?'} → {v_nueva or '?'}",
-               f"- Archivos: {len(p['agregar'])} nuevos · {len(p['reemplazar'])} cambiados · {len(p['eliminar'])} eliminados · "
-               f"{p['iguales']} iguales"]
-        out += lista("Nuevos", p["agregar"]) + lista("Cambiados", p["reemplazar"]) + lista("Eliminados (el núcleo nuevo ya no los trae)", p["eliminar"])
-        out += lista("Modificados a mano en esta carpeta (se respaldan antes de reemplazarlos)", p["modificados"])
-        out += lista("Se fusionan (entra lo del núcleo nuevo; tus permisos y hooks propios se conservan)", p["fusionar"])
-        out += lista("Se completa en empresa/ (solo lo que falta; nada existente cambia)", [d for _, d in faltantes])
+               f"- Archivos: {len(p['agregar']) + len(p['choques'])} nuevos · {len(p['reemplazar'])} cambiados · "
+               f"{len(p['eliminar'])} eliminados · {p['iguales']} iguales",
+               "", "## Lo tuyo en esta actualización (nada se pierde)", "", f"- No se tocan: {', '.join(NUNCA)}"]
+        out += lista("Cambian de nombre para no chocar con algo nuevo del núcleo (lo tuyo queda entero; lo del núcleo entra con "
+                     "el nombre original)", [f"{o} → {d}" for o, d in p["renombres"]])
+        out += lista("Se conservan como los dejaste (los modificaste y el núcleo nuevo no los cambia)", p["conservados"])
+        out += lista("Se fusionan (entra lo del núcleo nuevo; lo que agregaste se conserva)", p["fusionar"])
+        out += lista("Modificados a mano en esta carpeta (el núcleo nuevo también los cambia: se respaldan antes de "
+                     "reemplazarlos)", p["modificados"])
         out += lista("Propios de la empresa dentro de carpetas del núcleo (se conservan)", p["propios"])
+        out += lista("Se completa en empresa/ (solo lo que falta; nada existente cambia)", [d for _, d in faltantes])
+        out += lista("Pruebas propias que se ejecutan antes y después (si una deja de pasar, se revierte)", propias)
+        out += ["", "## Lo del núcleo", ""]
+        out += lista("Nuevos", p["agregar"] + p["choques"]) + lista("Cambiados", p["reemplazar"]) + lista("Eliminados (el núcleo nuevo ya no los trae)", p["eliminar"])
         out += lista("Sin registro del núcleo instalado: no se borran, revísalos", p["revisar"])
-        out += [f"- No se tocan: {', '.join(NUNCA)}"]
         nov = _nucleo.novedades(fuente, v_local)
         if nov and v_nueva != v_local:
             lineas = nov.splitlines()
             out += ["", "## Novedades", "", *lineas[:60]] + (["", f"(… {len(lineas) - 60} líneas más en CHANGELOG.md)"] if len(lineas) > 60 else [])
-        cambios = p["agregar"] or p["reemplazar"] or p["eliminar"] or faltantes
+        cambios = p["agregar"] or p["choques"] or p["reemplazar"] or p["eliminar"] or faltantes
         if not a.aplicar:
             out += ["", "Vista previa: nada cambió." + (" Para aplicar: python herramientas/actualizar_nucleo.py "
                     + (f"--desde {origen} " if a.desde else "") + "--aplicar" if cambios else " El núcleo ya está al día.")]
@@ -284,6 +381,7 @@ def main():
 
         # Respaldo de todo lo que se reemplaza o elimina (y del registro), para poder revertir
         antes = revisar_proyectos()  # con el núcleo actual, para comparar después
+        antes_ext = revisar_extensiones()
 
         # Rutas largas de Windows: todas las operaciones de archivos pasan por el prefijo \\?\
         local, nueva = _nucleo.ruta_larga(RAIZ), _nucleo.ruta_larga(fuente)
@@ -298,21 +396,45 @@ def main():
                 (respaldo / rel).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src, respaldo / rel)
 
+        movidos, nombres_skill = [], []
+
         def revertir():
-            for rel in p["agregar"]:
+            for rel in p["agregar"] + p["choques"]:
                 (local / rel).unlink(missing_ok=True)
+            for origen_r, destino_r in reversed(movidos):  # lo propio vuelve a su nombre original
+                o, d = local / origen_r, local / destino_r
+                if d.exists():
+                    if o.is_dir():
+                        shutil.rmtree(o, ignore_errors=True)  # solo quedaba lo que el núcleo nuevo había puesto ahí
+                    shutil.move(str(d), str(o))
+            for ruta_skill, texto_skill in nombres_skill:
+                ruta_skill.write_text(texto_skill, encoding="utf-8")
             for x in respaldo.rglob("*"):
                 if x.is_file():
                     destino = local / x.relative_to(respaldo)
                     destino.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(x, destino)
 
-        for rel in p["agregar"] + p["reemplazar"]:
+        for origen_r, destino_r in p["renombres"]:  # lo propio que choca de nombre se aparta entero antes de que entre lo nuevo
+            (local / destino_r).parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(local / origen_r), str(local / destino_r))
+            movidos.append((origen_r, destino_r))
+            skill = local / origen_r / "SKILL.md"  # todavía no existe: es donde volverá si se revierte
+            skill_movida = local / destino_r / "SKILL.md"
+            if skill_movida.is_file():
+                texto_skill = skill_movida.read_text(encoding="utf-8", errors="replace")
+                nombres_skill.append((skill, texto_skill))
+                skill_movida.write_text(re.sub(r"^name:.*$", f"name: {PurePosixPath(destino_r).name}", texto_skill, count=1,
+                                               flags=re.M), encoding="utf-8")
+        for rel in p["agregar"] + p["choques"] + p["reemplazar"]:
             (local / rel).parent.mkdir(parents=True, exist_ok=True)
             if rel in p["fusionar"]:
-                fusion = fusionar_settings((local / rel).read_text(encoding="utf-8"), (nueva / rel).read_text(encoding="utf-8"))
+                viejo_txt = (local / rel).read_text(encoding="utf-8", errors="replace")
+                nuevo_txt = (nueva / rel).read_text(encoding="utf-8", errors="replace")
+                fusion = (fusionar_settings(viejo_txt, nuevo_txt, p["archivo_propio"]) if rel == SETTINGS
+                          else fusionar_lineas(viejo_txt, nuevo_txt, por_paquete=rel == "requirements.txt"))
                 if fusion is not None:
-                    (local / rel).write_text(fusion, encoding="utf-8")
+                    (local / rel).write_bytes(fusion.encode("utf-8"))
                     continue
             shutil.copy2(nueva / rel, local / rel)
         for rel in p["eliminar"]:
@@ -347,16 +469,36 @@ def main():
                 return 1
             print("Proyectos: todos siguen funcionando.")
 
+        if antes_ext:
+            despues_ext = revisar_extensiones()
+            rotas = sorted(k for k, ok in antes_ext.items() if ok and not despues_ext.get(k, False))
+            if rotas:
+                revertir()
+                print("Con el núcleo nuevo, estas pruebas propias de la empresa dejarían de pasar: se revirtió la actualización. "
+                      "Nada cambió.\n" + "\n".join(f"- {k}" for k in rotas)
+                      + "\nUna extensión tuya usa algo del núcleo que cambió: ajústala (o avísale a quien mantiene el núcleo) y "
+                        "vuelve a actualizar.")
+                anotar_fallo(f"Actualizar a {v_nueva or '?'} rompe extensiones propias que funcionaban: se revirtió", "; ".join(rotas)[:300])
+                return 1
+            print(f"Extensiones propias: {sum(1 for ok in despues_ext.values() if ok)} de {len(despues_ext)} prueba(s) pasan, "
+                  "igual o mejor que antes.")
+
         if not a.sin_pruebas:
             print("Ejecutando la batería de pruebas...")
-            r = subprocess.run([sys.executable, "pruebas/ejecutar_pruebas.py"], cwd=RAIZ, capture_output=True, text=True,
+            r = subprocess.run([sys.executable, "pruebas/ejecutar_pruebas.py", "--sin-propias"], cwd=RAIZ, capture_output=True, text=True,
                                encoding="utf-8", errors="replace", timeout=1800)
-            ultima = ((r.stdout or "") + (r.stderr or "")).strip().splitlines()[-1:] or ["sin salida"]
+            salida_p = ((r.stdout or "") + (r.stderr or "")).strip().splitlines()
+            ultima = salida_p[-1:] or ["sin salida"]
             if r.returncode != 0:
                 revertir()
+                fallas = [l[6:].strip() for l in salida_p if l.startswith("FALLA ")]
                 print(f"Las pruebas fallaron ({ultima[0]}): se revirtió la actualización. Nada cambió.\n"
-                      "Avísale a quien mantiene el núcleo; el detalle sale con: python pruebas/ejecutar_pruebas.py")
-                anotar_fallo(f"La batería falla tras actualizar a {v_nueva or '?'}: se revirtió", ultima[0][:300])
+                      + "".join(f"- {x}\n" for x in fallas[:6]) + (f"- … y {len(fallas) - 6} más\n" if len(fallas) > 6 else "")
+                      + ("Puede deberse a archivos del núcleo que se modificaron en esta carpeta y se conservan: "
+                         + ", ".join(p["conservados"][:8]) + ". Lleva ese ajuste a empresa/extensiones/ y repite.\n" if p["conservados"] else "")
+                      + "Avísale a quien mantiene el núcleo; el detalle sale con: python pruebas/ejecutar_pruebas.py")
+                anotar_fallo(f"La batería falla tras actualizar a {v_nueva or '?'}: se revirtió",
+                             (ultima[0] + " · " + "; ".join(fallas))[:300])
                 return 1
             print(f"Pruebas: {ultima[0]}")
 
@@ -373,6 +515,10 @@ def main():
         except Exception:
             pass
 
+        respaldo_rel = respaldo.relative_to(local).as_posix()
+        if p["modificados"]:  # antes del commit, para que el recordatorio viaje con la actualización
+            anotar_reemplazados(p["modificados"], respaldo_rel)
+
         rc, top = git("rev-parse", "--show-toplevel")
         if not a.sin_commit and rc == 0 and Path(top).resolve() == RAIZ.resolve():
             rutas_git = ([e.rstrip("/") for e in p["union"]] + [".harness/estado.yaml", _nucleo.MANIFIESTO.as_posix(),
@@ -382,9 +528,16 @@ def main():
             rc_c, salida = git("commit", "-q", "-m", f"Actualización del núcleo a {v_nueva or 'la versión nueva'}")
             print("Commit: «Actualización del núcleo" + (f" a {v_nueva}»" if v_nueva else "»") if rc_c == 0
                   else f"No se hizo el commit: {salida[:400]}")
+        if p["renombres"]:
+            print("Cambiaron de nombre para no chocar con algo nuevo del núcleo (están enteros): "
+                  + "; ".join(f"{o} → {d}" for o, d in p["renombres"])
+                  + ". Si un hook o un permiso tuyo apuntaba al nombre anterior, actualízalo.")
         if p["modificados"]:
-            print("Revisa los archivos que estaban modificados a mano: su versión anterior quedó en el respaldo. "
-                  "Si eran ajustes propios, llévalos a la carpeta del proyecto o de la empresa (regla 8 de AGENTS.md).")
+            print("Estos archivos del núcleo estaban modificados a mano y el núcleo nuevo también los cambia: quedó la versión "
+                  f"nueva y la tuya está en {respaldo_rel}/: " + ", ".join(p["modificados"][:8])
+                  + (f" y {len(p['modificados']) - 8} más" if len(p["modificados"]) > 8 else "")
+                  + ". Lo propio va en empresa/ (extensiones, estilo) o en el proyecto; lo que el núcleo debería traer, con "
+                    "mejoras.py --anotar (quedó anotado un recordatorio).")
     return 0
 
 

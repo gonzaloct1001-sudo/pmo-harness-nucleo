@@ -15,15 +15,19 @@ description: Guarda el trabajo en Git y lo sube a GitHub de forma segura: verifi
    no exportes sin que el usuario lo pida.
 3. **Revisión de seguridad** antes de agregar: si aparece algún archivo dentro de `_entrada/`, cualquier
    `.pdf` dentro de `contractual/`, archivos de `contenidos/archivos/` o `entrega/final/`, o archivos que parezcan
-   credenciales (`.env`, claves, contraseñas), detente y pregunta. Refuerza `.gitignore` si corresponde.
+   credenciales (`.env`, claves, contraseñas), detente y pregunta. Si una carpeta debe quedar siempre fuera:
+   `python herramientas/confidencialidad.py --agregar "<carpeta/>" --quien "<nombre>"`.
 4. `git add -A`
 5. Mensaje de commit en español, en una línea, que describa lo hecho. Ej.:
    `andes: reporte semanal S39, 2 riesgos nuevos, avance SP1 actualizado`
    Sin líneas de coautoría (`Co-Authored-By`) ni menciones a herramientas de IA.
 6. `git commit`. El control de Git (`.githooks/pre-commit`) revisa confidenciales y planillas: si detiene el commit,
    corrige lo que indica y vuelve a intentar. **Nunca uses `--no-verify`.** Si el estado avisó que el control está
-   inactivo, actívalo antes con `git config core.hooksPath .githooks`.
-7. `git pull --rebase` y luego `git push`. Si el modo nube está activo (`.harness/nube.yaml`), antes revisa
+   inactivo, actívalo antes con `git config core.hooksPath .githooks`. Si el commit **avisa** de Word, Excel, PDF o
+   imágenes fuera de las carpetas de salida, dile al usuario cuáles son en una línea y pregunta si son material del
+   cliente (entonces van en `_entrada/` o se definen como confidenciales, y se sacan con `git rm --cached`).
+7. `git pull --rebase` y luego `git push`. El control de subida (`.githooks/pre-push`) no deja salir un commit con
+   confidenciales, aunque se haya hecho sin control en otro computador: si la detiene, sigue lo que indica. Si el modo nube está activo (`.harness/nube.yaml`), antes revisa
    `python herramientas/bandeja.py --listar`: un PR de la nube sobre el mismo proyecto se integra o se revisa primero,
    para no pisar su trabajo ni que él pise el tuyo.
 8. Si hay conflicto: no lo resuelvas a ciegas. Explica en simple qué archivo chocó y por qué (normalmente,

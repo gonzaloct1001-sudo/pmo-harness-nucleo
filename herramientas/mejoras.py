@@ -133,18 +133,38 @@ def terminos_sensibles(raiz):
             continue
         for m in patron.finditer(a.read_text(encoding="utf-8", errors="replace")):
             v = m.group(2).strip()
-            if len(v) >= 4 and v.upper() != "PENDIENTE":
+            if len(v) >= 2 and v.upper() != "PENDIENTE":
                 terminos.add(v)
+                terminos |= siglas(v)
     for p in raiz.glob("proyectos/*"):
-        if p.is_dir() and len(p.name) >= 4:
+        if p.is_dir() and len(p.name) >= 2:
             terminos.add(p.name)
+    if len(raiz.resolve().name) >= 2 and not _nucleo.es_mantenedor(raiz):
+        terminos.add(raiz.resolve().name)  # la carpeta de la empresa suele llevar su nombre corto o su sigla
     return sorted(terminos, key=len, reverse=True)
+
+
+def siglas(nombre):
+    """Siglas con que se suele nombrar una empresa o persona de varias palabras: con y sin las palabras de enlace."""
+    palabras = [p for p in re.split(r"[^\wáéíóúüñÁÉÍÓÚÜÑ]+", nombre) if p and p.upper() not in SOCIETARIAS]
+    if len(palabras) < 2:
+        return set()
+    todas = "".join(p[0] for p in palabras)
+    principales = "".join(p[0] for p in palabras if p.lower() not in ENLACES)
+    return {s.upper() for s in (todas, principales) if 2 <= len(s) <= 8}
+
+
+SOCIETARIAS = {"SPA", "SA", "S", "A", "LTDA", "LIMITADA", "EIRL", "SRL", "SAC", "INC", "LLC", "CIA"}
+ENLACES = {"de", "del", "la", "las", "los", "el", "y", "e", "en", "para", "por", "the", "of", "and"}
 
 
 def anonimizar(texto, terminos):
     t = texto or ""
     for term in terminos:
-        t = re.sub(re.escape(term), "[nombre]", t, flags=re.I)
+        # Un nombre corto o una sigla se reemplaza solo como palabra completa (también dentro de un nombre de archivo,
+        # entre guiones o guiones bajos): así «ABC» sale de `informe_abc.py` y no rompe una palabra que lo contenga.
+        patron = re.escape(term) if len(term) >= 4 else rf"(?<![A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ]){re.escape(term)}(?![A-Za-z0-9áéíóúüñÁÉÍÓÚÜÑ])"
+        t = re.sub(patron, "[nombre]", t, flags=re.I)
     t = re.sub(r"[\w.+-]+@[\w-]+\.[\w.]+", "[correo]", t)
     t = re.sub(r"\b\d{1,2}\.\d{3}\.\d{3}-[\dkK]\b", "[rut]", t)
     t = re.sub(r"(?:\$|USD|CLP|UF)\s?[\d.,]+|\b\d{1,3}(?:\.\d{3}){2,}(?:,\d+)?\b", "[monto]", t)
@@ -163,7 +183,8 @@ def exportar(raiz, salida=None, hoy=None):
     salida = Path(salida) if salida else raiz / ".harness" / f"mejoras-export-{hoy.isoformat()}.md"
     lineas = [f"# Mejoras al núcleo del PMO Harness · envío {org} del {hoy.isoformat()}", "",
               f"Núcleo {_nucleo.version(raiz) or '?'} · {len(nuevas)} anotación(es) · anonimizado por mejoras.py. Revísalo antes de "
-              "enviarlo al mantenedor: no debe llevar nombres, correos, RUT ni montos.", "",
+              "enviarlo al mantenedor: no debe llevar nombres, correos, RUT ni montos. Envía solo este archivo: el registro "
+              "`.harness/mejoras-nucleo.csv` guarda los textos sin anonimizar y no se entrega.", "",
               "| id | fecha | versión | tipo | dónde | qué | por qué | evidencia |", "|---|---|---|---|---|---|---|---|"]
     exportadas = []
     for f in nuevas:
@@ -324,7 +345,8 @@ def main():
             print("No hay anotaciones sin enviar.")
             return 0
         print(f"{n} anotación(es) exportada(s) a {ruta.relative_to(RAIZ).as_posix() if ruta.is_relative_to(RAIZ) else ruta}\n"
-              "Revisa el archivo (no debe llevar datos del cliente) y entrégaselo al mantenedor del núcleo.")
+              "Revisa el archivo (no debe llevar datos del cliente) y entrégaselo al mantenedor del núcleo. Solo ese archivo: "
+              "el registro .harness/mejoras-nucleo.csv guarda los textos sin anonimizar y no se envía.")
         return 0
 
     if a.cerrar:

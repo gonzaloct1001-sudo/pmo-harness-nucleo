@@ -14,7 +14,8 @@ from pathlib import Path
 IGNORAR_PARTES = {"__pycache__", ".git", ".venv", "_procesado"}
 IGNORAR_NOMBRES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 MANIFIESTO = Path(".harness") / "nucleo-instalado.csv"
-EJECUTABLES = (".githooks/pre-commit", "herramientas/py.sh", "herramientas/preparar_pc.sh", "INSTALAR-MAC.command")
+MARCA_PROPIO = "# --- Propio de esta carpeta (se conserva al actualizar el núcleo) ---"  # en .gitignore y requirements.txt
+EJECUTABLES = (".githooks/pre-commit", ".githooks/pre-push", "herramientas/py.sh", "herramientas/preparar_pc.sh", "INSTALAR-MAC.command")
 
 
 def ruta_larga(ruta):
@@ -137,6 +138,39 @@ def novedades(raiz, desde_version):
         return ""
     fin = re.search(rf"^##\s+{re.escape(desde_version)}\b", texto, re.M) if desde_version else None
     return texto[inicio.start():fin.start() if fin and fin.start() > inicio.start() else len(texto)].strip()
+
+
+def pruebas_propias(raiz):
+    """Pruebas propias de la empresa (rutas relativas): `empresa/extensiones/pruebas*.py` y `empresa/pruebas/*.py`.
+    Son de la empresa: el núcleo nunca las toca; la batería las ejecuta y la actualización las compara antes y después."""
+    raiz = Path(raiz)
+    halladas = sorted((raiz / "empresa" / "extensiones").glob("pruebas*.py")) + sorted((raiz / "empresa" / "pruebas").glob("*.py"))
+    return [x.relative_to(raiz).as_posix() for x in halladas if x.is_file() and not x.name.startswith("_")]
+
+
+def extensiones_propias(raiz):
+    """Herramientas y hooks propios de la empresa en `empresa/extensiones/` (rutas relativas, sin las pruebas)."""
+    base = Path(raiz) / "empresa" / "extensiones"
+    if not base.is_dir():
+        return []
+    return sorted(x.relative_to(raiz).as_posix() for x in base.rglob("*.py")
+                  if x.is_file() and "__pycache__" not in x.parts and not x.name.startswith("pruebas"))
+
+
+def carpetas_nucleo(raiz):
+    """Las carpetas completas del núcleo (entradas de NUCLEO.txt que terminan en /)."""
+    return tuple(e for e in rutas(raiz) if e.endswith("/"))
+
+
+def ajeno_al_nucleo(rel, es_carpeta, instalados, carpetas):
+    """True si `rel` vive dentro de una carpeta del núcleo pero no vino con el núcleo (no está en el registro de lo
+    instalado): es propio de la empresa, como una skill o un hook suyo. La batería y la revisión de integridad prueban
+    el núcleo y no lo consideran. Donde se mantiene el núcleo no hay registro (`instalados` es None): nada es ajeno."""
+    if instalados is None or not rel.startswith(tuple(carpetas)):
+        return False
+    if es_carpeta:
+        return not any(x.startswith(rel.rstrip("/") + "/") for x in instalados)
+    return rel not in instalados
 
 
 def leer_manifiesto(raiz):

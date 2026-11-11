@@ -1,5 +1,75 @@
 # Cambios
 
+## 3.2.0 — 2026-11-11
+
+### Lo tuyo no se pisa
+- **Extensiones propias (`empresa/extensiones/`)**: el lugar oficial para las herramientas, hooks y pruebas que una
+  empresa le agrega al harness (su `LEEME.md` explica cómo). Ninguna actualización las toca. La batería ejecuta las
+  pruebas propias (`empresa/extensiones/pruebas*.py`, `empresa/pruebas/*.py`) y las lista como «propia: …»; la
+  actualización las ejecuta antes y después y **se revierte sola si una que pasaba deja de pasar**. El estado de
+  inicio anuncia las extensiones.
+- **La actualización nunca pisa lo propio en silencio** (`actualizar_nucleo.py`). La vista previa parte por «Lo tuyo
+  en esta actualización»:
+  - algo propio que se llama igual que algo nuevo del núcleo **queda entero con otro nombre** (`<nombre>-propia` para
+    una skill, `<nombre>-propio.<ext>` para un archivo) y lo del núcleo entra con el nombre original; antes se
+    sobrescribía y aparecía como un archivo «cambiado» más;
+  - un archivo del núcleo modificado en la carpeta **se conserva si el núcleo nuevo no lo cambia**; antes se revertía
+    en cada actualización;
+  - `.gitignore` y `requirements.txt` **se fusionan** como ya lo hacía `.claude/settings.json` (lo propio queda bajo
+    una marca); antes se reemplazaban, y una carpeta que la empresa había dejado fuera de Git volvía a quedar expuesta;
+  - la fusión de `settings.json` conserva también los hooks y permisos propios que apuntan a archivos propios dentro
+    de `herramientas/`;
+  - lo modificado que el núcleo nuevo también cambia se respalda y se reemplaza como antes, pero queda nombrado al
+    terminar y anotado como recordatorio en `mejoras.py` (suele ser un arreglo que el núcleo debería traer).
+- **La batería y la revisión de integridad prueban el núcleo, no lo propio.** Dentro de una carpeta de empresa ya no
+  consideran las skills, hooks y archivos propios que viven en carpetas del núcleo. Antes, una sola skill propia hacía
+  fallar dos pruebas y, con eso, **toda actualización se revertía**. Si la batería falla al actualizar, el mensaje
+  nombra las pruebas que fallaron y los archivos del núcleo modificados aquí que podrían explicarlo.
+- **El núcleo no se edita en una carpeta de empresa**: hook `proteger_nucleo` (Claude Code, antes de Edit/Write) que
+  detiene la edición de un archivo del núcleo y encamina a `empresa/extensiones/`, a una skill propia, a
+  `empresa/estilo.md` o a `mejoras.py --anotar`. No aplica donde se mantiene el núcleo, ni a lo propio que vive dentro
+  de carpetas del núcleo, ni a los tres archivos que se fusionan.
+
+### Lo confidencial no sale
+- **Los controles miran el estado real, no el texto del comando.** El hook anterior interpretaba el comando y dejaba
+  pasar un `git add` con la ruta entre comillas, precedido de `cd`, con `git -C` o `git --no-pager`, en dos líneas o
+  con la salida recortada. Ahora: antes del comando bloquea saltarse el control (`--no-verify`, `git commit -n`,
+  cambiar o quitar `core.hooksPath`), `git init` junto con `git add` o `git commit`, y guardar o subir con el control
+  de Git inactivo; simula cada `git add` respetando comillas, `cd` y opciones globales; y **después del comando** saca
+  del staging lo confidencial y avisa si el último commit sin subir se llevó algo.
+- **Control antes de subir** (`.githooks/pre-push`): revisa todos los commits que aún no están en el remoto; uno con
+  confidenciales (hecho sin control, en otro computador o con otra herramienta) no sale. Se activa con el mismo
+  `git config core.hooksPath .githooks`.
+- **Definición propia: `empresa/confidencialidad.yaml`** (`nunca_subir`, `binarios_sueltos`, `carpetas_de_binarios`,
+  `claves_en_texto`), que leen todos los controles y ninguna actualización toca. Tres niveles documentados en
+  `reglas/confidencialidad.md`: se versiona, réplica fiel, solo ficha.
+- **`herramientas/confidencialidad.py`**: qué se protege y si los controles están activos; `--agregar "<carpeta/ o
+  patrón>" --quien` (lo anota en el YAML y en la sección propia de `.gitignore`); `--auditar` (confidenciales
+  versionados o en el historial, claves pegadas en textos, binarios fuera de lugar).
+- **Aviso de Word, Excel, PDF e imágenes nuevos fuera de las carpetas de salida**: el commit lo dice y sigue (la
+  empresa puede pedir `bloquear` o `permitir`). Una **clave o llave pegada en un texto** detiene el commit.
+
+### Mejoras recibidas de una carpeta de empresa (primer envío, origen 07a9bc)
+- **07a9bc-M-003**: `importar_msproject.py` acepta decimales con coma (Project Plan 365).
+- **07a9bc-M-004** y **07a9bc-M-005**: el hook de confidencialidad ya no depende de cómo esté escrito el comando.
+- **07a9bc-M-006**: `verificar_entorno.py` ve todos los asistentes registrados.
+- **07a9bc-M-007**: la exportación de mejoras anonimiza también nombres cortos, siglas y el nombre de la carpeta, como
+  palabra completa (también dentro de nombres de archivo); el archivo y el mensaje aclaran que se envía solo la
+  exportación, no el registro `.harness/mejoras-nucleo.csv`.
+- **07a9bc-M-008**: la batería ejecuta las pruebas propias de la empresa.
+- 07a9bc-M-001 (Word largo con plantilla de la empresa) y 07a9bc-M-002 (agenda diaria) quedan aceptadas para la 3.3.0.
+
+### Al actualizar a esta versión
+- El actualizador se renueva solo, así que estas protecciones rigen desde esta misma actualización. Se agregan a
+  `empresa/` el archivo `confidencialidad.yaml` y `extensiones/LEEME.md` (nada existente cambia).
+- Si habías agregado carpetas a `.gitignore` para que no se subieran, quedan bajo la marca «Propio de esta carpeta»;
+  conviene definirlas además con `confidencialidad.py --agregar`, para que también las detengan los controles.
+- Probado por el camino real: una carpeta creada con la 3.1.0 publicada, con skill propia, extensión con pruebas,
+  líneas propias en `.gitignore` y archivos del núcleo modificados, actualiza sin preguntas y conserva todo.
+- Batería: 427 pruebas (más las propias de cada empresa). Dos pruebas dependían del entorno y se corrigieron: una
+  pasaba solo si la plantilla de proyecto se había tocado en las últimas tres horas; otra tomaba la primera fila de
+  `MEJORAS.md`, que ahora trae filas reales.
+
 ## 3.1.0 — 2026-11-10
 
 ### Plan estratégico (3YP / 5YP)

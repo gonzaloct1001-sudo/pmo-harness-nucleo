@@ -20,7 +20,9 @@ Se ejecutan desde la raíz de la carpeta con `python` (en Windows, `py` si `pyth
 - `actualizar_nucleo.py [--desde url|carpeta] [--aplicar]` → trae la última versión del núcleo sin tocar los datos.
 - `preparar_pc.ps1` (Windows) / `preparar_pc.sh` (Mac) → revisa e instala con permiso Python, Git, GitHub CLI y LibreOffice.
 - `verificar_entorno.py` → diagnóstico del computador y del repositorio.
-- `hooks/precommit.py [--archivos rutas]` → control de confidenciales y validación de CSV/YAML (lo usa Git antes de cada commit).
+- `hooks/precommit.py [--archivos rutas | --push]` → control de confidenciales (los del harness, los de `empresa/confidencialidad.yaml`, claves pegadas en textos), aviso de Word/PDF/imágenes fuera de carpetas de salida y validación de CSV/YAML; lo usa Git antes de cada commit y, con `--push`, antes de subir.
+- `confidencialidad.py [--auditar | --agregar "<carpeta/ o patrón>" --quien <nombre>]` → qué no sale nunca de este computador (tres niveles), lo propio de la empresa y si los controles están activos; `--auditar` busca confidenciales ya versionados o en el historial; `--agregar` define algo como confidencial (queda en `empresa/confidencialidad.yaml` y en la sección propia de `.gitignore`).
+- `hooks/proteger_confidenciales.py`, `hooks/proteger_nucleo.py` → hooks de Claude Code: antes de un comando de Git, bloquea saltarse el control o agregar confidenciales (después, `validar_edicion.py` saca del staging lo que haya entrado); antes de editar, impide cambiar un archivo del núcleo en una carpeta de empresa (lo propio va en `empresa/extensiones/`).
 - `evaluar_metricas.py <ruta-proyecto>` → métricas, semáforos, reglas, requisitos de etapa, fichas vencidas.
 - `validar_proyecto.py <ruta-proyecto> [--corte-actualizacion]` → cronograma, riesgos, acuerdos, cambios, registros de obra, pendientes.
 - `evm_cpm.py <ruta-proyecto> [--registrar]` → valor ganado, ruta crítica y término pronosticado.

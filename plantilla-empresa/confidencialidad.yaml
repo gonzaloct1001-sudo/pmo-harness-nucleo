@@ -1,0 +1,14 @@
+# Confidencialidad de esta empresa: lo que no sale nunca de este computador, además de lo que el harness ya protege
+# (material de _entrada/, originales, banco de antecedentes, paquetes firmados, credenciales).
+# Este archivo es de la empresa: las actualizaciones del núcleo no lo tocan. Lo leen todos los controles.
+# Se cambia con la skill `configurar` (opción F) o con:
+#   python herramientas/confidencialidad.py --agregar "<carpeta/ o patrón>" --quien "<nombre>"
+# Para ver qué se protege y auditar lo ya versionado: python herramientas/confidencialidad.py [--auditar]
+
+nunca_subir: []            # carpetas (terminadas en /) o patrones como los de .gitignore. Ej.: ["privado-cliente/", "*.kdbx"]
+
+binarios_sueltos: avisar   # Word, Excel, PDF e imágenes nuevos fuera de carpetas de salidas, plantillas o marca:
+                           # avisar (sigue y lo dice) | bloquear (no se suben hasta clasificarlos) | permitir (sin aviso)
+carpetas_de_binarios: []   # carpetas propias donde esos archivos son normales. Ej.: ["proyectos/*/planos/"]
+
+claves_en_texto: bloquear  # una llave privada o un token pegado en un texto: bloquear | avisar

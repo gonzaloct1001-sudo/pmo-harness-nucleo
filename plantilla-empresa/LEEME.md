@@ -10,6 +10,8 @@ Lo común a todos los proyectos de la empresa dueña de esta carpeta. Cada proye
 | Logo | `marca/logo.png` | Lo usan todos los proyectos que no tengan uno propio |
 | Plantillas Word, Excel o PowerPoint | `plantillas/` | Formatos comunes (por ejemplo, el informe de avance o la carta de presentación) |
 | Formatos de reportes | `reportes/catalogo/` | Definiciones de reportes que se copian a cada proyecto nuevo |
+| Qué es confidencial aquí | `confidencialidad.yaml` | Carpetas y patrones que no salen nunca de este computador, además de lo que el harness ya protege; lo leen todos los controles |
+| Extensiones propias | `extensiones/` | Herramientas, hooks y pruebas que la empresa le agrega al harness (su `LEEME.md` explica cómo); ninguna actualización las toca |
 
 Reglas:
 - Una carpeta es una empresa. Para otra empresa: `python herramientas/nueva_empresa.py "<Nombre>" --destino <carpeta>`.

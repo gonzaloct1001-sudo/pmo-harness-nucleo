@@ -21,7 +21,7 @@ Si no está claro, muestra el menú en un mensaje y pide la letra:
 | C | Formatos propios: informes, minutas, presentaciones, plantillas | `empresa/_entrada/` → `adoptar-formatos` | Skill `adoptar-formatos` |
 | D | Asistente de IA: dejar lista una IA nueva, cambiar de IA a mitad de camino, modelos por nivel de capacidad | `.harness/asistentes.yaml`, `empresa/empresa.yaml` (`capacidad`) | `references/asistente.md` (pasos 1 a 6); editas `capacidad` |
 | E | Métricas y umbrales (semáforos) | `proyectos/<slug>/metricas/*.yaml` | Skill `metricas` |
-| F | Confidencialidad y réplicas: qué se replica en `fuentes/`, qué nunca se sube | `empresa/empresa.yaml` (`replicas`), `.gitignore` | Editas con confirmación; explicas el riesgo |
+| F | Confidencialidad y réplicas: qué se replica en `fuentes/`, qué nunca se sube, qué hacer con Word, PDF e imágenes sueltos | `empresa/empresa.yaml` (`replicas`), `empresa/confidencialidad.yaml` | `confidencialidad.py --agregar "<carpeta/>" --quien "<nombre>"` (no edites `.gitignore` a mano); el resto lo editas con confirmación y explicas el riesgo; `confidencialidad.py --auditar` para revisar lo ya subido |
 | G | Modo nube: activar, qué tareas, horarios, pausar, desactivar | `.harness/nube.yaml` y claude.ai/code | Skill `nube` (sección 6) |
 | H | Status semanal en este computador (día y hora) | tarea programada del sistema | `agendar_status.py --dia --hora` / `--quitar` |
 | I | Preferencias y ajustes de investigación | `empresa/investigacion/ajustes.yaml` | `investigacion.py --ajustar` / `--preferencia` |
@@ -30,6 +30,7 @@ Si no está claro, muestra el menú en un mensaje y pide la letra:
 | L | Una regla de cómo trabajar («siempre…», «nunca…») | `proyectos/<slug>/CLAUDE.md` o `empresa/estilo.md` | Agregas la regla en palabras simples |
 | M | Mejoras al harness mismo: ver lo anotado, entregarlo al mantenedor | `.harness/mejoras-nucleo.csv` | `mejoras.py --listar`; `--exportar` produce el archivo anonimizado que el usuario revisa y envía (nunca se edita el núcleo) |
 | N | Salud del harness: qué sobra, qué está viejo, cuánto contexto carga | informe de `entropia.py` | `python herramientas/entropia.py --informe`; muestras las propuestas y solo con su sí se retira algo |
+| O | Algo que el harness no trae: una herramienta, un aviso automático (hook) o una variante de algo del núcleo | `empresa/extensiones/` (herramientas, hooks y pruebas propias), `.claude/skills/<nombre-propio>/` (skills propias) | Lees `empresa/extensiones/LEEME.md`; escribes la extensión y su prueba propia; nunca editas el núcleo; si le sirve a cualquiera, además `mejoras.py --anotar` |
 
 ## 2. Aplicar
 1. Di en dos líneas qué vas a cambiar, dónde y qué efecto tiene («el logo nuevo saldrá en todos los documentos de la

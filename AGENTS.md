@@ -30,7 +30,7 @@ Responde siempre en español (Chile), con tono profesional, directo y sin tecnic
   (`nueva_empresa.py`). **Nunca mezcles datos de dos empresas.** El núcleo es público y solo lo modifica su dueño
   (`git config pmo.mantenedor true`); nunca «Fork».
 - `NUCLEO.txt` lista lo que se reemplaza al actualizar; `empresa/`, `proyectos/` y `.harness/` son de la empresa y
-  nunca se tocan.
+  nunca se tocan. El núcleo no se edita en una carpeta de empresa: lo propio va en `empresa/extensiones/`.
 - Tres capas: **núcleo** (`.claude/skills/`, `.claude/agents/`, `herramientas/`, `reglas/`, `arquetipos/`, plantillas)
   → **empresa** (`empresa/`: identidad, marca, formatos, banco de antecedentes, capacidad) → **proyecto**
   (`proyectos/<slug>/`: todo lo particular). Un proyecto combina arquetipos: `ejecucion`, `obra`, `agil`, `cartera`,
@@ -67,7 +67,8 @@ empezar, lee su `proyecto.yaml`, su `CLAUDE.md` y `seguimiento/traspaso.md`; el 
 
 **Confidencialidad y entregables** (`reglas/confidencialidad.md`, `reglas/entregables.md`)
 6. `_entrada/`, originales, banco de archivos y paquetes firmados no se suben a Git; de bases y contratos, réplica
-   fiel en `fuentes/`; de CVs y datos personales, solo la ficha.
+   fiel en `fuentes/`; de CVs y datos personales, solo la ficha; lo que la empresa defina, en
+   `empresa/confidencialidad.yaml`.
 13. Autoría limpia: todo entregable sale a nombre del usuario, sin rastros del proceso; `verificar_autoria.py` en OK
     antes de entregar.
 14. Integridad: si unas bases exigen o restringen declarar IA, es un requisito más; nunca una declaración falsa.
@@ -75,7 +76,8 @@ empezar, lee su `proyecto.yaml`, su `CLAUDE.md` y `seguimiento/traspaso.md`; el 
 22. Lo tuyo primero: formato del proyecto; si no, el de la empresa; si no, el del harness (skill `adoptar-formatos`).
 
 **Núcleo y método** (`reglas/nucleo.md`)
-8. Lo específico va al proyecto o a la empresa; nunca al núcleo ni a los arquetipos.
+8. Lo específico va al proyecto o a la empresa (herramientas, hooks y pruebas propias: `empresa/extensiones/`);
+   nunca al núcleo ni a los arquetipos.
 12. Al modificar el núcleo, `python pruebas/ejecutar_pruebas.py`; nada se da por terminado con una prueba en falla.
 19. Hechos del mundo con protocolo: ofrece `investigar` (parte en sondeo); si no, márcalos «sin verificar». P0, P2 y
     P5 las firma el usuario.

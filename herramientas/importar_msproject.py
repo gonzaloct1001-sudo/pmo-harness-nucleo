@@ -50,6 +50,19 @@ def _hijos(nodo, tag):
     return [h for h in list(nodo) if NS.sub("", h.tag) == tag]
 
 
+def _num(v):
+    """Número de un texto del XML: acepta coma decimal (Project Plan 365 y algunas configuraciones regionales la
+    escriben así) y separador de miles. Vacío = 0."""
+    v = str(v or "").strip().replace("\u00a0", "").replace(" ", "")
+    if not v:
+        return 0.0
+    if "," in v and "." in v:  # 1.234,5 o 1,234.5: el último separador es el decimal
+        v = v.replace(".", "").replace(",", ".") if v.rfind(",") > v.rfind(".") else v.replace(",", "")
+    else:
+        v = v.replace(",", ".")
+    return float(v)
+
+
 def _fecha(v):
     return v[:10] if v and re.match(r"\d{4}-\d{2}-\d{2}", v) and not v.startswith("1984-01-01") else ""
 
@@ -99,10 +112,14 @@ def leer_mspdi(ruta, nivel_sub=1, centavos=True):
 
         def monto(v):
             try:
-                return f"{float(v) / div:.0f}" if v not in ("", None) else ""
+                return f"{_num(v) / div:.0f}" if v not in ("", None) else ""
             except ValueError:
                 return ""
         pct = _t(n, "PercentComplete", "0") or "0"
+        try:
+            pct = f"{_num(pct):g}"
+        except ValueError:
+            pct = "0"
         base = [b for b in _hijos(n, "Baseline") if _t(b, "Number", "0") == "0"]
         tarea = {"uid": uid, "id": f"T{tid}", "resumen": False, "subproyecto": sub, "tarea": _t(n, "Name"),
                  "responsable": "; ".join(x for x, _ in asig.get(uid, [])),
@@ -110,7 +127,7 @@ def leer_mspdi(ruta, nivel_sub=1, centavos=True):
                  "inicio_plan": _fecha(_t(n, "Start")), "fin_plan": _fecha(_t(n, "Finish")),
                  "inicio_real": _fecha(_t(n, "ActualStart")), "fin_real": _fecha(_t(n, "ActualFinish")),
                  "avance_pct": pct, "es_hito": "si" if _t(n, "Milestone") == "1" else "no",
-                 "estado": "terminada" if float(pct or 0) >= 100 else "en curso" if float(pct or 0) > 0 else "no iniciada",
+                 "estado": "terminada" if _num(pct) >= 100 else "en curso" if _num(pct) > 0 else "no iniciada",
                  "costo_plan": monto(costo), "costo_real": monto(costo_r),
                  "base_inicio": _fecha(_t(base[0], "Start")) if base else "", "base_fin": _fecha(_t(base[0], "Finish")) if base else "",
                  "links": [(_t(l, "PredecessorUID"), _t(l, "Type", "1"), _t(l, "LinkLag", "0"), _t(l, "LagFormat", "7"))
@@ -132,7 +149,7 @@ def leer_mspdi(ruta, nivel_sub=1, centavos=True):
                 adv.append(f"{t['id']} depende de una tarea resumen ({p['id']}): revisa la dependencia en el harness.")
                 continue
             try:
-                dias = int(float(lag or 0)) / 4800  # LinkLag en décimas de minuto; 4800 = 1 día de 8 horas
+                dias = int(_num(lag)) / 4800  # LinkLag en décimas de minuto; 4800 = 1 día de 8 horas
             except ValueError:
                 dias = 0
             if tipo == "1" and abs(dias) < 0.01:
@@ -225,7 +242,7 @@ def main():
         grupos.setdefault(sid, []).append((fila, t))
 
     ahora = datetime.now().strftime("%Y-%m-%d-%H%M")
-    total_costo = sum(float(t["costo_plan"] or 0) for t in tareas)
+    total_costo = sum(_num(t["costo_plan"]) for t in tareas)
     print(f"# Importación de MS Project — {nombre}\n")
     print(f"- Tareas importadas: {len(tareas)} · hitos: {sum(1 for t in tareas if t['es_hito'] == 'si')} · "
           f"recursos: {len(recursos)} · costo planificado total: {total_costo:,.0f}".replace(",", "."))

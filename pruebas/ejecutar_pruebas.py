@@ -27,6 +27,7 @@ for _flujo in (sys.stdout, sys.stderr):  # la consola de Windows (cp1252) no deb
         pass
 resultados = []
 DETALLE = "--detalle" in sys.argv
+SIN_PROPIAS = "--sin-propias" in sys.argv  # la actualización del núcleo compara las pruebas propias por su cuenta
 
 
 def correr(args, cwd, entrada=None, env=None):
@@ -54,14 +55,27 @@ def main():
     largo = (lambda p: "\\\\?\\" + str(Path(p).resolve())) if os.name == "nt" else str  # rutas de más de 260 caracteres en Windows
     comunes = shutil.ignore_patterns(".git", "__pycache__", "_procesado", ".venv", "respaldo-nucleo")
 
+    sys.path.insert(0, str(RAIZ / "herramientas"))
+    import _nucleo as _nucleo_raiz
+    _registro = _nucleo_raiz.leer_manifiesto(RAIZ)  # None donde se mantiene el núcleo
+    _instalados = set(_registro) if _registro is not None else None
+    _carpetas_nucleo = _nucleo_raiz.carpetas_nucleo(RAIZ) if _instalados is not None else ()
+
     def solo_nucleo(carpeta, nombres):
-        """En una carpeta de empresa, las pruebas usan solo el núcleo: sin su empresa, su registro ni sus proyectos."""
+        """En una carpeta de empresa, las pruebas usan solo el núcleo: sin su empresa, su registro ni sus proyectos, y
+        sin lo propio que vive dentro de carpetas del núcleo (una skill o un hook de la empresa)."""
         ignorar = set(comunes(carpeta, nombres))
         c = Path(carpeta.replace("\\\\?\\", "", 1)).resolve()
         if c == RAIZ.resolve():
             ignorar |= {"empresa", ".harness"} & set(nombres)
         elif c == (RAIZ / "proyectos").resolve():
             ignorar |= set(nombres)
+        elif _instalados is not None:
+            try:
+                rel = c.relative_to(RAIZ.resolve()).as_posix() + "/"
+            except ValueError:
+                return ignorar
+            ignorar |= {n for n in nombres if _nucleo_raiz.ajeno_al_nucleo(rel + n, (c / n).is_dir(), _instalados, _carpetas_nucleo)}
         return ignorar
 
     shutil.copytree(largo(RAIZ), largo(repo), ignore=solo_nucleo)
@@ -720,6 +734,8 @@ def main():
         _log.write_text("# Cambios\n\n## 9.9 — prueba\n- Novedad de prueba.\n\n" + _log.read_text(encoding="utf-8").split("\n", 1)[1], encoding="utf-8")
         (fuente / "herramientas" / "nuevo_de_prueba.py").write_text("print('hola')\n", encoding="utf-8")
         (fuente / "biblioteca" / "LEEME.md").unlink()
+        with open(fuente / "README.md", "a", encoding="utf-8") as f:
+            f.write("\nlínea nueva del núcleo de prueba\n")
         correr([str(e2 / "herramientas" / "crear_proyecto.py"), "proy-e2", "--arquetipos", "estudio"], e2)
         (e2 / ".claude" / "skills" / "mi-skill").mkdir()
         (e2 / ".claude" / "skills" / "mi-skill" / "SKILL.md").write_text("---\nname: mi-skill\n---\nPropia.\n", encoding="utf-8")
@@ -884,7 +900,8 @@ def main():
         prueba("mejoras: el mantenedor procesa el archivo exportado", [MM, "--procesar", str(_exp), "--hoy", "2026-11-11"], mant,
                ["anotación(es) nueva(s) en MEJORAS.md", "--decidir"])
         _tabla = (mant / "MEJORAS.md").read_text(encoding="utf-8")
-        _m_id = re.search(r"\| ([0-9a-f]{6}-M-\d+) \|", _tabla)
+        _m_id = re.search(r"\| ([0-9a-f]{6}-M-\d+) \|", _exp_txt)  # el id que exportó esta empresa (MEJORAS.md trae además las reales)
+        _m_id = _m_id if _m_id and _m_id.group(1) in _tabla else None
         _id_envio = _m_id.group(1) if _m_id else "ninguno"
         resultados.append(("mejoras: MEJORAS.md recibe la fila como pendiente, sin datos del cliente",
                            bool(_m_id) and "| pendiente |" in _tabla and "Empresa Dos" not in _tabla and "evidencia:" in _tabla, [_tabla[-500:]]))
@@ -949,6 +966,7 @@ def main():
         prueba("hook cierre_sesion: no insiste la segunda vez", [str(_hk / "cierre_sesion.py")], e2, ausentes=["block"],
                entrada=json.dumps({"stop_hook_active": True}))
         _trasp.write_text(_trasp.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+        os.utime(e2 / "proyectos" / "prev" / "seguimiento" / "traspaso.md")  # el otro proyecto sin guardar también queda al día
         prueba("hook cierre_sesion: con el traspaso al día no dice nada", [str(_hk / "cierre_sesion.py")], e2, ausentes=["block"], entrada="{}")
         prueba("hook registrar_uso: anota la skill usada", [str(_hk / "registrar_uso.py")], e2,
                entrada=json.dumps({"tool_name": "Skill", "tool_input": {"skill": "status"}}))
@@ -1863,6 +1881,270 @@ def main():
                ["Instalado pero SIN PROYECTOS", "nuevo-proyecto", "nuevo-proyecto", "en marcha"])
 
 
+        # --- 3.2.0 · Lo propio nunca se pisa al actualizar, y lo confidencial no sale de este computador ---
+        correr([H + "nueva_empresa.py", "Servicios Técnicos Unidos SpA", "--destino", str(tmp / "empresas"), "--slug", "e3", "--sin-github"], repo, env=env_git)
+        correr([H + "nueva_empresa.py", "Fuente Tres", "--destino", str(tmp), "--slug", "nucleo-3", "--sin-github"], repo, env=env_git)
+        e3, f3 = tmp / "empresas" / "e3", tmp / "nucleo-3"
+
+        def _g3(*a, cwd=None):
+            r = subprocess.run(["git", *a], cwd=cwd or e3, capture_output=True, text=True, encoding="utf-8", errors="replace",
+                               env={**os.environ, **env_git})
+            return r.returncode, (r.stdout or "") + (r.stderr or "")
+
+        def _lee3(rel):
+            return (e3 / rel).read_text(encoding="utf-8") if (e3 / rel).exists() else "<no existe>"
+
+        def _hook3(script, comando=None, archivo=None, cwd=None):
+            ev = {"tool_name": "Bash", "tool_input": {"command": comando}} if comando is not None else \
+                 {"tool_name": "Edit", "tool_input": {"file_path": str(archivo)}}
+            return correr([str(e3 / "herramientas" / "hooks" / script)], cwd or e3, entrada=json.dumps(ev))
+
+        # El núcleo nuevo: otra versión, una skill y una herramienta con nombres que la empresa ya usa, y cambios en
+        # AGENTS.md, .gitignore, requirements.txt y settings.json
+        _c3 = f3 / "CHANGELOG.md"
+        _c3.write_text("# Cambios\n\n## 9.9 — prueba\n- Novedad.\n\n" + _c3.read_text(encoding="utf-8").split("\n", 1)[1], encoding="utf-8")
+        (f3 / ".claude" / "skills" / "zz-pendientes").mkdir(parents=True)
+        (f3 / ".claude" / "skills" / "zz-pendientes" / "SKILL.md").write_text("---\nname: zz-pendientes\ndescription: DEL NUCLEO\n---\n", encoding="utf-8")
+        (f3 / "herramientas" / "zz_util.py").write_text("print('del nucleo')\n", encoding="utf-8")
+        for _f, _extra in (("AGENTS.md", "\nlinea nueva del nucleo\n"), (".gitignore", "\n# nuevo del nucleo\nnuevo-ignorado/\n"),
+                           ("requirements.txt", "paquete-del-nucleo>=1.0\n")):
+            with open(f3 / _f, "a", encoding="utf-8", newline="\n") as _h:
+                _h.write(_extra)
+        _s3f = json.loads((f3 / ".claude" / "settings.json").read_text(encoding="utf-8"))
+        _s3f["permissions"]["allow"].append("Bash(python herramientas/zz_util.py:*)")
+        (f3 / ".claude" / "settings.json").write_text(json.dumps(_s3f, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        # La empresa personaliza
+        with open(e3 / "herramientas" / "hooks" / "sesion_larga.py", "a", encoding="utf-8") as _h:
+            _h.write("\n# ARREGLO PROPIO\n")                       # un archivo del núcleo que el núcleo nuevo no cambia
+        (e3 / ".claude" / "skills" / "zz-pendientes" / "references").mkdir(parents=True)
+        (e3 / ".claude" / "skills" / "zz-pendientes" / "SKILL.md").write_text("---\nname: zz-pendientes\ndescription: MIA\n---\n", encoding="utf-8")
+        (e3 / ".claude" / "skills" / "zz-pendientes" / "references" / "nota.md").write_text("mia\n", encoding="utf-8")
+        (e3 / "herramientas" / "zz_util.py").write_text("print('mio')\n", encoding="utf-8")
+        with open(e3 / ".gitignore", "a", encoding="utf-8") as _h:
+            _h.write("\n# propio\nzz-privado-prueba/\n")
+        (e3 / "zz-privado-prueba").mkdir()
+        (e3 / "zz-privado-prueba" / "contrato.docx").write_bytes(b"PK")
+        (e3 / "herramientas" / "hooks" / "zz_mio.py").write_text("print('mio')\n", encoding="utf-8")
+        _s3 = e3 / ".claude" / "settings.json"
+        _cfg3 = json.loads(_s3.read_text(encoding="utf-8"))
+        _cfg3["hooks"].setdefault("UserPromptSubmit", []).append({"hooks": [{"type": "command", "command": "python herramientas/hooks/zz_mio.py"}]})
+        _cfg3["hooks"]["UserPromptSubmit"].append({"hooks": [{"type": "command", "command": "python empresa/extensiones/resumen.py"}]})
+        _cfg3["permissions"]["allow"].append("Bash(python herramientas/hooks/zz_mio.py:*)")
+        _s3.write_text(json.dumps(_cfg3, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        with open(e3 / "AGENTS.md", "a", encoding="utf-8") as _h:
+            _h.write("\n## Regla propia\nSaluda.\n")               # un archivo que el núcleo nuevo también cambia
+        with open(e3 / "requirements.txt", "a", encoding="utf-8") as _h:
+            _h.write("zz-paquete-propio==1.0\n")
+        (e3 / "empresa" / "extensiones").mkdir(parents=True, exist_ok=True)
+        (e3 / "empresa" / "extensiones" / "resumen.py").write_text("print('resumen')\n", encoding="utf-8")
+        (e3 / "empresa" / "extensiones" / "pruebas.py").write_text(
+            "import sys\nfrom pathlib import Path\nsys.exit(0 if Path('herramientas/estado.py').exists() else 1)\n", encoding="utf-8")
+        _g3("add", "-A")
+        _g3("commit", "-q", "-m", "personalizaciones")
+        prueba("actualizar_nucleo: la vista previa parte por lo tuyo (renombres, conservados, fusiones, pruebas propias)",
+               [str(e3 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(f3)], e3,
+               ["Lo tuyo en esta actualización (nada se pierde)", ".claude/skills/zz-pendientes → .claude/skills/zz-pendientes-propia",
+                "herramientas/zz_util.py → herramientas/zz_util-propio.py", "Se conservan como los dejaste",
+                "herramientas/hooks/sesion_larga.py", "Se fusionan", ".gitignore", "requirements.txt", ".claude/settings.json",
+                "Modificados a mano", "AGENTS.md", "empresa/extensiones/pruebas.py", "Vista previa: nada cambió"])
+        prueba("actualizar_nucleo: aplica sin pisar nada propio",
+               [str(e3 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(f3), "--aplicar", "--sin-pruebas"], e3,
+               ["Aplicado", "Extensiones propias: 1 de 1", "Commit: «Actualización del núcleo a 9.9»", "Cambiaron de nombre"], env=env_git)
+        _cfg3 = json.loads(_s3.read_text(encoding="utf-8"))
+        _ups3 = [h["command"] for e in _cfg3["hooks"].get("UserPromptSubmit", []) for h in e["hooks"]]
+        _gi3, _req3 = _lee3(".gitignore"), _lee3("requirements.txt")
+        resultados.append(("actualizar_nucleo: un archivo del núcleo modificado se conserva si el núcleo nuevo no lo cambia",
+                           "ARREGLO PROPIO" in _lee3("herramientas/hooks/sesion_larga.py"), ["se perdió el arreglo propio"]))
+        resultados.append(("actualizar_nucleo: una skill propia que choca de nombre queda entera como <nombre>-propia y entra la del núcleo",
+                           "DEL NUCLEO" in _lee3(".claude/skills/zz-pendientes/SKILL.md")
+                           and "MIA" in _lee3(".claude/skills/zz-pendientes-propia/SKILL.md")
+                           and "name: zz-pendientes-propia" in _lee3(".claude/skills/zz-pendientes-propia/SKILL.md")
+                           and _lee3(".claude/skills/zz-pendientes-propia/references/nota.md") == "mia\n"
+                           and not (e3 / ".claude" / "skills" / "zz-pendientes" / "references").exists()
+                           and "mio" in _lee3("herramientas/zz_util-propio.py") and "del nucleo" in _lee3("herramientas/zz_util.py")
+                           and "zz-pendientes-propia" not in _lee3(".harness/nucleo-instalado.csv"),
+                           [_lee3(".claude/skills/zz-pendientes/SKILL.md"), _lee3(".claude/skills/zz-pendientes-propia/SKILL.md")]))
+        resultados.append(("actualizar_nucleo: .gitignore y requirements.txt se fusionan (lo propio queda, entra lo nuevo, nada se repite)",
+                           "zz-privado-prueba/" in _gi3 and "nuevo-ignorado/" in _gi3 and _gi3.count("zz-privado-prueba/") == 1
+                           and "Propio de esta carpeta" in _gi3 and "zz-privado-prueba" in _g3("check-ignore", "zz-privado-prueba/contrato.docx")[1]
+                           and "zz-paquete-propio==1.0" in _req3 and "paquete-del-nucleo" in _req3 and _req3.count("python-docx") == 1,
+                           [_gi3[-300:], _req3]))
+        resultados.append(("actualizar_nucleo: un hook y un permiso propios que viven en herramientas/ siguen registrados tras la fusión",
+                           "python herramientas/hooks/zz_mio.py" in _ups3 and "python empresa/extensiones/resumen.py" in _ups3
+                           and "Bash(python herramientas/hooks/zz_mio.py:*)" in _cfg3["permissions"]["allow"]
+                           and "Bash(python herramientas/zz_util.py:*)" in _cfg3["permissions"]["allow"], [str(_ups3)]))
+        resultados.append(("actualizar_nucleo: lo modificado que el núcleo también cambia queda respaldado, avisado y anotado",
+                           "linea nueva del nucleo" in _lee3("AGENTS.md") and "Regla propia" not in _lee3("AGENTS.md")
+                           and any("Regla propia" in x.read_text(encoding="utf-8") for x in (e3 / ".harness" / "respaldo-nucleo").glob("*/AGENTS.md"))
+                           and "AGENTS.md" in _lee3(".harness/mejoras-nucleo.csv") and _g3("status", "--short")[1].strip() == "",
+                           [_lee3(".harness/mejoras-nucleo.csv")[-300:], _g3("status", "--short")[1]]))
+        # Una extensión propia que deja de funcionar con el núcleo nuevo: se revierte todo, también los renombres
+        (f3 / "herramientas" / "estado.py").rename(f3 / "herramientas" / "estado_renombrado.py")
+        (f3 / "herramientas" / "otro_nuevo.py").write_text("print(1)\n", encoding="utf-8")
+        (f3 / ".claude" / "skills" / "zz-otra").mkdir()
+        (f3 / ".claude" / "skills" / "zz-otra" / "SKILL.md").write_text("---\nname: zz-otra\ndescription: DEL NUCLEO\n---\n", encoding="utf-8")
+        (e3 / ".claude" / "skills" / "zz-otra").mkdir()
+        (e3 / ".claude" / "skills" / "zz-otra" / "SKILL.md").write_text("---\nname: zz-otra\ndescription: MIA\n---\n", encoding="utf-8")
+        _g3("add", "-A")
+        _g3("commit", "-q", "-m", "otra skill propia")
+        _head3 = _g3("rev-parse", "HEAD")[1].strip()
+        prueba("actualizar_nucleo: si una prueba propia que pasaba deja de pasar, revierte y lo dice",
+               [str(e3 / "herramientas" / "actualizar_nucleo.py"), "--desde", str(f3), "--aplicar", "--sin-pruebas"], e3,
+               ["pruebas propias de la empresa dejarían de pasar", "empresa/extensiones/pruebas.py", "se revirtió"], codigo=1, env=env_git)
+        resultados.append(("actualizar_nucleo: al revertir nada cambia (ni archivos, ni nombres de skills propias, ni commits)",
+                           (e3 / "herramientas" / "estado.py").exists() and not (e3 / "herramientas" / "otro_nuevo.py").exists()
+                           and "MIA" in _lee3(".claude/skills/zz-otra/SKILL.md") and "name: zz-otra\n" in _lee3(".claude/skills/zz-otra/SKILL.md")
+                           and not (e3 / ".claude" / "skills" / "zz-otra-propia").exists() and _g3("rev-parse", "HEAD")[1].strip() == _head3
+                           and re.sub(r"\s", "", _g3("status", "--short")[1]) in ("", "M.harness/mejoras-nucleo.csv"),
+                           [_g3("status", "--short")[1], _lee3(".claude/skills/zz-otra/SKILL.md")]))
+        _g3("checkout", "--", ".harness/mejoras-nucleo.csv")
+        sys.path.insert(0, str(e3 / "herramientas"))
+        resultados.append(("_nucleo: descubre las pruebas y las extensiones propias de la empresa",
+                           _nuc.pruebas_propias(e3) == ["empresa/extensiones/pruebas.py"]
+                           and _nuc.extensiones_propias(e3) == ["empresa/extensiones/resumen.py"], [str(_nuc.pruebas_propias(e3))]))
+        prueba("estado: anuncia las extensiones propias", [str(e3 / "herramientas" / "estado.py")], e3,
+               ["Extensiones propias (empresa/extensiones/): 1 archivo(s), 1 prueba(s)"])
+        _inst3, _carp3 = set(_nuc.leer_manifiesto(e3)), _nuc.carpetas_nucleo(e3)
+        resultados.append(("_nucleo: distingue lo propio que vive dentro de carpetas del núcleo (la batería y la integridad no lo prueban)",
+                           _nuc.ajeno_al_nucleo(".claude/skills/zz-pendientes-propia", True, _inst3, _carp3)
+                           and _nuc.ajeno_al_nucleo("herramientas/hooks/zz_mio.py", False, _inst3, _carp3)
+                           and not _nuc.ajeno_al_nucleo(".claude/skills/status", True, _inst3, _carp3)
+                           and not _nuc.ajeno_al_nucleo("herramientas/estado.py", False, _inst3, _carp3)
+                           and not _nuc.ajeno_al_nucleo("AGENTS.md", False, _inst3, _carp3)
+                           and not _nuc.ajeno_al_nucleo("herramientas/estado.py", False, None, _carp3), [str(sorted(_carp3))]))
+        prueba("integridad: en una carpeta de empresa no reclama por las skills ni los archivos propios",
+               [str(e3 / "herramientas" / "integridad.py")], e3, ausentes=["zz-pendientes-propia", "zz-otra", "zz_mio", "zz_util-propio"], codigo=None)
+
+        # El núcleo no se edita en una carpeta de empresa (lo propio va aparte)
+        for _nom, _arch, _esp in (("bloquea un archivo del núcleo", e3 / "herramientas" / "estado.py", 2),
+                                  ("bloquea una skill del núcleo", e3 / ".claude" / "skills" / "status" / "SKILL.md", 2),
+                                  ("deja pasar lo de la empresa", e3 / "empresa" / "estilo.md", 0),
+                                  ("deja pasar settings.json, que se fusiona", _s3, 0),
+                                  ("deja pasar un archivo propio dentro de herramientas/", e3 / "herramientas" / "hooks" / "zz_mio.py", 0),
+                                  ("deja pasar una skill propia", e3 / ".claude" / "skills" / "zz-pendientes-propia" / "SKILL.md", 0)):
+            _rc, _sal = _hook3("proteger_nucleo.py", archivo=_arch)
+            resultados.append((f"proteger_nucleo: {_nom}", _rc == _esp and (not _esp or "empresa/extensiones/" in _sal), [f"rc={_rc}", _sal[:300]]))
+        _rc, _sal = 0, "omitida: esta carpeta es de una empresa"
+        if not (RAIZ / ".harness" / "nucleo-instalado.csv").exists():  # la carpeta donde se mantiene el núcleo no tiene registro de instalación
+            _rc, _sal = correr([H + "hooks/proteger_nucleo.py"], RAIZ, entrada=json.dumps(
+                {"tool_name": "Edit", "tool_input": {"file_path": str(RAIZ / "herramientas" / "estado.py")}}))
+        resultados.append(("proteger_nucleo: no aplica donde se mantiene el núcleo", _rc == 0, [_sal[:300]]))
+
+        # Confidencialidad: el control mira el estado real, no cómo está escrito el comando
+        for _d in ("proyectos/x/_entrada", "proyectos/x/notas", "proyectos/x/contexto", "proyectos/x/reportes"):
+            (e3 / _d).mkdir(parents=True, exist_ok=True)
+        (e3 / "proyectos" / "x" / "_entrada" / "Archivo con espacios.pdf").write_text("x")
+        (e3 / "proyectos" / "x" / "notas" / "password-banco.txt").write_text("clave")
+        (e3 / "proyectos" / "x" / "nota.md").write_text("nota\n", encoding="utf-8")
+        _P3 = "proyectos/x/notas/password-banco.txt"
+        _bloquea3 = {"ruta entre comillas": f'git add "{_P3}"',
+                     "-f con comillas y espacios": 'git add -f "proyectos/x/_entrada/Archivo con espacios.pdf"',
+                     "cd a la carpeta": "cd proyectos/x && git add notas/password-banco.txt",
+                     "git -C": f"git -C . add {_P3}", "git --no-pager": f"git --no-pager add {_P3}",
+                     "dos líneas": f"echo hola\ngit add {_P3}", "salida recortada": "git add -A 2>&1 | tail -3",
+                     "variable delante": f"GIT_TERMINAL_PROMPT=0 git add {_P3}", "PowerShell &": f"& git add {_P3}",
+                     "commit --no-verify": f'git add "{_P3}" && git commit --no-verify -m x', "commit -n": 'git commit -n -m "x"',
+                     "push --no-verify": "git push --no-verify origin main", "cambiar core.hooksPath": "git config core.hooksPath /dev/null",
+                     "quitar core.hooksPath": "git config --unset core.hooksPath"}
+        _fallan3 = [n for n, c in _bloquea3.items() if _hook3("proteger_confidenciales.py", c)[0] != 2]
+        resultados.append((f"hook: bloquea las {len(_bloquea3)} formas de agregar un confidencial o de saltarse el control", not _fallan3, _fallan3))
+        _pasan3 = {"git status": "git status", "add normal": "git add proyectos/x/nota.md",
+                   "«-n» dentro del mensaje": 'git commit -m "arreglo -n y --no-verify en el texto"',
+                   "activar el control": "git config core.hooksPath .githooks", "add --dry-run": f"git add --dry-run {_P3}"}
+        _fallan3 = [n for n, c in _pasan3.items() if _hook3("proteger_confidenciales.py", c)[0] != 0]
+        resultados.append(("hook: no estorba los comandos normales de Git", not _fallan3, _fallan3))
+        (tmp / "sinrepo" / "proyectos" / "y" / "_entrada").mkdir(parents=True)
+        _rc, _sal = _hook3("proteger_confidenciales.py", "git init && git add -A -f && git commit -m x", cwd=tmp / "sinrepo")
+        resultados.append(("hook: git init junto con add o commit se bloquea (sin repositorio no hay qué revisar)",
+                           _rc == 2 and "git init" in _sal, [f"rc={_rc}", _sal[:300]]))
+        _g3("config", "--unset", "core.hooksPath")
+        _rc, _sal = _hook3("proteger_confidenciales.py", 'git commit -m "x"')
+        resultados.append(("hook: con el control de Git inactivo no deja guardar hasta activarlo",
+                           _rc == 2 and "core.hooksPath .githooks" in _sal and _hook3("proteger_confidenciales.py", "git add proyectos/x/nota.md")[0] == 0,
+                           [f"rc={_rc}", _sal[:300]]))
+        _g3("config", "core.hooksPath", ".githooks")
+        _g3("add", "-f", "proyectos/x/_entrada/Archivo con espacios.pdf", _P3)
+        _g3("add", "proyectos/x/nota.md")
+        _rc, _sal = _hook3("validar_edicion.py", "sh -c 'algo con git adentro'")
+        _st3 = _g3("diff", "--cached", "--name-only")[1]
+        resultados.append(("hook: después del comando saca del staging lo confidencial y deja lo demás",
+                           _rc == 2 and "Saqué del staging" in _sal and "password-banco" not in _st3 and "espacios" not in _st3
+                           and "nota.md" in _st3 and (e3 / _P3).exists() and _hook3("validar_edicion.py", "ls -la")[0] == 0,
+                           [f"rc={_rc}", _sal[:400], _st3]))
+        _g3("commit", "-q", "-m", "nota")
+        _g3("add", "-f", _P3)
+        _g3("commit", "-q", "--no-verify", "-m", "se coló")
+        _rc, _sal = _hook3("validar_edicion.py", "git commit -m x")
+        resultados.append(("hook: avisa si el último commit, todavía sin subir, lleva confidenciales",
+                           _rc == 2 and "último commit incluye" in _sal and "reset --soft" in _sal, [f"rc={_rc}", _sal[:400]]))
+        _g3("init", "-q", "--bare", str(tmp / "remoto3.git"), cwd=tmp)
+        _g3("remote", "add", "origin", str(tmp / "remoto3.git"))
+        _rc, _sal = _g3("push", "-u", "origin", "main")
+        _rem3 = _g3("log", "--oneline", "--all", cwd=tmp / "remoto3.git")[1]
+        resultados.append(("control de subida: detiene un commit con confidenciales hecho sin control",
+                           _rc != 0 and "subida detenida" in _sal and "password-banco" in _sal and not _rem3.strip(), [f"rc={_rc}", _sal[:500], _rem3]))
+        _g3("reset", "-q", "--soft", "HEAD~1")
+        _g3("restore", "--staged", _P3)
+        (e3 / _P3).unlink()
+        _rc, _sal = _g3("push", "-u", "origin", "main")
+        resultados.append(("control de subida: una subida limpia pasa", _rc == 0 and _g3("log", "--oneline", "--all", cwd=tmp / "remoto3.git")[1].strip() != "",
+                           [f"rc={_rc}", _sal[:400]]))
+
+        # Lo que la empresa define como confidencial lo respetan todos los controles y sobrevive a las actualizaciones
+        (e3 / "zz-reservado-prueba").mkdir()
+        (e3 / "zz-reservado-prueba" / "nomina.xlsx").write_bytes(b"PK")
+        resultados.append(("confidencialidad: una carpeta que nadie definió no está protegida",
+                           _hook3("proteger_confidenciales.py", "git add -f zz-reservado-prueba/nomina.xlsx")[0] == 0, []))
+        prueba("confidencialidad --agregar: define una carpeta propia como confidencial",
+               [str(e3 / "herramientas" / "confidencialidad.py"), "--agregar", "zz-reservado-prueba/", "--quien", "Ana", "--hoy", "2026-11-11"], e3,
+               ["queda como confidencial", "nunca_subir", ".gitignore"])
+        _yml3 = _lee3("empresa/confidencialidad.yaml")
+        _rc, _sal = _hook3("proteger_confidenciales.py", "git add -f zz-reservado-prueba/nomina.xlsx")
+        _rc2, _sal2 = correr([str(e3 / "herramientas" / "hooks" / "precommit.py"), "--archivos", "zz-reservado-prueba/nomina.xlsx"], e3)
+        resultados.append(("confidencialidad: lo definido por la empresa lo detienen el hook y el control de Git, aunque se fuerce",
+                           '- "zz-reservado-prueba/"' in _yml3 and "Ana, 2026-11-11" in _yml3 and "binarios_sueltos: avisar" in _yml3
+                           and _lee3(".gitignore").rstrip().endswith("zz-reservado-prueba/") and _lee3(".gitignore").count("Propio de esta carpeta") == 1
+                           and _rc == 2 and "la empresa lo definió" in _sal and _rc2 == 1 and "la empresa lo definió" in _sal2,
+                           [_yml3[-300:], f"rc={_rc} {_sal[:200]}", f"rc={_rc2} {_sal2[:200]}"]))
+        prueba("confidencialidad: resumen con niveles, lo propio y los controles", [str(e3 / "herramientas" / "confidencialidad.py")], e3,
+               ["Nivel 3", "definido por la empresa: zz-reservado-prueba/", "ACTIVO", "solo en este computador"])
+        (e3 / "proyectos" / "x" / "contexto" / "contrato-cliente.docx").write_bytes(b"PK")
+        (e3 / "proyectos" / "x" / "reportes" / "informe.docx").write_bytes(b"PK")
+        _g3("add", "-A")
+        _rc, _sal = _g3("commit", "-m", "con binarios")
+        _aviso3 = _sal.split("Aviso: este commit agrega", 1)[-1] if "Aviso: este commit agrega" in _sal else ""
+        resultados.append(("control de Git: un Word fuera de carpetas de salida solo se avisa (el commit sale); el de reportes/ no",
+                           _rc == 0 and "contexto/contrato-cliente.docx" in _aviso3 and "reportes/informe.docx" not in _aviso3
+                           and "zz-reservado-prueba" not in _g3("show", "--name-only", "--format=", "HEAD")[1], [f"rc={_rc}", _sal[:500]]))
+        (e3 / "proyectos" / "x" / "nota.md").write_text("nota\ntoken: " + "gh" + "p_" + "a1B2" * 9 + "\n", encoding="utf-8")
+        _g3("add", "-A")
+        _rc, _sal = _g3("commit", "-m", "con clave")
+        resultados.append(("control de Git: una clave pegada en un texto detiene el commit", _rc != 0 and "trae pegada una token de GitHub" in _sal,
+                           [f"rc={_rc}", _sal[:400]]))
+        (e3 / "proyectos" / "x" / "nota.md").write_text("nota\n", encoding="utf-8")
+        _g3("add", "-A")
+        prueba("confidencialidad --auditar: sin confidenciales en Git, lista los binarios fuera de lugar",
+               [str(e3 / "herramientas" / "confidencialidad.py"), "--auditar"], e3, ["Sin confidenciales en Git", "contrato-cliente.docx"])
+        (e3 / "empresa" / "confidencialidad.yaml").write_text("nunca_subir: {esto: no es una lista\n", encoding="utf-8")
+        prueba("confidencialidad: si la definición propia no se puede leer, no se sube nada de proyectos/ hasta corregirla",
+               [str(e3 / "herramientas" / "hooks" / "precommit.py"), "--archivos", "proyectos/x/nota.md"], e3, ["no se puede leer"], codigo=1)
+        (e3 / "empresa" / "confidencialidad.yaml").write_text(_yml3, encoding="utf-8")
+
+        # Arreglos de la 3.2.0 que llegaron como mejoras desde una carpeta de empresa
+        (e3 / ".harness" / "asistentes.yaml").write_text("asistentes:\n  - id: claude-code\n  - id: codex\n", encoding="utf-8")
+        prueba("verificar_entorno: ve todos los asistentes registrados (07a9bc-M-006)", [str(e3 / "herramientas" / "verificar_entorno.py")], e3,
+               ["claude-code, codex"], codigo=None)
+        import importar_msproject as _im3
+        import mejoras as _mej3
+        resultados.append(("importar_msproject: acepta decimales con coma (07a9bc-M-003)",
+                           _im3._num("37,5") == 37.5 and _im3._num("1.234,5") == 1234.5 and _im3._num("1,234.5") == 1234.5
+                           and _im3._num("") == 0 and _im3._num("50") == 50, []))
+        _txt3 = _mej3.anonimizar("empresa/extensiones/md_a_docx_stu.py modificada en STU por Servicios Técnicos Unidos SpA; carpeta e3; "
+                                 "revisar el estudio", _mej3.terminos_sensibles(e3))
+        resultados.append(("mejoras: la exportación anonimiza siglas y nombres cortos sin romper otras palabras (07a9bc-M-007)",
+                           "stu" not in _txt3.lower().replace("estudio", "") and "Servicios" not in _txt3 and "estudio" in _txt3
+                           and "md_a_docx_[nombre].py" in _txt3 and "carpeta [nombre]" in _txt3 and "empresa/extensiones" in _txt3, [_txt3]))
+
         # Ficha de inicio: sin instalar, el hook la ofrece o avisa que ya tiene respuestas
         shutil.rmtree(repo / ".harness", ignore_errors=True)
         prueba("hook: sin instalar ofrece la ficha y el manual", [H + "hooks/inicio_sesion.py"], repo,
@@ -1873,6 +2155,14 @@ def main():
 
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # Pruebas propias de la empresa (empresa/extensiones/pruebas*.py, empresa/pruebas/*.py): corren sobre la carpeta real
+    if not SIN_PROPIAS:
+        sys.path.insert(0, str(RAIZ / "herramientas"))
+        import _nucleo as _n
+        for rel in _n.pruebas_propias(RAIZ):
+            rc_p, sal_p = correr([rel], RAIZ)
+            resultados.append((f"propia: {rel}", rc_p == 0, [f"código {rc_p}", sal_p[-600:]]))
 
     ok = sum(1 for _, bien, _ in resultados if bien)
     print("\n# Resultado de las pruebas\n")

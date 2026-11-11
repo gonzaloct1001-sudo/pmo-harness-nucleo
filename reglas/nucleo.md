@@ -6,8 +6,15 @@ del mundo o al elegir con qué modelo corre un paso.
 8. **Lo específico va al proyecto (o a la empresa):** nombres de reportes, métricas del dominio, políticas y
    cálculos propios se guardan en `proyectos/<slug>/` o, si son comunes a todos los proyectos, en `empresa/`; nunca
    en el núcleo ni en los arquetipos. Una skill propia va en `.claude/skills/<propia>/` (sobrevive a las
-   actualizaciones); una regla propia, en el `CLAUDE.md` del proyecto o en `empresa/estilo.md`. Lo que el núcleo
+   actualizaciones); una regla propia, en el `CLAUDE.md` del proyecto o en `empresa/estilo.md`; una herramienta, un
+   hook o una prueba propia, en `empresa/extensiones/` (su `LEEME.md` explica cómo: se importa lo del núcleo y se
+   escribe solo la diferencia, con una prueba propia que la actualización ejecuta antes y después). Lo que el núcleo
    debería traer y no trae se anota con `mejoras.py --anotar`.
+   **El núcleo no se edita en una carpeta de empresa** (en Claude Code lo impide el hook `proteger_nucleo`): un
+   archivo del núcleo se reemplaza al actualizar. Si hay que corregir algo ya, se resuelve con una extensión y se
+   anota la mejora. La actualización, por su parte, nunca pisa lo propio en silencio: conserva lo modificado si el
+   núcleo nuevo no lo cambia, renombra lo propio que choca de nombre con algo nuevo (`<nombre>-propia`), fusiona
+   `.gitignore`, `requirements.txt` y `.claude/settings.json`, y respalda y avisa lo demás.
 12. **Al modificar el núcleo** (skills, herramientas, arquetipos, plantillas, reglas) ejecuta
     `python pruebas/ejecutar_pruebas.py` y no des el cambio por terminado si alguna prueba falla. Esto aplica al
     mantenedor; en una carpeta de empresa el núcleo no se modifica.
