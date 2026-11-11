@@ -4,6 +4,13 @@
 Uso:
     python herramientas/actualizar_nucleo.py [--desde <url del repositorio | carpeta>]            # vista previa
     python herramientas/actualizar_nucleo.py [--desde ...] --aplicar [--sin-pruebas] [--sin-commit]
+    python herramientas/actualizar_nucleo.py --verificar                       # ¿el núcleo está como se instaló? (sin internet)
+    python herramientas/actualizar_nucleo.py --restaurar <archivo> [...] [--desde ...]   # vuelve un archivo a su original
+
+- Catastro: `.harness/nucleo-instalado.csv` guarda cada archivo del núcleo con su huella tal como se instaló. Con él,
+  `--verificar` dice qué se modificó en la carpeta, qué falta y qué es propio; `--restaurar` devuelve un archivo
+  cambiado o borrado por error a su original (lo busca en el historial de Git de la carpeta o en `--desde`, y lo
+  comprueba por su huella); la versión que había queda en el respaldo.
 
 - Origen: --desde, o `nucleo.origen` de .harness/estado.yaml. Puede ser la URL de un repositorio (se descarga una
   copia temporal) o una carpeta (por ejemplo, un zip descomprimido de la versión nueva).
@@ -144,6 +151,102 @@ def anotar_reemplazados(archivos, respaldo):
         return None
 
 
+def verificar():
+    """Compara el núcleo de esta carpeta con el catastro de lo instalado. Código 1 si falta algún archivo."""
+    d = _nucleo.desviaciones(RAIZ)
+    if d is None:
+        print("Esta carpeta no tiene catastro del núcleo instalado (.harness/nucleo-instalado.csv): se crea al instalar "
+              "o en la próxima actualización.")
+        return 0
+    registro = RAIZ / _nucleo.MANIFIESTO
+    total = len(_nucleo.leer_manifiesto(RAIZ))
+    out = ["# Catastro del núcleo instalado", "", f"- Versión instalada: {_nucleo.version(RAIZ) or '?'} · catastro del "
+           f"{datetime.fromtimestamp(registro.stat().st_mtime).strftime('%Y-%m-%d')} con {total} archivos",
+           f"- Intactos: {total - len(d['modificados']) - len(d['fusionados']) - len(d['faltantes'])} · modificados en esta carpeta: "
+           f"{len(d['modificados'])} · con agregados tuyos: {len(d['fusionados'])} · faltantes: {len(d['faltantes'])} · "
+           f"propios dentro de carpetas del núcleo: {len(d['propios'])}"]
+    out += lista("Modificados en esta carpeta (se conservan al actualizar mientras el núcleo nuevo no los cambie)", d["modificados"], 40)
+    out += lista("Con agregados tuyos (permisos, hooks, lo que nunca se sube, dependencias: se fusionan al actualizar)", d["fusionados"], 40)
+    out += lista("Faltan (el núcleo los trae y aquí no están)", d["faltantes"], 40)
+    out += lista("Propios de la empresa dentro de carpetas del núcleo (ninguna actualización los toca)", d["propios"], 40)
+    ajustes = RAIZ / SETTINGS
+    if ajustes.exists():
+        try:
+            json.loads(ajustes.read_text(encoding="utf-8"))
+        except ValueError as e:
+            out += [f"- ATENCIÓN: {SETTINGS} no es un JSON válido ({e}): la herramienta lo ignora y no se podrá fusionar al "
+                    "actualizar. Corrígelo (suele faltar una coma o una llave)."]
+    if d["modificados"] or d["faltantes"]:
+        out += ["", "Si un cambio no fue a propósito, el archivo vuelve a su original con:",
+                "  python herramientas/actualizar_nucleo.py --restaurar <archivo> [<archivo> ...]",
+                "(la versión que hay queda en el respaldo). Si fue a propósito, lo propio dura más en empresa/extensiones/."]
+    else:
+        out += ["", "El núcleo está tal como se instaló."]
+    print("\n".join(out))
+    return 1 if d["faltantes"] else 0
+
+
+def original_en_historial(rel, huella_esperada):
+    """Contenido original de `rel` (el que tiene la huella del catastro) buscado en el historial de Git de la carpeta."""
+    rc, commits = git("log", "--format=%H", "--", rel)
+    if rc != 0:
+        return None
+    for c in commits.split()[:200]:
+        r = subprocess.run(["git", "show", f"{c}:{rel}"], cwd=RAIZ, capture_output=True)
+        if r.returncode == 0 and _nucleo.huella_datos(r.stdout) == huella_esperada:
+            return r.stdout
+    return None
+
+
+def restaurar(pedidos, desde=None):
+    """Devuelve archivos del núcleo a su original instalado. Lo que había queda en el respaldo. Código 1 si alguno no se pudo."""
+    manifiesto = _nucleo.leer_manifiesto(RAIZ)
+    if manifiesto is None:
+        sys.exit("Esta carpeta no tiene catastro del núcleo instalado: no hay un original contra el cual restaurar.")
+    local = _nucleo.ruta_larga(RAIZ)
+    base_respaldo = local / ".harness" / "respaldo-nucleo" / datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    respaldo, n = base_respaldo, 1
+    while respaldo.exists():
+        n += 1
+        respaldo = base_respaldo.with_name(f"{base_respaldo.name}_{n}")
+    sin_resolver = 0
+    with tempfile.TemporaryDirectory(prefix="pmo-nucleo-") as tmp:
+        fuente = obtener_fuente(desde, tmp) if desde else None
+        for pedido in pedidos:
+            rel = pedido.replace("\\", "/")
+            if Path(pedido).is_absolute():
+                try:
+                    rel = Path(pedido).resolve().relative_to(RAIZ.resolve()).as_posix()
+                except ValueError:
+                    pass
+            elif rel.startswith("./"):
+                rel = rel[2:]
+            if rel not in manifiesto:
+                print(f"- {rel}: no es un archivo del núcleo instalado (si es tuyo, no hay nada que restaurar).")
+                continue
+            destino = local / rel
+            if destino.exists() and _nucleo.huella(destino) == manifiesto[rel]:
+                print(f"- {rel}: ya está como se instaló.")
+                continue
+            datos = original_en_historial(rel, manifiesto[rel])
+            if datos is None and fuente is not None and (fuente / rel).is_file() and _nucleo.huella(fuente / rel) == manifiesto[rel]:
+                datos = (fuente / rel).read_bytes()
+            if datos is None:
+                sin_resolver += 1
+                print(f"- {rel}: no encontré su original en el historial de Git de esta carpeta"
+                      + (" ni en el origen indicado" if desde else "") + ". Indica de dónde traerlo con --desde <repositorio o "
+                      "carpeta del núcleo en esta misma versión>, o actualiza el núcleo.")
+                continue
+            habia = destino.exists()
+            if habia:
+                (respaldo / rel).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(destino, respaldo / rel)
+            destino.parent.mkdir(parents=True, exist_ok=True)
+            destino.write_bytes(datos)
+            print(f"- {rel}: restaurado a su original" + (f" (lo que había quedó en {respaldo.relative_to(local).as_posix()}/)." if habia else "."))
+    return 1 if sin_resolver else 0
+
+
 def bloques_yaml(texto):
     """[(clave, bloque)] de nivel superior de un YAML sencillo: la línea `clave:` y lo que sigue hasta la próxima clave."""
     bloques, clave, lineas = [], None, []
@@ -258,6 +361,13 @@ def plan(fuente):
             p["propios"].append(rel)
     # Con cambios del usuario (o sin registro de lo instalado), estos archivos se fusionan en vez de reemplazarse
     p["fusionar"] = [x for x in (SETTINGS,) + POR_LINEAS if x in p["reemplazar"] and (x in p["modificados"] or manifiesto is None)]
+    p["settings_invalido"] = False
+    if SETTINGS in p["fusionar"]:  # un settings.json que no se puede leer no se puede fusionar: se dice con todas sus letras
+        try:
+            json.loads((RAIZ / SETTINGS).read_text(encoding="utf-8"))
+        except (ValueError, OSError):
+            p["fusionar"].remove(SETTINGS)
+            p["settings_invalido"] = True
     p["modificados"] = [x for x in p["modificados"] if x not in p["fusionar"]]
     p["renombres"] = renombres_por_choque(p["choques"], manifiesto)
     movidas = tuple(o + "/" for o, _ in p["renombres"] if o not in p["choques"])
@@ -320,6 +430,8 @@ def main():
     ap.add_argument("--sin-pruebas", action="store_true", help="no ejecutar la batería de pruebas después de aplicar")
     ap.add_argument("--sin-commit", action="store_true", help="no hacer el commit de la actualización")
     ap.add_argument("--carpeta", help=argparse.SUPPRESS)  # carpeta de empresa a actualizar (la usa el actualizador nuevo al relanzarse)
+    ap.add_argument("--verificar", action="store_true", help="comparar el núcleo de esta carpeta con el catastro de lo instalado")
+    ap.add_argument("--restaurar", nargs="+", metavar="ARCHIVO", help="devolver archivos del núcleo a su original instalado")
     a = ap.parse_args()
     global RAIZ
     if a.carpeta:
@@ -327,6 +439,10 @@ def main():
 
     if _nucleo.es_mantenedor(RAIZ):
         sys.exit("Esta carpeta es el núcleo que mantienes: se actualiza con Git (git pull / git push), no con este comando.")
+    if a.verificar:
+        return verificar()
+    if a.restaurar:
+        return restaurar(a.restaurar, a.desde)
     origen = a.desde or origen_configurado()
     if not origen:
         sys.exit("No sé de dónde traer el núcleo: indica --desde <url o carpeta>, o completa nucleo.origen en .harness/estado.yaml.")
@@ -355,6 +471,10 @@ def main():
                      "el nombre original)", [f"{o} → {d}" for o, d in p["renombres"]])
         out += lista("Se conservan como los dejaste (los modificaste y el núcleo nuevo no los cambia)", p["conservados"])
         out += lista("Se fusionan (entra lo del núcleo nuevo; lo que agregaste se conserva)", p["fusionar"])
+        if p["settings_invalido"]:
+            out += [f"- ATENCIÓN: tu {SETTINGS} no es un JSON válido (suele faltar una coma o una llave), así que no se puede "
+                    "fusionar: se reemplaza por el del núcleo nuevo y el tuyo queda en el respaldo. Si lo corriges antes de "
+                    "aplicar, se fusiona."]
         out += lista("Modificados a mano en esta carpeta (el núcleo nuevo también los cambia: se respaldan antes de "
                      "reemplazarlos)", p["modificados"])
         out += lista("Propios de la empresa dentro de carpetas del núcleo (se conservan)", p["propios"])
@@ -528,6 +648,9 @@ def main():
             rc_c, salida = git("commit", "-q", "-m", f"Actualización del núcleo a {v_nueva or 'la versión nueva'}")
             print("Commit: «Actualización del núcleo" + (f" a {v_nueva}»" if v_nueva else "»") if rc_c == 0
                   else f"No se hizo el commit: {salida[:400]}")
+        if p["settings_invalido"]:
+            print(f"Tu {SETTINGS} no era un JSON válido y no se pudo fusionar: quedó el del núcleo nuevo y el tuyo está en "
+                  f"{respaldo_rel}/{SETTINGS}. Copia de ahí tus permisos y hooks propios.")
         if p["renombres"]:
             print("Cambiaron de nombre para no chocar con algo nuevo del núcleo (están enteros): "
                   + "; ".join(f"{o} → {d}" for o, d in p["renombres"])

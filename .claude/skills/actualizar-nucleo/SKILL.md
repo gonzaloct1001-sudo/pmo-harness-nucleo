@@ -32,7 +32,9 @@ mejoras se traen con `herramientas/actualizar_nucleo.py`, que solo reemplaza las
    - **se completa `empresa/`** con lo que la plantilla nueva trae y la carpeta no tiene (archivos y bloques nuevos de
      `empresa.yaml`), sin cambiar nada existente;
    - **sin registro** (carpeta antigua sin `.harness/nucleo-instalado.csv`): no se borran; revisa si son restos de
-     una versión anterior.
+     una versión anterior;
+   - **`settings.json` no es JSON válido**: no se puede fusionar; ofrece corregirlo antes de aplicar (suele faltar
+     una coma) para que se fusione, en vez de dejar que se reemplace.
    Aclara que los proyectos, la empresa y los documentos no se tocan.
 4. **Aplicar**, con el visto bueno: `python herramientas/actualizar_nucleo.py [--desde <origen>] --aplicar`.
    Ejecuta las pruebas (varios minutos) y, si fallan, revierte solo. Si la carpeta es un repositorio, deja el commit
@@ -42,6 +44,20 @@ mejoras se traen con `herramientas/actualizar_nucleo.py`, que solo reemplaza las
    listó `.claude/settings.json` como «modificado a mano», copia del respaldo los permisos propios que faltaran.
 5. **Después:** si cambiaron `AGENTS.md`, `CLAUDE.md` o una skill, las reglas nuevas rigen desde la próxima sesión:
    sugiere cerrar y abrir la sesión de la IA. Ofrece `guardar-cambios` para subir el commit.
+
+## Revisar el núcleo instalado («¿mi harness está intacto?», «¿qué he cambiado?», o si el estado avisa)
+Cada carpeta guarda un catastro (`.harness/nucleo-instalado.csv`): los archivos del núcleo con su huella tal como se
+instalaron. No necesita internet.
+- `python herramientas/actualizar_nucleo.py --verificar`: cuántos archivos están intactos, cuáles se modificaron en
+  esta carpeta, cuáles faltan y cuáles son propios de la empresa. Resume en dos o tres líneas y pregunta, por cada
+  modificado o faltante, si fue a propósito.
+- Si **no** fue a propósito: con el sí del usuario, `python herramientas/actualizar_nucleo.py --restaurar <archivo>
+  [<archivo> ...]`. Vuelve al original instalado (lo comprueba por su huella, desde el historial de Git de la carpeta
+  o desde `--desde <origen>`); lo que había queda en `.harness/respaldo-nucleo/`.
+- Si **sí** fue a propósito: se conserva mientras el núcleo nuevo no cambie ese archivo; para que dure, ofrece
+  llevarlo a `empresa/extensiones/` y anotar la mejora (`mejoras.py --anotar`).
+- Qué cambió entre una versión y otra: `CHANGELOG.md`, y en Git el commit «Actualización del núcleo a <versión>»
+  (`git show --stat <commit>` lista los archivos nuevos, cambiados y eliminados).
 
 Varias empresas: repite en cada carpeta (cada una es independiente). Si el usuario mantiene el núcleo, el origen de
 todas puede ser el mismo repositorio del núcleo.

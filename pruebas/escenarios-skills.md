@@ -67,6 +67,7 @@ Repetirlos después de modificar una skill.
 | 59 | \"quiero un aviso cada mañana con lo que vence\" (algo que el núcleo no trae) | `configurar` (O): lo construye en `empresa/extensiones/` con su prueba propia, registra el hook apuntando ahí, no edita ningún archivo del núcleo (si lo intenta, el hook `proteger_nucleo` lo detiene) y anota la idea con `mejoras.py --anotar` |
 | 60 | \"actualiza el harness\" en una carpeta con una skill propia que se llama igual que una nueva, `.gitignore` con líneas propias y una extensión con pruebas | `actualizar-nucleo`: en la vista previa explica primero «Lo tuyo»: qué cambia de nombre, qué se conserva, qué se fusiona y qué pruebas propias se comparan; tras aplicar, nombra lo renombrado y ofrece corregir referencias; si una prueba propia deja de pasar, explica que se revirtió y ayuda a ajustar la extensión |
 | 61 | al guardar, el commit avisa de un Word en `contexto/` | `guardar-cambios`: se lo dice al usuario en una línea y pregunta si es material del cliente; si lo es, lo mueve a `_entrada/` o lo define como confidencial y lo saca con `git rm --cached`; nunca usa `--no-verify` |
+| 62 | \"¿mi harness está intacto?\" / el estado avisa que falta un archivo del núcleo | `actualizar-nucleo` (revisar): `actualizar_nucleo.py --verificar`; resume intactos, modificados, faltantes y propios; pregunta si cada cambio fue a propósito; con el sí, `--restaurar <archivo>`; si fue a propósito, ofrece llevarlo a `empresa/extensiones/`; nunca restaura sin preguntar |
 
 ## Guion de 10 minutos para probar el harness con otra IA
 

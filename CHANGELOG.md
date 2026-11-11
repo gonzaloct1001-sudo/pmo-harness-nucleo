@@ -21,6 +21,13 @@
     de `herramientas/`;
   - lo modificado que el núcleo nuevo también cambia se respalda y se reemplaza como antes, pero queda nombrado al
     terminar y anotado como recordatorio en `mejoras.py` (suele ser un arreglo que el núcleo debería traer).
+- **El catastro a la vista** (`.harness/nucleo-instalado.csv`, que ya existía y solo se consultaba al actualizar):
+  `actualizar_nucleo.py --verificar` dice, sin internet, qué archivos del núcleo se modificaron en la carpeta, cuáles
+  faltan y cuáles son propios; `--restaurar <archivo>` devuelve uno cambiado o borrado por error a su original
+  instalado (comprobado por su huella, desde el historial de Git de la carpeta o desde `--desde`) y deja lo que había
+  en el respaldo. El estado de inicio avisa si falta un archivo del núcleo o si alguno cambió en los últimos 7 días.
+- **Un `settings.json` que no es JSON válido** ya no aparece como «se fusiona»: la vista previa dice que no se puede
+  fusionar, que se reemplaza con respaldo, y que basta corregirlo antes de aplicar.
 - **La batería y la revisión de integridad prueban el núcleo, no lo propio.** Dentro de una carpeta de empresa ya no
   consideran las skills, hooks y archivos propios que viven en carpetas del núcleo. Antes, una sola skill propia hacía
   fallar dos pruebas y, con eso, **toda actualización se revertía**. Si la batería falla al actualizar, el mensaje
@@ -66,7 +73,7 @@
   conviene definirlas además con `confidencialidad.py --agregar`, para que también las detengan los controles.
 - Probado por el camino real: una carpeta creada con la 3.1.0 publicada, con skill propia, extensión con pruebas,
   líneas propias en `.gitignore` y archivos del núcleo modificados, actualiza sin preguntas y conserva todo.
-- Batería: 427 pruebas (más las propias de cada empresa). Dos pruebas dependían del entorno y se corrigieron: una
+- Batería: 435 pruebas (más las propias de cada empresa). Dos pruebas dependían del entorno y se corrigieron: una
   pasaba solo si la plantilla de proyecto se había tocado en las últimas tres horas; otra tomaba la primera fila de
   `MEJORAS.md`, que ahora trae filas reales.
 

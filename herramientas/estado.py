@@ -187,6 +187,17 @@ def resumen(remoto=False):
                           + (f", {len(pruebas_ext)} prueba(s) propia(s)" if pruebas_ext else "; sin pruebas propias (conviene tener una)")
                           + ". Úsalas cuando el pedido calce; lo propio nunca se edita en el núcleo.")
 
+    if not mantenedor:  # catastro: archivos del núcleo que faltan, o que cambiaron hace poco en esta carpeta
+        desv = _nucleo.desviaciones(RAIZ, rapido=True, dias=7)
+        if desv and (desv["faltantes"] or desv["modificados"]):
+            partes = ([f"faltan {len(desv['faltantes'])} archivo(s) ({', '.join(desv['faltantes'][:3])}"
+                       + ("…" if len(desv["faltantes"]) > 3 else "") + ")"] if desv["faltantes"] else []) \
+                + ([f"{len(desv['modificados'])} cambiaron en esta carpeta en los últimos 7 días ({', '.join(desv['modificados'][:3])}"
+                    + ("…" if len(desv["modificados"]) > 3 else "") + ")"] if desv["modificados"] else [])
+            lineas.append("- Núcleo instalado: " + " y ".join(partes) + ". Dilo en una línea; el detalle sale con "
+                          "`python herramientas/actualizar_nucleo.py --verificar` y, si no fue a propósito, vuelven a su "
+                          "original con `--restaurar <archivo>` (solo con el sí del usuario).")
+
     entrada_emp = RAIZ / "empresa" / "_entrada"
     if entrada_emp.is_dir() and not mantenedor:  # formatos propios entregados y todavía no adoptados
         registrados = set()

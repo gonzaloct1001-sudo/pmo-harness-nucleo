@@ -14,6 +14,7 @@ from pathlib import Path
 IGNORAR_PARTES = {"__pycache__", ".git", ".venv", "_procesado"}
 IGNORAR_NOMBRES = {".DS_Store", "Thumbs.db", "desktop.ini"}
 MANIFIESTO = Path(".harness") / "nucleo-instalado.csv"
+SE_FUSIONAN = (".claude/settings.json", ".gitignore", "requirements.txt")  # del núcleo, pero hechos para llevar agregados propios
 MARCA_PROPIO = "# --- Propio de esta carpeta (se conserva al actualizar el núcleo) ---"  # en .gitignore y requirements.txt
 EJECUTABLES = (".githooks/pre-commit", ".githooks/pre-push", "herramientas/py.sh", "herramientas/preparar_pc.sh", "INSTALAR-MAC.command")
 
@@ -29,7 +30,11 @@ def ruta_larga(ruta):
 def huella(ruta):
     """Huella del contenido. En archivos de texto ignora la diferencia CRLF/LF (Windows/Mac): el zip de GitHub y una
     copia clonada en Windows tienen el mismo contenido aunque sus saltos de línea difieran."""
-    datos = Path(ruta).read_bytes()
+    return huella_datos(Path(ruta).read_bytes())
+
+
+def huella_datos(datos):
+    """Huella de un contenido ya leído (la misma regla que `huella`)."""
     if b"\0" not in datos[:8192]:
         datos = datos.replace(b"\r\n", b"\n")
     return hashlib.sha256(datos).hexdigest()[:20]
@@ -171,6 +176,35 @@ def ajeno_al_nucleo(rel, es_carpeta, instalados, carpetas):
     if es_carpeta:
         return not any(x.startswith(rel.rstrip("/") + "/") for x in instalados)
     return rel not in instalados
+
+
+def desviaciones(raiz, rapido=False, dias=None):
+    """Diferencias entre el núcleo de esta carpeta y lo que se instaló, según el catastro (`.harness/nucleo-instalado.csv`):
+    {"modificados": [...], "faltantes": [...], "propios": [...]}. None si no hay catastro (donde se mantiene el núcleo, o
+    una carpeta sin instalar). Con `rapido` solo calcula la huella de los archivos tocados después del catastro y no lista
+    los propios: es lo que usa el estado de inicio. Con `dias`, solo cuenta como modificados los tocados en ese plazo."""
+    import time
+    manifiesto = leer_manifiesto(raiz)
+    if manifiesto is None:
+        return None
+    base = ruta_larga(raiz)
+    referencia = (Path(raiz) / MANIFIESTO).stat().st_mtime
+    desde = time.time() - dias * 86400 if dias else None
+    modificados, fusionados, faltantes = [], [], []
+    for rel, h in manifiesto.items():
+        try:
+            st = (base / rel).stat()
+        except OSError:
+            faltantes.append(rel)
+            continue
+        if (rapido and st.st_mtime <= referencia) or (desde and st.st_mtime < desde):
+            continue
+        if huella(base / rel) != h:
+            (fusionados if rel in SE_FUSIONAN else modificados).append(rel)  # esos tres están hechos para llevar agregados propios
+    propios = []
+    if not rapido and (Path(raiz) / "NUCLEO.txt").exists():
+        propios = sorted(r for r in archivos(raiz) if r not in manifiesto)
+    return {"modificados": sorted(modificados), "fusionados": sorted(fusionados), "faltantes": sorted(faltantes), "propios": propios}
 
 
 def leer_manifiesto(raiz):

@@ -204,6 +204,11 @@ reemplaza el núcleo, y antes de aplicar te muestra una sección «Lo tuyo en es
   versión queda en un respaldo y te dice exactamente cuál;
 - si tienes extensiones con pruebas propias, se ejecutan antes y después: **si algo tuyo dejara de funcionar, la
   actualización se deshace sola** y te dice qué ajustar.
+Tu carpeta guarda además un **catastro**: la lista de los archivos del núcleo tal como se instalaron. Con él puedes
+preguntar en cualquier momento «¿mi harness está intacto?»: te dice qué archivos se cambiaron en tu carpeta, cuáles
+faltan y cuáles son tuyos. Si algo se cambió o se borró sin querer, «restaura ese archivo» lo devuelve a su original
+(lo que había queda en un respaldo); el asistente te avisa al empezar si falta algo o si algo cambió hace poco.
+
 Por eso el asistente no edita el núcleo en tu carpeta: cuando pides algo que el harness no trae, lo construye como
 extensión tuya y, si le serviría a cualquiera, lo anota como idea para el núcleo.
 

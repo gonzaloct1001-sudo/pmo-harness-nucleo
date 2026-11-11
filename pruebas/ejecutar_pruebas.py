@@ -2015,6 +2015,49 @@ def main():
         prueba("integridad: en una carpeta de empresa no reclama por las skills ni los archivos propios",
                [str(e3 / "herramientas" / "integridad.py")], e3, ausentes=["zz-pendientes-propia", "zz-otra", "zz_mio", "zz_util-propio"], codigo=None)
 
+        # Catastro a la vista: qué cambió en el núcleo instalado, qué falta, y volver un archivo a su original
+        _act3 = str(e3 / "herramientas" / "actualizar_nucleo.py")
+        prueba("actualizar_nucleo --verificar: lista lo modificado en la carpeta y lo propio, sin necesitar el origen", [_act3, "--verificar"], e3,
+               ["Catastro del núcleo instalado", "Versión instalada: 9.9", "modificados en esta carpeta: 1", "herramientas/hooks/sesion_larga.py",
+                "faltantes: 0", "Propios de la empresa dentro de carpetas del núcleo", ".claude/skills/zz-pendientes-propia/SKILL.md", "--restaurar"])
+        (e3 / "herramientas" / "gantt_mermaid.py").unlink()                 # borrado por error
+        with open(e3 / "herramientas" / "evm_cpm.py", "a", encoding="utf-8") as _h:
+            _h.write("\n# cambio involuntario\n")                       # modificado hoy, después del catastro
+        prueba("actualizar_nucleo --verificar: un archivo del núcleo borrado se informa y da código 1", [_act3, "--verificar"], e3,
+               ["modificados en esta carpeta: 2", "con agregados tuyos: 3", "faltantes: 1", "Faltan", "herramientas/gantt_mermaid.py",
+                "herramientas/evm_cpm.py", "Con agregados tuyos", ".gitignore"], codigo=1)
+        prueba("estado: avisa de archivos del núcleo que faltan o cambiaron hace poco (no de lo que ya se conservó al actualizar ni de lo que se fusiona)",
+               [str(e3 / "herramientas" / "estado.py")], e3,
+               ["Núcleo instalado: faltan 1 archivo(s) (herramientas/gantt_mermaid.py)",
+                "1 cambiaron en esta carpeta en los últimos 7 días (herramientas/evm_cpm.py)", "--verificar"])
+        prueba("actualizar_nucleo --restaurar: devuelve lo borrado y lo modificado a su original; lo que había queda en el respaldo",
+               [_act3, "--restaurar", "herramientas/gantt_mermaid.py", "herramientas/evm_cpm.py", ".\\herramientas\\hooks\\sesion_larga.py",
+                ".claude/skills/zz-pendientes-propia/SKILL.md"], e3,
+               ["herramientas/gantt_mermaid.py: restaurado a su original", "herramientas/evm_cpm.py: restaurado a su original (lo que había quedó en",
+                "herramientas/hooks/sesion_larga.py: restaurado a su original (lo que había quedó en",
+                "zz-pendientes-propia/SKILL.md: no es un archivo del núcleo instalado"])
+        _d3 = _nuc.desviaciones(e3)
+        resultados.append(("actualizar_nucleo --restaurar: el núcleo queda como se instaló, lo propio intacto y el cambio anterior respaldado",
+                           _d3["modificados"] == [] and _d3["faltantes"] == [] and ".claude/settings.json" in _d3["fusionados"]
+                           and ".claude/skills/zz-pendientes-propia/SKILL.md" in _d3["propios"]
+                           and "cambio involuntario" not in _lee3("herramientas/evm_cpm.py")
+                           and "ARREGLO PROPIO" not in _lee3("herramientas/hooks/sesion_larga.py") and "MIA" in _lee3(".claude/skills/zz-pendientes-propia/SKILL.md")
+                           and any("ARREGLO PROPIO" in x.read_text(encoding="utf-8")
+                                   for x in (e3 / ".harness" / "respaldo-nucleo").glob("*/herramientas/hooks/sesion_larga.py")),
+                           [str(_d3["modificados"]), str(_d3["faltantes"])]))
+        prueba("estado: con el núcleo como se instaló no dice nada del catastro", [str(e3 / "herramientas" / "estado.py")], e3,
+               ausentes=["Núcleo instalado:"])
+        # Un settings.json que no es JSON válido no se puede fusionar: la vista previa lo dice en vez de prometer una fusión
+        _s3_bueno = _s3.read_text(encoding="utf-8")
+        _s3f = json.loads((f3 / ".claude" / "settings.json").read_text(encoding="utf-8"))
+        _s3f["permissions"]["allow"].append("Bash(python herramientas/otro_nuevo.py:*)")
+        (f3 / ".claude" / "settings.json").write_text(json.dumps(_s3f, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        _s3.write_text(_s3_bueno.replace('"permissions": {', '"permissions": {,', 1), encoding="utf-8")
+        prueba("actualizar_nucleo: un settings.json que no es JSON válido se avisa en la vista previa (no se promete fusionarlo)",
+               [_act3, "--desde", str(f3)], e3, ["no es un JSON válido", "queda en el respaldo"])
+        prueba("actualizar_nucleo --verificar: también avisa del settings.json inválido", [_act3, "--verificar"], e3, ["no es un JSON válido"])
+        _s3.write_text(_s3_bueno, encoding="utf-8")
+
         # El núcleo no se edita en una carpeta de empresa (lo propio va aparte)
         for _nom, _arch, _esp in (("bloquea un archivo del núcleo", e3 / "herramientas" / "estado.py", 2),
                                   ("bloquea una skill del núcleo", e3 / ".claude" / "skills" / "status" / "SKILL.md", 2),

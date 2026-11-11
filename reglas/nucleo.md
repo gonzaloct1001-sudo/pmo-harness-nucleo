@@ -14,7 +14,10 @@ del mundo o al elegir con qué modelo corre un paso.
    archivo del núcleo se reemplaza al actualizar. Si hay que corregir algo ya, se resuelve con una extensión y se
    anota la mejora. La actualización, por su parte, nunca pisa lo propio en silencio: conserva lo modificado si el
    núcleo nuevo no lo cambia, renombra lo propio que choca de nombre con algo nuevo (`<nombre>-propia`), fusiona
-   `.gitignore`, `requirements.txt` y `.claude/settings.json`, y respalda y avisa lo demás.
+   `.gitignore`, `requirements.txt` y `.claude/settings.json`, y respalda y avisa lo demás. El catastro
+   (`.harness/nucleo-instalado.csv`) dice en cualquier momento qué se modificó o falta
+   (`actualizar_nucleo.py --verificar`); un cambio involuntario vuelve a su original con `--restaurar`, solo con el sí
+   del usuario.
 12. **Al modificar el núcleo** (skills, herramientas, arquetipos, plantillas, reglas) ejecuta
     `python pruebas/ejecutar_pruebas.py` y no des el cambio por terminado si alguna prueba falla. Esto aplica al
     mantenedor; en una carpeta de empresa el núcleo no se modifica.
