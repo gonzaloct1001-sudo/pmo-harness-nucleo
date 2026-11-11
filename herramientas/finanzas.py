@@ -49,6 +49,15 @@ UMBRAL_DESVIO = 0.10
 
 
 # ------------------------------------------------------------------------------------------------ utilidades
+def num_propio(v):
+    """Número de un CSV del propio harness (real.csv, presupuesto.csv, forecast.csv): se escribe con punto decimal y sin
+    separador de miles, así que «12.345» es doce coma tres, no doce mil. Lo que no tenga esa forma se lee con `num`."""
+    s = str(v if v is not None else "").strip()
+    if re.fullmatch(r"-?\d+(\.\d+)?([eE][-+]?\d+)?", s):
+        return float(s)
+    return num(v)
+
+
 def num(v):
     if v is None:
         return 0.0
@@ -190,7 +199,7 @@ class Finanzas:
         for f in self.real:
             if f["periodo"] != periodo or self.linea_de.get(cuenta_norm(f["cuenta"])) != linea:
                 continue
-            d, h = num(f.get("debe")), num(f.get("haber"))
+            d, h = num_propio(f.get("debe")), num_propio(f.get("haber"))
             total += (h - d) if tipo == "ingreso" else (d - h)
         return total
 
@@ -201,7 +210,7 @@ class Finanzas:
             p = f["periodo"]
             if not (p == "inicial" or (RE_PERIODO.match(p) and p <= periodo)) or self.linea_de.get(cuenta_norm(f["cuenta"])) != linea:
                 continue
-            d, h = num(f.get("debe")), num(f.get("haber"))
+            d, h = num_propio(f.get("debe")), num_propio(f.get("haber"))
             total += (d - h) if tipo == "activo" else (h - d)
         return total
 
@@ -255,7 +264,7 @@ class Finanzas:
                 "diferencia": activo - pasivo - patrimonio}
 
     def monto_version(self, filas, linea, periodo, version):
-        return sum(num(f.get("monto")) for f in filas if f.get("periodo") == periodo and f.get("linea") == linea
+        return sum(num_propio(f.get("monto")) for f in filas if f.get("periodo") == periodo and f.get("linea") == linea
                    and (not version or f.get("version", "") == version))
 
     def presupuesto_mes(self, periodo):
@@ -377,8 +386,8 @@ def revisar(fz):
     for c, pers in sorted(sin.items()):
         avisos.append(f"cuenta {c} sin mapear en el plan ({', '.join(sorted(pers))}): sus movimientos no entran a los estados.")
     for p in fz.periodos():
-        d = sum(num(f.get("debe")) for f in fz.real if f["periodo"] == p)
-        h = sum(num(f.get("haber")) for f in fz.real if f["periodo"] == p)
+        d = sum(num_propio(f.get("debe")) for f in fz.real if f["periodo"] == p)
+        h = sum(num_propio(f.get("haber")) for f in fz.real if f["periodo"] == p)
         if abs(d - h) > TOLERANCIA:
             errores.append(f"{p}: debe {fmt(d)} ≠ haber {fmt(h)}: la importación no cuadra.")
         e = fz.estado_cierre(p)
@@ -745,15 +754,15 @@ def importar(fz, archivo, periodo, vista_previa, mapa, acumulado, inicial, hoy):
             debe, haber = (sd, 0.0) if sd else (0.0, sa)
         if acumulado and not inicial:
             previos = [f for f in fz.real if cuenta_norm(f["cuenta"]) == cuenta and f["periodo"] != periodo]
-            debe -= sum(num(f.get("debe")) for f in previos)
-            haber -= sum(num(f.get("haber")) for f in previos)
+            debe -= sum(num_propio(f.get("debe")) for f in previos)
+            haber -= sum(num_propio(f.get("haber")) for f in previos)
         if not debe and not haber:
             continue
         if cuenta not in fz.plan:
             sin_plan.add(f"{cuenta} {nombre}".strip())
         nuevas.append({"periodo": periodo, "cuenta": cuenta, "debe": f"{debe:.2f}".rstrip("0").rstrip("."), "haber": f"{haber:.2f}".rstrip("0").rstrip("."),
                        "origen": Path(archivo).name, "nota": nombre if cuenta not in fz.plan else ""})
-    td, th = sum(num(f["debe"]) for f in nuevas), sum(num(f["haber"]) for f in nuevas)
+    td, th = sum(num_propio(f["debe"]) for f in nuevas), sum(num_propio(f["haber"]) for f in nuevas)
     print(f"# Importación · {Path(archivo).name} → {periodo}\n")
     print(f"- Hoja/archivo: {hoja} · fila de encabezados: {enc + 1} · columnas: " + ", ".join(f"{k}={cols[k] + 1}" for k in cols))
     print(f"- Movimientos: {len(nuevas)} cuentas · debe {fmt(td)} · haber {fmt(th)} · {'cuadra' if abs(td - th) <= TOLERANCIA else 'NO CUADRA (diferencia ' + fmt(td - th) + ')'}"
@@ -791,8 +800,8 @@ def cerrar(fz, periodo, quien, forzar, hoy):
     sin = fz.cuentas_sin_mapear(periodo)
     if sin:
         problemas.append(f"cuentas sin mapear: {', '.join(sorted(sin))}")
-    d = sum(num(f.get("debe")) for f in fz.real if f["periodo"] == periodo)
-    h = sum(num(f.get("haber")) for f in fz.real if f["periodo"] == periodo)
+    d = sum(num_propio(f.get("debe")) for f in fz.real if f["periodo"] == periodo)
+    h = sum(num_propio(f.get("haber")) for f in fz.real if f["periodo"] == periodo)
     if abs(d - h) > TOLERANCIA:
         problemas.append(f"debe {fmt(d)} ≠ haber {fmt(h)}")
     b = fz.balance(periodo)

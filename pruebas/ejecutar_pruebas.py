@@ -2510,6 +2510,296 @@ def main():
         prueba("rentabilidad: el ejemplo de finanzas corre con sus ventas ficticias", [H + "rentabilidad.py", "ejemplos/finanzas-demo", "--analizar", "--json", "--costo-hora", "250"], repo,
                ['"cuadrantes"', '"margen_en_riesgo"'], codigo=None)
 
+        # --- 3.5.0 · Análisis a fondo en dos niveles (experto.py: pronóstico, regresión, grupos de clientes y plazo) y optimización ---
+        # Lo que pide el nivel especialista se prueba solo donde está instalado; donde no, se prueba que el nivel base responde y avisa.
+        import math as _math5
+        import random as _rnd5
+        from datetime import date, timedelta
+        import experto as _exp5
+        import finanzas as _fin5
+        _esp5 = _exp5.listo()
+        _experto5 = str(e3 / "herramientas" / "experto.py")
+        _d5 = tmp / "datos5"
+        _d5.mkdir()
+        _g5 = _rnd5.Random(5)
+
+        def _csv5(nombre, cab, filas, carpeta=None):
+            p = (carpeta or _d5) / nombre
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(",".join(cab) + "\n" + "".join(",".join(str(x) for x in f) + "\n" for f in filas), encoding="utf-8")
+            return str(p)
+
+        def _json5(args, cwd):
+            rc, out = correr(args, cwd)
+            try:
+                return rc, json.loads(out[out.index("{"):out.rindex("}") + 1])
+            except ValueError:
+                return rc, {}
+        _mes5 = lambda i: f"{2022 + i // 12}-{i % 12 + 1:02d}"  # noqa: E731
+
+        prueba("experto estado: dice qué hay del nivel especialista y cómo se instala", [_experto5, "estado"], e3,
+               ["Nivel especialista del análisis", "numpy", "scikit-learn"] + (["Completo"] if _esp5 else ["Incompleto", "experto.py instalar"]))
+        prueba("experto: un análisis que no existe se rechaza con la lista de los que hay", [_experto5, "adivinar"], e3,
+               ["No conozco «adivinar»", "pronosticar", "regresion", "segmentar", "plazo"], codigo=1)
+        _req5 = _lee3("requirements-analisis.txt")
+        resultados.append(("nivel especialista: sus bibliotecas van en un archivo aparte, del núcleo, y no en lo que se instala con el harness",
+                           all(b in _req5 for b in ("numpy", "pandas", "scipy", "statsmodels", "scikit-learn"))
+                           and "requirements-analisis.txt" in _lee3("NUCLEO.txt").splitlines()
+                           and not any(b in _lee3("requirements.txt") for b in ("numpy", "pandas", "scipy", "statsmodels", "scikit-learn")), [_req5]))
+        _perm5 = json.loads(_lee3(".claude/settings.json")).get("permissions", {}).get("allow", [])
+        resultados.append(("permisos: instalar el nivel especialista nunca queda autorizado de antemano (pasa siempre por el sí del usuario)",
+                           not any("experto.py:*" in p or "experto.py instalar" in p or "requirements-analisis" in p for p in _perm5),
+                           [p for p in _perm5 if "experto" in p or "requirements-analisis" in p]))
+        _falta5 = "\n".join(_exp5.texto_recomendacion({"especialista": True, "motivos": ["hay estacionalidad"], "instalado": False}, "base"))
+        _hay5 = "\n".join(_exp5.texto_recomendacion({"especialista": True, "motivos": ["hay estacionalidad"], "instalado": True}, None))
+        _basta5 = "\n".join(_exp5.texto_recomendacion({"especialista": False, "motivos": ["una recta alcanza"], "instalado": False}, "base"))
+        resultados.append(("experto: si conviene el especialista y no está instalado, manda preguntar al usuario (seguir con el base o instalar); si el base alcanza, no pregunta",
+                           "Pregunta al usuario" in _falta5 and "experto.py instalar" in _falta5 and "Este resultado es del nivel base" in _falta5
+                           and "Pregunta" not in _hay5 and "Está instalado" in _hay5
+                           and "Nivel recomendado: base" in _basta5 and "Pregunta" not in _basta5 and "instalar" not in _basta5, [_falta5, _hay5, _basta5]))
+
+        # Pronóstico de una serie mensual
+        _lin5 = _csv5("lineal.csv", ["fecha", "valor"], [(_mes5(i), 10 + 2 * i) for i in range(10)])
+        _est5 = _csv5("estable.csv", ["mes", "ventas"], [(_mes5(i), round(100 + 2 * i + 30 * _math5.sin(2 * _math5.pi * i / 12) + _g5.uniform(-4, 4), 2)) for i in range(48)])
+        _qui5 = _csv5("quiebre.csv", ["mes", "ventas"], [(_mes5(i), round(100 + i + (6 * (i - 30) if i > 30 else 0) + _g5.uniform(-4, 4), 2)) for i in range(48)])
+        _rc5, _pl5 = _json5([_experto5, "pronosticar", "--datos", _lin5, "--nivel", "base", "--horizonte", "3", "--json"], e3)
+        resultados.append(("pronosticar: en una recta exacta elige la tendencia, pronostica 30, 32 y 34 y su error comprobado es cero",
+                           _rc5 == 0 and _pl5.get("metodo") == "tendencia lineal" and [p["valor"] for p in _pl5.get("pronostico", [])] == [30.0, 32.0, 34.0]
+                           and _pl5["errores"]["tendencia lineal"]["mae"] == 0 and _pl5["errores"]["último valor"]["mae"] > 0 and _pl5["reservados"] == 2
+                           and _pl5["pronostico"][0]["periodo"] == "2022-11", [str(_pl5)[:400]]))
+        _rc5, _dg5 = _json5([_experto5, "pronosticar", "--datos", _est5, "--diagnosticar", "--json"], e3)
+        _rc5b, _pe5 = _json5([_experto5, "pronosticar", "--datos", _est5, "--nivel", "base", "--json"], e3)
+        resultados.append(("pronosticar: con estacionalidad estable el diagnóstico dice que el nivel base alcanza, y un método simple la sigue con menos de 5 % de error",
+                           _rc5 == 0 and _dg5.get("recomendacion", {}).get("especialista") is False and "ya la sigue" in _dg5["recomendacion"]["motivos"][0]
+                           and _dg5["mediciones"]["mejora_estacional"] > 0.1 and _rc5b == 0
+                           and _pe5["metodo"] in ("tendencia lineal con estacionalidad", "mismo mes del año anterior más el crecimiento anual")
+                           and _pe5["errores"][_pe5["metodo"]]["mape"] < 0.05 and all(p["bajo"] <= p["valor"] <= p["alto"] for p in _pe5["pronostico"]),
+                           [str(_dg5)[:400], str(_pe5.get("metodo"))]))
+        _sal5 = prueba("pronosticar --diagnosticar: si el método simple se queda corto porque la tendencia cambió, recomienda el especialista y dice por qué",
+                       [_experto5, "pronosticar", "--datos", _qui5, "--diagnosticar"], e3,
+                       ["Nivel recomendado: especialista", "se quedó corto en los 6 meses", "la tendencia está cambiando"]
+                       + (["Está instalado"] if _esp5 else ["No está instalado. Pregunta al usuario qué prefiere", "experto.py instalar"]))
+        prueba("pronosticar: deja la página, el Markdown y los datos en el análisis del proyecto",
+               [_experto5, "pronosticar", "--datos", _qui5, "--nivel", "base", "--proyecto", "proyectos/ag", "--id", "pron", "--hoy", "2026-11-11", "--unidad", "MM$"], e3,
+               ["# Pronóstico: 48 meses de historia", "Error comprobado en los últimos 6 meses", "Página: proyectos/ag/analisis/pron/informe.html"]
+               + (["Está instalado: repite sin `--nivel base`"] if _esp5 else ["Este resultado es del nivel base"]))
+        _ph5, _pm5 = _lee3("proyectos/ag/analisis/pron/informe.html"), _lee3("proyectos/ag/analisis/pron/informe.md")
+        _pj5 = json.loads(_lee3("proyectos/ag/analisis/pron/resultado.json"))
+        resultados.append(("pronosticar: la página dibuja lo real y lo pronosticado en un mismo gráfico y explica cómo leerlo",
+                           "<svg" in _ph5 and _ph5.count("<polyline") >= 2 and "null" in _pm5 and "Pronóstico:" in _pm5 and "Cómo leer esto" in _pm5
+                           and "supone que el futuro se parece al pasado" in _pm5 and _pj5["nivel"] == "base" and len(_pj5["pronostico"]) == 6
+                           and _pj5["recomendacion"]["especialista"] is True, [_pm5[:300]]))
+        _rc5, _dj5 = _json5([H + "experto.py", "pronosticar", "--datos", "ejemplos/finanzas-demo/datos/ventas-mensuales.csv", "--diagnosticar", "--json"], repo)
+        _rc5b, _bj5 = _json5([H + "experto.py", "pronosticar", "--datos", "ejemplos/finanzas-demo/datos/ventas-mensuales.csv", "--nivel", "base", "--json"], repo)
+        resultados.append(("pronosticar: en la serie de ejemplo el diagnóstico recomienda el especialista porque hay estacionalidad y el mejor método simple se equivoca en más de 5 %",
+                           _rc5 == 0 and _dj5.get("recomendacion", {}).get("especialista") is True and "hay estacionalidad" in _dj5["recomendacion"]["motivos"][0]
+                           and 0.07 < _dj5["mediciones"]["mape_mejor_simple"] < 0.08 and _rc5b == 0
+                           and _cerca4(_bj5["errores"][_bj5["metodo"]]["mape"], _dj5["mediciones"]["mape_mejor_simple"], 1e-6), [str(_dj5)[:400]]))
+        prueba("pronosticar: con menos de 6 meses no pronostica y lo dice",
+               [_experto5, "pronosticar", "--datos", _csv5("cuatro.csv", ["fecha", "valor"], [(_mes5(i), 10 + i) for i in range(4)])], e3, ["al menos 6"], codigo=1)
+
+        # Regresión
+        _rx5 = _csv5("recta.csv", ["x", "y"], [(i, 5 + 3 * i) for i in range(12)])
+        _filas5 = []
+        for _i5 in range(60):
+            _x15, _x25, _z5 = round(_g5.uniform(0, 10), 3), round(_g5.uniform(0, 10), 3), round(_g5.uniform(0, 10), 3)
+            _filas5.append((_i5 + 1, round(4 + 2 * _x15 - _x25 + _g5.uniform(-0.5, 0.5), 4), _x15, _x25, _z5, "norte" if _i5 % 2 else "sur"))
+        _rm5 = _csv5("varias.csv", ["n", "y", "x1", "x2", "sin_relacion", "zona"], _filas5)
+        _rc5, _rr5 = _json5([_experto5, "regresion", "--datos", _rx5, "--objetivo", "y", "--nivel", "base", "--json"], e3)
+        _v5 = (_rr5.get("variables") or [{}])[0]
+        resultados.append(("regresion: en una recta exacta (y = 5 + 3x) da pendiente 3, intercepto 5 y explica el 100 %; con una variable el nivel base alcanza",
+                           _rc5 == 0 and _cerca4(_v5.get("coeficiente"), 3, 1e-9) and _cerca4(_v5.get("intercepto"), 5, 1e-9) and _cerca4(_rr5["r2"], 1, 1e-9)
+                           and _rr5["recomendacion"]["especialista"] is False and _cerca4(_rr5["fuera_de_muestra"]["mejora_pct"], 100, 1e-6), [str(_rr5)[:400]]))
+        _rc5, _rb5 = _json5([_experto5, "regresion", "--datos", _rm5, "--objetivo", "y", "--variables", "x1,x2,sin_relacion,zona", "--nivel", "base", "--json"], e3)
+        _pv5 = {v["nombre"]: v for v in _rb5.get("variables", [])}
+        resultados.append(("regresion (base): mira cada variable por separado, deja fuera la columna de texto, no destaca la que no tiene relación y recomienda el especialista",
+                           _rc5 == 0 and _rb5["nivel"] == "base" and _rb5["datos"]["excluidas"] == ["zona"] and "x1" in _rb5["destacadas"]
+                           and "sin_relacion" not in _rb5["destacadas"] and _pv5["x1"]["coeficiente"] > 0 > _pv5["x2"]["coeficiente"]
+                           and _rb5["recomendacion"]["especialista"] is True and "20 separaciones" in _rb5["fuera_de_muestra"]["metodo"],
+                           [str(_rb5.get("destacadas")), str(_rb5.get("advertencias"))]))
+        prueba("regresion: con muy pocas filas no analiza y dice cuántas hacen falta",
+               [_experto5, "regresion", "--datos", _csv5("pocas.csv", ["x", "y"], [(i, 2 * i) for i in range(5)]), "--objetivo", "y"], e3, ["al menos 8"], codigo=1)
+        _az5 = _csv5("azar.csv", ["y", "a", "b"], [(round(_g5.uniform(0, 100), 2), round(_g5.uniform(0, 100), 2), round(_g5.uniform(0, 100), 2)) for _ in range(60)])
+        _rc5, _ra5 = _json5([_experto5, "regresion", "--datos", _az5, "--objetivo", "y", "--nivel", "base", "--json"], e3)
+        resultados.append(("regresion: con datos al azar dice que ninguna variable predice mejor que el promedio, y no destaca ninguna",
+                           _rc5 == 0 and _ra5["destacadas"] == [] and "Ninguna variable predice mejor que el promedio" in _ra5["conclusion"], [str(_ra5)[:300]]))
+
+        # Grupos de clientes (siempre por identificador)
+        prueba("segmentar: con menos de seis clientes no arma grupos y lo dice", [_experto5, "segmentar", "proyectos/ag"], e3, ["se necesitan al menos 6"], codigo=1)
+        _s95, _doc5 = [], 0
+        for _k5, (_dias5, _compras5) in enumerate([(5, 6)] * 3 + [(300, 3)] * 3 + [(100, 1)] * 3):
+            for _j5 in range(_compras5):
+                _doc5 += 1
+                _s95.append(((date(2026, 10, 31) - timedelta(days=_dias5 + 30 * _j5)).isoformat(), _doc5, f"C-{_k5 + 1:04d}", "Producto A", 10, 1000, 600, "directo"))
+        _cab5 = ["fecha", "documento", "cliente_id", "producto", "cantidad", "precio_unitario", "costo_unitario", "canal"]
+        _csv5("ventas.csv", _cab5, _s95, tmp / "seg9" / "finanzas")
+        _rc5, _sj5 = _json5([_experto5, "segmentar", str(tmp / "seg9"), "--hasta", "2026-10-31", "--nivel", "base", "--json"], e3)
+        _gc5 = {c["cliente_id"]: c["grupo"] for c in _sj5.get("clientes", [])}
+        resultados.append(("segmentar (base): los grupos por reglas coinciden con el cálculo a mano (3 frecuentes y recientes, 3 que se alejan, 3 de una vez) y la conclusión dice la concentración",
+                           _rc5 == 0 and [_gc5.get(f"C-{k:04d}") for k in range(1, 10)] == ["Frecuentes y recientes"] * 3 + ["Se están alejando"] * 3 + ["Nuevos o de una vez"] * 3
+                           and _sj5["metodo_grupos"] == "reglas" and _sj5["recomendacion"]["especialista"] is False
+                           and "El 33 % de los clientes (3) concentra el 60 % de las ventas" in _sj5["conclusion"]
+                           and "3 clientes que compraban seguido se están alejando" in _sj5["conclusion"]
+                           and _cerca4(sum(g["ventas"] for g in _sj5["grupos"]), 300000) and _cerca4(_sj5["grupos"][0]["margen"], 72000), [str(_gc5), _sj5.get("conclusion", "")]))
+        _s605 = []
+        for _k5 in range(60):
+            _tipo5 = _k5 // 20  # 0 = compran seguido y hace poco · 1 = de una o dos veces · 2 = compraban y dejaron de hacerlo
+            _compras5, _ult5 = ((_g5.randint(8, 12), _g5.randint(3, 25)), (_g5.randint(1, 2), _g5.randint(40, 120)), (_g5.randint(4, 6), _g5.randint(250, 350)))[_tipo5]
+            _cant5 = ((8, 16), (1, 3), (4, 8))[_tipo5]
+            for _j5 in range(_compras5):
+                _doc5 += 1
+                _s605.append(((date(2026, 10, 31) - timedelta(days=_ult5 + 28 * _j5)).isoformat(), _doc5, f"C-{_k5 + 1:04d}", "Producto A", _g5.randint(*_cant5), 1000, 600, "web"))
+        _csv5("ventas.csv", _cab5, _s605, tmp / "seg60" / "finanzas")
+        prueba("segmentar --diagnosticar: con 60 clientes recomienda buscar grupos por datos, y dice qué hacer si no está instalado",
+               [_experto5, "segmentar", str(tmp / "seg60"), "--diagnosticar"], e3,
+               ["60 clientes con ventas", "Nivel recomendado: especialista"] + (["Está instalado"] if _esp5 else ["Pregunta al usuario qué prefiere"]))
+        prueba("segmentar: escribe el informe con identificadores y la página con el gráfico por grupo",
+               [_experto5, "segmentar", str(tmp / "seg60"), "--hasta", "2026-10-31", "--nivel", "base", "--id", "grupos", "--hoy", "2026-11-11"], e3,
+               ["Nivel usado: base · grupos por reglas", "## Por grupo", "analisis/grupos/informe.html"])
+        _sh5 = (tmp / "seg60" / "analisis" / "grupos" / "informe.html").read_text(encoding="utf-8")
+        resultados.append(("segmentar: la página trae los grupos, el gráfico y cómo leerlos, sin nombres de clientes",
+                           "<svg" in _sh5 and "C-0001" in _sh5 and "Los grupos describen el período analizado" in _sh5 and "Frecuentes y recientes" in _sh5, [_sh5[:200]]))
+
+        # Plazo del proyecto bajo incertidumbre
+        _pz5 = tmp / "plazo5"
+        _csv5("cronograma.csv", ["id", "tarea", "inicio_plan", "fin_plan", "inicio_real", "fin_real", "avance_pct", "predecesoras", "es_hito", "estado"],
+              [("T1", "Diseño", "2026-11-10", "2026-11-20", "", "", 0, "", "no", "no iniciada"),
+               ("T2", "Construcción", "2026-11-20", "2026-11-30", "", "", 0, "T1", "no", "no iniciada"),
+               ("T3", "Compras", "2026-11-20", "2026-11-23", "", "", 0, "T1", "no", "no iniciada"),
+               ("T4", "Puesta en marcha", "2026-11-30", "2026-12-05", "", "", 0, '"T2,T3"', "no", "no iniciada")], _pz5 / "cronograma")
+        _rc5, _z05 = _json5([_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10", "--meta", "2026-12-05", "--optimista", "0", "--pesimista", "0", "--corridas", "200", "--json"], e3)
+        _rc5b, _z15 = _json5([_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10", "--meta", "2026-12-04", "--optimista", "0", "--pesimista", "0", "--corridas", "200", "--json"], e3)
+        resultados.append(("plazo: sin incertidumbre el término es el del cálculo a mano (05-12) y la probabilidad es 100 % o 0 % según la meta",
+                           _rc5 == 0 and _z05.get("termino", {}).get("probable") == "2026-12-05" and _z05["probabilidad"] == 1 and _z05["termino"]["p80"] == "2026-12-05"
+                           and _rc5b == 0 and _z15["probabilidad"] == 0, [str(_z05)[:300]]))
+        _rc5, _z25 = _json5([_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10", "--meta", "2026-12-05", "--corridas", "2000", "--semilla", "9", "--json"], e3)
+        _zt5 = {t["id"]: t for t in _z25.get("tareas", [])}
+        resultados.append(("plazo: con rangos, la ruta larga define el término y la corta nunca, la fecha con 80 % de seguridad queda después de la meta y la misma semilla repite",
+                           _rc5 == 0 and _zt5["T4"]["criticidad"] == 1 and _zt5["T2"]["criticidad"] > 0.5 and _zt5["T3"]["criticidad"] == 0
+                           and _z25["termino"]["p80"] > "2026-12-05" and _z25["probabilidad"] < 0.5 and _z25["nivel"] == "base"
+                           and "supuesto sin fuente" in " ".join(_z25["advertencias"])
+                           and _json5([_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10", "--meta", "2026-12-05", "--corridas", "2000", "--semilla", "9", "--json"], e3)[1] == _z25,
+                           [str(_z25)[:400]]))
+        _csv5("incertidumbre.csv", ["id", "optimista_dias", "probable_dias", "pesimista_dias", "fuente"], [("T9", 1, 2, 3, "prueba")], _pz5 / "cronograma")
+        prueba("plazo: un rango para una tarea que no existe se rechaza diciendo dónde", [_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10"], e3,
+               ["incertidumbre.csv, línea 2 (id T9)", "no existe en el cronograma"], codigo=1)
+        _csv5("incertidumbre.csv", ["id", "optimista_dias", "probable_dias", "pesimista_dias", "fuente"], [("T2", 10, 10, 40, "estimación del responsable")], _pz5 / "cronograma")
+        prueba("plazo: usa el rango propio de una tarea, informa las tareas que mueven la fecha y deja la página",
+               [_experto5, "plazo", str(_pz5), "--fecha", "2026-11-10", "--meta", "2026-12-05", "--id", "plazo", "--corridas", "1000"], e3,
+               ["Probabilidad de terminar en la meta o antes", "Las que más mueven la fecha: T2 Construcción", "Nivel recomendado: base", "analisis/plazo/informe.html"])
+        _zh5 = (_pz5 / "analisis" / "plazo" / "informe.html").read_text(encoding="utf-8")
+        resultados.append(("plazo: la página trae el histograma, las tareas que mueven la fecha y de dónde sale cada rango",
+                           _zh5.count("<svg") >= 1 and "estimación del responsable" in _zh5 and "supuesto sin fuente" in _zh5 and "Con 80 % de seguridad" in _zh5, [_zh5[:200]]))
+        prueba("plazo: el proyecto de ejemplo corre tal como viene", [H + "experto.py", "plazo", "ejemplos/demo-andes", "--fecha", "2026-11-11", "--corridas", "500", "--json"], repo,
+               ['"probabilidad"', '"criticidad"', '"hitos"'])
+
+        # Optimización de decisiones en simular.py
+        _op5 = {"modelo": "precio-volumen", "corridas": 2000, "semilla": 7, "optimizar": {"objetivo": "media"}, "entradas": {
+            "margen": 0.5, "cambio_precio": {"decision": True, "min": 0.0, "max": 0.10, "paso": 0.01, "valor": 0.02},
+            "sensibilidad": {"min": 0.5, "probable": 1.5, "max": 3.0, "fuente": "prueba"}, "perdida_volumen": {"formula": "sensibilidad * cambio_precio"}}}
+        _o5 = _sim4.optimizar(_sim4.preparar(_op5))
+        _op5b = json.loads(json.dumps(_op5))
+        _op5b["entradas"]["perdida_volumen"] = {"min": 0.01, "probable": 0.05, "max": 0.1, "fuente": "prueba"}
+        del _op5b["entradas"]["sensibilidad"]
+        _o5b = _sim4.optimizar(_sim4.preparar(_op5b))
+        resultados.append(("simular --optimizar: encuentra el alza que maximiza el margen (5 %, la del cálculo exacto) y, si al modelo le falta lo que frena la decisión, avisa que la mejor quedó en el borde",
+                           _o5["mejor"] == {"cambio_precio": 0.05} and _o5["en_borde"] == [] and _o5["combinaciones"] == 11 and _o5["valor_mejor"] > _o5["valor_actual"]
+                           and _o5b["mejor"] == {"cambio_precio": 0.1} and _o5b["en_borde"] == ["cambio_precio"], [str(_o5["primeras"][:3]), str(_o5b["mejor"])]))
+        _op5c = {"modelo": "formula", "formula": "ruido - (a - 0.3) * (a - 0.3) - (b - 0.7) * (b - 0.7) - (c - 0.5) * (c - 0.5)", "corridas": 200, "semilla": 3,
+                 "optimizar": {"objetivo": "media", "restricciones": ["a + b <= 0.91"]},
+                 "entradas": {"ruido": {"min": -0.01, "max": 0.01, "fuente": "prueba"}, "a": {"decision": True, "min": 0, "max": 1, "paso": 0.05},
+                              "b": {"decision": True, "min": 0, "max": 1, "paso": 0.05}, "c": {"decision": True, "min": 0, "max": 1, "paso": 0.05}}}
+        try:
+            _o5c, _e5c = _sim4.optimizar(_sim4.preparar(_op5c)), ""
+        except _sim4.Problema as _e5:
+            _o5c, _e5c = None, str(_e5)
+        if _esp5:
+            resultados.append(("simular --optimizar (especialista): con miles de combinaciones usa la búsqueda dirigida, respeta la restricción y llega al óptimo conocido",
+                               _o5c is not None and _o5c["metodo"].startswith("búsqueda") and abs(_o5c["mejor"]["a"] - 0.25) <= 0.051 and abs(_o5c["mejor"]["b"] - 0.65) <= 0.051
+                               and abs(_o5c["mejor"]["c"] - 0.5) <= 0.051 and _o5c["mejor"]["a"] + _o5c["mejor"]["b"] <= 0.91, [str(_o5c and _o5c["mejor"]), _e5c]))
+        else:
+            resultados.append(("simular --optimizar (base): con miles de combinaciones no las prueba todas; dice cómo achicar la búsqueda y manda preguntar por el nivel especialista",
+                               _o5c is None and "demasiadas combinaciones" in _e5c and "9.261" in _e5c and "Pregunta al usuario" in _e5c, [_e5c]))
+        (ag / "analisis" / "mejor").mkdir(parents=True, exist_ok=True)
+        (ag / "analisis" / "mejor" / "analisis.yaml").write_text(
+            'pregunta: "¿Cuánto conviene subir los precios?"\nmodelo: precio-volumen\ncorridas: 2000\nsemilla: 7\noptimizar: {objetivo: media}\nentradas:\n  margen: 0.5\n'
+            '  cambio_precio: {decision: true, min: 0.0, max: 0.10, paso: 0.01, valor: 0.02}\n  sensibilidad: {min: 0.5, probable: 1.5, max: 3.0, fuente: "prueba"}\n'
+            '  perdida_volumen: {formula: "sensibilidad * cambio_precio"}\n', encoding="utf-8")
+        prueba("simular --optimizar: informa la mejor combinación contra la decisión de hoy y deja su página",
+               [_simular4, "proyectos/ag/analisis/mejor", "--optimizar", "--hoy", "2026-11-11"], e3,
+               ["Mejor combinación: cambio_precio = 0,05", "11 combinaciones probadas", "Página: proyectos/ag/analisis/mejor/optimizacion.html"], ausentes=["ATENCIÓN"])
+        _oh5 = _lee3("proyectos/ag/analisis/mejor/optimizacion.html")
+        resultados.append(("simular --optimizar: la página muestra cómo cambia el objetivo con la decisión y recuerda que decide quien responde",
+                           "<svg" in _oh5 and "La mejor decisión" in _oh5 and "La decisión es de quien responde por ella" in _oh5, [_oh5[:200]]))
+        prueba("simular --revisar: reconoce las decisiones y las entradas calculadas", [_simular4, "proyectos/ag/analisis/mejor", "--revisar"], e3,
+               ["supuestos con rango: sensibilidad", "decisiones: cambio_precio"])
+        prueba("simular --optimizar: el ejemplo de precios corre tal como viene y da la respuesta conocida (alza de 4 %)",
+               [H + "simular.py", "ejemplos/finanzas-demo/analisis/mejor-precio", "--optimizar", "--json"], repo, ['"cambio_precio": 0.04', '"en_borde": []'])
+
+        # Arreglos que acompañan a la versión
+        resultados.append(("finanzas: en los datos propios «12.345» es doce coma tres (no doce mil); la lectura tolerante sigue leyendo miles con punto y decimales con coma",
+                           _fin5.num_propio("12.345") == 12.345 and _fin5.num("12.345") == 12345 and _fin5.num_propio("1.234,5") == 1234.5
+                           and _fin5.num_propio("-7") == -7.0, [str(_fin5.num_propio("12.345"))]))
+        (tmp / "huecos.md").write_text("# Serie\n\n```grafico\ntipo: lineas\ntitulo: Ventas\ncategorias: [ene, feb, mar, abr]\nseries:\n"
+                                       "  Real: [10, 12, null, null]\n  Pronóstico: [null, 12, 14, 15]\n```\n", encoding="utf-8")
+        prueba("explicar: un gráfico de líneas admite meses sin dato", [_exp3, str(tmp / "huecos.md")], e3, ["Página generada"])
+        (tmp / "vacia.md").write_text("# Serie\n\n```grafico\ntipo: lineas\ntitulo: Ventas\ncategorias: [ene, feb, mar]\nseries:\n"
+                                      "  Real: [10, 12, 13]\n  Otra: [null, null, null]\n```\n", encoding="utf-8")
+        prueba("explicar: una serie sin ningún valor se rechaza", [_exp3, str(tmp / "vacia.md")], e3, ["no trae ningún valor"], codigo=1)
+        resultados.append(("explicar: lo real y lo pronosticado se dibujan como dos líneas que se tocan en el último mes real",
+                           (tmp / "huecos.html").read_text(encoding="utf-8").count("<polyline") == 2, []))
+
+        # Nivel especialista: solo donde está instalado; donde no, pedirlo termina con código 3 y dice cómo instalarlo
+        if _esp5:
+            _rc5, _pq5 = _json5([_experto5, "pronosticar", "--datos", _qui5, "--json"], e3)
+            _simples5 = [v["mae"] for k, v in _pq5.get("errores", {}).items() if not k.startswith("Holt")]
+            resultados.append(("pronosticar (especialista): donde la tendencia cambió, el modelo que pesa más lo reciente baja el error a menos de la mitad del mejor método simple",
+                               _rc5 == 0 and _pq5["nivel"] == "especialista" and _pq5["metodo"].startswith("Holt")
+                               and _pq5["errores"][_pq5["metodo"]]["mae"] < 0.5 * min(_simples5) and all(p["bajo"] <= p["valor"] <= p["alto"] for p in _pq5["pronostico"]),
+                               [str(_pq5.get("metodo")), str(_pq5.get("errores"))[:300]]))
+            _rc5, _ej5 = _json5([H + "experto.py", "pronosticar", "--datos", "ejemplos/finanzas-demo/datos/ventas-mensuales.csv", "--json"], repo)
+            resultados.append(("pronosticar (especialista): en la serie de ejemplo el modelo con estacionalidad baja el error comprobado a menos de dos tercios del mejor método simple",
+                               _rc5 == 0 and _ej5["metodo"].startswith("Holt-Winters")
+                               and _ej5["errores"][_ej5["metodo"]]["mape"] < 0.66 * _dj5["mediciones"]["mape_mejor_simple"]
+                               and _ej5["pronostico"][1]["valor"] > _ej5["pronostico"][0]["valor"], [str(_ej5.get("metodo")), str(_ej5.get("errores"))[:300]]))
+            _sal5 = prueba("pronosticar (especialista): donde un método simple ya acierta, lo dice y entrega el simple",
+                           [_experto5, "pronosticar", "--datos", _est5, "--salida", str(tmp / "pron-esp")], e3, ["nivel especialista", "Página:"], ausentes=["Warning", "Traceback"])
+            _rc5, _re5 = _json5([_experto5, "regresion", "--datos", _rm5, "--objetivo", "y", "--variables", "x1,x2,sin_relacion", "--json"], e3)
+            _pv5 = {v["nombre"]: v for v in _re5.get("variables", [])}
+            resultados.append(("regresion (especialista): recupera los coeficientes verdaderos (2 y −1), destaca solo las dos variables con efecto y mejora al promedio en datos no vistos",
+                               _rc5 == 0 and _re5["nivel"] == "especialista" and _cerca4(_pv5["x1"]["coeficiente"], 2, 0.05) and _cerca4(_pv5["x2"]["coeficiente"], -1, 0.05)
+                               and _re5["destacadas"] == ["x1", "x2"] and _pv5["sin_relacion"]["p"] > 0.05 and _re5["fuera_de_muestra"]["mejora_pct"] > 80
+                               and _re5["r2_ajustado"] > 0.98 and all(v["vif"] < 2 for v in _pv5.values()), [str(_re5)[:500]]))
+            _rc5, _ra5 = _json5([_experto5, "regresion", "--datos", _az5, "--objetivo", "y", "--json"], e3)
+            resultados.append(("regresion (especialista): con datos al azar el modelo no mejora al promedio y no destaca ninguna variable",
+                               _rc5 == 0 and _ra5["destacadas"] == [] and "no predice mejor que el promedio" in _ra5["conclusion"], [str(_ra5.get("conclusion"))]))
+            _rc5, _se5 = _json5([_experto5, "segmentar", str(tmp / "seg60"), "--hasta", "2026-10-31", "--json"], e3)
+            _ge5 = [c["grupo"] for c in sorted(_se5.get("clientes", []), key=lambda c: c["cliente_id"])]
+            resultados.append(("segmentar (especialista): encuentra los tres grupos que se construyeron, pasa las dos comprobaciones y la misma semilla repite",
+                               _rc5 == 0 and _se5["metodo_grupos"] == "datos" and _se5["comprobaciones"]["k"] == 3
+                               and all(len(set(_ge5[i:i + 20])) == 1 for i in (0, 20, 40)) and len(set(_ge5)) == 3
+                               and _se5["comprobaciones"]["silueta"] > _se5["comprobaciones"]["silueta_desordenada_p95"] and _se5["comprobaciones"]["estabilidad"] >= 0.9
+                               and _json5([_experto5, "segmentar", str(tmp / "seg60"), "--hasta", "2026-10-31", "--json"], e3)[1] == _se5,
+                               [str(_se5.get("comprobaciones")), _se5.get("conclusion", "")]))
+            _csv5("ventas.csv", _cab5, [((date(2026, 10, 31) - timedelta(days=_g5.randint(1, 360))).isoformat(), 9000 + i, f"C-{i % 60 + 1:04d}", "Producto A",
+                                         _g5.randint(1, 20), 1000, 600, "web") for i in range(150)], tmp / "segazar" / "finanzas")
+            _rc5, _sz5 = _json5([_experto5, "segmentar", str(tmp / "segazar"), "--hasta", "2026-10-31", "--json"], e3)
+            _cz5 = _sz5.get("comprobaciones", {})
+            _pasa5 = _cz5.get("k") is not None and _cz5["silueta"] > _cz5["silueta_desordenada_p95"] and _cz5["estabilidad"] >= 0.6
+            resultados.append(("segmentar (especialista): con compras al azar, entrega grupos por datos solo si pasan las dos comprobaciones; si no, lo dice y entrega los grupos por reglas",
+                               _rc5 == 0 and (_sz5["metodo_grupos"] == "datos") == _pasa5
+                               and (_pasa5 or ("grupos por reglas" in _sz5["conclusion"] and _sz5["grupos"] == _sz5["grupos_reglas"])),
+                               [str(_cz5), _sz5.get("conclusion", "")]))
+        else:
+            for _an5, _args5 in (("pronosticar", ["--datos", _est5]), ("regresion", ["--datos", _rm5, "--objetivo", "y"]), ("segmentar", [str(tmp / "seg60")])):
+                _rc5, _sal5 = correr([_experto5, _an5] + _args5 + ["--nivel", "especialista"], e3)
+                resultados.append((f"{_an5}: pedir el nivel especialista sin tenerlo instalado termina con código 3 y dice cómo instalarlo, sin instalar nada",
+                                   _rc5 == 3 and "experto.py instalar" in _sal5 and "con el sí del usuario" in _sal5, [f"rc={_rc5}", _sal5[:300]]))
+            _rc5, _pa5 = _json5([_experto5, "pronosticar", "--datos", _qui5, "--json"], e3)
+            resultados.append(("sin el nivel especialista, `auto` analiza con el base y deja escrito que el especialista convenía",
+                               _rc5 == 0 and _pa5.get("nivel") == "base" and _pa5["recomendacion"]["especialista"] is True and _pa5["recomendacion"]["instalado"] is False,
+                               [str(_pa5.get("recomendacion"))]))
+
         # Ficha de inicio: sin instalar, el hook la ofrece o avisa que ya tiene respuestas
         shutil.rmtree(repo / ".harness", ignore_errors=True)
         prueba("hook: sin instalar ofrece la ficha y el manual", [H + "hooks/inicio_sesion.py"], repo,

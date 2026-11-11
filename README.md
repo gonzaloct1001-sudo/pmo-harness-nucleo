@@ -1,4 +1,4 @@
-# PMO Harness v3.4
+# PMO Harness v3.5
 
 Un arnés para que un asistente de IA —Claude Code, OpenAI Codex, Gemini, Google Antigravity, Cursor, GitHub Copilot u
 otro que trabaje sobre carpetas— lleve con método y evidencia **tus proyectos, las finanzas de tu empresa y tus
@@ -270,6 +270,9 @@ actualización los toca; todo queda en el historial y se puede deshacer.
   herramienta.
 
 ## Historial de versiones (completo en `CHANGELOG.md`)
+- **3.5** — Análisis a fondo, en dos niveles: `experto.py` (pronósticos, regresión, grupos de clientes y plazo del
+  proyecto bajo incertidumbre) y optimización de decisiones en `simular.py`. El nivel base no instala nada; el
+  especialista se instala a pedido, y antes de analizar el asistente dice cuál conviene y pregunta.
 - **3.4** — Análisis para decidir, sin instalar nada: simulación con rangos (probabilidad de una meta, tornado, qué
   supuesto pesa más), cinco modelos de negocio y fórmula propia (`simular.py`); rentabilidad por cliente y producto
   con mapa de cuadrantes (`rentabilidad.py`), con los clientes siempre por identificador y sus nombres solo en el

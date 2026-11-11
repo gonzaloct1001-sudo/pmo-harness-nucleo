@@ -21,7 +21,8 @@ modifique registros o que vaya a durar más de un rato.
     datos del cliente); nunca edites el núcleo: lo decide el mantenedor.
 18. **Tu consola no es interactiva.** No ejecutes comandos que esperen una respuesta (S/N, términos que aceptar,
     contraseñas, un editor): quedan detenidos y el usuario no puede contestar. Para instalar usa solo
-    `herramientas/preparar_pc.ps1` o `preparar_pc.sh` (nunca winget, choco ni brew directos); para Git, usa `-m`,
+    `herramientas/preparar_pc.ps1` o `preparar_pc.sh` (nunca winget, choco ni brew directos; las bibliotecas del
+    nivel especialista del análisis, solo con `python herramientas/experto.py instalar` y con el sí del usuario); para Git, usa `-m`,
     nunca `-i`, y `git --no-pager` si la carpeta no tiene `core.pager cat`. Ejecuta los scripts desde la carpeta con
     su ruta relativa (`herramientas/...`): algunos controles de seguridad detienen PowerShell si su línea de comando
     trae la ruta completa de la carpeta abierta en el editor. Si algo queda esperando, detenlo y ofrece el instalador

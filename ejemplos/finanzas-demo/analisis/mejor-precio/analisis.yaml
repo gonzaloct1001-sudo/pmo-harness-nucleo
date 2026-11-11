@@ -1,0 +1,13 @@
+pregunta: "¿Cuánto conviene subir los precios?"
+modelo: precio-volumen
+resultado: cambio_margen_total
+meta: 0                            # además se informa la probabilidad de que el margen bruto total no baje
+sentido: mayor
+corridas: 5000
+semilla: 20261111                  # misma semilla, mismos resultados
+optimizar: {objetivo: media, sentido: maximizar}   # también p10 (cuidar el escenario malo) o probabilidad (de la meta)
+entradas:
+  margen: 0.38                     # margen bruto del año, de los estados de resultados
+  cambio_precio: {decision: true, min: 0.0, max: 0.10, paso: 0.01, valor: 0.05}   # lo que la empresa elige; `valor` es la decisión de hoy
+  sensibilidad: {min: 1.0, probable: 2.0, max: 3.5, fuente: "juicio de la gerencia comercial (demo): por cada 1 % de alza se pierde cerca de 2 % del volumen"}
+  perdida_volumen: {formula: "sensibilidad * cambio_precio"}                      # lo que esa decisión provoca

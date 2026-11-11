@@ -1,5 +1,59 @@
 # Cambios
 
+## 3.5.0 — 2026-11-11
+
+### Análisis a fondo, en dos niveles
+- **`herramientas/experto.py`**, un solo punto de entrada para cuatro análisis, cada uno con `--diagnosticar` (dice
+  antes si el nivel base alcanza y por qué) y con su página (`informe.html`), su Markdown y su `resultado.json`:
+  - **`pronosticar`**: una serie mensual hacia adelante. Base: seis métodos simples (último valor, promedio de tres
+    meses, tendencia, mismo mes del año anterior solo o con el crecimiento anual, y tendencia con estacionalidad),
+    eligiendo por el error en meses reservados. Especialista: suavizamiento exponencial con tendencia y
+    estacionalidad; si no baja en 5 % el error del mejor método simple, se dice y se entrega el simple. El
+    diagnóstico recomienda el especialista solo si el mejor método simple se equivoca en más de 5 % y queda algo que
+    aprovechar: estacionalidad, o una tendencia que está cambiando.
+  - **`regresion`**: qué variables acompañan a un resultado. Base: una variable a la vez, comprobada en 20
+    separaciones al azar de los datos. Especialista: todas juntas,
+    con coeficientes, intervalos, variables que se mueven juntas y validación cruzada contra «predecir el promedio»;
+    si no predice mejor que el promedio, no destaca ninguna variable.
+  - **`segmentar`**: grupos de clientes (siempre por identificador) según días desde la última compra, cantidad de
+    compras y monto. Base: por reglas. Especialista: por datos, con dos comprobaciones (que haya grupos de verdad y
+    que sean estables); si fallan, se usan las reglas.
+  - **`plazo`**: el cronograma con la duración de cada tarea pendiente como rango: probabilidad de terminar en la
+    fecha comprometida, fechas con 50, 80 y 90 % de seguridad, criticidad por tarea e hitos en riesgo. Los rangos
+    propios de cada tarea van en `cronograma/incertidumbre.csv`; sin ellos usa un supuesto declarado (−10 % / +30 %).
+- **Dos niveles, y el usuario decide.** El nivel base usa solo lo que el harness ya trae. El especialista
+  (`requirements-analisis.txt`: numpy, pandas, scipy, statsmodels y scikit-learn; unos 450 MB) se instala en el mismo
+  Python con `experto.py instalar`, únicamente con el sí del usuario. La skill `analizar` manda evaluar primero si el
+  base alcanza (`--diagnosticar` lo dice con su motivo, medido en los datos): si alcanza, analiza sin preguntar; si
+  conviene el especialista y no está instalado, pregunta: seguir con el base (y qué deja sin responder) o instalar.
+  `--nivel especialista` sin tenerlo termina con código 3 y explica cómo instalarlo. Cada página dice con qué nivel
+  se hizo el análisis y si convenía el otro.
+- **Optimización de decisiones** en `simular.py --optimizar`: entradas de decisión (`{decision: true, min, max,
+  paso}`), entradas calculadas con una fórmula sobre otras (lo que una decisión provoca), objetivo a elegir (promedio,
+  percentil 10, 50 o 90, o probabilidad de la meta) y restricciones. Todas las combinaciones se comparan con los
+  mismos escenarios; con muchas, el nivel especialista usa una búsqueda dirigida. Advierte cuando la mejor queda en el
+  borde del rango (al modelo le falta lo que frena esa decisión) y cuántas combinaciones dan casi lo mismo.
+- `explicar.py`: el gráfico de líneas admite meses sin dato (`null`), para dibujar juntos lo real y lo pronosticado.
+- Ejemplos: `ejemplos/finanzas-demo/datos/ventas-mensuales.csv` (una serie donde el diagnóstico recomienda el
+  especialista) y `analisis/mejor-precio` (una decisión con respuesta conocida); recorrido en `ejemplos/LEEME.md`.
+- `verificar_entorno.py` informa si el nivel especialista está instalado. Evaluación de comportamiento nueva:
+  «pregunta antes de instalar».
+
+### Arreglos
+- **`finanzas.py`**: un monto guardado con exactamente tres decimales en los datos propios («12.345» en UF o dólares)
+  se leía como miles; ahora los datos propios se leen con punto decimal (`num_propio`) y la lectura tolerante queda
+  solo para las exportaciones.
+- El manual suma lo que el documento en línea ya traía (decidir con números inciertos, cómo parte cada tarea,
+  clientes por código).
+
+### Al actualizar a esta versión
+- No cambia nada existente ni se instala nada: el nivel especialista sigue siendo opcional y a pedido.
+- Permisos de Claude Code: conviene autorizar `experto.py` por análisis (`estado`, `pronosticar`, `regresion`,
+  `segmentar`, `plazo`) y **no** `instalar`: así la instalación pasa siempre por una confirmación en pantalla. La
+  batería comprueba que `instalar` no quede autorizado de antemano.
+- Batería: 528 pruebas con el nivel base y 531 donde está instalado el especialista (cada entorno prueba lo suyo:
+  sin él, que pedirlo avisa cómo instalarlo; con él, que sus métodos recuperan respuestas conocidas).
+
 ## 3.4.0 — 2026-11-11
 
 ### Análisis para decidir (nivel base: no instala nada)

@@ -1,0 +1,7 @@
+# Nivel especialista del análisis (opcional). No se instala con el harness: solo cuando el usuario lo pide,
+# con `python herramientas/experto.py instalar`. Sin esto, todos los análisis funcionan en el nivel base.
+numpy>=1.26
+pandas>=2.1
+scipy>=1.11
+statsmodels>=0.14
+scikit-learn>=1.3

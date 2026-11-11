@@ -22,7 +22,8 @@ Bloques especiales, entre ``` con su nombre:
     datos: {Obras civiles: 80, Montaje: 55, Puesta en marcha: 10}
     ```
 - barras y columnas: `datos: {etiqueta: valor}`, o varias series con `series: [Plan, Real]` y `datos: {etiqueta: [70, 62]}`.
-- lineas: `categorias: [ene, feb, mar]` y `series: {Plan: [10, 20, 30], Real: [8, 19, 26]}`.
+- lineas: `categorias: [ene, feb, mar]` y `series: {Plan: [10, 20, 30], Real: [8, 19, 26]}`; un valor `null` es un
+  mes sin dato (así se dibujan juntos lo real y lo pronosticado: `Real: [8, 19, null]`, `Pronóstico: [null, 19, 24]`).
 - tornado: `base: 120` y `datos: {Precio: [90, 150], Costo: [135, 100]}` (el resultado con la variable en su valor
   bajo y en su valor alto); se ordena solo, de la variable que más mueve el resultado a la que menos.
 - histograma: `valores: [...]`; opcional `meta: 100` con `sentido: mayor | menor` (calcula y muestra la probabilidad
@@ -215,13 +216,16 @@ def barra_v(x, w, yb, ye):
     return f"M{x:.1f},{yb:.1f}V{ye + s * r:.1f}Q{x:.1f},{ye:.1f} {x + r:.1f},{ye:.1f}H{x + w - r:.1f}Q{x + w:.1f},{ye:.1f} {x + w:.1f},{ye + s * r:.1f}V{yb:.1f}Z"
 
 
-def series_de(spec, donde):
-    """(categorías, nombres de serie, {serie: [valores]}) desde las formas que admite un bloque de gráfico."""
+def series_de(spec, donde, vacios=False):
+    """(categorías, nombres de serie, {serie: [valores]}) desde las formas que admite un bloque de gráfico. Con `vacios`,
+    un valor `null` es un punto sin dato (solo en líneas)."""
     datos, series = spec.get("datos"), spec.get("series")
     if isinstance(series, dict):
         cats = [str(c) for c in (spec.get("categorias") or range(1, max(len(v) for v in series.values()) + 1))]
         nombres = [str(k) for k in series]
-        valores = {str(k): [numero(x, donde) for x in v] for k, v in series.items()}
+        valores = {str(k): [None if x is None and vacios else numero(x, donde) for x in v] for k, v in series.items()}
+        if any(all(x is None for x in v) for v in valores.values()):
+            raise Problema(f"{donde}: una serie no trae ningún valor")
         if any(len(v) != len(cats) for v in valores.values()):
             raise Problema(f"{donde}: cada serie debe traer un valor por categoría ({len(cats)})")
     elif isinstance(datos, dict) and datos:
@@ -348,40 +352,48 @@ def fig_columnas(spec, donde):
 
 
 def g_lineas(spec, donde):
-    cats, nombres, val = series_de(spec, donde)
+    cats, nombres, val = series_de(spec, donde, vacios=True)
     if len(cats) < 2:
         raise Problema(f"{donde}: una línea necesita al menos dos puntos")
     u, k = spec.get("unidad", ""), len(nombres)
-    todos = [v for n in nombres for v in val[n]]
+    todos = [v for n in nombres for v in val[n] if v is not None]
     vmin, vmax = min(todos), max(todos)
     ms = marcas_eje(0 if 0 <= vmin < (vmax - vmin) else vmin, vmax)
     izq, sup, ph = 56, 14, 240
     y = lambda v: sup + ph - (v - ms[0]) / (ms[-1] - ms[0]) * ph  # noqa: E731
-    finales = sorted(y(val[n][-1]) for n in nombres)
-    con_nombre = k >= 2 and all(b - a >= 15 for a, b in zip(finales, finales[1:]))  # si chocan, quedan la leyenda y el globo
-    der = 16 + (max(ancho_texto(n, 12) for n in nombres) + 14 if con_nombre else (ancho_texto(num(val[nombres[0]][-1], u), 12) + 14 if k == 1 else 0))
+    ultimo = {n: max(i for i, v in enumerate(val[n]) if v is not None) for n in nombres}  # dónde termina cada serie
+    juntas = all(ultimo[n] == len(cats) - 1 for n in nombres)
+    finales = sorted(y(val[n][ultimo[n]]) for n in nombres)
+    con_nombre = k >= 2 and juntas and all(b - a >= 15 for a, b in zip(finales, finales[1:]))  # si chocan, quedan la leyenda y el globo
+    der = 16 + (max(ancho_texto(n, 12) for n in nombres) + 14 if con_nombre else (ancho_texto(num(val[nombres[0]][ultimo[nombres[0]]], u), 12) + 14 if k == 1 else 0))
     pw, alto = ANCHO - izq - der, sup + ph + 34
     x = lambda i: izq + i * pw / (len(cats) - 1)  # noqa: E731
     o = [f'<line class="grid" x1="{izq}" y1="{y(m):.1f}" x2="{izq + pw:.1f}" y2="{y(m):.1f}"/>'
          f'<text class="tick" x="{izq - 8}" y="{y(m) + 4:.1f}" text-anchor="end">{esc(compacto(m))}</text>' for m in ms]
     o.append(f'<line class="eje" x1="{izq}" y1="{sup + ph}" x2="{izq + pw:.1f}" y2="{sup + ph}"/>')
     for j, n in enumerate(nombres):
-        puntos = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(val[n]))
-        o.append(f'<polyline class="l{j + 1}" points="{puntos}"/>')
-        xf, yf = x(len(cats) - 1), y(val[n][-1])
+        tramo = []
+        for i, v in enumerate(val[n] + [None]):  # una línea por cada tramo seguido con dato
+            if v is not None:
+                tramo.append(f"{x(i):.1f},{y(v):.1f}")
+            elif tramo:
+                o.append(f'<polyline class="l{j + 1}" points="{" ".join(tramo)}"/>' if len(tramo) > 1 else
+                         f'<circle class="s{j + 1}" cx="{tramo[0].split(",")[0]}" cy="{tramo[0].split(",")[1]}" r="2"/>')
+                tramo = []
+        xf, yf = x(ultimo[n]), y(val[n][ultimo[n]])
         o.append(f'<circle class="pt s{j + 1}" cx="{xf:.1f}" cy="{yf:.1f}" r="4"/>')
         if con_nombre:
             o.append(f'<text class="et" style="font-size:12px" x="{xf + 10:.1f}" y="{yf + 4:.1f}">{esc(n)}</text>')
         elif k == 1:
-            o.append(f'<text class="val" x="{xf + 10:.1f}" y="{yf + 4:.1f}">{esc(num(val[n][-1], u))}</text>')
+            o.append(f'<text class="val" x="{xf + 10:.1f}" y="{yf + 4:.1f}">{esc(num(val[n][ultimo[n]], u))}</text>')
     cada = max(1, math.ceil(len(cats) / max(1, int(pw / 80))))
     medio = pw / (len(cats) - 1)
     for i, c in enumerate(cats):
         g = [f'<line class="cruz" x1="{x(i):.1f}" y1="{sup}" x2="{x(i):.1f}" y2="{sup + ph}"/>']
-        g += [f'<circle class="pt pt-h s{j + 1}" cx="{x(i):.1f}" cy="{y(val[n][i]):.1f}" r="4"/>' for j, n in enumerate(nombres)]
+        g += [f'<circle class="pt pt-h s{j + 1}" cx="{x(i):.1f}" cy="{y(val[n][i]):.1f}" r="4"/>' for j, n in enumerate(nombres) if val[n][i] is not None]
         if i % cada == 0:
             g.append(f'<text class="tick" x="{x(i):.1f}" y="{sup + ph + 18}" text-anchor="middle">{esc(cortar(c, 80 * cada - 6))}</text>')
-        tip = pista(c, [(n if k > 1 else "", num(val[n][i], u), j + 1) for j, n in enumerate(nombres)])
+        tip = pista(c, [(n if k > 1 else "", num(val[n][i], u), j + 1) for j, n in enumerate(nombres) if val[n][i] is not None])
         g.append(f'<rect class="hit" tabindex="0" x="{x(i) - medio / 2:.1f}" y="{sup}" width="{medio:.1f}" height="{ph + 22}" data-tip="{tip}"/>')
         o.append(f'<g class="banda">{"".join(g)}</g>')
     svg = f'<svg viewBox="0 0 {ANCHO} {alto}" role="img" aria-label="{esc(spec.get("titulo") or "Gráfico de líneas")}">{"".join(o)}</svg>'

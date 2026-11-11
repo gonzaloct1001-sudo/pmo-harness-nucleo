@@ -6,6 +6,7 @@ Uso:
     python herramientas/simular.py --modelos                                   # los modelos disponibles y sus entradas
     python herramientas/simular.py --nuevo <modelo> --proyecto proyectos/<slug> --id <nombre> [--pregunta "..."]
     python herramientas/simular.py <carpeta del análisis> [--revisar] [--corridas N] [--semilla S] [--abrir] [--json]
+    python herramientas/simular.py <carpeta del análisis> --optimizar          # la mejor combinación de decisiones
 
 Un análisis vive en `<proyecto>/analisis/<id>/analisis.yaml`:
     pregunta: "¿Conviene subir los precios 5 %?"
@@ -23,6 +24,14 @@ Un análisis vive en `<proyecto>/analisis/<id>/analisis.yaml`:
 Rangos: `{min, probable, max}` (triangular), `{min, max}` (uniforme), `{media, desv}` con `min` y `max` opcionales
 (normal). `fuente` dice de dónde sale el rango; sin ella queda marcado como supuesto. Con `modelo: formula`:
     formula: "ventas * margen - gastos"          # o varios pasos: resultados: {bruto: "ventas * margen", neto: "bruto - gastos"}
+
+Decisiones y optimización: una entrada que la empresa elige se escribe `{decision: true, min: 0, max: 0.10, paso: 0.01,
+valor: 0.05}` (en una simulación normal vale `valor`). Una entrada que depende de otras se escribe con su fórmula,
+`perdida_volumen: {formula: "sensibilidad * cambio_precio"}`, donde `sensibilidad` es otra entrada (con su rango): así
+el modelo sabe qué frena una decisión. `--optimizar` prueba las combinaciones de decisiones (con los mismos escenarios
+para todas) y entrega la mejor según `optimizar: {objetivo: media | p10 | p50 | p90 | probabilidad, sentido: maximizar |
+minimizar, restricciones: ["cambio_precio <= 0.08"]}`; deja `optimizacion.html`, `.md` y `.json`. Si la mejor queda
+en el borde de su rango, lo advierte: o el rango es estrecho, o al modelo le falta la relación que frena esa decisión.
 
 Qué entrega (en la carpeta del análisis): `informe.html` (página con la probabilidad, el rango de resultados, el
 histograma, el tornado y los supuestos), `informe.md`, `resultado.json` y una fila en `corridas.csv` (fecha, semilla y
@@ -42,10 +51,14 @@ from datetime import date
 from pathlib import Path
 
 import _modelos
+import experto
 
 RAIZ = Path(__file__).resolve().parent.parent
 ARCHIVO = "analisis.yaml"
 CORRIDAS = 5000
+INCIERTAS = ("triangular", "uniforme", "normal")
+OBJETIVOS = ("media", "p10", "p50", "p90", "probabilidad")
+MAX_COMBINACIONES = 3000
 
 
 class Problema(Exception):
@@ -68,6 +81,21 @@ def entrada(nombre, crudo):
     if not isinstance(crudo, dict):
         return {"forma": "fijo", "base": _num(crudo, donde), "fuente": ""}
     fuente = str(crudo.get("fuente") or "").strip()
+    if crudo.get("formula") is not None:
+        return {"forma": "formula", "texto": str(crudo["formula"]), "base": None, "fuente": fuente}
+    if crudo.get("decision"):
+        if crudo.get("min") is None or crudo.get("max") is None:
+            raise Problema(f"{donde}: una decisión lleva `min` y `max` (y `paso`)")
+        lo, hi = _num(crudo["min"], donde), _num(crudo["max"], donde)
+        if lo >= hi:
+            raise Problema(f"{donde}: `min` debe ser menor que `max`")
+        paso = _num(crudo["paso"], donde) if crudo.get("paso") is not None else (hi - lo) / 10
+        if paso <= 0 or paso > hi - lo:
+            raise Problema(f"{donde}: `paso` debe ser mayor que cero y caber en el rango")
+        valor = _num(crudo["valor"], donde) if crudo.get("valor") is not None else lo
+        if not lo <= valor <= hi:
+            raise Problema(f"{donde}: `valor` debe quedar entre `min` y `max`")
+        return {"forma": "decision", "base": valor, "min": lo, "max": hi, "paso": paso, "fuente": fuente}
     if "valor" in crudo:
         return {"forma": "fijo", "base": _num(crudo["valor"], donde), "fuente": fuente}
     if "media" in crudo:
@@ -99,6 +127,21 @@ def preparar(definicion):
     if not isinstance(crudas, dict) or not crudas:
         raise Problema("faltan las `entradas` (cada una con un valor fijo o un rango)")
     entradas = {str(k): entrada(str(k), v) for k, v in crudas.items()}
+    primarias = [k for k, d in entradas.items() if d["forma"] != "formula"]
+    calculadas, auxiliares = [], set()
+    for k, d in entradas.items():
+        if d["forma"] != "formula":
+            continue
+        try:
+            codigo, usa = _modelos.compilar(d["texto"])
+        except _modelos.FormulaInvalida as e:
+            raise Problema(f"entrada «{k}»: {e}")
+        faltan = [x for x in usa if x not in primarias]
+        if faltan:
+            raise Problema(f"entrada «{k}»: su fórmula usa {', '.join(faltan)}, que no es una entrada con valor, rango o decisión "
+                           "(una entrada calculada no puede depender de otra calculada)")
+        calculadas.append((k, codigo))
+        auxiliares |= set(usa)
     if modelo == "formula":
         pasos = definicion.get("resultados") or ({"resultado": definicion["formula"]} if definicion.get("formula") else None)
         if not isinstance(pasos, dict) or not pasos:
@@ -128,22 +171,34 @@ def preparar(definicion):
         etiquetas = {k: k.replace("_", " ").capitalize() for k in entradas}
     elif modelo in _modelos.MODELOS:
         m = _modelos.MODELOS[modelo]
-        sobran = [k for k in entradas if k not in m["entradas"]]
+        sobran = [k for k in entradas if k not in m["entradas"] and k not in auxiliares]
         if sobran:
             raise Problema(f"el modelo «{modelo}» no tiene la entrada {', '.join(sobran)}; las suyas son: {', '.join(m['entradas'])}")
         faltan = [k for k, d in m["entradas"].items() if not d["opcional"] and k not in entradas]
         if faltan:
             raise Problema(f"al modelo «{modelo}» le faltan entradas: {', '.join(faltan)}")
         evaluar, resultados, principal, notas, titulo = m["calcular"], m["resultados"], m["principal"], m["notas"], m["nombre"]
-        etiquetas = {k: m["entradas"][k]["que"] for k in entradas}
+        etiquetas = {k: (m["entradas"][k]["que"] if k in m["entradas"] else k.replace("_", " ").capitalize()) for k in entradas}
     else:
         raise Problema("`modelo` debe ser uno de: " + ", ".join(list(_modelos.MODELOS) + ["formula"]))
     resultado = str(definicion.get("resultado") or principal)
     if resultado not in resultados:
         raise Problema(f"`resultado: {resultado}` no existe en este modelo; puede ser: {', '.join(resultados)}")
-    base = evaluar({k: d["base"] for k, d in entradas.items()}).get(resultado)
+    nucleo = evaluar
+
+    def evaluar(valores):  # primero las entradas calculadas (dependen de decisiones y supuestos), después el modelo
+        v = dict(valores)
+        for nombre, codigo in calculadas:
+            v[nombre] = _modelos.evaluar(codigo, v)
+            if v[nombre] is None:
+                return {}
+        return nucleo(v)
+    valores_base = {k: entradas[k]["base"] for k in primarias}
+    for nombre, codigo in calculadas:
+        entradas[nombre]["base"] = _modelos.evaluar(codigo, valores_base)
+    base = evaluar(valores_base).get(resultado)
     if base is None and resultado == principal and modelo in _modelos.MODELOS:
-        otros = [k for k, v in evaluar({k: d["base"] for k, d in entradas.items()}).items() if v is not None]
+        otros = [k for k, v in evaluar(valores_base).items() if v is not None]
         raise Problema(f"con esas entradas el modelo no puede calcular «{resultado}» (falta una entrada opcional); "
                        f"sí puede: {', '.join(otros)}. Indica `resultado:` o completa las entradas")
     unidad = str(definicion.get("unidad") if definicion.get("unidad") is not None else
@@ -154,7 +209,8 @@ def preparar(definicion):
             "escala": _num(definicion["escala"], "escala") if definicion.get("escala") is not None else (100.0 if unidad == "%" else 1.0),
             "meta": meta, "mayor": not str(definicion.get("sentido") or "mayor").strip().lower().startswith("men"),
             "corridas": int(definicion.get("corridas") or CORRIDAS), "semilla": int(definicion.get("semilla") or 0),
-            "pregunta": str(definicion.get("pregunta") or "").strip(), "base": base}
+            "pregunta": str(definicion.get("pregunta") or "").strip(), "base": base,
+            "optimizar": definicion.get("optimizar") if isinstance(definicion.get("optimizar"), dict) else {}}
 
 
 # ------------------------------------------------------------------------------------------- simulación
@@ -199,7 +255,7 @@ def correlacion_de_orden(xs, ys):
 
 def alcanzar(plan, nombre):
     """Valor de una sola entrada que lleva el resultado a la meta con las demás en su valor más probable, o None."""
-    d, base = plan["entradas"][nombre], {k: x["base"] for k, x in plan["entradas"].items()}
+    d, base = plan["entradas"][nombre], {k: x["base"] for k, x in plan["entradas"].items() if x["forma"] != "formula"}
     lo, hi = (d["media"] - 4 * d["desv"], d["media"] + 4 * d["desv"]) if d["forma"] == "normal" else (d["min"], d["max"])
     ancho = hi - lo
     lo, hi = lo - 2 * ancho, hi + 2 * ancho
@@ -222,15 +278,19 @@ def alcanzar(plan, nombre):
     return (lo + hi) / 2
 
 
-def simular(plan, corridas=None, semilla=None):
-    """Corre la simulación y devuelve cifras, sensibilidad y los valores simulados (ya en la escala en que se muestran)."""
+def simular(plan, corridas=None, semilla=None, decisiones=None, liviano=False):
+    """Corre la simulación y devuelve cifras, sensibilidad y los valores simulados (ya en la escala en que se muestran).
+    `decisiones` fija las entradas de decisión en esos valores (si no, usan su `valor`); `liviano` omite la sensibilidad."""
     corridas = int(corridas or plan["corridas"])
     semilla = int(semilla if semilla is not None else plan["semilla"])
+    variables = [k for k, d in plan["entradas"].items() if d["forma"] in INCIERTAS]
+    if not variables:
+        corridas = 100  # sin incertidumbre todos los escenarios son iguales
     if corridas < 100:
         raise Problema("al menos 100 corridas para que la probabilidad signifique algo")
     rng = random.Random(semilla)
-    variables = [k for k, d in plan["entradas"].items() if d["forma"] != "fijo"]
-    fijos = {k: d["base"] for k, d in plan["entradas"].items()}
+    fijos = {k: d["base"] for k, d in plan["entradas"].items() if d["forma"] != "formula"}
+    fijos.update(decisiones or {})
     muestras, valores, escala = {k: [] for k in variables}, [], plan["escala"]
     for _ in range(corridas):
         e = dict(fijos)
@@ -246,9 +306,12 @@ def simular(plan, corridas=None, semilla=None):
          "base": plan["base"] * escala if plan["base"] is not None else None, "media": sum(vs) / len(vs),
          "p10": percentil(vs, 0.10), "p50": percentil(vs, 0.50), "p90": percentil(vs, 0.90), "minimo": vs[0], "maximo": vs[-1],
          "valores": vs, "probabilidad": None, "tornado": [], "pesos": {}, "alcanzar": {}}
+    r["base"] = (lambda b: b * escala if b is not None else None)(plan["evaluar"](fijos).get(plan["resultado"]))
     if plan["meta"] is not None:
         meta = plan["meta"] * escala
         r["probabilidad"] = sum(1 for v in vs if (v >= meta if plan["mayor"] else v <= meta)) / len(vs)
+    if liviano:
+        return r
     ys = [valores[i] for i in validos]
     rho = {k: correlacion_de_orden([muestras[k][i] for i in validos], ys) for k in variables}
     total = sum(x * x for x in rho.values())
@@ -286,6 +349,10 @@ def n(v, unidad=""):
 def describir(d):
     if d["forma"] == "fijo":
         return n(d["base"]), "valor fijo"
+    if d["forma"] == "decision":
+        return f"{n(d['base'])} (se puede elegir entre {n(d['min'])} y {n(d['max'])})", "decisión"
+    if d["forma"] == "formula":
+        return f"{d['texto']} (con los valores más probables: {n(d['base'])})", "se calcula"
     if d["forma"] == "triangular":
         return f"{n(d['min'])} a {n(d['max'])}, más probable {n(d['probable'])}", "triangular"
     if d["forma"] == "uniforme":
@@ -348,10 +415,10 @@ def informe_md(plan, r, hoy):
     sin_fuente = []
     for k, d in plan["entradas"].items():
         valor, forma = describir(d)
-        if d["forma"] != "fijo" and not d["fuente"]:
+        if d["forma"] in INCIERTAS and not d["fuente"]:
             sin_fuente.append(corto(k))
         o.append(f"| {corto(k)} | " + (f"{et.get(k, '')} | " if con_que else "")
-                 + f"{valor} | {forma} | {d['fuente'] or ('supuesto sin fuente' if d['forma'] != 'fijo' else '')} |")
+                 + f"{valor} | {forma} | {d['fuente'] or ('supuesto sin fuente' if d['forma'] in INCIERTAS else '')} |")
     o += ["", "# Cómo leer esto", ""]
     o += [f"- {x}" for x in plan["notas"]]
     if sin_fuente:
@@ -362,6 +429,163 @@ def informe_md(plan, r, hoy):
           "- Una simulación ordena la incertidumbre que se le entrega; no la reduce ni predice lo que no está en los supuestos.",
           f"- Para repetir exactamente esta corrida: {n(r['corridas'])} escenarios con la semilla {r['semilla']}.", ""]
     return "\n".join(o)
+
+
+def rejilla(d):
+    """Los valores que puede tomar una decisión: de `min` a `max` en pasos de `paso` (el `max` siempre incluido)."""
+    cantidad = int(math.floor((d["max"] - d["min"]) / d["paso"] + 1e-9))
+    valores = [round(d["min"] + i * d["paso"], 10) for i in range(cantidad + 1)]
+    return valores if abs(valores[-1] - d["max"]) < 1e-9 else valores + [d["max"]]
+
+
+def optimizar(plan, corridas=None, semilla=None):
+    """Busca la combinación de decisiones que mejor cumple el objetivo, evaluando cada una con los mismos escenarios."""
+    cfg = plan["optimizar"]
+    decisiones = [k for k, d in plan["entradas"].items() if d["forma"] == "decision"]
+    if not decisiones:
+        raise Problema("no hay ninguna entrada de decisión (`{decision: true, min, max, paso}`): no hay nada que optimizar")
+    objetivo = str(cfg.get("objetivo") or ("probabilidad" if plan["meta"] is not None else "media")).strip().lower()
+    if objetivo not in OBJETIVOS:
+        raise Problema("`optimizar.objetivo` debe ser uno de: " + ", ".join(OBJETIVOS))
+    if objetivo == "probabilidad" and plan["meta"] is None:
+        raise Problema("para optimizar la probabilidad hace falta una `meta`")
+    maximizar = not str(cfg.get("sentido") or "maximizar").strip().lower().startswith("min")
+    restricciones = []
+    for texto in cfg.get("restricciones") or []:
+        try:
+            codigo, usa = _modelos.compilar(texto)
+        except _modelos.FormulaInvalida as e:
+            raise Problema(f"restricción: {e}")
+        if [x for x in usa if x not in decisiones]:
+            raise Problema(f"la restricción «{texto}» solo puede usar decisiones ({', '.join(decisiones)})")
+        restricciones.append((str(texto), codigo))
+    corridas = max(200, min(int(corridas or plan["corridas"]), 2000))
+    semilla = int(semilla if semilla is not None else plan["semilla"])
+    cumple = lambda c: all(_modelos.evaluar(codigo, c) for _, codigo in restricciones)  # noqa: E731
+
+    def valor(c):
+        r = simular(plan, corridas, semilla, decisiones=c, liviano=True)
+        v = r[objetivo]
+        return v * 100 if objetivo == "probabilidad" else v
+    ejes = {k: rejilla(plan["entradas"][k]) for k in decisiones}
+    total = 1
+    for k in decisiones:
+        total *= len(ejes[k])
+    metodo, probadas = "todas las combinaciones", []
+    if total <= MAX_COMBINACIONES:
+        combos = [{}]
+        for k in decisiones:
+            combos = [{**c, k: x} for c in combos for x in ejes[k]]
+        for c in combos:
+            if cumple(c):
+                try:
+                    probadas.append((valor(c), c))
+                except Problema:
+                    continue
+    elif experto.listo():
+        from scipy.optimize import differential_evolution
+        metodo = "búsqueda evolutiva (nivel especialista)"
+
+        def ajustar(x):
+            return {k: min(plan["entradas"][k]["max"], max(plan["entradas"][k]["min"], round(
+                round((float(xi) - plan["entradas"][k]["min"]) / plan["entradas"][k]["paso"]) * plan["entradas"][k]["paso"] + plan["entradas"][k]["min"], 10)))
+                for k, xi in zip(decisiones, x)}
+
+        vistos = {}
+
+        def costo(x):
+            c = ajustar(x)
+            clave = tuple(c[k] for k in decisiones)
+            if clave not in vistos:
+                try:
+                    vistos[clave] = valor(c) if cumple(c) else None
+                except Problema:
+                    vistos[clave] = None
+            v = vistos[clave]
+            return 1e18 if v is None else (-v if maximizar else v)
+        differential_evolution(costo, [(plan["entradas"][k]["min"], plan["entradas"][k]["max"]) for k in decisiones], seed=semilla,
+                               maxiter=40, popsize=12, tol=1e-6, polish=False)
+        probadas = [(v, dict(zip(decisiones, clave))) for clave, v in vistos.items() if v is not None]
+    else:
+        rec = experto.recomendacion(True, [f"hay {total:,} combinaciones de decisiones".replace(",", "."),
+                                           "probarlas todas una por una tomaría demasiado; una búsqueda dirigida las recorre bien"])
+        raise Problema("demasiadas combinaciones para probarlas todas (" + f"{total:,}".replace(",", ".") + f"; el límite es {MAX_COMBINACIONES}). "
+                       "Agranda el `paso` de alguna decisión, o usa el nivel especialista.\n" + "\n".join(experto.texto_recomendacion(rec, None)))
+    if not probadas:
+        raise Problema("ninguna combinación de decisiones cumple las restricciones (o el modelo no pudo calcularlas)")
+    probadas.sort(key=lambda x: -x[0] if maximizar else x[0])
+    mejor_valor, mejor = probadas[0]
+    actual = {k: plan["entradas"][k]["base"] for k in decisiones}
+    tolerancia = 1.0 if objetivo == "probabilidad" else abs(mejor_valor) * 0.02
+    en_borde = [k for k in decisiones if abs(mejor[k] - plan["entradas"][k]["min"]) < 1e-9 or abs(mejor[k] - plan["entradas"][k]["max"]) < 1e-9]
+    return {"objetivo": objetivo, "maximizar": maximizar, "metodo": metodo, "decisiones": decisiones, "combinaciones": len(probadas),
+            "corridas": corridas, "semilla": semilla, "mejor": mejor, "valor_mejor": mejor_valor, "actual": actual,
+            "valor_actual": valor(actual) if cumple(actual) else None, "parecidas": sum(1 for v, _ in probadas if abs(v - mejor_valor) <= tolerancia),
+            "en_borde": en_borde, "primeras": [{"valor": v, **c} for v, c in probadas[:10]],
+            "curva": [(c[decisiones[0]], v) for v, c in sorted(probadas, key=lambda x: x[1][decisiones[0]])] if len(decisiones) == 1 else [],
+            "restricciones": [texto for texto, _ in restricciones], "detalle_mejor": simular(plan, None, semilla, decisiones=mejor, liviano=True)}
+
+
+def optimizacion_md(plan, o, hoy):
+    """El resultado de la optimización en el Markdown que entiende explicar.py."""
+    u = plan["unidad"]
+    corto = lambda k: k.replace("_", " ").capitalize()  # noqa: E731
+    nombres = {"media": "el promedio del resultado", "p10": "el resultado en un escenario malo (percentil 10)", "p50": "el resultado central",
+               "p90": "el resultado en un escenario bueno (percentil 90)", "probabilidad": "la probabilidad de cumplir la meta"}
+    uo = "%" if o["objetivo"] == "probabilidad" else u
+    mejor_txt = ", ".join(f"{corto(k).lower()} = {n(v)}" for k, v in o["mejor"].items())
+    titulo = (plan["pregunta"] or plan["titulo"]).replace('"', "'")
+    lineas = ["---", f"titulo: \"La mejor decisión: {titulo}\"",
+              f"subtitulo: \"{plan['titulo']} · {n(o['combinaciones'])} combinaciones probadas · {n(o['corridas'])} escenarios cada una · semilla {o['semilla']}\"",
+              f"fecha: {hoy.isoformat()}", "---", "",
+              f"> Para {'maximizar' if o['maximizar'] else 'minimizar'} {nombres[o['objetivo']]}, la mejor combinación es **{mejor_txt}**: da {n(o['valor_mejor'], uo)}"
+              + (f", contra {n(o['valor_actual'], uo)} con la decisión de hoy." if o["valor_actual"] is not None else "."), "", "```cifras",
+              f"Con la mejor combinación: {n(o['valor_mejor'], uo)} | {nombres[o['objetivo']]}"]
+    if o["valor_actual"] is not None:
+        lineas.append(f"Con la decisión de hoy: {n(o['valor_actual'], uo)} | " + ", ".join(f"{corto(k).lower()} = {n(v)}" for k, v in o["actual"].items()))
+    d = o["detalle_mejor"]
+    lineas += [f"Resultado central con la mejor: {n(d['p50'], u)} | ocho de cada diez escenarios entre {n(d['p10'], u)} y {n(d['p90'], u)}",
+               f"Otras que dan casi lo mismo: {n(o['parecidas'] - 1)} | de {n(o['combinaciones'])} combinaciones probadas", "```", ""]
+    if o["curva"]:
+        k = o["decisiones"][0]
+        lineas += ["# Cómo cambia el objetivo con la decisión", "", "```grafico", "tipo: lineas", f"titulo: \"{nombres[o['objetivo']].capitalize()} según {corto(k).lower()}\""]
+        lineas += ([f"unidad: \"{uo}\""] if uo else []) + ["categorias: [" + ", ".join(f"\"{n(x)}\"" for x, _ in o["curva"]) + "]",
+                                                             "series:", "  Objetivo: [" + ", ".join(f"{v:.6g}" for _, v in o["curva"]) + "]", "```", ""]
+    lineas += ["# Las mejores combinaciones", "", "| " + " | ".join(corto(k) for k in o["decisiones"]) + f" | {nombres[o['objetivo']].capitalize()} |",
+               "|" + "---|" * (len(o["decisiones"]) + 1)]
+    lineas += ["| " + " | ".join(n(f[k]) for k in o["decisiones"]) + f" | {n(f['valor'], uo)} |" for f in o["primeras"]]
+    lineas += ["", "# Cómo leer esto", ""]
+    if o["en_borde"]:
+        lineas.append("- **La mejor combinación queda en el borde del rango de " + ", ".join(corto(k).lower() for k in o["en_borde"])
+                      + "**: o el rango permitido es estrecho, o al modelo le falta la relación que frena esa decisión (por ejemplo, que "
+                        "subir el precio hace perder volumen). Revisa eso antes de decidir.")
+    if o["parecidas"] > 1:
+        lineas.append(f"- {n(o['parecidas'])} combinaciones (la mejor y {n(o['parecidas'] - 1)} más) dan prácticamente el mismo resultado: entre ellas "
+                      "se puede elegir por otros criterios.")
+    if o["restricciones"]:
+        lineas.append("- Restricciones aplicadas: " + "; ".join(f"`{x}`" for x in o["restricciones"]) + ".")
+    lineas += [f"- Método: {o['metodo']}; todas las combinaciones se compararon con los mismos {n(o['corridas'])} escenarios.",
+               "- La optimización solo conoce lo que está en el modelo: una consecuencia que no esté escrita (reacción de la competencia, capacidad, "
+               "plazos) no la ve. La decisión es de quien responde por ella.", ""]
+    return "\n".join(lineas)
+
+
+def guardar_optimizacion(carpeta, plan, o, hoy):
+    import explicar
+    md = optimizacion_md(plan, o, hoy)
+    (carpeta / "optimizacion.md").write_text(md, encoding="utf-8")
+    proyecto = proyecto_de(carpeta.resolve())
+    cfg = {}
+    if proyecto:
+        import _config
+        cfg = _config.cargar(proyecto)
+    pagina, _ = explicar.generar(md, carpeta, cfg, proyecto, hoy)
+    (carpeta / "optimizacion.html").write_text(pagina, encoding="utf-8")
+    resumen = {k: v for k, v in o.items() if k != "detalle_mejor"}
+    resumen["resultado_con_la_mejor"] = {k: o["detalle_mejor"][k] for k in ("media", "p10", "p50", "p90", "probabilidad")}
+    resumen["fecha"] = hoy.isoformat()
+    (carpeta / "optimizacion.json").write_text(json.dumps(resumen, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return carpeta / "optimizacion.html"
 
 
 def proyecto_de(carpeta):
@@ -440,6 +664,7 @@ def main():
     ap.add_argument("--id", help="nombre corto del análisis, sin espacios (con --nuevo)")
     ap.add_argument("--pregunta", default="", help="la pregunta que responde (con --nuevo)")
     ap.add_argument("--revisar", action="store_true", help="solo revisar la definición, sin simular")
+    ap.add_argument("--optimizar", action="store_true", help="buscar la mejor combinación de las entradas de decisión")
     ap.add_argument("--corridas", type=int, help="cantidad de escenarios (por defecto, la de la definición)")
     ap.add_argument("--semilla", type=int, help="semilla (por defecto, la de la definición)")
     ap.add_argument("--abrir", action="store_true", help="abrir la página en el navegador")
@@ -478,11 +703,31 @@ def main():
             raise Problema("la definición todavía tiene PENDIENTE: completa la pregunta y las entradas")
         plan = preparar(yaml.safe_load(texto))
         if a.revisar:
-            variables = [k for k, d in plan["entradas"].items() if d["forma"] != "fijo"]
-            print(f"Definición correcta: modelo {plan['modelo']}, resultado «{plan['resultado']}», {len(variables)} supuesto(s) con rango "
-                  f"({', '.join(variables) or 'ninguno'}). Con los valores más probables: {n(plan['base'] * plan['escala'] if plan['base'] is not None else None, plan['unidad'])}.")
+            variables = [k for k, d in plan["entradas"].items() if d["forma"] in INCIERTAS]
+            decisiones = [k for k, d in plan["entradas"].items() if d["forma"] == "decision"]
+            print(f"Definición correcta: modelo {plan['modelo']}, resultado «{plan['resultado']}», supuestos con rango: "
+                  f"{', '.join(variables) or 'ninguno'}" + (f"; decisiones: {', '.join(decisiones)}" if decisiones else "")
+                  + f". Con los valores más probables: {n(plan['base'] * plan['escala'] if plan['base'] is not None else None, plan['unidad'])}.")
             return 0
-        if not any(d["forma"] != "fijo" for d in plan["entradas"].values()):
+        if a.optimizar:
+            o = optimizar(plan, a.corridas, a.semilla)
+            pagina = guardar_optimizacion(carpeta, plan, o, hoy)
+            if a.json:
+                print((carpeta / "optimizacion.json").read_text(encoding="utf-8"))
+                return 0
+            uo = "%" if o["objetivo"] == "probabilidad" else plan["unidad"]
+            print(f"# La mejor decisión: {plan['pregunta'] or plan['titulo']}\n")
+            print("- Mejor combinación: " + ", ".join(f"{k} = {n(v)}" for k, v in o["mejor"].items()) + f" → {o['objetivo']} {n(o['valor_mejor'], uo)}"
+                  + (f" (hoy: {n(o['valor_actual'], uo)})" if o["valor_actual"] is not None else ""))
+            print(f"- {n(o['combinaciones'])} combinaciones probadas con {n(o['corridas'])} escenarios cada una ({o['metodo']})"
+                  + (f"; {n(o['parecidas'])} dan casi lo mismo que la mejor" if o["parecidas"] > 1 else "; ninguna otra da casi lo mismo"))
+            if o["en_borde"]:
+                print("- ATENCIÓN: la mejor queda en el borde del rango de " + ", ".join(o["en_borde"]) + ": revisa si al modelo le falta lo que frena esa decisión")
+            print(f"\nPágina: {pagina.as_posix()}")
+            if a.abrir:
+                webbrowser.open(pagina.resolve().as_uri())
+            return 0
+        if not any(d["forma"] in INCIERTAS for d in plan["entradas"].values()):
             raise Problema("ninguna entrada tiene rango: sin incertidumbre no hay nada que simular (dale a lo incierto `{min, probable, max}`)")
         r = simular(plan, a.corridas, a.semilla)
         pagina = guardar(carpeta, plan, r, hoy)

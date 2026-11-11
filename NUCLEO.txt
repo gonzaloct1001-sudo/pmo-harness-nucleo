@@ -43,6 +43,7 @@ CHANGELOG.md
 LICENSE
 NUCLEO.txt
 requirements.txt
+requirements-analisis.txt
 .gitignore
 .gitattributes
 INSTALAR-WINDOWS.bat

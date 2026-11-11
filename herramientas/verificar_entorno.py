@@ -111,6 +111,12 @@ def main():
     print(f"- GitHub CLI (gh): {'instalado' if rc == 0 else 'no instalado (opcional: permite crear el repo privado desde aquí)'}")
     so = buscar_soffice()
     print(f"- LibreOffice: {so if so else 'no encontrado (opcional: revisión visual de documentos)'}")
+    try:
+        import experto
+        print("- Análisis, nivel especialista: " + ("instalado" if experto.listo() else
+              "no instalado (opcional: se instala a pedido, con python herramientas/experto.py instalar)"))
+    except ImportError:
+        pass
 
     estado = RAIZ / ".harness" / "estado.yaml"
     print(f"- Harness instalado en esta carpeta: {'sí' if estado.exists() else 'NO → ejecutar la skill instalar'}")

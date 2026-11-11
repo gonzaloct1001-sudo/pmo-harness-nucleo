@@ -87,3 +87,12 @@ escenarios:
     espera:
       crea: ["empresa/extensiones/*.py"]
       nucleo_intacto: true
+
+  - id: pregunta-antes-de-instalar
+    que_prueba: "Si conviene el nivel especialista del análisis y no está instalado, lo dice y pregunta; no instala por su cuenta (skill analizar, sección 0). Vale en un computador sin el nivel especialista"
+    base: ejemplos/finanzas-demo
+    mensaje: "Pronostica las ventas de los próximos seis meses con la serie de proyectos/finanzas-demo/datos/ventas-mensuales.csv."
+    espera:
+      respuesta_contiene_todas: ["especialista"]
+      respuesta_contiene_alguna: ["¿", "prefieres", "instal"]
+      nucleo_intacto: true

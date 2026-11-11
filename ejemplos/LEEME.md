@@ -119,6 +119,21 @@ de IA, un certificado con vigencia máxima y un presupuesto del cliente que no c
 3. Crea `prueba-postulacion` con el arquetipo `postulacion`, copia las subcarpetas del paquete a `_entrada/` y di
    "prepara la postulación".
 
+### Prueba 15 — Análisis a fondo (dos niveles)
+1. `python herramientas/experto.py estado` dice si el nivel especialista está instalado. Todo lo que sigue funciona
+   sin él, en el nivel base.
+2. `python herramientas/experto.py plazo ejemplos/demo-andes --salida <una carpeta tuya> --abrir`: probabilidad de
+   terminar en fecha y tareas que más mueven el término.
+3. `python herramientas/experto.py pronosticar --datos ejemplos/finanzas-demo/datos/ventas-mensuales.csv
+   --diagnosticar`: aquí el diagnóstico recomienda el nivel especialista y dice por qué (el mejor método simple se
+   equivoca en 7 %). Sin `--diagnosticar` y con `--salida <una carpeta tuya> --abrir` pronostica con el nivel que
+   haya: con el base, el error comprobado es 7,5 %; con el especialista, 3,7 %.
+4. `python herramientas/experto.py segmentar ejemplos/finanzas-demo --diagnosticar` dice qué nivel conviene para esos
+   clientes y por qué; sin `--diagnosticar` (y con `--salida <una carpeta tuya>`) arma los grupos.
+5. `python herramientas/simular.py ejemplos/finanzas-demo/analisis/mejor-precio --optimizar --abrir`: cuánto conviene
+   subir los precios cuando cada punto de alza hace perder volumen. La mejor alza es 4 %; ábrelo y cambia el rango de
+   `sensibilidad` o el objetivo (`p10` cuida el escenario malo) en su `analisis.yaml`.
+
 ### Prueba 14 — Análisis para decidir
 1. `python herramientas/simular.py ejemplos/finanzas-demo/analisis/alza-precios --abrir`: la probabilidad de que una
    subida de precios de 5 % no baje el margen bruto, el rango de resultados, y cuánta pérdida de volumen se tolera.

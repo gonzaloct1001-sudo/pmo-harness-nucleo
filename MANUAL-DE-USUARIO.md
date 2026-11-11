@@ -1,4 +1,4 @@
-# PMO Harness 3.4: manual de usuario
+# PMO Harness 3.5: manual de usuario
 
 > Para instalarlo por primera vez, sigue la **guía de inicio** (`EMPEZAR-AQUI.md`). Este manual explica cómo se usa,
 > en palabras simples. Lo técnico está en `README.md` y en `AGENTS.md`.
@@ -84,6 +84,7 @@ Basta con describir lo que quieres; estas frases son ejemplos.
 | Saber cómo van las cosas | «¿cómo vamos?» · «dame el reporte de status» |
 | Ver tus pendientes del día | «¿qué tengo pendiente hoy?» (con Claude Code llega sola en tu primer mensaje del día) |
 | Entender algo de un vistazo | «explícame el cierre de octubre en una página» · «hazme un gráfico del avance» |
+| Decidir con números inciertos | «¿qué tan probable es cerrar el año sobre la meta?» · «¿conviene subir los precios?» |
 | Un documento largo con el formato oficial | «pasa este informe a la plantilla de la empresa» |
 | Convertir notas en una minuta con acuerdos | «estas son mis notas de la reunión de hoy» |
 | Sacar el informe del período | «prepara el informe de esta semana» · «arma la presentación para el comité» |
@@ -157,9 +158,24 @@ Cuando una decisión depende de números inciertos, pide el análisis en vez de 
   **Los nombres de tus clientes no salen de tu computador**: en los datos cada cliente es un código (C-0001) y el
   nombre queda en un archivo local; para revisar con nombres, pídelo «con nombres» y esa versión tampoco se sube.
 
+- **«¿Cuál es la mejor decisión?»** Le dices qué puedes elegir (el precio, la dotación, cuánto invertir) y entre qué
+  valores, y qué provoca cada decisión; prueba las combinaciones y te muestra la mejor según lo que tú priorices: el
+  promedio, un escenario malo o la probabilidad de llegar a la meta. La decisión sigue siendo tuya.
+- **«Pronostica las ventas de los próximos meses»**, **«¿qué explica este resultado?»**, **«¿qué grupos de clientes
+  tengo?»**, **«¿terminamos en la fecha comprometida?»**: pronósticos con su error comprobado, variables que
+  acompañan a un resultado, grupos de clientes según cómo compran, y la probabilidad de cumplir el plazo con las
+  tareas que más lo mueven.
+
+**Dos niveles.** Todo lo anterior funciona con lo que el harness ya trae (nivel base). Para algunos casos conviene el
+nivel especialista, que usa programas adicionales de análisis: más datos, estacionalidad, varias variables a la vez,
+muchos clientes. Antes de analizar, el asistente mira tus datos y te dice cuál conviene y por qué; si conviene el
+especialista y no lo tienes, **te pregunta**: seguir con el nivel base (y qué deja sin responder) o instalarlo (una
+vez, unos 450 MB, con internet). No instala nada sin tu sí, y nunca te presenta un resultado simple como si fuera el
+robusto.
+
 Cada análisis queda guardado con su pregunta, sus supuestos y sus resultados, y se puede repetir exacto. El resultado
-vale lo que valgan los rangos que le diste: por eso la página muestra los supuestos y marca los que no tienen fuente.
-Lo que este nivel no hace todavía: pronósticos con estacionalidad, segmentación automática y optimización.
+vale lo que valgan los rangos y los datos que le diste: por eso la página muestra los supuestos, marca los que no
+tienen fuente y dice cuánto se equivocó el método al comprobarlo.
 
 ### Plan estratégico (3 o 5 años)
 Sobre las finanzas se arma el plan: «armemos el plan estratégico 2027-2029». El asistente te lleva por el diagnóstico
@@ -222,6 +238,7 @@ adelante…». El asistente te dice qué va a cambiar y qué efecto tiene, pide 
 | El asistente de IA y qué modelo usa para cada tipo de tarea | «voy a usar Gemini en esta carpeta» |
 | Los umbrales de los semáforos | «el rojo de caja es con menos de un mes» |
 | Qué se replica y qué nunca se sube | «los contratos también quedan solo en el PC» · «la carpeta de sueldos nunca se sube» |
+| Cómo parte cada tarea | «de ahora en adelante, siempre con plan» · «sin planes previos» |
 | Algo que el harness no trae | «quiero un aviso cada mañana con lo que vence» (queda como extensión tuya) |
 | El modo nube y sus tareas | «pausa el resumen de la mañana» · «ya no quiero la nube» |
 | El status semanal del computador | «el reporte los viernes a las 5» |
@@ -279,7 +296,8 @@ que descargas es público, pero al instalarlo se desconecta de él: nada tuyo va
 Hay tres niveles: lo que **se versiona** (datos y salidas), lo que deja una **copia fiel en texto** (bases, contratos,
 actas) y lo que deja **solo una ficha** (el archivo y su contenido no salen de tu computador). Tú puedes sumar al
 tercer nivel lo que quieras: «la carpeta de sueldos nunca se sube». Queda anotado en un archivo tuyo
-(`empresa/confidencialidad.yaml`) que ninguna actualización toca.
+(`empresa/confidencialidad.yaml`) que ninguna actualización toca. Los nombres de tus clientes siguen la misma regla:
+en los datos van como códigos y el nombre queda en una carpeta local.
 
 Los controles miran lo que realmente está por guardarse, no cómo se escribió la instrucción: uno revisa cada guardado,
 otro revisa **antes de subir** a GitHub (por si algo se guardó desde otro computador o con otra herramienta), y con

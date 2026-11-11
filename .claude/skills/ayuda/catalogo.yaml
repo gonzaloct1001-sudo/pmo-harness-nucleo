@@ -94,7 +94,7 @@ skills:
   - {id: status, para: "Status de todos los proyectos: semáforos, lo que vence, decisiones; reporte web semanal y tablero de varias empresas", arquetipos: [todos],
      ejemplos: ["¿cómo vamos?", "¿qué tengo pendiente hoy?", "dame el reporte de status", "agéndalo los lunes a las 9", "quiero ver todas mis empresas juntas"]}
   - {id: analizar, para: "Análisis para decidir: probabilidad de una meta, qué supuesto pesa más, modelos de precio, equilibrio, palancas, caja y crecimiento, y rentabilidad por cliente y producto", arquetipos: [todos],
-     ejemplos: ["quiero un análisis de sensibilidad de este estado de resultados", "¿qué tan probable es cerrar el año sobre la meta?", "¿conviene subir los precios 5 %?", "¿qué clientes me dejan margen y cuáles no?"]}
+     ejemplos: ["quiero un análisis de sensibilidad de este estado de resultados", "¿qué tan probable es cerrar el año sobre la meta?", "¿cuánto conviene subir los precios?", "pronostica las ventas de los próximos seis meses", "¿qué clientes me dejan margen y cuáles se están alejando?", "¿qué probabilidad hay de terminar en la fecha comprometida?"]}
   - {id: explicar, para: "Explicar algo complejo en una página visual: cifras clave, gráficos, pasos y línea de tiempo, en un solo archivo que se abre con doble clic", arquetipos: [todos],
      ejemplos: ["explícame el cierre de octubre en una página", "hazme un gráfico del avance por frente", "muéstrame qué variable pesa más en el resultado", "quiero el plan detallado antes de partir"]}
   - {id: reportes, para: "Generar cualquier reporte del catálogo del proyecto · Crear un reporte propio, desde un modelo o conversando", arquetipos: [todos],
